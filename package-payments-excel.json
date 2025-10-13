@@ -1,0 +1,26 @@
+{
+  "name": "pnrr-payments-excel-export",
+  "version": "1.0.0",
+  "description": "Download all PNRR payments data and export to Excel",
+  "main": "download-payments-excel.js",
+  "scripts": {
+    "download": "node download-payments-excel.js",
+    "install-deps": "npm install xlsx node-fetch"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5",
+    "node-fetch": "^2.7.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "keywords": [
+    "pnrr",
+    "excel",
+    "export",
+    "payments",
+    "romania"
+  ],
+  "author": "PNRR Data Export Tool",
+  "license": "MIT"
+}

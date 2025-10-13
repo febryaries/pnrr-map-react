@@ -1,0 +1,16 @@
+{
+  "name": "pnrr-projects-excel-export",
+  "version": "1.0.0",
+  "description": "PNRR Projects Excel Export Tool",
+  "main": "download-projects-excel.cjs",
+  "scripts": {
+    "download": "node download-projects-excel.cjs"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5",
+    "node-fetch": "^2.7.0"
+  },
+  "keywords": ["pnrr", "projects", "excel", "export", "romania"],
+  "author": "PNRR Data Team",
+  "license": "MIT"
+}

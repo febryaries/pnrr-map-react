@@ -1,0 +1,1316 @@
+[
+  {
+    "id": 2,
+    "componentCode": "C1",
+    "measureCode": "I1",
+    "title": "I1. Extinderea sistemelor de apă și canalizare în aglomerări mai mari de 2000 de locuitori echivalenți",
+    "allocatedValue": 244838539,
+    "executedValue": 50017454,
+    "executionPercent": "20,4 %"
+  },
+  {
+    "id": 3,
+    "componentCode": "C1",
+    "measureCode": "I2",
+    "title": "I2. Colectarea apelor uzate în aglomerări mai mici de 2.000 de locuitori echivalenți, care împiedică atingerea unei stări bune a corpurilor de apă și/sau afectează arii naturale protejate",
+    "allocatedValue": 57974587,
+    "executedValue": 25049710,
+    "executionPercent": "43,2 %"
+  },
+  {
+    "id": 5,
+    "componentCode": "C1",
+    "measureCode": "I4",
+    "title": "I4. Adaptarea la schimbările climatice prin automatizarea și digitalizarea echipamentelor de evacuare și stocare a apei la acumulări existente pentru asigurarea debitului ecologic și creșterea siguranței alimentării cu apă a populației și reducerea riscului la inundații.",
+    "allocatedValue": 33003856,
+    "executedValue": 1185419,
+    "executionPercent": "3,6 %"
+  },
+  {
+    "id": 7,
+    "componentCode": "C1",
+    "measureCode": "I5",
+    "title": "I5. Dotarea adecvată a administrațiilor bazinale pentru monitorizarea infrastructurii, prevenirea și gestionarea situațiilor de urgență",
+    "allocatedValue": 35000000,
+    "executedValue": 12484331,
+    "executionPercent": "35,7 %"
+  },
+  {
+    "id": 8,
+    "componentCode": "C1",
+    "measureCode": "I6",
+    "title": "I6. Realizarea cadastrului apelor",
+    "allocatedValue": 30000000,
+    "executedValue": 499002,
+    "executionPercent": "1,7 %"
+  },
+  {
+    "id": 11,
+    "componentCode": "C2",
+    "measureCode": "I1",
+    "title": "I1. Campania națională de împădurire și reîmpădurire, inclusiv păduri urbane",
+    "allocatedValue": 2500000,
+    "executedValue": 2478414,
+    "executionPercent": "99,1 %"
+  },
+  {
+    "id": 12,
+    "componentCode": "C2",
+    "measureCode": "I2",
+    "title": "I2. Dezvoltarea de capacități moderne de producere a materialului forestier de reproducere",
+    "allocatedValue": 307547498,
+    "executedValue": 73155571,
+    "executionPercent": "23,8 %"
+  },
+  {
+    "id": 13,
+    "componentCode": "C2",
+    "measureCode": "I3",
+    "title": "I3. Actualizarea planurilor de management aprobate și identificarea zonelor potențiale de protecție strictă în habitate naturale terestre și marine în vederea punerii în aplicare a Strategiei UE privind biodiversitatea pentru 2030",
+    "allocatedValue": 50000000,
+    "executedValue": 17622067,
+    "executionPercent": "35,2 %"
+  },
+  {
+    "id": 16,
+    "componentCode": "C2",
+    "measureCode": "I4",
+    "title": "I4. Investiții integrate de reconstrucție ecologică a habitatelor și conservarea speciilor aferente pajiștilor, zonelor acvatice și dependente de apă",
+    "allocatedValue": 5000000,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 20,
+    "componentCode": "C2",
+    "measureCode": "I5",
+    "title": "I5. Sisteme integrate de reducere a riscurilor generate de viituri torențiale în bazinete forestiere expuse unor astfel de fenomene",
+    "allocatedValue": 10001000,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 21,
+    "componentCode": "C3",
+    "measureCode": "I1",
+    "title": "I1. Dezvoltarea, modernizarea și completarea sistemelor de management integrat al deșeurilor municipale la nivel de județ sau la nivel de orașe/comune",
+    "allocatedValue": 22000000,
+    "executedValue": 12817720,
+    "executionPercent": "58,3 %"
+  },
+  {
+    "id": 149,
+    "componentCode": "C3",
+    "measureCode": "I1",
+    "title": "I1. Dezvoltarea, modernizarea și completarea sistemelor de management integrat al deșeurilor municipale la nivel de județ sau la nivel de orașe/comune",
+    "allocatedValue": 1000000,
+    "executedValue": 661400,
+    "executionPercent": "66,1 %"
+  },
+  {
+    "id": 25,
+    "componentCode": "C3",
+    "measureCode": "I2",
+    "title": "I2. Dezvoltarea infrastructurii pentru managementul gunoiului de grajd și al altor deșeuri agricole compostabile",
+    "allocatedValue": 240106200,
+    "executedValue": 249537871,
+    "executionPercent": "103,9 %"
+  },
+  {
+    "id": 26,
+    "componentCode": "C3",
+    "measureCode": "I3",
+    "title": "I3. Dezvoltarea capacităților instituționale de monitorizare publică și control pentru gestionarea deșeurilor și prevenirea poluării",
+    "allocatedValue": 165643845,
+    "executedValue": 45269539,
+    "executionPercent": "27,3 %"
+  },
+  {
+    "id": 29,
+    "componentCode": "C4",
+    "measureCode": "I1",
+    "title": "I1. Modernizarea și reînnoirea infrastructurii feroviare",
+    "allocatedValue": 50196850,
+    "executedValue": 236147,
+    "executionPercent": "0,5 %"
+  },
+  {
+    "id": 30,
+    "componentCode": "C4",
+    "measureCode": "I2",
+    "title": "I2. Material rulant feroviar",
+    "allocatedValue": 13000000,
+    "executedValue": 6794785,
+    "executionPercent": "52,3 %"
+  },
+  {
+    "id": 32,
+    "componentCode": "C4",
+    "measureCode": "I3",
+    "title": "I3.  Dezvoltarea infrastructurii rutiere durabile aferente rețelei TEN-T, taxarea drumurilor, managementul traficului și siguranța rutieră",
+    "allocatedValue": 1874376400,
+    "executedValue": 1029044282,
+    "executionPercent": "54,9 %"
+  },
+  {
+    "id": 174,
+    "componentCode": "C4",
+    "measureCode": "I3",
+    "title": "I3.  Dezvoltarea infrastructurii rutiere durabile aferente rețelei TEN-T, taxarea drumurilor, managementul traficului și siguranța rutieră - 5 loturi A7 si Infrastructura aferentă operaționalizării sistemelor de trafic inteligent – centru de management al traficului, sisteme de informare a utilizatorilor, interoperabilitatea sistemelor de transport",
+    "allocatedValue": 280829800,
+    "executedValue": 146803831,
+    "executionPercent": "52,3 %"
+  },
+  {
+    "id": 175,
+    "componentCode": "C5",
+    "measureCode": "I1",
+    "title": "I1. Instituirea unui fond pentru Valul Renovării care să finanțeze lucrări de îmbunătățire a eficienței energetice a fondului construit",
+    "allocatedValue": 1098821134,
+    "executedValue": 1658641562,
+    "executionPercent": "151,0 %"
+  },
+  {
+    "id": 35,
+    "componentCode": "C5",
+    "measureCode": "I1",
+    "title": "I1. Instituirea unui fond pentru Valul Renovării care să finanțeze lucrări de îmbunătățire a eficienței energetice a fondului construit",
+    "allocatedValue": 2169200266,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 36,
+    "componentCode": "C5",
+    "measureCode": "I2",
+    "title": "I2. Implementarea Registrului național al clădirilor",
+    "allocatedValue": 10000000,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 38,
+    "componentCode": "C5",
+    "measureCode": "I4",
+    "title": "I4. Economie circulară și creșterea eficienței energetice a clădirilor istorice",
+    "allocatedValue": 19000000,
+    "executedValue": 1378427,
+    "executionPercent": "7,3 %"
+  },
+  {
+    "id": 41,
+    "componentCode": "C6",
+    "measureCode": "I2",
+    "title": "I2. Capacitățile de producție a hidrogenului verde care să fie utilizat pentru stocarea energiei electrice și/sau pentru decarbonizarea industriei",
+    "allocatedValue": 1390241851,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 42,
+    "componentCode": "C6",
+    "measureCode": "I3",
+    "title": "I3. Dezvoltarea unei producții combinate de energie termică și energie electrică (CHP) pe gaz flexibile și de înaltă eficiență în sectorul încălzirii centralizate, în vederea atingerii unei decarbonizări adânci",
+    "allocatedValue": 523160864,
+    "executedValue": 1030189366,
+    "executionPercent": "196,9 %"
+  },
+  {
+    "id": 43,
+    "componentCode": "C6",
+    "measureCode": "I4",
+    "title": "I4. Lanț industrial de producție și/sau asamblare și/sau reciclare a bateriilor, a celulelor și panourilor fotovoltaice (inclusiv echipamente auxiliare) și noi capacități de stocare a energiei electrice",
+    "allocatedValue": 5000000,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 176,
+    "componentCode": "C6",
+    "measureCode": "I4",
+    "title": "I4. Lanț industrial de producție și/sau asamblare și/sau reciclare a bateriilor, a celulelor și panourilor fotovoltaice (inclusiv echipamente auxiliare) și noi capacități de stocare a energiei electrice",
+    "allocatedValue": 14850000,
+    "executedValue": 1313610,
+    "executionPercent": "8,9 %"
+  },
+  {
+    "id": 44,
+    "componentCode": "C6",
+    "measureCode": "I5",
+    "title": "I5. Asigurarea eficienței energetice în sectorul industrial",
+    "allocatedValue": 150000,
+    "executedValue": 22000,
+    "executionPercent": "14,7 %"
+  },
+  {
+    "id": 46,
+    "componentCode": "C7",
+    "measureCode": "I1",
+    "title": "I1. Implementarea infrastructurii de cloud guvernamental",
+    "allocatedValue": 86500000,
+    "executedValue": 2861021,
+    "executionPercent": "3,3 %"
+  },
+  {
+    "id": 47,
+    "componentCode": "C7",
+    "measureCode": "I2",
+    "title": "I2. Dezvoltarea cloudului și migrarea în cloud.",
+    "allocatedValue": 86377743,
+    "executedValue": 28245786,
+    "executionPercent": "32,7 %"
+  },
+  {
+    "id": 48,
+    "componentCode": "C7",
+    "measureCode": "I3",
+    "title": "I3. Realizarea sistemului de eHealth și telemedicină  - I3.1 Redimensionare, standardizare și optimizare a Platformei informatice din asigurările de sănătate (PIAS)",
+    "allocatedValue": 50000000,
+    "executedValue": 6516,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 177,
+    "componentCode": "C7",
+    "measureCode": "I3",
+    "title": "I3. Realizarea sistemului de eHealth și telemedicină - I3.2. Digitalizarea instituțiilor cu atribuții în domeniul sanitar aflate în subordinea MS",
+    "allocatedValue": 80000000,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 178,
+    "componentCode": "C7",
+    "measureCode": "I3",
+    "title": "I3. Realizarea sistemului de eHealth și telemedicină - I3.3  Digitalizarea a 200 de unități sanitare publice",
+    "allocatedValue": 64000000,
+    "executedValue": 6701538,
+    "executionPercent": "10,5 %"
+  },
+  {
+    "id": 49,
+    "componentCode": "C7",
+    "measureCode": "I4",
+    "title": "I4. Digitalizarea sistemului judiciar",
+    "allocatedValue": 1000000,
+    "executedValue": 1000000,
+    "executionPercent": "100,0 %"
+  },
+  {
+    "id": 50,
+    "componentCode": "C7",
+    "measureCode": "I5",
+    "title": "I5. Digitalizare în domeniul mediului",
+    "allocatedValue": 374728570,
+    "executedValue": 176346215,
+    "executionPercent": "47,1 %"
+  },
+  {
+    "id": 51,
+    "componentCode": "C7",
+    "measureCode": "I6",
+    "title": "I6. Digitalizarea în domeniul muncii și protecției sociale",
+    "allocatedValue": 187050420,
+    "executedValue": 4728866,
+    "executionPercent": "2,5 %"
+  },
+  {
+    "id": 52,
+    "componentCode": "C7",
+    "measureCode": "I7",
+    "title": "I7. Implementarea formularelor electronice eForms în domeniul achizițiilor publice",
+    "allocatedValue": 100000000,
+    "executedValue": 22316977,
+    "executionPercent": "22,3 %"
+  },
+  {
+    "id": 53,
+    "componentCode": "C7",
+    "measureCode": "I8",
+    "title": "I8. Cartea de identitate electronică și semnătura digitală",
+    "allocatedValue": 100000000,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 54,
+    "componentCode": "C7",
+    "measureCode": "I9",
+    "title": "I9. Digitalizarea sectorului organizațiilor neguvernamentale",
+    "allocatedValue": 100000000,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 55,
+    "componentCode": "C7",
+    "measureCode": "I10",
+    "title": "I10. Transformarea digitală în managementul funcției publice",
+    "allocatedValue": 242310000,
+    "executedValue": 46468278,
+    "executionPercent": "19,2 %"
+  },
+  {
+    "id": 56,
+    "componentCode": "C7",
+    "measureCode": "I11",
+    "title": "I11. Implementarea unei scheme de sprijinire a utilizării serviciilor de comunicații prin diferite tipuri de instrumente pentru beneficiari, cu accent pe zonele albe",
+    "allocatedValue": 47951280,
+    "executedValue": 8237545,
+    "executionPercent": "17,2 %"
+  },
+  {
+    "id": 57,
+    "componentCode": "C7",
+    "measureCode": "I12",
+    "title": "I12. Asigurarea protecției cibernetice atât pentru infrastructurile TIC publice, cât și pentru cele private cu valențe critic e pentru securitatea națională, prin utilizarea tehnologiilor inteligente",
+    "allocatedValue": 85000000,
+    "executedValue": 43076266,
+    "executionPercent": "50,7 %"
+  },
+  {
+    "id": 58,
+    "componentCode": "C7",
+    "measureCode": "I13",
+    "title": "I13. Dezvoltarea sistemelor de securitate pentru protecția spectrului guvernamental",
+    "allocatedValue": 851600,
+    "executedValue": 654792,
+    "executionPercent": "76,9 %"
+  },
+  {
+    "id": 59,
+    "componentCode": "C7",
+    "measureCode": "I14",
+    "title": "I14. Sporirea rezilienței și a securității cibernetice a serviciilor de infrastructură ale furnizorilor de servicii de internet pentru autoritățile publice din România",
+    "allocatedValue": 129000000,
+    "executedValue": 230861,
+    "executionPercent": "0,2 %"
+  },
+  {
+    "id": 60,
+    "componentCode": "C7",
+    "measureCode": "I15",
+    "title": "I15. Crearea de noi competențe de securitate cibernetică pentru societate și economie",
+    "allocatedValue": 12000000,
+    "executedValue": 35386,
+    "executionPercent": "0,3 %"
+  },
+  {
+    "id": 61,
+    "componentCode": "C7",
+    "measureCode": "I16",
+    "title": "I16. Program de formare de competențe digitale avansate pentru funcționarii publici",
+    "allocatedValue": 10000000,
+    "executedValue": 1129813,
+    "executionPercent": "11,3 %"
+  },
+  {
+    "id": 62,
+    "componentCode": "C7",
+    "measureCode": "I17",
+    "title": "I17. Scheme de finanțare pentru biblioteci pentru a deveni hub-uri de dezvoltare a competențelor digitale",
+    "allocatedValue": 94000000,
+    "executedValue": 18202922,
+    "executionPercent": "19,4 %"
+  },
+  {
+    "id": 63,
+    "componentCode": "C7",
+    "measureCode": "I18",
+    "title": "I18. Transformarea digitală și adoptarea tehnologiei de automatizare a proceselor de lucru robotice în administrația publică.",
+    "allocatedValue": 100000000,
+    "executedValue": 196840,
+    "executionPercent": "0,2 %"
+  },
+  {
+    "id": 64,
+    "componentCode": "C7",
+    "measureCode": "I19",
+    "title": "I19. Scheme dedicate perfecționării/recalificării angajaților din firme",
+    "allocatedValue": 38530000,
+    "executedValue": 10060486,
+    "executionPercent": "26,1 %"
+  },
+  {
+    "id": 65,
+    "componentCode": "C8",
+    "measureCode": "I1",
+    "title": "I1. Creșterea conformării voluntare a contribuabililor prin dezvoltarea serviciilor digitale",
+    "allocatedValue": 18393501,
+    "executedValue": 17589781,
+    "executionPercent": "95,6 %"
+  },
+  {
+    "id": 66,
+    "componentCode": "C8",
+    "measureCode": "I2",
+    "title": "I2. Îmbunătățirea proceselor de administrare a impozitelor și taxelor, inclusiv prin implementarea managementului integrat al riscurilor",
+    "allocatedValue": 11310000,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 67,
+    "componentCode": "C8",
+    "measureCode": "I3",
+    "title": "I3. Asigurarea capacității de răspuns la provocările informaționale actuale și viitoare, inclusiv în contextul pandemiei, prin transformarea digitală a Ministerului de Finanțe/Agenției Naționale de Administrare Fiscală",
+    "allocatedValue": 20000000,
+    "executedValue": 5658100,
+    "executionPercent": "28,3 %"
+  },
+  {
+    "id": 68,
+    "componentCode": "C8",
+    "measureCode": "I4",
+    "title": "I4. Implementarea vămii electronice",
+    "allocatedValue": 22624468,
+    "executedValue": 6773297,
+    "executionPercent": "29,9 %"
+  },
+  {
+    "id": 69,
+    "componentCode": "C8",
+    "measureCode": "I5",
+    "title": "I5. Îmbunătățirea mecanismului de programare bugetară",
+    "allocatedValue": 14800000,
+    "executedValue": 50838,
+    "executionPercent": "0,3 %"
+  },
+  {
+    "id": 70,
+    "componentCode": "C8",
+    "measureCode": "I6",
+    "title": "I6. Instrument de modelare economică (set de instrumente de simulare privind opțiunile de reformă a pensiilor) pentru îmbunătățirea capacității instituționale de a prognoza cheltuielile cu pensiile",
+    "allocatedValue": 19000000,
+    "executedValue": 925298,
+    "executionPercent": "4,9 %"
+  },
+  {
+    "id": 71,
+    "componentCode": "C8",
+    "measureCode": "I7",
+    "title": "I7. Asistență tehnică pentru revizuirea cadrului fiscal",
+    "allocatedValue": 11889498,
+    "executedValue": 2255342,
+    "executionPercent": "19,0 %"
+  },
+  {
+    "id": 72,
+    "componentCode": "C8",
+    "measureCode": "I8",
+    "title": "I8. Operaționalizarea Băncii Naționale de Dezvoltare",
+    "allocatedValue": 7000000,
+    "executedValue": 1060414,
+    "executionPercent": "15,2 %"
+  },
+  {
+    "id": 74,
+    "componentCode": "C8",
+    "measureCode": "I9",
+    "title": "I9. Susținerea procesului de evaluare a dosarelor de pensii aflate în plată",
+    "allocatedValue": 196400000,
+    "executedValue": 140547091,
+    "executionPercent": "71,6 %"
+  },
+  {
+    "id": 75,
+    "componentCode": "C8",
+    "measureCode": "I10",
+    "title": "I10. Eficiență operațională și servicii electronice avansate pentru sistemul național de pensii prin digitalizare.",
+    "allocatedValue": 88000000,
+    "executedValue": 48223990,
+    "executionPercent": "54,8 %"
+  },
+  {
+    "id": 179,
+    "componentCode": "C8",
+    "measureCode": "I11",
+    "title": "I11. Capitalizare BID",
+    "allocatedValue": 61999999,
+    "executedValue": 40674441,
+    "executionPercent": "65,6 %"
+  },
+  {
+    "id": 77,
+    "componentCode": "C9",
+    "measureCode": "I1",
+    "title": "I1. Platforme digitale privind transparentizarea legislativă, debirocratizarea și simplificarea procedurală destinate mediului de afaceri",
+    "allocatedValue": 4000000,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 153,
+    "componentCode": "C9",
+    "measureCode": "I2",
+    "title": "I2. Instrumente financiare pentru sectorul privat",
+    "allocatedValue": 400000,
+    "executedValue": 347708,
+    "executionPercent": "86,9 %"
+  },
+  {
+    "id": 154,
+    "componentCode": "C9",
+    "measureCode": "I2",
+    "title": "I2. Instrumente financiare pentru sectorul privat",
+    "allocatedValue": 4000000,
+    "executedValue": 1058610,
+    "executionPercent": "26,5 %"
+  },
+  {
+    "id": 158,
+    "componentCode": "C9",
+    "measureCode": "I3",
+    "title": "I3. Scheme de ajutor pentru sectorul privat",
+    "allocatedValue": 10000000,
+    "executedValue": 9954200,
+    "executionPercent": "99,5 %"
+  },
+  {
+    "id": 159,
+    "componentCode": "C9",
+    "measureCode": "I3",
+    "title": "I3. Scheme de ajutor pentru sectorul privat",
+    "allocatedValue": 19250597,
+    "executedValue": 20777581,
+    "executionPercent": "107,9 %"
+  },
+  {
+    "id": 85,
+    "componentCode": "C9",
+    "measureCode": "I4",
+    "title": "I4. Proiecte transfrontaliere și multinaționale – Procesoare cu consum redus de energie și cipuri semiconductoare",
+    "allocatedValue": 61881919,
+    "executedValue": 20800158,
+    "executionPercent": "33,6 %"
+  },
+  {
+    "id": 87,
+    "componentCode": "C9",
+    "measureCode": "I5",
+    "title": "I5. Înființarea și operaționalizarea centrelor de competență",
+    "allocatedValue": 100000000,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 90,
+    "componentCode": "C9",
+    "measureCode": "I8",
+    "title": "I8. Dezvoltarea unui program pentru atragerea resurselor umane înalt specializate din străinătate pentru activități de cercetare, dezvoltare, inovare (T284)",
+    "allocatedValue": 4000000,
+    "executedValue": 1345288,
+    "executionPercent": "33,6 %"
+  },
+  {
+    "id": 91,
+    "componentCode": "C9",
+    "measureCode": "I9",
+    "title": "I9. Program de sprijin pentru posesorii de certificate de excelență primite la competiția pentru burse individuale Marie Sklodowska Curie (T285)",
+    "allocatedValue": 5297170,
+    "executedValue": 3465664,
+    "executionPercent": "65,4 %"
+  },
+  {
+    "id": 92,
+    "componentCode": "C9",
+    "measureCode": "I10",
+    "title": "I10. Înființarea și susținerea financiară a unei rețele naționale de (8) opt centre regionale de orientare în carieră ca parte a ERA TALENT PLATFORM",
+    "allocatedValue": 1050000000,
+    "executedValue": 138547169,
+    "executionPercent": "13,2 %"
+  },
+  {
+    "id": 93,
+    "componentCode": "C10",
+    "measureCode": "I1",
+    "title": "I1. Mobilitate urbană durabilă",
+    "allocatedValue": 200000000,
+    "executedValue": 91721479,
+    "executionPercent": "45,9 %"
+  },
+  {
+    "id": 94,
+    "componentCode": "C10",
+    "measureCode": "I2",
+    "title": "I2. Construcția de locuințe pentru tineri / locuințe pentru specialiști în sănătate și educație",
+    "allocatedValue": 256500000,
+    "executedValue": 1375626,
+    "executionPercent": "0,5 %"
+  },
+  {
+    "id": 95,
+    "componentCode": "C10",
+    "measureCode": "I3",
+    "title": "I3. Reabilitarea moderată a clădirilor publice pentru a îmbunătăți furnizarea de servicii publice de către unitățile administrativ-teritoriale",
+    "allocatedValue": 600000,
+    "executedValue": 13,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 180,
+    "componentCode": "C10",
+    "measureCode": "I3",
+    "title": "I3. Reabilitarea moderată a clădirilor publice pentru a îmbunătăți furnizarea de servicii publice de către unitățile administrativ-teritoriale",
+    "allocatedValue": 400000000,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 96,
+    "componentCode": "C10",
+    "measureCode": "I4",
+    "title": "I4. Elaborarea / actualizarea în format GIS a documentelor de amenajare a teritoriului și de urbanism",
+    "allocatedValue": 25000000,
+    "executedValue": 8642602,
+    "executionPercent": "34,6 %"
+  },
+  {
+    "id": 98,
+    "componentCode": "C11",
+    "measureCode": "I1",
+    "title": "I1. Promovarea celor 12 rute turistice/culturale",
+    "allocatedValue": 183000000,
+    "executedValue": 46733542,
+    "executionPercent": "25,5 %"
+  },
+  {
+    "id": 99,
+    "componentCode": "C11",
+    "measureCode": "I2",
+    "title": "I2. Modernizarea/crearea de muzee și memoriale",
+    "allocatedValue": 1600000,
+    "executedValue": 978784,
+    "executionPercent": "61,2 %"
+  },
+  {
+    "id": 100,
+    "componentCode": "C11",
+    "measureCode": "I3",
+    "title": "I3. Înființarea și operaționalizarea Centrului Național de Coordonare Velo",
+    "allocatedValue": 4000000,
+    "executedValue": 1643301,
+    "executionPercent": "41,1 %"
+  },
+  {
+    "id": 101,
+    "componentCode": "C11",
+    "measureCode": "I4",
+    "title": "I4. Implementarea a 2404 km de piste pentru biciclete",
+    "allocatedValue": 3430000,
+    "executedValue": 4339499,
+    "executionPercent": "126,5 %"
+  },
+  {
+    "id": 103,
+    "componentCode": "C11",
+    "measureCode": "I5",
+    "title": "I5. Sporirea accesului la cultură în zonele defavorizate din punct de vedere cultural",
+    "allocatedValue": 904000000,
+    "executedValue": 421563069,
+    "executionPercent": "46,6 %"
+  },
+  {
+    "id": 104,
+    "componentCode": "C11",
+    "measureCode": "I6",
+    "title": "I6. Dezvoltarea unui sistem digital pentru procesele de finanțare a culturii",
+    "allocatedValue": 145341508,
+    "executedValue": 50186304,
+    "executionPercent": "34,5 %"
+  },
+  {
+    "id": 105,
+    "componentCode": "C11",
+    "measureCode": "I7",
+    "title": "I7. Accelerarea digitalizării producției și distribuției de filme",
+    "allocatedValue": 287500000,
+    "executedValue": 278369270,
+    "executionPercent": "96,8 %"
+  },
+  {
+    "id": 109,
+    "componentCode": "C12",
+    "measureCode": "I1",
+    "title": "I1. Dezvoltarea infrastructurii medicale prespitalicești  -  I1.1 - Cabinete ale medicilor de familie sau asocieri de cabinete de asistență medicală primară – 2000 unități",
+    "allocatedValue": 287500000,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 181,
+    "componentCode": "C12",
+    "measureCode": "I1",
+    "title": "I1. Dezvoltarea infrastructurii medicale prespitalicești  - I1.3 – Unități de asistență medicală ambulatorie – 30 unități",
+    "allocatedValue": 25197281,
+    "executedValue": 14879294,
+    "executionPercent": "59,1 %"
+  },
+  {
+    "id": 182,
+    "componentCode": "C12",
+    "measureCode": "I1",
+    "title": "I1. Dezvoltarea infrastructurii medicale prespitalicești  - I1.4 – Centre comunitare integrate (nou-construite/renovate și dotate, inclusiv cu personal adecvat) – 200 unități",
+    "allocatedValue": 102085000,
+    "executedValue": 46173057,
+    "executionPercent": "45,2 %"
+  },
+  {
+    "id": 183,
+    "componentCode": "C12",
+    "measureCode": "I1",
+    "title": "I1. Dezvoltarea infrastructurii medicale prespitalicești - I1.5 – Cabinete de planificare familială",
+    "allocatedValue": 34728928,
+    "executedValue": 5637432,
+    "executionPercent": "16,2 %"
+  },
+  {
+    "id": 110,
+    "componentCode": "C12",
+    "measureCode": "I2",
+    "title": "I2. Dezvoltarea infrastructurii spitalicești publice - I2.1 Dezvoltarea infrastructurii spitalicești publice (19 spitale) si I2.2 Echipamente și aparatură medicală",
+    "allocatedValue": 1500000,
+    "executedValue": 47040,
+    "executionPercent": "3,1 %"
+  },
+  {
+    "id": 184,
+    "componentCode": "C12",
+    "measureCode": "I2",
+    "title": "I2. Dezvoltarea infrastructurii spitalicești publice - I2.1 Dezvoltarea infrastructurii spitalicești publice (19 spitale) si I2.2 Echipamente și aparatură medicală",
+    "allocatedValue": 24302153,
+    "executedValue": 8943931,
+    "executionPercent": "36,8 %"
+  },
+  {
+    "id": 185,
+    "componentCode": "C12",
+    "measureCode": "I2",
+    "title": "I2. Dezvoltarea infrastructurii spitalicești publice - I2.3- Dezvoltarea infrastructurii spitalicești publice (25 Unități de terapie intensivă pentru nou-născuți dotate, inclusiv cu ambulanțe pentru nou-născuți (pentru centrele regionale)  (T376)",
+    "allocatedValue": 7790000,
+    "executedValue": 3609702,
+    "executionPercent": "46,3 %"
+  },
+  {
+    "id": 186,
+    "componentCode": "C12",
+    "measureCode": "I2",
+    "title": "I2. Dezvoltarea infrastructurii spitalicești publice - I2.4 Echipamente și materiale destinate reducerii riscului de infecții nosocomiale",
+    "allocatedValue": 3750000,
+    "executedValue": 1979771,
+    "executionPercent": "52,8 %"
+  },
+  {
+    "id": 187,
+    "componentCode": "C12",
+    "measureCode": "I4",
+    "title": "I4. Modernizarea asistenței medicale de urgență (Achiziționarea de noi ambulanțe)",
+    "allocatedValue": 5460000,
+    "executedValue": 5129592,
+    "executionPercent": "94,0 %"
+  },
+  {
+    "id": 113,
+    "componentCode": "C13",
+    "measureCode": "I1",
+    "title": "I1. Crearea unei rețele de centre de zi pentru copiii expuși riscului de a fi separați de familie",
+    "allocatedValue": 10000000,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 114,
+    "componentCode": "C13",
+    "measureCode": "I2",
+    "title": "I2. Reabilitarea, renovarea și dezvoltarea infrastructurii sociale pentru persoanele cu dizabilități",
+    "allocatedValue": 1000000,
+    "executedValue": 276022,
+    "executionPercent": "27,6 %"
+  },
+  {
+    "id": 115,
+    "componentCode": "C13",
+    "measureCode": "I3",
+    "title": "I3. Operaționalizarea introducerii tichetelor de muncă pentru activitățile casnice",
+    "allocatedValue": 120250000,
+    "executedValue": 183565643,
+    "executionPercent": "152,7 %"
+  },
+  {
+    "id": 118,
+    "componentCode": "C13",
+    "measureCode": "I4",
+    "title": "I4. Crearea unei rețele de centre de îngrijire de zi și de reabilitare pentru persoanele în vârstă",
+    "allocatedValue": 80250000,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 129,
+    "componentCode": "C14",
+    "measureCode": "I5",
+    "title": "I5.  Monitorizarea și implementarea planului",
+    "allocatedValue": 10854000,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 130,
+    "componentCode": "C15",
+    "measureCode": "I1",
+    "title": "I1. Construirea, echiparea și operaționalizarea a unui număr de 110 de creșe",
+    "allocatedValue": 2016807,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 188,
+    "componentCode": "C15",
+    "measureCode": "I1",
+    "title": "I1. Construirea, echiparea și operaționalizarea a unui număr de 110 de creșe",
+    "allocatedValue": 275549474,
+    "executedValue": 423615541,
+    "executionPercent": "153,7 %"
+  },
+  {
+    "id": 131,
+    "componentCode": "C15",
+    "measureCode": "I2",
+    "title": "I2: Înființarea, echiparea și operaționalizarea unui număr de 90 servicii \r\ncomplementare pentru grupurile dezavantajate",
+    "allocatedValue": 259886530,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 132,
+    "componentCode": "C15",
+    "measureCode": "I3",
+    "title": "I3.Dezvoltarea programului cadru pentru formarea continuă a profesioniștilor care lucrează în servicii de educație timpurii",
+    "allocatedValue": 74026000,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 133,
+    "componentCode": "C15",
+    "measureCode": "I4",
+    "title": "I4: Sprijinirea unităților de învățământ cu risc crescut de abandon școlar",
+    "allocatedValue": 150380000,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 134,
+    "componentCode": "C15",
+    "measureCode": "I5",
+    "title": "I5: Instruiri pentru utilizatorii (SIIIR) și (MATE) și intervenții sistemice pentru reducerea abandonului școlar",
+    "allocatedValue": 183590800,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 135,
+    "componentCode": "C15",
+    "measureCode": "I6",
+    "title": "I6: Dezvoltarea a 10 consorții regionale și dezvoltarea și dotarea a 10 campusuri profesionale",
+    "allocatedValue": 70180000,
+    "executedValue": 1700000,
+    "executionPercent": "2,4 %"
+  },
+  {
+    "id": 137,
+    "componentCode": "C15",
+    "measureCode": "I8",
+    "title": "I8: Program de formare continuă a personalului didactic",
+    "allocatedValue": 30053000,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 138,
+    "componentCode": "C15",
+    "measureCode": "I9",
+    "title": "I9: Asigurarea echipamentelor și resurselor tehnologice digitale pentru școli",
+    "allocatedValue": 80280000,
+    "executedValue": 15012569,
+    "executionPercent": "18,7 %"
+  },
+  {
+    "id": 139,
+    "componentCode": "C15",
+    "measureCode": "I10",
+    "title": "I10: Dezvoltarea rețelei de școli verzi și achiziționarea de microbuze verzi",
+    "allocatedValue": 48611800,
+    "executedValue": 13613396,
+    "executionPercent": "28,0 %"
+  },
+  {
+    "id": 189,
+    "componentCode": "C15",
+    "measureCode": "I10",
+    "title": "I10: Dezvoltarea rețelei de școli verzi și achiziționarea de microbuze verzi",
+    "allocatedValue": 34032327,
+    "executedValue": 5631899,
+    "executionPercent": "16,6 %"
+  },
+  {
+    "id": 140,
+    "componentCode": "C15",
+    "measureCode": "I11",
+    "title": "I11: Asigurarea dotărilor sălilor de clasa și a laboratoarelor/cabinetelor școlare din sistemul preuniversitar",
+    "allocatedValue": 4540000,
+    "executedValue": 2923075,
+    "executionPercent": "64,4 %"
+  },
+  {
+    "id": 142,
+    "componentCode": "C15",
+    "measureCode": "I13",
+    "title": "I13: Echiparea laboratoarelor de informatică din unitățile de învățământ profesional și tehnic",
+    "allocatedValue": 77694085,
+    "executedValue": 7638863,
+    "executionPercent": "9,8 %"
+  },
+  {
+    "id": 143,
+    "componentCode": "C15",
+    "measureCode": "I14",
+    "title": "I14: Echiparea atelierelor de practică din unitățile de învățământ profesional și tehnic",
+    "allocatedValue": 730000,
+    "executedValue": 696955,
+    "executionPercent": "95,5 %"
+  },
+  {
+    "id": 145,
+    "componentCode": "C15",
+    "measureCode": "I16",
+    "title": "I16: Digitalizarea universităților și pregătirea acestora pentru profesiile digitale ale viitorului",
+    "allocatedValue": 2000000,
+    "executedValue": 2106911,
+    "executionPercent": "105,4 %"
+  },
+  {
+    "id": 146,
+    "componentCode": "C15",
+    "measureCode": "I17",
+    "title": "I17: Asigurarea infrastructurii universitare (cămine, cantine, spații de recreere)",
+    "allocatedValue": 300000,
+    "executedValue": 296652,
+    "executionPercent": "98,9 %"
+  },
+  {
+    "id": 147,
+    "componentCode": "C15",
+    "measureCode": "I18",
+    "title": "I18: Program de instruire și mentorat pentru manageri și inspectori școlari",
+    "allocatedValue": 1190000,
+    "executedValue": 1185667,
+    "executionPercent": "99,6 %"
+  },
+  {
+    "id": 161,
+    "componentCode": "C16",
+    "measureCode": "I2",
+    "title": "I2. Capacități de producție de energie electrică din surse regenerabile*",
+    "allocatedValue": 12841000,
+    "executedValue": 11471751,
+    "executionPercent": "89,3 %"
+  },
+  {
+    "id": 163,
+    "componentCode": "C16",
+    "measureCode": "I4",
+    "title": "I4. Schemă de acordare a voucherelor pentru accelerarea instalării de capacități de energie regenerabilă în cadrul gospodăriilor individuale",
+    "allocatedValue": 11930000,
+    "executedValue": 6924010,
+    "executionPercent": "58,0 %"
+  },
+  {
+    "id": 190,
+    "componentCode": "C16",
+    "measureCode": "I4",
+    "title": "I4. Schemă de acordare a voucherelor pentru accelerarea instalării de capacități de energie regenerabilă în cadrul gospodăriilor individuale",
+    "allocatedValue": 14180000,
+    "executedValue": 3827288,
+    "executionPercent": "27,0 %"
+  },
+  {
+    "id": 164,
+    "componentCode": "C16",
+    "measureCode": "I5",
+    "title": "I5. Eficientizarea, modernizarea și digitalizarea rețelei naționale de transport a energiei electrice \r\nSubinvestiția 5.a - Instalarea de centrale fotovoltaice (CEF) și instalații de stocare a energiei electrice destinate alimentării serviciilor interne instalate în stațiile C.N.T.E.E. Transelectrica S.A",
+    "allocatedValue": 14000000,
+    "executedValue": 6977026,
+    "executionPercent": "49,8 %"
+  },
+  {
+    "id": 191,
+    "componentCode": "C16",
+    "measureCode": "I5",
+    "title": "I5. Eficientizarea, modernizarea și digitalizarea rețelei naționale de transport a energiei electrice \r\nSubinvestiția 5.b - Retehnologizarea SMART SA – filiala C.N.T.E.E. Transelectrica S.A",
+    "allocatedValue": 2000000,
+    "executedValue": 998560,
+    "executionPercent": "49,9 %"
+  },
+  {
+    "id": 192,
+    "componentCode": "C16",
+    "measureCode": "I5",
+    "title": "I5. Eficientizarea, modernizarea și digitalizarea rețelei naționale de transport a energiei electrice \r\nSubinvestiția 5.c - Optimizarea rețelei de comunicații și crearea unui centru de date – Teletrans SA, filiala C.N.T.E.E. Transelectrica S.A",
+    "allocatedValue": 4600000,
+    "executedValue": 2680824,
+    "executionPercent": "58,3 %"
+  },
+  {
+    "id": 166,
+    "componentCode": "C16",
+    "measureCode": "I7",
+    "title": "I7. Schemă de acordare de vouchere pentru îmbunătățirea eficienței energetice în cadrul gospodăriilor individuale",
+    "allocatedValue": 17830000,
+    "executedValue": 1041493,
+    "executionPercent": "5,8 %"
+  },
+  {
+    "id": 193,
+    "componentCode": "C16",
+    "measureCode": "I8",
+    "title": "I8. Contribuția la schema de ajutor de stat sub formă de contracte pentru diferență pentru producerea de energie electrică din surse regenerabile din energie eoliană terestră și energie solară fotovoltaică",
+    "allocatedValue": 167273000,
+    "executedValue": 119498443,
+    "executionPercent": "71,4 %"
+  },
+  {
+    "id": 1,
+    "componentCode": "C1",
+    "measureCode": "R2",
+    "title": "R2. Reconfigurarea actualului mecanism economic al ANAR în vederea asigurării modernizării și întreținerii sistemului național de gospodărire a apelor, precum și a implementării corespunzătoare a Directivei-cadru privind apa și a Directivei privind inundațiile",
+    "allocatedValue": 62727000,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 10,
+    "componentCode": "C2",
+    "measureCode": "R1",
+    "title": "R1. Reforma sistemului de management și a celui privind guvernanța în domeniul forestier prin dezvoltarea unei noi Strategii forestiere naționale și a legislației subsecvente",
+    "allocatedValue": 6236458,
+    "executedValue": 2465728,
+    "executionPercent": "39,5 %"
+  },
+  {
+    "id": 28,
+    "componentCode": "C4",
+    "measureCode": "R1",
+    "title": "R1. Transport sustenabil, decarbonizare și siguranță rutieră /Decarbonizarea rutieră în conformitate cu principiul „poluatorul plătește”",
+    "allocatedValue": 3832000,
+    "executedValue": 578970,
+    "executionPercent": "15,1 %"
+  },
+  {
+    "id": 31,
+    "componentCode": "C4",
+    "measureCode": "R2",
+    "title": "R2. Management performant pentru transport de calitate - Îmbunătățirea capacității instituționale de management și guvernanță corporativă",
+    "allocatedValue": 460000000,
+    "executedValue": 14441953,
+    "executionPercent": "3,1 %"
+  },
+  {
+    "id": 34,
+    "componentCode": "C5",
+    "measureCode": "R1",
+    "title": "R1. Realizarea unui cadru normativ simplificat și actualizat care să sprijine implementarea investițiilor în tranziția spre clădiri verzi și reziliente",
+    "allocatedValue": 43000000,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 40,
+    "componentCode": "C6",
+    "measureCode": "R4",
+    "title": "R4. Dezvoltarea unui cadru legislativ și de reglementare favorabil tehnologiilor viitorului, în special hidrogen și soluții de stocare",
+    "allocatedValue": 169000000,
+    "executedValue": 20877298,
+    "executionPercent": "12,4 %"
+  },
+  {
+    "id": 45,
+    "componentCode": "C7",
+    "measureCode": "R1",
+    "title": "R1. Dezvoltarea unui cadru unitar pentru definirea arhitecturii unui sistem de tip cloud guvernamental",
+    "allocatedValue": 80000000,
+    "executedValue": 18180101,
+    "executionPercent": "22,7 %"
+  },
+  {
+    "id": 73,
+    "componentCode": "C8",
+    "measureCode": "R6",
+    "title": "R6. Rsistemului public de pensii",
+    "allocatedValue": 478500000,
+    "executedValue": 218111821,
+    "executionPercent": "45,6 %"
+  },
+  {
+    "id": 86,
+    "componentCode": "C9",
+    "measureCode": "R2",
+    "title": "R2. Raționalizarea guvernanței în domeniul cercetării, dezvoltării și inovării",
+    "allocatedValue": 209144630,
+    "executedValue": 105615087,
+    "executionPercent": "50,5 %"
+  },
+  {
+    "id": 97,
+    "componentCode": "C11",
+    "measureCode": "R1",
+    "title": "R1. Operaționalizarea organizațiilor de management al destinației (OMD-uri)",
+    "allocatedValue": 52960909,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 102,
+    "componentCode": "C11",
+    "measureCode": "R3",
+    "title": "R3. Reformarea sistemului de finanțare a sectorului cultural",
+    "allocatedValue": 600000000,
+    "executedValue": 210594293,
+    "executionPercent": "35,1 %"
+  },
+  {
+    "id": 106,
+    "componentCode": "C12",
+    "measureCode": "R1",
+    "title": "R1. Dezvoltarea capacității pentru gestionarea fondurilor publice din sănătate",
+    "allocatedValue": 9000000,
+    "executedValue": 3957263,
+    "executionPercent": "44,0 %"
+  },
+  {
+    "id": 107,
+    "componentCode": "C12",
+    "measureCode": "R2",
+    "title": "R2. Dezvoltarea capacității de investiții în infrastructura sanitară",
+    "allocatedValue": 50000000,
+    "executedValue": 17525691,
+    "executionPercent": "35,1 %"
+  },
+  {
+    "id": 108,
+    "componentCode": "C12",
+    "measureCode": "R3",
+    "title": "R3. Dezvoltarea capacității pentru managementul serviciilor de sănătate și managementul resurselor umane din sănătate",
+    "allocatedValue": 234000000,
+    "executedValue": 104307200,
+    "executionPercent": "44,6 %"
+  },
+  {
+    "id": 111,
+    "componentCode": "C13",
+    "measureCode": "R2",
+    "title": "R2. Rsistemului de protecție a persoanelor adulte cu dizabilități",
+    "allocatedValue": 135791094,
+    "executedValue": 9158281,
+    "executionPercent": "6,7 %"
+  },
+  {
+    "id": 112,
+    "componentCode": "C13",
+    "measureCode": "R3",
+    "title": "R3. Implementarea venitului minim de incluziune (VMI)",
+    "allocatedValue": 30720000,
+    "executedValue": 65812,
+    "executionPercent": "0,2 %"
+  },
+  {
+    "id": 116,
+    "componentCode": "C13",
+    "measureCode": "R6",
+    "title": "R6. Îmbunătățirea legislației privind economia socială",
+    "allocatedValue": 460000000,
+    "executedValue": 38285411,
+    "executionPercent": "8,3 %"
+  },
+  {
+    "id": 117,
+    "componentCode": "C13",
+    "measureCode": "R7",
+    "title": "R7. Rserviciilor de îngrijire pe termen lung pentru persoanele în vârstă",
+    "allocatedValue": 305381134,
+    "executedValue": 49667,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 119,
+    "componentCode": "C14",
+    "measureCode": "R1",
+    "title": "R1. Îmbunătățirea predictibilității și a eficienței proceselor decizionale prin întărirea capacității de coordonare a politicilor și analiză de impact la nivelul guvernului și a ministerelor coordonatoare, precum și prin consolidarea instrumentelor în vederea creșterea calității consultărilor publice la toate palierele administrație",
+    "allocatedValue": 305381134,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 120,
+    "componentCode": "C14",
+    "measureCode": "R2",
+    "title": "R2. Întărirea coordonării la Centrul Guvernului printr-o abordare integrată și coerentă a inițiativelor în domeniul schimbărilor climatice și a dezvoltării durabile",
+    "allocatedValue": 29557000,
+    "executedValue": 11717014,
+    "executionPercent": "39,6 %"
+  },
+  {
+    "id": 121,
+    "componentCode": "C14",
+    "measureCode": "R3",
+    "title": "R3. Management performant al resurselor umane în sectorul public",
+    "allocatedValue": 13791327,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 122,
+    "componentCode": "C14",
+    "measureCode": "R4",
+    "title": "R4. Dezvoltarea unui sistem de salarizare echitabil și unitar în sectorul public",
+    "allocatedValue": 8440200,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 123,
+    "componentCode": "C14",
+    "measureCode": "R8",
+    "title": "R8. Reformarea sistemului național de achiziții publice",
+    "allocatedValue": 269690200,
+    "executedValue": 307081,
+    "executionPercent": "0,1 %"
+  },
+  {
+    "id": 124,
+    "componentCode": "C14",
+    "measureCode": "R9",
+    "title": "R9. Îmbunătățirea cadrului procedural de implementare a principiilor guvernanței corporative în cadrul întreprinderilor de stat",
+    "allocatedValue": 350519607,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 167,
+    "componentCode": "C16",
+    "measureCode": "R1",
+    "title": "R1. Crearea unui cadru juridic pentru utilizarea terenurilor aflate în proprietatea statului ca zone de accelerare pentru investițiile în sursele regenerabile de energie",
+    "allocatedValue": 3011752,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  },
+  {
+    "id": 168,
+    "componentCode": "C16",
+    "measureCode": "R2",
+    "title": "R2. Înființarea de ghișee unice pentru furnizarea către prosumatori de servicii de consiliere în domeniul energiei pentru renovările ce vizează eficiența energetică și producția de energie din surse regenerabile",
+    "allocatedValue": 431438,
+    "executedValue": 0,
+    "executionPercent": "0,0 %"
+  }
+]
