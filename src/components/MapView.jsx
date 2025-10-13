@@ -1156,26 +1156,9 @@ const MapView = ({
             }
         })
 
-        // Add multi-county data
-        if (multiData && multiData.extras && multiData.extras.rows) {
-            if (activeProgram) {
-                // Filter multi-county data by component
-                const filteredMultiProjects = multiData.extras.rows.filter(project =>
-                    project[fieldMappings.componentCode] === activeProgram
-                )
-                totalValue += filteredMultiProjects.reduce((sum, project) =>
-                    sum + getValueField(project), 0
-                )
-                totalProjects += filteredMultiProjects.length
-            } else {
-                // Calculate from individual projects to respect currency selection
-                const multiValue = multiData.extras.rows.reduce((sum, project) =>
-                    sum + getValueField(project), 0
-                )
-                totalValue += multiValue
-                totalProjects += multiData.extras.rows.length
-            }
-        }
+        // NOTE: Multi-county data (RO-MULTI) is NOT added here because
+        // NAȚIONAL projects are already included in București via useBucurestiNationalProjects hook
+        // Adding them here would create duplicates
 
         return { totalValue, totalProjects }
     }, [data, activeProgram, fieldMappings, currency, getValueField])
