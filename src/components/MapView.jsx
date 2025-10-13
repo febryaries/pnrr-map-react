@@ -31,6 +31,7 @@ const EnhancedTable = ({
   const [filterStadiu, setFilterStadiu] = useState('')
   const [filterLocality, setFilterLocality] = useState('')
   const [filterFundingSource, setFilterFundingSource] = useState('')
+  const [filterCounty, setFilterCounty] = useState('')
 
   // Get unique values for filters
   const uniqueStadiu = useMemo(() => {
@@ -53,6 +54,14 @@ const EnhancedTable = ({
     const values = new Set()
     data.forEach(item => {
       if (item.fundingSource) values.add(item.fundingSource)
+    })
+    return Array.from(values).sort()
+  }, [data])
+
+  const uniqueCounties = useMemo(() => {
+    const values = new Set()
+    data.forEach(item => {
+      if (item.county) values.add(item.county)
     })
     return Array.from(values).sort()
   }, [data])
@@ -105,9 +114,14 @@ const EnhancedTable = ({
       filtered = filtered.filter(item => item.fundingSource === filterFundingSource)
     }
     
+    // Apply County filter
+    if (filterCounty) {
+      filtered = filtered.filter(item => item.county === filterCounty)
+    }
+    
     setFilteredData(filtered)
     setCurrentPage(1) // Reset to first page when filtering
-  }, [data, searchTerm, filterStadiu, filterLocality, filterFundingSource, columns])
+  }, [data, searchTerm, filterStadiu, filterLocality, filterFundingSource, filterCounty, columns])
 
   // Sort data
   const sortedData = useMemo(() => {
@@ -467,14 +481,40 @@ const EnhancedTable = ({
               </select>
             </div>
             
+            {/* County Filter */}
+            <div style={{ flex: '1 1 200px', minWidth: '200px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: '500', marginBottom: '4px', color: '#64748b' }}>
+                Județ
+              </label>
+              <select
+                value={filterCounty}
+                onChange={(e) => setFilterCounty(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '6px',
+                  fontSize: '14px',
+                  backgroundColor: '#fff',
+                  cursor: 'pointer'
+                }}
+              >
+                <option value="">Toate județele</option>
+                {uniqueCounties.map(value => (
+                  <option key={value} value={value}>{value}</option>
+                ))}
+              </select>
+            </div>
+            
             {/* Clear Filters Button */}
-            {(filterStadiu || filterLocality || filterFundingSource) && (
+            {(filterStadiu || filterLocality || filterFundingSource || filterCounty) && (
               <div style={{ flex: '0 0 auto', display: 'flex', alignItems: 'flex-end' }}>
                 <button
                   onClick={() => {
                     setFilterStadiu('')
                     setFilterLocality('')
                     setFilterFundingSource('')
+                    setFilterCounty('')
                   }}
                   style={{
                     padding: '8px 16px',
@@ -1782,8 +1822,14 @@ const MapView = ({
                 <EnhancedTable
                     data={(() => {
                         // Get all projects/payments from all counties
+                        // EXCLUDE RO-MULTI because NAȚIONAL projects are already included in București
                         const allData = []
                         data.forEach(county => {
+                            // Skip Multi Județe (RO-MULTI) - NAȚIONAL projects are in București
+                            if (county.county?.code === 'RO-MULTI' || county.code === 'RO-MULTI') {
+                                return;
+                            }
+                            
                             if (county.extras?.rows) {
                                 county.extras.rows.forEach(item => {
                                     // Create concatenated title from contract number and title
@@ -1958,9 +2004,14 @@ const MapView = ({
                     title={endpoint === 'payments' ? 'Plăți PNRR' : 'Proiecte PNRR'}
                     subtitle={
                         (() => {
-                            const totalData = data.reduce((sum, county) => sum + (county.extras?.rows?.length || 0), 0)
+                            // EXCLUDE RO-MULTI from calculations (NAȚIONAL projects are in București)
+                            const dataWithoutMulti = data.filter(county => 
+                                county.county?.code !== 'RO-MULTI' && county.code !== 'RO-MULTI'
+                            )
+                            
+                            const totalData = dataWithoutMulti.reduce((sum, county) => sum + (county.extras?.rows?.length || 0), 0)
                             const filteredData = activeProgram 
-                                ? data.reduce((sum, county) => {
+                                ? dataWithoutMulti.reduce((sum, county) => {
                                     if (county.extras?.rows) {
                                         return sum + county.extras.rows.filter(item => item[fieldMappings.componentCode] === activeProgram).length
                                     }
@@ -1968,7 +2019,7 @@ const MapView = ({
                                 }, 0)
                                 : totalData
                             
-                            const totalValue = data.reduce((sum, county) => {
+                            const totalValue = dataWithoutMulti.reduce((sum, county) => {
                                 if (county.extras?.rows) {
                                     return sum + county.extras.rows.reduce((countySum, item) => {
                                         const value = getValueField(item)
