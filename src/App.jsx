@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import MapView from './components/MapView'
 import CountyDetails from './components/CountyDetails'
+import ChatWidget from './components/AIAssistant/ChatWidget'
 import { mockData } from './data/data'
 import { useDataEndpoint } from './hooks/useDataEndpoint'
 import './App.css'
@@ -144,6 +145,19 @@ function App() {
           )}
         </>
       )}
+      
+      {/* AI Assistant Chat Widget */}
+      <ChatWidget 
+        pnrrData={data}
+        appState={{
+          currentView,
+          selectedCounty,
+          viewMode,
+          activeProgram,
+          metric,
+          currency
+        }}
+      />
     </div>
   )
 }
