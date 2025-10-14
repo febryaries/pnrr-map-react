@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { fmtMoney, COMPONENT_MAPPING_PAYMENTS } from '../data/data'
 import getProcessedComponentsData from '../data/processComponentsData'
 
@@ -41,6 +41,9 @@ const extractMeasureCode = (description) => {
 
 const ComponentsOverview = ({ currency = 'EUR' }) => {
   const [expandedComponents, setExpandedComponents] = useState(new Set())
+  const [isSticky, setIsSticky] = useState(false)
+  const sectionRef = useRef(null)
+  const headerRef = useRef(null)
   
   // Helper function to convert EUR to RON if needed
   const convertValue = (eurValue) => {
@@ -83,6 +86,52 @@ const ComponentsOverview = ({ currency = 'EUR' }) => {
 
   const totalValue = componentsSummary.reduce((sum, comp) => sum + comp.totalValue, 0)
 
+  // Intersection Observer pentru sticky navigation
+  useEffect(() => {
+    const headerElement = headerRef.current
+    const sectionElement = sectionRef.current
+    
+    if (!headerElement || !sectionElement) return
+
+    // Observer pentru header - când iese din viewport, activează sticky
+    const headerObserver = new IntersectionObserver(
+      ([entry]) => {
+        // Sticky când header-ul a ieșit din viewport (scroll down)
+        if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
+          setIsSticky(true)
+        } else if (entry.isIntersecting) {
+          setIsSticky(false)
+        }
+      },
+      { 
+        rootMargin: '-80px 0px 0px 0px', // Offset pentru a activa puțin mai târziu
+        threshold: 0 
+      }
+    )
+
+    // Observer pentru secțiune - când ieși complet din secțiune, dezactivează sticky
+    const sectionObserver = new IntersectionObserver(
+      ([entry]) => {
+        // Dacă secțiunea iese complet din viewport (scroll down past section)
+        if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
+          setIsSticky(false)
+        }
+      },
+      { 
+        rootMargin: '0px 0px -100% 0px', // Trigger când secțiunea iese complet
+        threshold: 0 
+      }
+    )
+
+    headerObserver.observe(headerElement)
+    sectionObserver.observe(sectionElement)
+
+    return () => {
+      headerObserver.disconnect()
+      sectionObserver.disconnect()
+    }
+  }, [])
+
   const toggleComponent = (componentCode) => {
     const newExpanded = new Set(expandedComponents)
     if (newExpanded.has(componentCode)) {
@@ -91,6 +140,26 @@ const ComponentsOverview = ({ currency = 'EUR' }) => {
       newExpanded.add(componentCode)
     }
     setExpandedComponents(newExpanded)
+  }
+
+  // Funcție pentru scroll smooth cu ancora către componentă
+  const scrollToComponent = (componentCode) => {
+    const element = document.querySelector(`[data-component="${componentCode}"]`)
+    
+    if (element) {
+      const stickyHeight = 60 // înălțimea sticky nav
+      const offset = element.getBoundingClientRect().top + window.pageYOffset - stickyHeight - 20
+      
+      window.scrollTo({
+        top: offset,
+        behavior: 'smooth'
+      })
+      
+      // Expandează componenta după scroll
+      setTimeout(() => {
+        setExpandedComponents(new Set([componentCode]))
+      }, 600)
+    }
   }
 
   const getComponentColor = (code) => {
@@ -109,9 +178,28 @@ const ComponentsOverview = ({ currency = 'EUR' }) => {
 
   return (
     <>
-      <section className="map-container" id="componente-pnrr">
+      <section ref={sectionRef} className="map-container" id="componente-pnrr">
         <div className="components-overview">
-          <div className="components-header">
+          {/* Sticky Navigation - apare doar când scroll în secțiune */}
+          {isSticky && (
+            <div className="components-sticky-nav">
+              <div className="sticky-nav-content">
+                {componentsSummary.map(comp => (
+                  <button
+                    key={comp.code}
+                    onClick={() => scrollToComponent(comp.code)}
+                    className={expandedComponents.has(comp.code) ? 'active' : ''}
+                    style={{ borderBottomColor: getComponentColor(comp.code) }}
+                    title={comp.name}
+                  >
+                    {comp.code}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div ref={headerRef} className="components-header">
             <h2>Componente PNRR</h2>
             <p className="components-description">
               Planul Național de Redresare și Reziliență cuprinde <strong>16 componente</strong> strategice, cu o valoare totală de <strong>{formatMoney(totalValue)}</strong>, menite să transforme economia și societatea românească.
@@ -141,6 +229,7 @@ const ComponentsOverview = ({ currency = 'EUR' }) => {
             return (
               <div 
                 key={component.code}
+                data-component={component.code}
                 className={`component-accordion-item ${isExpanded ? 'expanded' : ''}`}
                 style={{ borderLeftColor: getComponentColor(component.code) }}
               >

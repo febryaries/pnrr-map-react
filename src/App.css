@@ -2264,13 +2264,11 @@ h1 {
   padding: 0 32px;
   width: 100%;
   box-sizing: border-box;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  overflow: visible;
 }
 
 .projects-payments-section .card {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  overflow: visible;
 }
 
 @media (max-width: 1200px) {
@@ -2573,6 +2571,7 @@ h1 {
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(2, 6, 23, 0.06);
   padding: 12px 16px;
+  overflow: visible;
 }
 
 .card.pie-card,
@@ -3160,6 +3159,7 @@ td.num {
 
 .scroll-x {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* County details specific */
@@ -3688,5 +3688,318 @@ td.num {
   
   .value-main {
     font-size: 14px;
+  }
+}
+
+/* ===== STICKY NAVIGATION FOR COMPONENTS ===== */
+
+.components-sticky-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin: 0 -24px;
+  padding: 0 24px;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sticky-nav-content {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.sticky-nav-content::-webkit-scrollbar {
+  height: 4px;
+}
+
+.sticky-nav-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sticky-nav-content::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 2px;
+}
+
+.sticky-nav-content::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.components-sticky-nav button {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-bottom: 3px solid transparent;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.components-sticky-nav button:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.components-sticky-nav button.active {
+  background: #ffffff;
+  color: #0f172a;
+  border-color: #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* Responsive pentru sticky nav */
+@media (max-width: 960px) {
+  .components-sticky-nav {
+    margin: 0 -20px;
+    padding: 0 20px;
+  }
+  
+  .sticky-nav-content {
+    gap: 6px;
+    padding: 10px 0;
+  }
+  
+  .components-sticky-nav button {
+    padding: 7px 14px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .components-sticky-nav {
+    margin: 0 -16px;
+    padding: 0 16px;
+  }
+  
+  .sticky-nav-content {
+    gap: 6px;
+    padding: 8px 0;
+  }
+  
+  .components-sticky-nav button {
+    padding: 6px 12px;
+    font-size: 11px;
+    border-radius: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .components-sticky-nav {
+    margin: 0 -12px;
+    padding: 0 12px;
+  }
+  
+  .sticky-nav-content {
+    gap: 4px;
+    padding: 8px 0;
+  }
+  
+  .components-sticky-nav button {
+    padding: 6px 10px;
+    font-size: 10px;
+  }
+}
+
+/* ===== STICKY FILTERS FOR TABLE ===== */
+
+.table-filters-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin: 0 -24px 16px -24px;
+  padding: 12px 24px;
+  animation: slideDown 0.3s ease-out;
+}
+
+.table-filters-sticky-content {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.table-filters-sticky .filter-item {
+  flex: 1 1 180px;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.table-filters-sticky .filter-item label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.table-filters-sticky .filter-item select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 13px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.table-filters-sticky .filter-item select:hover {
+  border-color: #94a3b8;
+}
+
+.table-filters-sticky .filter-item select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.table-filters-sticky .clear-filters-btn {
+  padding: 8px 16px;
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  height: fit-content;
+}
+
+.table-filters-sticky .clear-filters-btn:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+/* Responsive pentru sticky filters */
+@media (max-width: 960px) {
+  .table-filters-sticky {
+    margin: 0 -20px 16px -20px;
+    padding: 10px 20px;
+  }
+  
+  .table-filters-sticky-content {
+    gap: 10px;
+  }
+  
+  .table-filters-sticky .filter-item {
+    flex: 1 1 160px;
+    min-width: 160px;
+  }
+  
+  .table-filters-sticky .filter-item label {
+    font-size: 10px;
+  }
+  
+  .table-filters-sticky .filter-item select {
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+  
+  .table-filters-sticky .clear-filters-btn {
+    padding: 7px 14px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .table-filters-sticky {
+    margin: 0 -16px 16px -16px;
+    padding: 10px 16px;
+  }
+  
+  .table-filters-sticky-content {
+    gap: 8px;
+  }
+  
+  .table-filters-sticky .filter-item {
+    flex: 1 1 calc(50% - 4px);
+    min-width: calc(50% - 4px);
+  }
+  
+  .table-filters-sticky .clear-filters-btn {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .table-filters-sticky {
+    margin: 0 -12px 16px -12px;
+    padding: 8px 12px;
+  }
+  
+  .table-filters-sticky-content {
+    gap: 6px;
+  }
+  
+  .table-filters-sticky .filter-item {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+  
+  .table-filters-sticky .filter-item label {
+    font-size: 9px;
+  }
+  
+  .table-filters-sticky .filter-item select {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+  
+  .table-filters-sticky .clear-filters-btn {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+}
+
+/* ===== PROGRESSIVE FILTERS ANIMATION ===== */
+
+.filter-item-appear {
+  animation: filterAppear 0.4s ease-out;
+}
+
+@keyframes filterAppear {
+  from {
+    opacity: 0;
+    transform: translateX(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
   }
 }
