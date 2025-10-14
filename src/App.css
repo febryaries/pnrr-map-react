@@ -3266,3 +3266,427 @@ td.num {
 .highcharts-tooltip .tt-btn:hover {
   opacity: 0.9;
 }
+
+/* PNRR Link Styles */
+.pnrr-link {
+  margin-left: 8px;
+  color: #3b82f6;
+  text-decoration: none;
+  font-size: 14px;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.pnrr-link:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.investment-description {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+/* Investment value styles */
+.investment-value {
+  text-align: right;
+  min-width: 150px;
+}
+
+.value-main {
+  font-weight: 600;
+  color: #10b981;
+  font-size: 14px;
+}
+
+.value-executed {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.executed-label {
+  font-weight: 500;
+  color: #475569;
+}
+
+.execution-percent {
+  color: #3b82f6;
+  font-weight: 600;
+}
+
+/* Component value - reduce space below */
+.component-value {
+  margin-bottom: -4px;
+}
+
+/* Component executed value in header */
+.component-executed {
+  font-size: 13px;
+  color: #059669;
+  font-weight: 500;
+  margin-top: 0px;
+  margin-bottom: 3px;
+}
+
+/* Component code badge - colorful rounded badge */
+.component-code {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  height: 48px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  color: white;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+/* Component info wrapper */
+.component-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Component name */
+.component-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+/* Component meta - now under the title */
+.component-meta {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 400;
+}
+
+/* Components Header Section */
+.components-header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 40px;
+}
+
+.components-header h2 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 16px;
+}
+
+.components-description {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #64748b;
+  margin-bottom: 32px;
+  max-width: 100%;
+  text-align: center;
+}
+
+.components-description strong {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+/* Stats Boxes - horizontal layout */
+.components-stats-boxes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  width: 100%;
+  max-width: 100%;
+}
+
+.stat-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.2s ease;
+}
+
+.stat-box:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.stat-label {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 500;
+  margin-bottom: -2px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+/* Individual colors for each component */
+.component-accordion-item[style*="border-left-color: rgb(59, 130, 246)"] .component-code,
+.component-accordion-item[style*="border-left-color: #3b82f6"] .component-code {
+  background: #3b82f6; /* C1 - Blue */
+}
+
+.component-accordion-item[style*="border-left-color: rgb(16, 185, 129)"] .component-code,
+.component-accordion-item[style*="border-left-color: #10b981"] .component-code {
+  background: #10b981; /* C2 - Green */
+}
+
+.component-accordion-item[style*="border-left-color: rgb(245, 158, 11)"] .component-code,
+.component-accordion-item[style*="border-left-color: #f59e0b"] .component-code {
+  background: #f59e0b; /* C3 - Orange */
+}
+
+.component-accordion-item[style*="border-left-color: rgb(239, 68, 68)"] .component-code,
+.component-accordion-item[style*="border-left-color: #ef4444"] .component-code {
+  background: #ef4444; /* C4 - Red */
+}
+
+.component-accordion-item[style*="border-left-color: rgb(139, 92, 246)"] .component-code,
+.component-accordion-item[style*="border-left-color: #8b5cf6"] .component-code {
+  background: #8b5cf6; /* C5 - Purple */
+}
+
+.component-accordion-item[style*="border-left-color: rgb(6, 182, 212)"] .component-code,
+.component-accordion-item[style*="border-left-color: #06b6d4"] .component-code {
+  background: #06b6d4; /* C6 - Cyan */
+}
+
+.component-accordion-item[style*="border-left-color: rgb(132, 204, 22)"] .component-code,
+.component-accordion-item[style*="border-left-color: #84cc16"] .component-code {
+  background: #84cc16; /* C7 - Lime */
+}
+
+.component-accordion-item[style*="border-left-color: rgb(249, 115, 22)"] .component-code,
+.component-accordion-item[style*="border-left-color: #f97316"] .component-code {
+  background: #f97316; /* C8 - Orange */
+}
+
+.component-accordion-item[style*="border-left-color: rgb(236, 72, 153)"] .component-code,
+.component-accordion-item[style*="border-left-color: #ec4899"] .component-code {
+  background: #ec4899; /* C9 - Pink */
+}
+
+.component-accordion-item[style*="border-left-color: rgb(99, 102, 241)"] .component-code,
+.component-accordion-item[style*="border-left-color: #6366f1"] .component-code {
+  background: #6366f1; /* C10 - Indigo */
+}
+
+.component-accordion-item[style*="border-left-color: rgb(20, 184, 166)"] .component-code,
+.component-accordion-item[style*="border-left-color: #14b8a6"] .component-code {
+  background: #14b8a6; /* C11 - Teal */
+}
+
+.component-accordion-item[style*="border-left-color: rgb(244, 63, 94)"] .component-code,
+.component-accordion-item[style*="border-left-color: #f43f5e"] .component-code {
+  background: #f43f5e; /* C12 - Rose */
+}
+
+.component-accordion-item[style*="border-left-color: rgb(100, 116, 139)"] .component-code,
+.component-accordion-item[style*="border-left-color: #64748b"] .component-code {
+  background: #64748b; /* C14 - Slate */
+}
+
+.component-accordion-item[style*="border-left-color: rgb(14, 165, 233)"] .component-code,
+.component-accordion-item[style*="border-left-color: #0ea5e9"] .component-code {
+  background: #0ea5e9; /* C15 - Sky */
+}
+
+.component-accordion-item[style*="border-left-color: rgb(34, 197, 94)"] .component-code,
+.component-accordion-item[style*="border-left-color: #22c55e"] .component-code {
+  background: #22c55e; /* C16 - Green */
+}
+
+/* ===== RESPONSIVE: Components Overview ===== */
+
+/* Tablet */
+@media (max-width: 960px) {
+  .components-header {
+    margin-bottom: 32px;
+  }
+  
+  .components-header h2 {
+    font-size: 28px;
+  }
+  
+  .components-description {
+    font-size: 15px;
+    margin-bottom: 28px;
+  }
+  
+  .components-stats-boxes {
+    gap: 16px;
+  }
+  
+  .stat-box {
+    padding: 18px;
+  }
+  
+  .stat-value {
+    font-size: 24px;
+  }
+  
+  .component-code {
+    min-width: 44px;
+    height: 44px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+  
+  .component-name {
+    font-size: 16px;
+  }
+  
+  .component-value {
+    font-size: 16px;
+  }
+  
+  .component-executed {
+    font-size: 12px;
+  }
+  
+  .component-meta {
+    font-size: 11px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .components-header {
+    margin-bottom: 28px;
+  }
+  
+  .components-header h2 {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+  
+  .components-description {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+  
+  .components-stats-boxes {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .stat-box {
+    padding: 16px;
+  }
+  
+  .stat-value {
+    font-size: 22px;
+  }
+  
+  .component-code {
+    min-width: 40px;
+    height: 40px;
+    font-size: 12px;
+    border-radius: 8px;
+    margin-right: 8px;
+  }
+  
+  .component-name {
+    font-size: 15px;
+  }
+  
+  .component-meta {
+    font-size: 11px;
+  }
+  
+  .component-value {
+    font-size: 18px;
+  }
+  
+  .investment-value {
+    width: 100%;
+    text-align: left;
+  }
+  
+  .value-main {
+    font-size: 16px;
+  }
+  
+  .value-executed {
+    font-size: 11px;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .components-header {
+    margin-bottom: 24px;
+  }
+  
+  .components-header h2 {
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+  
+  .components-description {
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+  
+  .components-stats-boxes {
+    gap: 10px;
+  }
+  
+  .stat-box {
+    padding: 14px;
+  }
+  
+  .stat-label {
+    font-size: 10px;
+    margin-bottom: 8px;
+  }
+  
+  .stat-value {
+    font-size: 20px;
+  }
+  
+  .component-code {
+    min-width: 36px;
+    height: 36px;
+    font-size: 11px;
+    border-radius: 8px;
+    margin-right: 6px;
+  }
+  
+  .component-name {
+    font-size: 14px;
+  }
+  
+  .component-meta {
+    font-size: 10px;
+  }
+  
+  .component-value {
+    font-size: 16px;
+  }
+  
+  .component-executed {
+    font-size: 11px;
+  }
+  
+  .value-main {
+    font-size: 14px;
+  }
+}
