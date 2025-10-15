@@ -181,7 +181,16 @@ const EnhancedTable = ({
   }
 
   const renderPagination = () => {
-    if (totalPages <= 1) return null
+    // If only one page or less, show simple count
+    if (totalPages <= 1) {
+      return (
+        <div className="pagination" role="navigation" aria-label="Paginare">
+          <div className="pagination-info">
+            Afișez: {sortedData.length} {sortedData.length === 1 ? 'proiect' : 'proiecte'}
+          </div>
+        </div>
+      )
+    }
   
     const pages = []
     const maxVisiblePages = 3
@@ -1363,7 +1372,6 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
                 title={`Click: ${program.label} | Click again to deselect`}
               >
                 {program.label}
-                {activeProgram === program.key && ' •'}
               </button>
             ))}
           </div>

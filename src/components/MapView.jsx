@@ -22,6 +22,8 @@ const EnhancedTable = ({
   endpoint = null, // Add endpoint prop for mobile card rendering
   enableExport = false, // Enable export to XLSX
   exportFileName = 'export', // File name for export
+  activeProgram = null, // Active program from parent
+  setActiveProgram = null, // Function to set active program
 }) => {
   const [sortColumn, setSortColumn] = useState(defaultSortColumn)
   const [sortDirection, setSortDirection] = useState(defaultSortDirection)
@@ -32,7 +34,7 @@ const EnhancedTable = ({
   const [filterLocality, setFilterLocality] = useState('')
   const [filterFundingSource, setFilterFundingSource] = useState('')
   const [filterCounty, setFilterCounty] = useState('')
-  const [filterComponent, setFilterComponent] = useState('')
+  const [filterComponent, setFilterComponent] = useState(activeProgram || '')
   
   // Ref for sticky filters to scroll to
   const filtersRef = useRef(null)
@@ -276,9 +278,18 @@ const EnhancedTable = ({
     scrollToFilters()
   }
 
+  // Sync filterComponent with activeProgram from parent
+  useEffect(() => {
+    setFilterComponent(activeProgram || '')
+  }, [activeProgram])
+
   // Handle component change - no reset, just update
   const handleComponentChange = (value) => {
     setFilterComponent(value)
+    // Sync with parent activeProgram
+    if (setActiveProgram) {
+      setActiveProgram(value || null)
+    }
     scrollToFilters()
   }
 
@@ -314,7 +325,16 @@ const EnhancedTable = ({
   }
 
   const renderPagination = () => {
-    if (totalPages <= 1) return null
+    // If only one page or less, show simple count
+    if (totalPages <= 1) {
+      return (
+        <div className="pagination" role="navigation" aria-label="Paginare">
+          <div className="pagination-info">
+            Afișez: {sortedData.length} {sortedData.length === 1 ? 'proiect' : 'proiecte'}
+          </div>
+        </div>
+      )
+    }
   
     const pages = []
     const maxVisiblePages = 3
@@ -1660,7 +1680,6 @@ const MapView = ({
                                 title={`Click: ${program.label} · Valoare | Shift+Click: ${program.label} · Proiecte | Click again to deselect`}
                             >
                                 {program.label}
-                                {activeProgram === program.key && (metric === 'projects' ? ' •P' : ' •V')}
                             </button>
                         ))}
                     </div>
@@ -2096,6 +2115,8 @@ const MapView = ({
                     endpoint={endpoint}
                     enableExport={true}
                     exportFileName={`${endpoint === 'payments' ? 'plati' : 'proiecte'}_pnrr_toate`}
+                    activeProgram={activeProgram}
+                    setActiveProgram={setActiveProgram}
                 />
             </section>
 
