@@ -3832,13 +3832,11 @@ td.num {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid #e2e8f0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  margin: 0 -24px 16px -24px;
-  padding: 12px 24px;
-  animation: slideDown 0.3s ease-out;
+  background: transparent;
+  border-bottom: none;
+  box-shadow: none;
+  margin: 0 0 16px 0;
+  padding: 0;
 }
 
 .table-filters-sticky-content {

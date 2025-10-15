@@ -60,29 +60,32 @@ const EnhancedTable = ({
   const uniqueLocalities = useMemo(() => {
     const values = new Set()
     data.forEach(item => {
-      // Only show localities from selected county
-      if (filterCounty && item.county === filterCounty && item.locality) {
-        values.add(item.locality)
-      } else if (!filterCounty && item.locality) {
-        // If no county selected, show all localities
+      let shouldInclude = true
+      
+      // Apply county filter if selected
+      if (filterCounty && item.county !== filterCounty) {
+        shouldInclude = false
+      }
+      
+      if (shouldInclude && item.locality) {
         values.add(item.locality)
       }
     })
     return Array.from(values).sort()
   }, [data, filterCounty])
 
-  // Get unique components (filtered by county and locality)
+  // Get unique components (filtered by active filters)
   const uniqueComponents = useMemo(() => {
     const values = new Set()
     data.forEach(item => {
       let shouldInclude = true
       
-      // Apply county filter
+      // Apply county filter if selected
       if (filterCounty && item.county !== filterCounty) {
         shouldInclude = false
       }
       
-      // Apply locality filter
+      // Apply locality filter if selected
       if (filterLocality && item.locality !== filterLocality) {
         shouldInclude = false
       }
@@ -94,23 +97,23 @@ const EnhancedTable = ({
     return Array.from(values).sort()
   }, [data, filterCounty, filterLocality])
 
-  // Get unique stadiu (filtered by county, locality, and component)
+  // Get unique stadiu (filtered by active filters)
   const uniqueStadiu = useMemo(() => {
     const values = new Set()
     data.forEach(item => {
       let shouldInclude = true
       
-      // Apply county filter
+      // Apply county filter if selected
       if (filterCounty && item.county !== filterCounty) {
         shouldInclude = false
       }
       
-      // Apply locality filter
+      // Apply locality filter if selected
       if (filterLocality && item.locality !== filterLocality) {
         shouldInclude = false
       }
       
-      // Apply component filter
+      // Apply component filter if selected
       if (filterComponent && item.componentCode !== filterComponent) {
         shouldInclude = false
       }
@@ -122,23 +125,23 @@ const EnhancedTable = ({
     return Array.from(values).sort()
   }, [data, filterCounty, filterLocality, filterComponent])
 
-  // Get unique funding sources (filtered by county, locality, and component)
+  // Get unique funding sources (filtered by active filters)
   const uniqueFundingSources = useMemo(() => {
     const values = new Set()
     data.forEach(item => {
       let shouldInclude = true
       
-      // Apply county filter
+      // Apply county filter if selected
       if (filterCounty && item.county !== filterCounty) {
         shouldInclude = false
       }
       
-      // Apply locality filter
+      // Apply locality filter if selected
       if (filterLocality && item.locality !== filterLocality) {
         shouldInclude = false
       }
       
-      // Apply component filter
+      // Apply component filter if selected
       if (filterComponent && item.componentCode !== filterComponent) {
         shouldInclude = false
       }
@@ -261,54 +264,21 @@ const EnhancedTable = ({
     setSearchTerm(value)
   }
 
-  // Handle county change - reset dependent filters
+  // Handle county change - no reset, just update
   const handleCountyChange = (value) => {
     setFilterCounty(value)
-    // Reset dependent filters
-    if (!value) {
-      // If clearing county, reset all dependent filters
-      setFilterLocality('')
-      setFilterComponent('')
-      setFilterStadiu('')
-      setFilterFundingSource('')
-    } else {
-      // If changing county, reset locality and other filters
-      setFilterLocality('')
-      setFilterComponent('')
-      setFilterStadiu('')
-      setFilterFundingSource('')
-    }
-    // Scroll to filters to see results
     scrollToFilters()
   }
 
-  // Handle locality change - reset dependent filters
+  // Handle locality change - no reset, just update
   const handleLocalityChange = (value) => {
     setFilterLocality(value)
-    // Reset dependent filters
-    if (!value) {
-      setFilterComponent('')
-      setFilterStadiu('')
-      setFilterFundingSource('')
-    } else {
-      // If changing locality, reset component and other filters
-      setFilterComponent('')
-      setFilterStadiu('')
-      setFilterFundingSource('')
-    }
-    // Scroll to filters to see results
     scrollToFilters()
   }
 
-  // Handle component change - reset dependent filters
+  // Handle component change - no reset, just update
   const handleComponentChange = (value) => {
     setFilterComponent(value)
-    // Reset dependent filters
-    if (!value) {
-      setFilterStadiu('')
-      setFilterFundingSource('')
-    }
-    // Scroll to filters to see results
     scrollToFilters()
   }
 
@@ -545,11 +515,11 @@ const EnhancedTable = ({
         </div>
       )}
 
-      {/* Sticky Filters - PROGRESIVE - Moved outside searchable div for sticky to work */}
+      {/* Sticky Filters - ALL VISIBLE - Independent filtering */}
       {searchable && (
         <div className="table-filters-sticky" ref={filtersRef}>
           <div className="table-filters-sticky-content">
-              {/* Step 1: County Filter - ALWAYS VISIBLE */}
+              {/* County Filter - ALWAYS VISIBLE */}
               <div className="filter-item">
                 <label>📍 Alege Județul</label>
                 <select value={filterCounty} onChange={(e) => handleCountyChange(e.target.value)}>
@@ -560,63 +530,56 @@ const EnhancedTable = ({
                 </select>
               </div>
               
-              {/* Step 2: Locality Filter - APPEARS AFTER COUNTY SELECTED */}
-              {filterCounty && (
-                <div className="filter-item filter-item-appear">
-                  <label>🏘️ Alege Localitatea</label>
-                  <select value={filterLocality} onChange={(e) => handleLocalityChange(e.target.value)}>
-                    <option value="">Toate localitățile din {filterCounty}</option>
-                    {uniqueLocalities.map(value => (
-                      <option key={value} value={value}>{value}</option>
-                    ))}
-                  </select>
-                </div>
-              )}
+              {/* Locality Filter - ALWAYS VISIBLE */}
+              <div className="filter-item">
+                <label>🏘️ Alege Localitatea</label>
+                <select value={filterLocality} onChange={(e) => handleLocalityChange(e.target.value)}>
+                  <option value="">{filterCounty ? `Toate localitățile din ${filterCounty}` : 'Toate localitățile'}</option>
+                  {uniqueLocalities.map(value => (
+                    <option key={value} value={value}>{value}</option>
+                  ))}
+                </select>
+              </div>
               
-              {/* Step 3: Component Filter - APPEARS AFTER LOCALITY SELECTED */}
-              {filterCounty && filterLocality && (
-                <div className="filter-item filter-item-appear">
-                  <label>🎯 Alege Componenta</label>
-                  <select value={filterComponent} onChange={(e) => handleComponentChange(e.target.value)}>
-                    <option value="">Toate componentele</option>
-                    {uniqueComponents.map(code => {
-                      const component = COMPONENT_MAPPING[code]
-                      return (
-                        <option key={code} value={code}>
-                          {code} - {component?.label || code}
-                        </option>
-                      )
-                    })}
-                  </select>
-                </div>
-              )}
+              {/* Component Filter - ALWAYS VISIBLE */}
+              <div className="filter-item">
+                <label>🎯 Alege Componenta</label>
+                <select value={filterComponent} onChange={(e) => handleComponentChange(e.target.value)}>
+                  <option value="">Toate componentele</option>
+                  {uniqueComponents.map(code => {
+                    const component = COMPONENT_MAPPING[code]
+                    return (
+                      <option key={code} value={code}>
+                        {code} - {component?.label || code}
+                      </option>
+                    )
+                  })}
+                </select>
+              </div>
               
-              {/* Step 4: Stadiu & Funding Source - APPEAR AFTER COMPONENT SELECTED */}
-              {filterCounty && filterLocality && filterComponent && (
-                <>
-                  <div className="filter-item filter-item-appear">
-                    <label>📊 Stadiu</label>
-                    <select value={filterStadiu} onChange={(e) => { setFilterStadiu(e.target.value); scrollToFilters(); }}>
-                      <option value="">Toate stadiile</option>
-                      {uniqueStadiu.map(value => (
-                        <option key={value} value={value}>{value}</option>
-                      ))}
-                    </select>
-                  </div>
-                  
-                  <div className="filter-item filter-item-appear">
-                    <label>💰 Sursă Finanțare</label>
-                    <select value={filterFundingSource} onChange={(e) => { setFilterFundingSource(e.target.value); scrollToFilters(); }}>
-                      <option value="">Toate sursele</option>
-                      {uniqueFundingSources.map(value => (
-                        <option key={value} value={value}>{value}</option>
-                      ))}
-                    </select>
-                  </div>
-                </>
-              )}
+              {/* Stadiu Filter - ALWAYS VISIBLE */}
+              <div className="filter-item">
+                <label>📊 Stadiu</label>
+                <select value={filterStadiu} onChange={(e) => { setFilterStadiu(e.target.value); scrollToFilters(); }}>
+                  <option value="">Toate stadiile</option>
+                  {uniqueStadiu.map(value => (
+                    <option key={value} value={value}>{value}</option>
+                  ))}
+                </select>
+              </div>
               
-              {/* Clear Filters Button - ALWAYS VISIBLE IF ANY FILTER ACTIVE */}
+              {/* Funding Source Filter - ALWAYS VISIBLE */}
+              <div className="filter-item">
+                <label>💰 Sursă Finanțare</label>
+                <select value={filterFundingSource} onChange={(e) => { setFilterFundingSource(e.target.value); scrollToFilters(); }}>
+                  <option value="">Toate sursele</option>
+                  {uniqueFundingSources.map(value => (
+                    <option key={value} value={value}>{value}</option>
+                  ))}
+                </select>
+              </div>
+              
+              {/* Clear Filters Button - VISIBLE IF ANY FILTER ACTIVE */}
               {(filterStadiu || filterLocality || filterFundingSource || filterCounty || filterComponent) && (
                 <button
                   onClick={() => {
