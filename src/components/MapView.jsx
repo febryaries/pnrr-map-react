@@ -269,13 +269,13 @@ const EnhancedTable = ({
   // Handle county change - no reset, just update
   const handleCountyChange = (value) => {
     setFilterCounty(value)
-    scrollToFilters()
+    // No scroll - user is already at the filters
   }
 
   // Handle locality change - no reset, just update
   const handleLocalityChange = (value) => {
     setFilterLocality(value)
-    scrollToFilters()
+    // No scroll - user is already at the filters
   }
 
   // Sync filterComponent with activeProgram from parent
@@ -290,7 +290,7 @@ const EnhancedTable = ({
     if (setActiveProgram) {
       setActiveProgram(value || null)
     }
-    scrollToFilters()
+    // No scroll - user is already at the filters
   }
 
   // Export to XLSX function
@@ -580,7 +580,7 @@ const EnhancedTable = ({
               {/* Stadiu Filter - ALWAYS VISIBLE */}
               <div className="filter-item">
                 <label>📊 Stadiu</label>
-                <select value={filterStadiu} onChange={(e) => { setFilterStadiu(e.target.value); scrollToFilters(); }}>
+                <select value={filterStadiu} onChange={(e) => setFilterStadiu(e.target.value)}>
                   <option value="">Toate stadiile</option>
                   {uniqueStadiu.map(value => (
                     <option key={value} value={value}>{value}</option>
@@ -591,7 +591,7 @@ const EnhancedTable = ({
               {/* Funding Source Filter - ALWAYS VISIBLE */}
               <div className="filter-item">
                 <label>💰 Sursă Finanțare</label>
-                <select value={filterFundingSource} onChange={(e) => { setFilterFundingSource(e.target.value); scrollToFilters(); }}>
+                <select value={filterFundingSource} onChange={(e) => setFilterFundingSource(e.target.value)}>
                   <option value="">Toate sursele</option>
                   {uniqueFundingSources.map(value => (
                     <option key={value} value={value}>{value}</option>
@@ -608,7 +608,11 @@ const EnhancedTable = ({
                     setFilterFundingSource('')
                     setFilterCounty('')
                     setFilterComponent('')
-                    scrollToFilters()
+                    // Sync with parent activeProgram
+                    if (setActiveProgram) {
+                      setActiveProgram(null)
+                    }
+                    // No scroll - user is already at the filters
                   }}
                   className="clear-filters-btn"
                 >
@@ -1025,10 +1029,13 @@ const MapView = ({
                 text: getMapTitle(),
                 align: 'left',
                 margin: 0,
+                useHTML: true,
                 style: {
                     fontSize: '22px',
                     fontWeight: 700,
-                    color: '#0f172a'
+                    color: '#0f172a',
+                    maxWidth: '60%',
+                    lineHeight: '1.3'
                 }
             },
             subtitle: {
@@ -1139,15 +1146,23 @@ const MapView = ({
         // Get currency symbol based on selected currency
         const currencySymbol = currency === 'RON' ? 'RON' : 'EUR'
 
+        let title = ''
         if (viewMode === 'general') {
-            return `Sursa datelor: ${sourceName} - General ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}${filterSuffix}`
+            title = `Sursa datelor: ${sourceName} - General ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}${filterSuffix}`
         } else if (viewMode === 'program') {
-            return `Sursa datelor: ${sourceName} - ${componentLabel || activeProgram} - ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}`
+            title = `Sursa datelor: ${sourceName} - ${componentLabel || activeProgram} - ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}`
         } else if (viewMode === 'total') {
-            return `Sursa datelor: ${sourceName} - Total (General + Multi județe) - ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}${filterSuffix}`
+            title = `Sursa datelor: ${sourceName} - Total (General + Multi județe) - ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}${filterSuffix}`
         } else {
-            return `Sursa datelor: ${sourceName} - Multi județe - ${metric === 'value' ? `Valoare (${currencySymbol}, împărțită egal între județe)` : 'Proiecte (plin în fiecare județ)'}${filterSuffix}`
+            title = `Sursa datelor: ${sourceName} - Multi județe - ${metric === 'value' ? `Valoare (${currencySymbol}, împărțită egal între județe)` : 'Proiecte (plin în fiecare județ)'}${filterSuffix}`
         }
+
+        // If title is too long (more than 100 chars), add line break after "filtrat:"
+        if (title.length > 100 && title.includes('(filtrat:')) {
+            title = title.replace('(filtrat:', '<br/>(filtrat:')
+        }
+
+        return title
     }
 
     // Extract available components from data dynamically

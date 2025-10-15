@@ -809,6 +809,15 @@ h1 {
   pointer-events: none;
 }
 
+/* Limit Highcharts title width to prevent overlap with cards */
+.highcharts-title {
+  max-width: 60% !important;
+}
+
+.highcharts-title tspan {
+  white-space: normal !important;
+}
+
 /* Hide desktop overlay on mobile */
 @media (max-width: 768px) {
   .map-totals-overlay {
@@ -3860,6 +3869,10 @@ td.num {
   color: #475569;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  background: #fff;
+  padding: 2px 0;
+  position: relative;
+  z-index: 1;
 }
 
 .table-filters-sticky .filter-item select {
