@@ -3841,11 +3841,12 @@ td.num {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: transparent;
-  border-bottom: none;
-  box-shadow: none;
+  background: #ffffff;
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #e2e8f0;
   margin: 0 0 16px 0;
-  padding: 0;
+  padding: 12px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .table-filters-sticky-content {
@@ -3860,7 +3861,7 @@ td.num {
   min-width: 180px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
 .table-filters-sticky .filter-item label {
