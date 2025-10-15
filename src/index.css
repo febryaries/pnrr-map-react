@@ -289,6 +289,17 @@ button {
   border-radius: 4px;
 }
 
+/* Zero cost items styling */
+.zero-cost-label {
+  font-weight: 700;
+  color: #059669;
+  font-size: 14px;
+  background: #ecfdf5;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
 /* Responsive design for Components Overview */
 @media (max-width: 768px) {
   .components-overview {

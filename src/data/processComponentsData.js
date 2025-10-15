@@ -63,6 +63,25 @@ export function getProcessedComponentsData() {
     componentsData[code].totalExecutedValue += (item.executedValue || 0)
   })
   
+  // Sort investments and reforms: items with value > 0 first, then items with value = 0
+  Object.values(componentsData).forEach(component => {
+    component.investments.sort((a, b) => {
+      // If one has value 0 and the other doesn't, put the one with value first
+      if (a.value === 0 && b.value !== 0) return 1
+      if (a.value !== 0 && b.value === 0) return -1
+      // Otherwise maintain original order
+      return 0
+    })
+    
+    component.reforms.sort((a, b) => {
+      // If one has value 0 and the other doesn't, put the one with value first
+      if (a.value === 0 && b.value !== 0) return 1
+      if (a.value !== 0 && b.value === 0) return -1
+      // Otherwise maintain original order
+      return 0
+    })
+  })
+  
   return componentsData
 }
 

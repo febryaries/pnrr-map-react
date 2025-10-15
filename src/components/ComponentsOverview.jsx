@@ -276,9 +276,10 @@ const ComponentsOverview = ({ currency = 'EUR' }) => {
                             {investments.map((investment, index) => {
                               const measureCode = extractMeasureCode(investment.description)
                               const pnrrLink = measureCode ? getPNRRLink(component.code, measureCode) : null
+                              const isZeroCost = investment.value === 0
                               
                               return (
-                                <div key={index} className="investment-item">
+                                <div key={index} className={`investment-item ${isZeroCost ? 'zero-cost' : ''}`}>
                                   <div className="investment-description">
                                     {investment.description}
                                     {pnrrLink && (
@@ -294,14 +295,20 @@ const ComponentsOverview = ({ currency = 'EUR' }) => {
                                     )}
                                   </div>
                                   <div className="investment-value">
-                                    <div className="value-main">{formatMoney(investment.value)}</div>
-                                    {investment.executedValue !== undefined && (
-                                      <div className="value-executed">
-                                        <span className="executed-label">Executat:</span> {formatMoney(investment.executedValue)}
-                                        {investment.executionPercent && (
-                                          <span className="execution-percent"> • {investment.executionPercent}</span>
+                                    {isZeroCost ? (
+                                      <div className="zero-cost-label">Fără cheltuieli asociate</div>
+                                    ) : (
+                                      <>
+                                        <div className="value-main">{formatMoney(investment.value)}</div>
+                                        {investment.executedValue !== undefined && investment.executedValue > 0 && (
+                                          <div className="value-executed">
+                                            <span className="executed-label">Executat:</span> {formatMoney(investment.executedValue)}
+                                            {investment.executionPercent && (
+                                              <span className="execution-percent"> • {investment.executionPercent}</span>
+                                            )}
+                                          </div>
                                         )}
-                                      </div>
+                                      </>
                                     )}
                                   </div>
                                 </div>
@@ -318,9 +325,10 @@ const ComponentsOverview = ({ currency = 'EUR' }) => {
                             {reforms.map((reform, index) => {
                               const measureCode = extractMeasureCode(reform.description)
                               const pnrrLink = measureCode ? getPNRRLink(component.code, measureCode) : null
+                              const isZeroCost = reform.value === 0
                               
                               return (
-                                <div key={index} className="investment-item">
+                                <div key={index} className={`investment-item ${isZeroCost ? 'zero-cost' : ''}`}>
                                   <div className="investment-description">
                                     {reform.description}
                                     {pnrrLink && (
@@ -336,14 +344,20 @@ const ComponentsOverview = ({ currency = 'EUR' }) => {
                                     )}
                                   </div>
                                   <div className="investment-value">
-                                    <div className="value-main">{formatMoney(reform.value)}</div>
-                                    {reform.executedValue !== undefined && (
-                                      <div className="value-executed">
-                                        <span className="executed-label">Executat:</span> {formatMoney(reform.executedValue)}
-                                        {reform.executionPercent && (
-                                          <span className="execution-percent"> • {reform.executionPercent}</span>
+                                    {isZeroCost ? (
+                                      <div className="zero-cost-label">Fără cheltuieli asociate</div>
+                                    ) : (
+                                      <>
+                                        <div className="value-main">{formatMoney(reform.value)}</div>
+                                        {reform.executedValue !== undefined && reform.executedValue > 0 && (
+                                          <div className="value-executed">
+                                            <span className="executed-label">Executat:</span> {formatMoney(reform.executedValue)}
+                                            {reform.executionPercent && (
+                                              <span className="execution-percent"> • {reform.executionPercent}</span>
+                                            )}
+                                          </div>
                                         )}
-                                      </div>
+                                      </>
                                     )}
                                   </div>
                                 </div>
