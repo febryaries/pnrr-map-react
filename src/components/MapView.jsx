@@ -1534,7 +1534,7 @@ const MapView = ({
                         </div>
                         <div className="indicator-card">
                             <div className="indicator-value">{formatMoneyEUR(totalIndicators.platit_eur)}</div>
-                            <div className="indicator-label">Plătit catre beneficiari</div>
+                            <div className="indicator-label">Plătit către beneficiari</div>
                         </div>
                         <div className="indicator-card">
                             <div className="indicator-value">{formatMoneyEUR(totalIndicators.incasat_eur)}</div>
@@ -1542,7 +1542,7 @@ const MapView = ({
                         </div>
                         <div className="indicator-card">
                             <div className="indicator-value">{fmtNum(totalIndicators.nr_beneficiari_plati)}</div>
-                            <div className="indicator-label">Număr Beneficiari Catre care s-au facut plati</div>
+                            <div className="indicator-label">Număr Beneficiari Către care s-au făcut plăți</div>
                             <div className="indicator-sublabel">Beneficiari cu plăți</div>
                         </div>
                         <div className="indicator-card">
@@ -1569,7 +1569,7 @@ const MapView = ({
                             // Don't reset view state - preserve current viewMode, metric, and activeProgram
                         }}
                     >
-                        Plati PNRR
+                        Plăți PNRR
                     </button>
                     <button
                         className={endpoint === 'projects' ? 'active' : ''}
@@ -1578,7 +1578,7 @@ const MapView = ({
                             // Don't reset view state - preserve current viewMode, metric, and activeProgram
                         }}
                     >
-                        Proiecte PNRR in execuție
+                        Proiecte PNRR în execuție
                     </button>
                 </div>
             </div>
@@ -1674,7 +1674,7 @@ const MapView = ({
                             rel="noopener noreferrer"
                             className="details-button"
                         >
-                            Afla mai multe detalii
+                            Află mai multe detalii
                         </a>
                     </div>
                     <div className="programs">
@@ -2080,7 +2080,13 @@ const MapView = ({
                             searchable: true,
                             render: (value) => value ? <div style={{ maxWidth: '100px', wordWrap: 'break-word', fontSize: '12px', lineHeight: '1.3' }}>{value}</div> : <div style={{ fontSize: '12px' }}>-</div>
                         }
-                    ]}
+                    ].filter(col => {
+                        // Ascundem coloanele 'title' și 'progress' doar pentru tabelul de plăți
+                        if (endpoint === 'payments') {
+                            return col.key !== 'title' && col.key !== 'progress'
+                        }
+                        return true
+                    })}
                     title={endpoint === 'payments' ? 'Plăți PNRR' : 'Proiecte PNRR'}
                     subtitle={
                         (() => {

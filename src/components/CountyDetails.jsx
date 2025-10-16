@@ -1352,7 +1352,7 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
               rel="noopener noreferrer"
               className="details-button"
             >
-              Afla mai multe detalii
+              Află mai multe detalii
             </a>
           </div>
           <div className="programs">
