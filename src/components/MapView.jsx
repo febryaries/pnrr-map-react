@@ -852,8 +852,12 @@ const MapView = ({
 
     // Process data based on current view mode and metric
     const processedData = useMemo(() => {
-        if (!data || data.length === 0) {
-            return []
+        if (!data || data.length === 0) return []
+
+        // Debug: Log București data
+        const bucuresti = data.find(d => (d.county?.code || d.code) === 'RO-BI')
+        if (bucuresti) {
+            console.log(`🔍 BUCUREȘTI in processedData: ${bucuresti.total.projects} proiecte, ${bucuresti.total.value.toFixed(2)} EUR`)
         }
 
         // Handle both old format (d.code) and new format (d.county.code)
@@ -1081,6 +1085,11 @@ const MapView = ({
                 formatter: function () {
                     const point = this.point
                     const currencySymbol = currentCurrency === 'RON' ? 'RON' : 'EUR'
+                    
+                    // Debug: Log tooltip data
+                    if (point.code === 'RO-BI') {
+                        console.log(`🔍 TOOLTIP București: point.money = ${point.money}, point.projects = ${point.projects}`)
+                    }
                     
                     // Convert value if RON is selected (point.money is in EUR)
                     const valueToDisplay = currentCurrency === 'RON' ? point.money * 5 : point.money

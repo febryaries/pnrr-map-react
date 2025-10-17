@@ -93,10 +93,25 @@ export class ProjectDataAggregation extends BaseDataAggregation {
     let argesProjectCount = 0;
     let argesTotalValue = 0;
     
+    // Debug: Track NAȚIONAL projects
+    let nationalProjectCount = 0;
+    let nationalTotalValue = 0;
+    
     // Process each project record
     deduplicatedData.forEach(item => {
       const countyCode = this.normalizeCountyName(this.convertRomanianDiacritics(item.judet_implementare || ''));
       const componentMapping = this.config.componentMapping[item.cod_componenta || ''];
+      
+      // EXCLUDE NAȚIONAL projects explicitly (check both judet and localitate)
+      const judet = (item.judet_implementare || '').toUpperCase().trim();
+      const localitate = (item.localitate_implementare || '').toUpperCase().trim();
+      
+      if (judet === 'NAȚIONAL' || localitate === 'NATIONAL') {
+        nationalProjectCount++;
+        nationalTotalValue += parseFloat(String(item.valoare_fe || 0));
+        multiCountyProjects.push(item);
+        return;
+      }
       
       // NOTE: Projects without countyCode go to multiCountyProjects (NATIONAL projects)
       if (!countyCode) {
@@ -227,104 +242,14 @@ export class ProjectDataAggregation extends BaseDataAggregation {
     const result = Object.values(countyData);
     
     // Add multi-county data if exists (keep RO-MULTI for compatibility)
-    // BUT also add these projects to București
+    // NAȚIONAL projects are now SEPARATE from București
     if (multiCountyProjects.length > 0) {
       // Create RO-MULTI entry (for MapView and other components)
       const multiData = this.createMultiCountyData(multiCountyProjects);
       result.push(multiData);
       
-      // ALSO add national projects to București
-      const bucuresti = countyData['BI'];
-      if (bucuresti) {
-        multiCountyProjects.forEach(item => {
-          const componentMapping = this.config.componentMapping[item.cod_componenta || ''];
-          // NOTE: Removed filter to include ALL NATIONAL projects, even without valid componentMapping
-          // if (!componentMapping) return;
-          
-          const programKey = componentMapping?.program || 'Unknown';
-          const ronAmount = parseFloat(String(item.valoare_fe || 0));
-          const startDate = item.data_inceput || '';
-          const eurAmount = convertRONToEUR(ronAmount, startDate);
-          const financialAmount = this.createFinancialAmount(eurAmount, ronAmount, startDate);
-          const value = eurAmount;
-          
-          // Add to București totals
-          bucuresti.total.value += value;
-          bucuresti.total.projects += 1;
-          
-          // Update București programs (only if programKey is valid)
-          if (programKey && programKey !== 'Unknown' && bucuresti.programs[programKey]) {
-            bucuresti.programs[programKey].value += value;
-            bucuresti.programs[programKey].projects += 1;
-          }
-          
-          // Update București components (only if component code exists)
-          if (item.cod_componenta && bucuresti.components[item.cod_componenta]) {
-            bucuresti.components[item.cod_componenta].value += value;
-            bucuresti.components[item.cod_componenta].projects += 1;
-          }
-          
-          // Create project row for extras (add to București's rows)
-          const projectRow: any = {
-            contractNumber: item.nr_contract,
-            title: this.convertRomanianDiacritics(item.titlu_contract || ''),
-            beneficiaryName: this.convertRomanianDiacritics(item.denumire_beneficiar || ''),
-            beneficiaryCUI: item.cui,
-            beneficiaryType: this.convertRomanianDiacritics(item.tip_beneficiar || ''),
-            beneficiaryLocality: this.convertRomanianDiacritics(item.localitate_implementare || ''),
-            totalValue: financialAmount,
-            feValue: this.createFinancialAmount(parseFloat(String(item.valoare_fe || 0)), 0, startDate),
-            fpnValue: this.createFinancialAmount(0, parseFloat(String(item.valoare_fpn || 0)), item.data_angajament),
-            tvaValue: this.createFinancialAmount(0, parseFloat(String(item.valoare_tva || 0)), item.data_angajament),
-            ineligibleValue: this.createFinancialAmount(0, parseFloat(String(item.valoare_neeligibil || 0)), item.data_angajament),
-            componentCode: item.cod_componenta || '',
-            componentLabel: this.convertRomanianDiacritics(componentMapping?.label || item.cod_componenta || 'N/A'),
-            measureCode: item.cod_masura || '',
-            subMeasureCode: item.cod_submasura,
-            fundingSource: this.convertRomanianDiacritics(item.sursa_finantare || ''),
-            countyCode: 'RO-BI',
-            countyName: 'București',
-            locality: this.convertRomanianDiacritics(item.localitate_implementare || ''),
-            progress: this.parseProgress(item.stadiu),
-            stage: this.convertRomanianDiacritics(item.stadiu || ''),
-            impact: this.convertRomanianDiacritics(item.impact || ''),
-            engagementDate: item.data_angajament ? new Date(item.data_angajament).toLocaleDateString('ro-RO') : '',
-            startDate: item.data_inceput ? new Date(item.data_inceput).toLocaleDateString('ro-RO') : '',
-            completionDate: item.data_finalizare ? new Date(item.data_finalizare).toLocaleDateString('ro-RO') : '',
-            cri: item.cri,
-            scope: this.convertRomanianDiacritics(`${item.titlu_contract || ''} - ${item.localitate_implementare || ''}`.trim()),
-            __programKey: programKey,
-            __shareValue: value,
-            __shareProjects: 1,
-            
-            // Old structure fields for compatibility with MapView
-            DENUMIRE_BENEFICIAR: this.convertRomanianDiacritics(item.denumire_beneficiar || ''),
-            VALOARE_FE: eurAmount,
-            VALOARE_TOTAL: ronAmount,
-            DATA_ANGAJAMENT: item.data_angajament || '',
-            TITLU_CONTRACT: this.convertRomanianDiacritics(item.titlu_contract || ''),
-            SURSA_FINANTARE: this.convertRomanianDiacritics(item.sursa_finantare || ''),
-            JUDET_IMPLEMENTARE: this.convertRomanianDiacritics(item.judet_implementare || ''),
-            LOCALITATE_IMPLEMENTARE: this.convertRomanianDiacritics(item.localitate_implementare || ''),
-            COD_COMPONENTA: item.cod_componenta || '',
-            COMPONENTA_LABEL: this.convertRomanianDiacritics(componentMapping?.label || item.cod_componenta || 'N/A'),
-            COD_MASURA: item.cod_masura || '',
-            COD_SUBMASURA: item.cod_submasura || '',
-            STADIU: this.convertRomanianDiacritics(item.stadiu || ''),
-            IMPACT: this.convertRomanianDiacritics(item.impact || ''),
-            NR_CONTRACT: item.nr_contract || '',
-            CUI: item.cui || '',
-            TIP_BENEFICIAR: this.convertRomanianDiacritics(item.tip_beneficiar || ''),
-            CRI: item.cri || '',
-            SCOP_PROIECT: this.convertRomanianDiacritics(`${item.titlu_contract || ''} - ${item.localitate_implementare || ''}`.trim()),
-            __program_key: programKey,
-            __share_value: value,
-            __share_projects: 1
-          };
-          
-          bucuresti.extras.rows.push(projectRow);
-        });
-      }
+      // Log NAȚIONAL projects exclusion
+      console.log(`✅ EXCLUDED ${nationalProjectCount} NAȚIONAL projects (${(nationalTotalValue / 1000000).toFixed(2)} mil EUR) from București`);
     }
     
     return result;

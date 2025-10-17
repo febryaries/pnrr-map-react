@@ -1403,8 +1403,48 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
           </div>
         )}
 
-        {/* KPIs */}
-        <div className="kpis kpis--two-columns">
+        {/* KPIs with Currency Selector */}
+        <div style={{ display: 'flex', alignItems: 'stretch', gap: '20px', marginBottom: '30px', maxWidth: '900px', marginLeft: 'auto', marginRight: 'auto' }}>
+          {/* Currency Selector - for NAȚIONAL and București */}
+          {(isNational || isBucuresti) && (
+            <div style={{ 
+              flex: '0 0 auto',
+              background: '#fff',
+              border: '1px solid #e2e8f0',
+              borderRadius: '12px',
+              padding: '20px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              gap: '8px'
+            }}>
+              <div style={{ fontSize: '13px', color: '#64748b', fontWeight: '500' }}>Monedă</div>
+              <select 
+                value={currency} 
+                onChange={(e) => setCurrency(e.target.value)}
+                style={{
+                  padding: '8px 12px',
+                  border: '2px solid #e2e8f0',
+                  borderRadius: '8px',
+                  fontSize: '16px',
+                  fontWeight: '700',
+                  color: '#0f172a',
+                  backgroundColor: '#fff',
+                  cursor: 'pointer',
+                  outline: 'none',
+                  transition: 'border-color 0.2s'
+                }}
+                onMouseOver={(e) => e.target.style.borderColor = '#0ea5e9'}
+                onMouseOut={(e) => e.target.style.borderColor = '#e2e8f0'}
+              >
+                <option value="EUR">EUR</option>
+                <option value="RON">RON</option>
+              </select>
+            </div>
+          )}
+
+          {/* KPIs */}
+          <div style={{ flex: '1', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
           <div className="kpi">
             <div className="label">
               Total proiecte {activeProgram ? `(${COMPONENT_MAPPING[activeProgram]?.label})` : '(toate programele)'}
@@ -1422,6 +1462,7 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
                 Clasament valoare: #{valueRank} • Clasament proiecte: #{projectsRank}
               </div>
             )}
+          </div>
           </div>
         </div>
 
@@ -1565,7 +1606,7 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
               render: (value) => value ? <div style={{ maxWidth: '120px', wordWrap: 'break-word' }}>{value}</div> : '-'
             }
           ]}
-          title="Investiții în acest județ"
+          title={(isNational || isBucuresti) ? "Investiții" : "Investiții în acest județ"}
           subtitle={
             selectedLocality 
               ? (
