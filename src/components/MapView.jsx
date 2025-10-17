@@ -1128,6 +1128,119 @@ const MapView = ({
         }
     }, [mapData, processedData, metric, onCountyClick, currency, endpoint, viewMode, activeProgram, COMPONENT_MAPPING])
 
+    // Calculate National projects data from multiCountyProjects
+    const nationalData = useMemo(() => {
+        const multiCounty = data.find(d => (d.county?.code || d.code) === 'RO-MULTI')
+        if (!multiCounty) return { value: 0, projects: 0 }
+        
+        return {
+            value: multiCounty.total?.value || 0,
+            projects: multiCounty.total?.projects || 0
+        }
+    }, [data])
+
+    // Mini map configuration for National projects
+    const nationalMiniMapOptions = useMemo(() => {
+        if (!mapData) return null
+        
+        // Format values for tooltip (calculate inside useMemo)
+        const currencySymbol = currency === 'RON' ? 'RON' : 'EUR'
+        const valueToDisplay = currency === 'RON' ? nationalData.value * 5 : nationalData.value
+        const formattedValue = fmtMoney(valueToDisplay, currencySymbol)
+        const formattedProjects = fmtNum(nationalData.projects)
+        
+        return {
+            chart: {
+                map: mapData.topology,
+                height: 250,
+                backgroundColor: 'transparent'
+            },
+            title: {
+                text: 'Proiecte Naționale',
+                align: 'center',
+                style: {
+                    fontSize: '14px',
+                    fontWeight: 600,
+                    color: '#0f172a'
+                }
+            },
+            subtitle: {
+                text: 'Click pentru detalii',
+                align: 'center',
+                style: {
+                    fontSize: '11px',
+                    color: '#64748b'
+                }
+            },
+            mapNavigation: {
+                enabled: false
+            },
+            colorAxis: {
+                min: 0,
+                max: 1,
+                stops: [
+                    [0, '#bae6fd'],
+                    [1, '#0ea5e9']
+                ]
+            },
+            tooltip: {
+                useHTML: true,
+                backgroundColor: '#fff',
+                borderColor: '#0ea5e9',
+                borderRadius: 6,
+                borderWidth: 2,
+                padding: 8,
+                shadow: true,
+                style: {
+                    pointerEvents: 'none'
+                },
+                formatter: function() {
+                    return `
+                        <div style="width: 140px;">
+                            <div style="font-size: 12px; font-weight: 700; margin-bottom: 8px; color: #0f172a; text-align: center;">
+                                Proiecte Naționale
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="background: #0ea5e9; color: #fff; padding: 6px 12px; border-radius: 4px; font-weight: 600; font-size: 11px;">
+                                    Click pentru detalii
+                                </div>
+                            </div>
+                        </div>
+                    `
+                }
+            },
+            series: [{
+                data: processedData.map(d => ({
+                    ...d,
+                    value: 1  // Toate județele aceeași culoare
+                })),
+                name: 'România',
+                borderColor: '#ffffff',
+                borderWidth: 0.5,
+                dataLabels: {
+                    enabled: false
+                },
+                point: {
+                    events: {
+                        click: function() {
+                            // Click pe ORICE județ → National
+                            onCountyClick('NATIONAL', 'Proiecte Naționale')
+                        }
+                    }
+                },
+                cursor: 'pointer',
+                states: {
+                    hover: {
+                        color: '#0284c7'
+                    }
+                }
+            }],
+            credits: {
+                enabled: false
+            }
+        }
+    }, [mapData, processedData, onCountyClick, nationalData, currency])
+
     // Expose county click handler globally for tooltip
     useEffect(() => {
         window.handleCountyClick = onCountyClick
@@ -1734,6 +1847,19 @@ const MapView = ({
 
             {/* Map */}
             <section className="map-container">
+                {/* National Mini Map - Left Side */}
+                {nationalMiniMapOptions && (
+                    <div className="national-mini-map">
+                        <div className="national-map-card">
+                            <HighchartsReact
+                                highcharts={Highcharts}
+                                constructorType={'mapChart'}
+                                options={nationalMiniMapOptions}
+                            />
+                        </div>
+                    </div>
+                )}
+
                 <div className="map-chart">
                     {mapOptions && (
                         <HighchartsReact
@@ -1864,8 +1990,8 @@ const MapView = ({
                             // Convert to RON if needed (county.money is in EUR)
                             const valueToDisplay = currency === 'RON' ? county.money * 5 : county.money
                             const displayValue = metric === 'value' ? fmtMoney(valueToDisplay, getCurrencySymbol()) : fmtNum(county.projects)
-                            // Special display name for București
-                            const displayName = county.code === 'RO-BI' ? 'București și proiecte naționale' : county.name
+                            // Simple display name - no special case for București
+                            const displayName = county.name
 
                             return (
                                 <li

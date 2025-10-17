@@ -1,13 +1,13 @@
 /**
- * Custom hook to fetch București + NAȚIONAL projects directly from API
- * This bypasses ProjectDataAggregation.ts to ensure ALL 200 NATIONAL projects are included
+ * Custom hook to fetch NAȚIONAL projects directly from API
+ * This bypasses ProjectDataAggregation.ts to get only NAȚIONAL projects
  */
 
 import { useState, useEffect } from 'react';
 
 const API_URL = 'https://pnrr.fonduri-ue.ro/ords/pnrr/mfe/progres_tehnic_proiecte';
 
-export const useBucurestiNationalProjects = () => {
+export const useNationalProjects = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -41,37 +41,13 @@ export const useBucurestiNationalProjects = () => {
           }
         }
 
-        // Filter for București + NAȚIONAL projects
+        // Filter for NAȚIONAL projects ONLY
         const filtered = allProjects.filter(project => {
           const judet = (project.judet_implementare || '').toUpperCase().trim();
           const localitate = (project.localitate_implementare || '').toUpperCase().trim();
           
-          // Include NAȚIONAL projects
+          // Include ONLY NAȚIONAL projects
           if (judet === 'NAȚIONAL' || localitate === 'NATIONAL') {
-            return true;
-          }
-          
-          // Include ALL București projects (based on judet_implementare ONLY)
-          // Don't filter by localitate_implementare because projects can have
-          // beneficiaries in other cities but still be implemented in București
-          if (
-            judet === 'MUNICIPIUL BUCUREȘTI' || 
-            judet === 'BUCUREȘTI' ||
-            judet === 'MUNICIPIUL BUCURESTI' ||
-            judet === 'BUCURESTI'
-          ) {
-            return true;
-          }
-          
-          // Also include projects from other judete that have București as locality
-          // (e.g., ILFOV with BUCUREȘTI locality)
-          if (!judet && (
-            localitate === 'BUCUREȘTI' ||
-            localitate === 'BUCURESTI' ||
-            localitate === 'MUNICIPIUL BUCUREȘTI' ||
-            localitate === 'MUNICIPIUL BUCURESTI' ||
-            localitate.startsWith('SECTOR')
-          )) {
             return true;
           }
           
@@ -79,37 +55,18 @@ export const useBucurestiNationalProjects = () => {
         });
 
         console.log(`✅ Fetched ${allProjects.length} total projects from API`);
-        console.log(`✅ Filtered ${filtered.length} projects for București + NAȚIONAL`);
-        
-        // Count NAȚIONAL projects
-        const nationalCount = filtered.filter(p => {
-          const judet = (p.judet_implementare || '').toUpperCase();
-          const localitate = (p.localitate_implementare || '').toUpperCase();
-          return judet === 'NAȚIONAL' || localitate === 'NATIONAL';
-        }).length;
-        
-        console.log(`✅ NAȚIONAL projects: ${nationalCount}`);
+        console.log(`✅ Filtered ${filtered.length} projects for NAȚIONAL`);
 
         // Transform API data to match the expected structure
         const transformedProjects = filtered.map(project => {
           const localitate = (project.localitate_implementare || '').toUpperCase().trim();
           
-          // Clean up locality display: exclude "MUNICIPIUL X" from other cities
-          // Keep only București-relevant localities
-          let displayLocality = project.localitate_implementare || '';
+          // For NAȚIONAL projects, keep locality as "NATIONAL"
+          let displayLocality = project.localitate_implementare || 'NATIONAL';
           
-          // If locality starts with "MUNICIPIUL" and is NOT București, replace with "București"
-          if (localitate.startsWith('MUNICIPIUL') && 
-              !localitate.includes('BUCUREȘTI') && 
-              !localitate.includes('BUCURESTI')) {
-            displayLocality = 'BUCUREȘTI'; // Show as București since judet is București
-          }
-          
-          // Same for COMUNA, JUDETUL from other regions
-          if ((localitate.startsWith('COMUNA') || localitate.startsWith('JUDETUL')) &&
-              !localitate.includes('BUCUREȘTI') && 
-              !localitate.includes('BUCURESTI')) {
-            displayLocality = 'BUCUREȘTI';
+          // Ensure NAȚIONAL projects show "NATIONAL" in locality
+          if (localitate === 'NAȚIONAL' || localitate === 'NATIONAL' || !localitate) {
+            displayLocality = 'NATIONAL';
           }
           
           return {

@@ -4,7 +4,8 @@ import HighchartsReact from 'highcharts-react-official'
 import HighchartsMap from 'highcharts/modules/map'
 import { PROGRAMS, PROGRAM_COLORS, COUNTY_MAP, fmtMoney, fmtNum, COMPONENT_MAPPING_PAYMENTS, COMPONENT_MAPPING_PROJECTS, ro_localities } from '../data/data'
 import * as XLSX from 'xlsx'
-import { useBucurestiNationalProjects } from '../hooks/useBucurestiNationalProjects'
+import { useBucurestiProjects } from '../hooks/useBucurestiProjects'
+import { useNationalProjects } from '../hooks/useNationalProjects'
 
 // Enhanced Table Component with sorting, filtering, and pagination
 const EnhancedTable = ({ 
@@ -281,7 +282,7 @@ const EnhancedTable = ({
               {item.component}
             </div>
             <div className="mobile-table-card-value">
-              {item.isMultiCounty ? 'Multi județe' : item.componentCode}
+              {item.isMultiCounty ? 'National' : item.componentCode}
             </div>
           </div>
           
@@ -579,17 +580,37 @@ HighchartsMap(Highcharts)
 const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentLoading, useRealData, activeProgram, setActiveProgram, endpoint, currency, setCurrency }) => {
   const [metric, setMetric] = useState('value')
   const [countyMapData, setCountyMapData] = useState(null)
+  const [romaniaMapData, setRomaniaMapData] = useState(null)
   const [localityData, setLocalityData] = useState([])
   const [selectedLocality, setSelectedLocality] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isProcessingLocality, setIsProcessingLocality] = useState(false)
   const [isLoadingLocalityData, setIsLoadingLocalityData] = useState(true)
 
-  // Use custom hook for București to get ALL NATIONAL projects directly from API
-  const isBucuresti = county.county.code === 'RO-BI';
-  const { projects: apiProjects, loading: apiLoading, error: apiError } = isBucuresti && endpoint === 'projects' 
-    ? useBucurestiNationalProjects() 
+  // Detect if this is București or National
+  const isBucuresti = county.county?.code === 'RO-BI' || county.code === 'RO-BI';
+  const isNational = county.county?.code === 'NATIONAL' || county.code === 'NATIONAL';
+  
+  // Use custom hook for București to get București projects (exclude NAȚIONAL)
+  const { projects: bucurestiProjects, loading: bucLoading, error: bucError } = isBucuresti && endpoint === 'projects' 
+    ? useBucurestiProjects() 
     : { projects: [], loading: false, error: null };
+  
+  // Use custom hook for National to get NAȚIONAL projects
+  const { projects: nationalProjects, loading: natLoading, error: natError } = isNational && endpoint === 'projects' 
+    ? useNationalProjects() 
+    : { projects: [], loading: false, error: null };
+  
+  // Select the correct projects based on county type
+  const apiProjects = isNational ? nationalProjects : bucurestiProjects;
+  const apiLoading = isNational ? natLoading : bucLoading;
+  const apiError = isNational ? natError : bucError;
+  
+  // Debug: Log National projects info
+  if (isNational && apiProjects.length > 0) {
+    const totalValue = apiProjects.reduce((sum, p) => sum + (parseFloat(p.VALOARE_FE) || 0), 0);
+    console.log(`🔍 NATIONAL DEBUG: ${apiProjects.length} proiecte, Valoare totală: ${totalValue.toFixed(2)} EUR`);
+  }
 
   // Get the correct component mapping based on endpoint
   const COMPONENT_MAPPING = endpoint === 'projects' ? COMPONENT_MAPPING_PROJECTS : COMPONENT_MAPPING_PAYMENTS
@@ -660,8 +681,37 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
   const countyCode = county.county.code.replace('RO-', '')
   const countyData = county
 
+  // Load Romania map for NATIONAL
+  useEffect(() => {
+    if (!isNational) return
+    
+    const loadRomaniaMap = async () => {
+      try {
+        const response = await fetch('https://code.highcharts.com/mapdata/countries/ro/ro-all.topo.json')
+        if (response.ok) {
+          const topology = await response.json()
+          setRomaniaMapData(topology)
+        }
+      } catch (error) {
+        console.warn('Error loading Romania map:', error)
+      }
+    }
+    
+    loadRomaniaMap()
+  }, [isNational])
+
   // Load county map data by filtering Romania topology
   useEffect(() => {
+    // Skip map loading for NATIONAL (no county geometry)
+    if (isNational) {
+      setCountyMapData(null)
+      setIsLoading(false)
+      if (onLoadingComplete && isParentLoading) {
+        onLoadingComplete()
+      }
+      return
+    }
+    
     const loadCountyMap = async () => {
       try {
         // Load full Romania topology and filter for the specific county
@@ -735,6 +785,15 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
 
   // Manage loading state - set to false when map data is ready (don't wait for locality data)
   useEffect(() => {
+    // For NATIONAL, skip map loading and set loading to false immediately
+    if (isNational) {
+      setIsLoading(false)
+      if (onLoadingComplete && isParentLoading) {
+        onLoadingComplete()
+      }
+      return
+    }
+    
     // Set loading to false when map data is loaded
     if (countyMapData !== null) {
       setIsLoading(false)
@@ -743,7 +802,7 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
         onLoadingComplete()
       }
     }
-  }, [countyMapData, isParentLoading, onLoadingComplete])
+  }, [countyMapData, isParentLoading, onLoadingComplete, isNational])
 
   // Load and process locality data - only after main loading is complete
   useEffect(() => {
@@ -900,8 +959,8 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
   const projectsRank = projectsRanking.findIndex(c => c.code === county.county.code) + 1
 
   // Projects table data with component filtering
-  // For București, use API data directly to get ALL 200 NATIONAL projects
-  const allProjectsData = (isBucuresti && endpoint === 'projects' && apiProjects.length > 0) 
+  // For București or National, use API data directly
+  const allProjectsData = ((isBucuresti || isNational) && endpoint === 'projects' && apiProjects.length > 0) 
     ? apiProjects 
     : (countyData.extras?.rows || []);
   
@@ -923,7 +982,10 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
     : allProjectsData
 
   // Calculate PNRR value (sum of all programs)
-  const pnrrValue = Object.values(countyData.programs).reduce((sum, prog) => sum + (prog.value || 0), 0)
+  // For NATIONAL, calculate from projectsData instead of countyData.programs
+  const pnrrValue = isNational 
+    ? projectsData.reduce((sum, project) => sum + getValueField(project), 0)
+    : Object.values(countyData.programs).reduce((sum, prog) => sum + (prog.value || 0), 0)
 
   // Component chart data
   const programChartData = useMemo(() => {
@@ -976,10 +1038,9 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
     }
 
     return top10.map(c => {
-      // Special display name for București
-      const displayName = c.code === 'RO-BI' ? 'București și proiecte naționale' : c.name
+      // Simple display name - no special case for București
       return {
-        name: `${c.code.replace('RO-', '')} · ${displayName}`,
+        name: `${c.code.replace('RO-', '')} · ${c.name}`,
         y: metric === 'value' ? c.value : c.projects,
         color: c.code === county.county.code ? '#0ea5e9' : '#cbd5e1'
       }
@@ -1342,79 +1403,25 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
           </div>
         )}
 
-        {/* Component Filter - Same as MapView */}
-        <div id="componente-pnrr" className="key-areas-section">
-          <div className="key-areas-header">
-            <h3 className="key-areas-title">Filtrează în funcție de Componente din PNRR</h3>
-            <a 
-              href="https://pnrr.fonduri-ue.ro/ords/pnrr/r/dashboard-status-pnrr/home?T=tb" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="details-button"
-            >
-              Află mai multe detalii
-            </a>
-          </div>
-          <div className="programs">
-            {PROGRAMS.map(program => (
-              <button
-                key={program.key}
-                className={activeProgram === program.key ? 'active' : ''}
-                onClick={(e) => {
-                  // If clicking the same active program, deselect it
-                  if (activeProgram === program.key) {
-                    setActiveProgram(null)
-                  } else {
-                    // Otherwise, select the program
-                    setActiveProgram(program.key)
-                  }
-                }}
-                title={`Click: ${program.label} | Click again to deselect`}
-              >
-                {program.label}
-              </button>
-            ))}
-          </div>
-        </div>
         {/* KPIs */}
-        <div className="kpis">
-          <div 
-            className="kpi kpi-clickable" 
-            onClick={() => {
-              const element = document.getElementById('componente-pnrr')
-              if (element) {
-                element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-              }
-            }}
-            style={{ cursor: 'pointer' }}
-            title="Click pentru a vedea componentele PNRR"
-          >
-            <div className="label">
-              Total valoare {activeProgram ? `(${COMPONENT_MAPPING[activeProgram]?.label})` : '(toate programele)'}, fără multi-județe
-            </div>
-            <div className="value">
-              {activeProgram 
-                ? formatMoneyWithCurrency(projectsData.reduce((sum, project) => sum + getValueField(project), 0))
-                : formatMoneyWithCurrency(projectsData.reduce((sum, project) => sum + getValueField(project), 0))
-              }
-            </div>
-            <div className="subline">Multi județe: {formatMoneyWithCurrency(multiShare.value)}</div>
-          </div>
+        <div className="kpis kpis--two-columns">
           <div className="kpi">
             <div className="label">
-              Total proiecte {activeProgram ? `(${COMPONENT_MAPPING[activeProgram]?.label})` : '(toate programele)'}, fără multi-județe
+              Total proiecte {activeProgram ? `(${COMPONENT_MAPPING[activeProgram]?.label})` : '(toate programele)'}
             </div>
             <div className="value">{fmtNum(projectsData.length)}</div>
-            <div className="subline">Multi județe: {fmtNum(multiShare.projects)} proiecte</div>
+            {!isNational && <div className="subline">National: {fmtNum(multiShare.projects)} proiecte</div>}
           </div>
           <div className="kpi">
-            <div className="label">Informații suplimentare</div>
+            <div className="label">Total PNRR</div>
             <div className="value">
-              Total PNRR: {formatMoneyWithCurrency(pnrrValue)}
+              {formatMoneyWithCurrency(pnrrValue)}
             </div>
-            <div className="subline">
-              Clasament valoare: #{valueRank} • Clasament proiecte: #{projectsRank}
-            </div>
+            {!isNational && (
+              <div className="subline">
+                Clasament valoare: #{valueRank} • Clasament proiecte: #{projectsRank}
+              </div>
+            )}
           </div>
         </div>
 
@@ -1435,6 +1442,38 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
                 options={countyMapOptions}
               />
             )
+          ) : isNational && romaniaMapData ? (
+            <HighchartsReact
+              highcharts={Highcharts}
+              constructorType={'mapChart'}
+              options={{
+                chart: {
+                  map: romaniaMapData,
+                  height: 400
+                },
+                title: {
+                  text: 'Proiecte Naționale',
+                  style: { fontSize: '16px', fontWeight: 600 }
+                },
+                subtitle: {
+                  text: 'Proiecte cu impact la nivel național'
+                },
+                mapNavigation: { enabled: false },
+                colorAxis: {
+                  min: 0,
+                  max: 1,
+                  stops: [[0, '#e0e7ff'], [1, '#e0e7ff']]
+                },
+                series: [{
+                  name: 'România',
+                  borderColor: '#94a3b8',
+                  borderWidth: 1,
+                  nullColor: '#e0e7ff',
+                  showInLegend: false
+                }],
+                credits: { enabled: false }
+              }}
+            />
           ) : (
             <div style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>
               <h3 style={{ margin: '0 0 8px 0', fontSize: '16px' }}>Harta județului {county.county.name}</h3>
@@ -1554,16 +1593,7 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
                 </div>
               )
               : projectsData.length > 0 ? 
-                (() => {
-                  // Count NAȚIONAL projects (check multiple field names)
-                  const nationalCount = projectsData.filter(p => {
-                    const judet = (p.judet_implementare || p.JUDET_IMPLEMENTARE || '').toUpperCase();
-                    const locality = (p.localitate_implementare || p.LOCALITATE_IMPLEMENTARE || p.locality || '').toUpperCase();
-                    return judet === 'NAȚIONAL' || locality === 'NATIONAL';
-                  }).length;
-                  
-                  return `${projectsData.length} proiecte găsite${activeProgram ? ` (${COMPONENT_MAPPING[activeProgram]?.label})` : ''} • Naționale: ${nationalCount} • ${formatMoneyWithCurrency(projectsData.reduce((sum, p) => sum + getValueField(p), 0))} valoare totală`;
-                })() :
+                `${projectsData.length} proiecte găsite${activeProgram ? ` (${COMPONENT_MAPPING[activeProgram]?.label})` : ''} • ${formatMoneyWithCurrency(projectsData.reduce((sum, p) => sum + getValueField(p), 0))} valoare totală` :
                 `Nu au fost găsite proiecte pentru acest județ${activeProgram ? ` (${COMPONENT_MAPPING[activeProgram]?.label})` : ''}.`
           }
           itemsPerPage={20}
@@ -1659,14 +1689,14 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
               })
               // NOTE: Keep all rows including zero values
               ,
-            // Add multi-county row
-            {
-              component: 'Multi județe',
-              componentCode: 'MULTI',
+            // Add National row (only for non-National counties)
+            ...(!isNational ? [{
+              component: 'National',
+              componentCode: 'NATIONAL',
               value: multiShare.value,
               projects: multiShare.projects,
               isMultiCounty: true
-            }
+            }] : [])
           ]}
           columns={[
             {
@@ -1702,8 +1732,7 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
           title="Detaliu pe componente"
           subtitle={`Valorile sunt filtrate pentru județul ${county.county.name} (${countyCode})`}
           itemsPerPage={20}
-          searchable={true}
-          searchPlaceholder="Caută componentă..."
+          searchable={false}
           defaultSortColumn="value"
           defaultSortDirection="desc"
           mobileCardType="components"

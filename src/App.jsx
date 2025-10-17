@@ -59,6 +59,31 @@ function App() {
   }, [endpoint, fetchData, endpointInfo.name, useMockData])
 
   const handleCountyClick = (countyCode, countyName) => {
+    // Special handling for NATIONAL - create a fake county object
+    if (countyCode === 'NATIONAL') {
+      const nationalCounty = {
+        county: {
+          code: 'NATIONAL',
+          name: 'Proiecte Naționale'
+        },
+        code: 'NATIONAL',
+        name: 'Proiecte Naționale',
+        total: {
+          value: 0,
+          projects: 0
+        },
+        programs: {},
+        components: {},
+        extras: {
+          rows: []
+        }
+      }
+      setIsLoadingCounty(true)
+      setSelectedCounty(nationalCounty)
+      setCurrentView('county')
+      return
+    }
+    
     const county = data.find(c => (c.county?.code || c.code) === countyCode)
     if (county) {
       setIsLoadingCounty(true)
