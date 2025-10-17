@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
+import { convertRONToEUR } from '../services/ExchangeRateService';
 
 const API_URL = 'https://pnrr.fonduri-ue.ro/ords/pnrr/mfe/progres_tehnic_proiecte';
 
@@ -103,14 +104,19 @@ export const useBucurestiProjects = () => {
             displayLocality = 'BUCUREȘTI';
           }
           
+          // Convert RON to EUR (valoare_fe is in RON from API)
+          const ronAmount = parseFloat(project.valoare_fe) || 0;
+          const startDate = project.data_inceput || '';
+          const eurAmount = convertRONToEUR(ronAmount, startDate);
+          
           return {
             // Original API fields (keep for compatibility)
             ...project,
             
             // Mapped fields for EnhancedTable
             DENUMIRE_BENEFICIAR: project.denumire_beneficiar || '',
-            VALOARE_FE: parseFloat(project.valoare_fe) || 0,
-            VALOARE_TOTAL: parseFloat(project.valoare_total) || 0,
+            VALOARE_FE: eurAmount, // Converted to EUR
+            VALOARE_TOTAL: ronAmount, // Keep original RON
             TITLU_CONTRACT: project.titlu_contract || '',
             NR_CONTRACT: project.nr_contract || '',
             SURSA_FINANTARE: project.sursa_finantare || '',
@@ -126,8 +132,8 @@ export const useBucurestiProjects = () => {
             title: project.titlu_contract || '',
             contractNumber: project.nr_contract || '',
             fundingSource: project.sursa_finantare || '',
-            value: parseFloat(project.valoare_fe) || 0,
-            value_ron: parseFloat(project.valoare_total) || 0,
+            value: eurAmount, // EUR value
+            value_ron: ronAmount, // RON value
             componentCode: project.cod_componenta || '',
             measureCode: project.cod_masura || '',
             locality: displayLocality

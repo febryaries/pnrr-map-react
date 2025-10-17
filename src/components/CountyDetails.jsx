@@ -982,8 +982,8 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
     : allProjectsData
 
   // Calculate PNRR value (sum of all programs)
-  // For NATIONAL, calculate from projectsData instead of countyData.programs
-  const pnrrValue = isNational 
+  // For NAȚIONAL and București, calculate from projectsData to respect currency selection
+  const pnrrValue = (isNational || isBucuresti)
     ? projectsData.reduce((sum, project) => sum + getValueField(project), 0)
     : Object.values(countyData.programs).reduce((sum, prog) => sum + (prog.value || 0), 0)
 
