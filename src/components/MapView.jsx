@@ -324,6 +324,85 @@ const EnhancedTable = ({
     XLSX.writeFile(workbook, fileName)
   }
 
+  // Export to JSON function
+  const handleExportToJSON = () => {
+    // Prepare data for export - use all filtered data, not just paginated
+    const exportData = sortedData.map(item => {
+      const row = {}
+      columns.forEach(column => {
+        const value = item[column.key]
+        row[column.label] = value
+      })
+      return row
+    })
+
+    // Convert to JSON string with pretty formatting
+    const jsonString = JSON.stringify(exportData, null, 2)
+
+    // Create blob and download
+    const blob = new Blob([jsonString], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+
+    // Generate file name with timestamp
+    const timestamp = new Date().toISOString().split('T')[0]
+    link.download = `${exportFileName}_${timestamp}.json`
+
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }
+
+  // Export to CSV function
+  const handleExportToCSV = () => {
+    // Prepare data for export - use all filtered data, not just paginated
+    const exportData = sortedData.map(item => {
+      const row = {}
+      columns.forEach(column => {
+        const value = item[column.key]
+        row[column.label] = value
+      })
+      return row
+    })
+
+    // Create CSV header
+    const headers = columns.map(col => col.label).join(',')
+
+    // Create CSV rows
+    const rows = exportData.map(item => {
+      return columns.map(col => {
+        const value = item[col.label]
+        // Escape values that contain commas, quotes, or newlines
+        if (value === null || value === undefined) return ''
+        const stringValue = String(value)
+        if (stringValue.includes(',') || stringValue.includes('"') || stringValue.includes('\n')) {
+          return `"${stringValue.replace(/"/g, '""')}"`
+        }
+        return stringValue
+      }).join(',')
+    }).join('\n')
+
+    // Combine header and rows
+    const csvContent = `${headers}\n${rows}`
+
+    // Create blob and download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+
+    // Generate file name with timestamp
+    const timestamp = new Date().toISOString().split('T')[0]
+    link.download = `${exportFileName}_${timestamp}.csv`
+
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }
+
   const renderPagination = () => {
     // If only one page or less, show simple count
     if (totalPages <= 1) {
@@ -495,24 +574,62 @@ const EnhancedTable = ({
           )}
         </div>
         {enableExport && (
-          <button
-            onClick={handleExportToXLSX}
-            style={{
-              padding: '10px 20px',
-              background: '#10b981',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: '600',
-              whiteSpace: 'nowrap',
-              boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-            }}
-            title="Exportă toate proiectele în format Excel"
-          >
-            📊 Exportă XLSX
-          </button>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            <button
+              onClick={handleExportToXLSX}
+              style={{
+                padding: '10px 20px',
+                background: '#10b981',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '600',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+              }}
+              title="Exportă toate proiectele în format Excel"
+            >
+              📊 Exportă XLSX
+            </button>
+            <button
+              onClick={handleExportToJSON}
+              style={{
+                padding: '10px 20px',
+                background: '#3b82f6',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '600',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+              }}
+              title="Exportă toate proiectele în format JSON"
+            >
+              📄 Exportă JSON
+            </button>
+            <button
+              onClick={handleExportToCSV}
+              style={{
+                padding: '10px 20px',
+                background: '#8b5cf6',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '600',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+              }}
+              title="Exportă toate proiectele în format CSV"
+            >
+              📋 Exportă CSV
+            </button>
+          </div>
         )}
       </div>
       
@@ -697,6 +814,7 @@ const MapView = ({
     const [mapData, setMapData] = useState(null)
     const [topBeneficiaries, setTopBeneficiaries] = useState(null)
     const [loadingBeneficiaries, setLoadingBeneficiaries] = useState(false)
+    const [showAllBeneficiaries, setShowAllBeneficiaries] = useState(false)
 
     // Get the correct component mapping based on endpoint
     const COMPONENT_MAPPING = endpoint === 'projects' ? COMPONENT_MAPPING_PROJECTS : COMPONENT_MAPPING_PAYMENTS
@@ -817,12 +935,12 @@ const MapView = ({
         })} mil ${getCurrencySymbol()}`
     }
 
-    // Fetch top beneficiaries on component mount
+    // Fetch top 100 beneficiaries on component mount
     useEffect(() => {
         const fetchTopBeneficiaries = async () => {
             setLoadingBeneficiaries(true)
             try {
-                const response = await fetch('https://pnrr.fonduri-ue.ro/ords/pnrr/mfe/top_beneficiari')
+                const response = await fetch('https://pnrr.fonduri-ue.ro/ords/pnrr/mfe/persons')
                 if (response.ok) {
                     const data = await response.json()
                     setTopBeneficiaries(data)
@@ -1380,7 +1498,10 @@ const MapView = ({
         // NAȚIONAL projects are already included in București via useBucurestiNationalProjects hook
         // Adding them here would create duplicates
 
-        return { totalValue, totalProjects }
+        // Calculate NAȚIONAL projects count (always show total, not filtered by component)
+        const nationalProjects = multiData?.extras?.rows?.length || 0
+
+        return { totalValue, totalProjects, nationalProjects }
     }, [data, activeProgram, fieldMappings, currency, getValueField])
 
     // Component totals for pie chart
@@ -1851,6 +1972,10 @@ const MapView = ({
                             <div className="mobile-total-sublabel">{COMPONENT_MAPPING[activeProgram]?.label}</div>
                         )}
                     </div>
+                    <div className="mobile-total-card">
+                        <div className="mobile-total-value">{fmtNum(calculatedTotals.nationalProjects)}</div>
+                        <div className="mobile-total-label">NAȚIONALE</div>
+                    </div>
                 </div>
             </section>
 
@@ -1905,6 +2030,10 @@ const MapView = ({
                             <div className="map-total-sublabel">{COMPONENT_MAPPING[activeProgram]?.label}</div>
                         )}
                     </div>
+                    <div className="map-total-card">
+                        <div className="map-total-value">{fmtNum(calculatedTotals.nationalProjects)}</div>
+                        <div className="map-total-label">NAȚIONALE</div>
+                    </div>
                 </div>
             </section>
 
@@ -1913,7 +2042,7 @@ const MapView = ({
             {/* Top Beneficiaries Section - Only show when no component is selected */}
             {!activeProgram && (
                 <section className="beneficiaries-section">
-                    <h2>Topul beneficiarilor PNRR raportat la plăți</h2>
+                    <h2>Topul beneficiarilor PNRR raportat la plăți (Top 100)</h2>
                     {loadingBeneficiaries ? (
                         <div className="beneficiaries-loading">
                             <div className="loading-spinner-small"></div>
@@ -1927,48 +2056,62 @@ const MapView = ({
                                         <tr>
                                             <th>Beneficiar</th>
                                             <th>CUI</th>
-                                            {/* <th className="num">Nerambursabil</th>
-                                        <th className="num">Rambursabil</th> */}
                                             <th className="num">Total ({getCurrencySymbol()})</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {topBeneficiaries.items.map((beneficiary, index) => (
-                                            <tr key={index}>
-                                                <td>
-                                                    <a
-                                                        href={`https://pnrr.fonduri-ue.ro/ords/pnrr/r/dashboard-status-pnrr/detalii-beneficiar?p2_cui=${beneficiary.cui}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="beneficiary-link"
-                                                    >
-                                                        {`#${index + 1} ` + beneficiary.beneficiar}
-                                                    </a>
-                                                </td>
-                                                <td>{beneficiary.cui}</td>
-                                                {/* <td className="num">
-                                                {beneficiary.nerambursabil ? fmtMoney(beneficiary.nerambursabil / 4.95) : '-'}
-                                            </td>
-                                            <td className="num">
-                                                {beneficiary.rambursabil ? fmtMoney(beneficiary.rambursabil / 4.95) : '-'}
-                                            </td> */}
-                                                <td className="num">
-                                                    <strong>{formatMoneyWithCurrency(beneficiary.total_euro, beneficiary.total)}</strong>
-                                                </td>
-                                            </tr>
-                                        ))}
+                                        {topBeneficiaries.items
+                                            .slice(0, showAllBeneficiaries ? 100 : 5)
+                                            .map((beneficiary, index) => {
+                                                // Convert RON to EUR (using fixed rate 4.95)
+                                                const amountRON = beneficiary['received amount in lei'] || 0
+                                                const amountEUR = amountRON / 4.95
+                                                const displayAmount = currency === 'RON' ? amountRON : amountEUR
+                                                const isTopFive = index < 5
+                                                
+                                                // Format as millions with currency symbol
+                                                const millions = displayAmount / 1e6
+                                                const formattedAmount = `${millions.toLocaleString('ro-RO', {
+                                                    minimumFractionDigits: 2,
+                                                    maximumFractionDigits: 2
+                                                })} mil ${getCurrencySymbol()}`
+
+                                                return (
+                                                    <tr key={index}>
+                                                        <td style={{ fontWeight: isTopFive ? 'bold' : 'normal' }}>
+                                                            #{index + 1} {beneficiary['full legal name']}
+                                                        </td>
+                                                        <td style={{ fontWeight: isTopFive ? 'bold' : 'normal' }}>
+                                                            {beneficiary['tax identification number']}
+                                                        </td>
+                                                        <td className="num" style={{ fontWeight: isTopFive ? 'bold' : 'normal' }}>
+                                                            {formattedAmount}
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })}
                                     </tbody>
                                 </table>
                             </div>
                             <div className="beneficiaries-actions">
-                                <a
-                                    href="https://pnrr.fonduri-ue.ro/public/beneficiari"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                <button
+                                    onClick={() => setShowAllBeneficiaries(!showAllBeneficiaries)}
                                     className="btn btn-primary"
+                                    style={{
+                                        padding: '12px 24px',
+                                        background: '#0ea5e9',
+                                        color: '#fff',
+                                        border: 'none',
+                                        borderRadius: '6px',
+                                        cursor: 'pointer',
+                                        fontSize: '14px',
+                                        fontWeight: '600',
+                                        textDecoration: 'none',
+                                        display: 'inline-block'
+                                    }}
                                 >
-                                    Vezi toți beneficiarii
-                                </a>
+                                    {showAllBeneficiaries ? 'Vezi mai puțin (Top 5)' : 'Vezi toți beneficiarii (Top 100)'}
+                                </button>
                             </div>
                         </div>
                     ) : null}

@@ -59,6 +59,9 @@ function App() {
   }, [endpoint, fetchData, endpointInfo.name, useMockData])
 
   const handleCountyClick = (countyCode, countyName) => {
+    // Scroll to top when opening county details
+    window.scrollTo(0, 0)
+    
     // Special handling for NATIONAL - create a fake county object
     if (countyCode === 'NATIONAL') {
       const nationalCounty = {
@@ -93,6 +96,9 @@ function App() {
   }
 
   const handleBackToMap = () => {
+    // Scroll to top when returning to map
+    window.scrollTo(0, 0)
+    
     setCurrentView('map')
     setSelectedCounty(null)
     setIsLoadingCounty(false)

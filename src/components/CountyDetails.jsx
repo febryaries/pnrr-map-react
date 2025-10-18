@@ -181,6 +181,85 @@ const EnhancedTable = ({
     XLSX.writeFile(workbook, fileName)
   }
 
+  // Export to JSON function
+  const handleExportToJSON = () => {
+    // Prepare data for export - use all filtered data, not just paginated
+    const exportData = sortedData.map(item => {
+      const row = {}
+      columns.forEach(column => {
+        const value = item[column.key]
+        row[column.label] = value
+      })
+      return row
+    })
+
+    // Convert to JSON string with pretty formatting
+    const jsonString = JSON.stringify(exportData, null, 2)
+
+    // Create blob and download
+    const blob = new Blob([jsonString], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+
+    // Generate file name with timestamp
+    const timestamp = new Date().toISOString().split('T')[0]
+    link.download = `${exportFileName}_${timestamp}.json`
+
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }
+
+  // Export to CSV function
+  const handleExportToCSV = () => {
+    // Prepare data for export - use all filtered data, not just paginated
+    const exportData = sortedData.map(item => {
+      const row = {}
+      columns.forEach(column => {
+        const value = item[column.key]
+        row[column.label] = value
+      })
+      return row
+    })
+
+    // Create CSV header
+    const headers = columns.map(col => col.label).join(',')
+
+    // Create CSV rows
+    const rows = exportData.map(item => {
+      return columns.map(col => {
+        const value = item[col.label]
+        // Escape values that contain commas, quotes, or newlines
+        if (value === null || value === undefined) return ''
+        const stringValue = String(value)
+        if (stringValue.includes(',') || stringValue.includes('"') || stringValue.includes('\n')) {
+          return `"${stringValue.replace(/"/g, '""')}"`
+        }
+        return stringValue
+      }).join(',')
+    }).join('\n')
+
+    // Combine header and rows
+    const csvContent = `${headers}\n${rows}`
+
+    // Create blob and download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+
+    // Generate file name with timestamp
+    const timestamp = new Date().toISOString().split('T')[0]
+    link.download = `${exportFileName}_${timestamp}.csv`
+
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }
+
   const renderPagination = () => {
     // If only one page or less, show simple count
     if (totalPages <= 1) {
@@ -383,24 +462,62 @@ const EnhancedTable = ({
           )}
         </div>
         {enableExport && (
-          <button
-            onClick={handleExportToXLSX}
-            style={{
-              padding: '10px 20px',
-              background: '#10b981',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: '600',
-              whiteSpace: 'nowrap',
-              boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-            }}
-            title="Exportă toate proiectele în format Excel"
-          >
-            📊 Exportă XLSX
-          </button>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            <button
+              onClick={handleExportToXLSX}
+              style={{
+                padding: '10px 20px',
+                background: '#10b981',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '600',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+              }}
+              title="Exportă toate proiectele în format Excel"
+            >
+              📊 Exportă XLSX
+            </button>
+            <button
+              onClick={handleExportToJSON}
+              style={{
+                padding: '10px 20px',
+                background: '#3b82f6',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '600',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+              }}
+              title="Exportă toate proiectele în format JSON"
+            >
+              📄 Exportă JSON
+            </button>
+            <button
+              onClick={handleExportToCSV}
+              style={{
+                padding: '10px 20px',
+                background: '#8b5cf6',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '600',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+              }}
+              title="Exportă toate proiectele în format CSV"
+            >
+              📋 Exportă CSV
+            </button>
+          </div>
         )}
       </div>
       
