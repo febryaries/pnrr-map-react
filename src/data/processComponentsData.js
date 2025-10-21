@@ -26,14 +26,14 @@ const COMPONENT_NAMES = {
 export function getProcessedComponentsData() {
   const componentsData = {}
   
-  // Group by component code
-  componentsRawData.forEach(item => {
-    const code = item.componentCode
+  // Process each component from the updated JSON structure
+  componentsRawData.forEach(component => {
+    const code = component.code
     
     if (!componentsData[code]) {
       componentsData[code] = {
         code: code,
-        name: COMPONENT_NAMES[code] || code,
+        name: COMPONENT_NAMES[code] || component.name,
         totalValue: 0,
         totalExecutedValue: 0,
         investments: [],
@@ -41,32 +41,43 @@ export function getProcessedComponentsData() {
       }
     }
     
-    // Determine if it's an investment (I) or reform (R)
-    const isInvestment = item.measureCode.startsWith('I')
-    const isReform = item.measureCode.startsWith('R')
-    
-    const measureItem = {
-      description: item.title,
-      value: item.allocatedValue || 0,
-      executedValue: item.executedValue || 0,
-      executionPercent: item.executionPercent || '0%'
-    }
-    
-    if (isInvestment) {
+    // Process investments
+    component.investments.forEach(investment => {
+      const measureItem = {
+        masura: investment.masura,
+        titlul_masurii: investment.titlul_masurii,
+        alocare_financiara_euro: investment.alocare_financiara_euro,
+        executat_euro: investment.executat_euro,
+        executat_procent: investment.executat_procent,
+        finantare: investment.finantare
+      }
+      
       componentsData[code].investments.push(measureItem)
-    } else if (isReform) {
-      componentsData[code].reforms.push(measureItem)
-    }
+      componentsData[code].totalValue += investment.alocare_financiara_euro
+      componentsData[code].totalExecutedValue += investment.executat_euro
+    })
     
-    // Add to total value and executed value
-    componentsData[code].totalValue += (item.allocatedValue || 0)
-    componentsData[code].totalExecutedValue += (item.executedValue || 0)
+    // Process reforms
+    component.reforms.forEach(reform => {
+      const measureItem = {
+        masura: reform.masura,
+        titlul_masurii: reform.titlul_masurii,
+        alocare_financiara_euro: reform.alocare_financiara_euro,
+        executat_euro: reform.executat_euro,
+        executat_procent: reform.executat_procent,
+        finantare: reform.finantare
+      }
+      
+      componentsData[code].reforms.push(measureItem)
+      componentsData[code].totalValue += reform.alocare_financiara_euro
+      componentsData[code].totalExecutedValue += reform.executat_euro
+    })
   })
   
   // Sort investments and reforms by measure code (I1, I2, R1, R2, etc.)
   Object.values(componentsData).forEach(component => {
-    const extractNumber = (description) => {
-      const match = description.match(/^([IR])(\d+)/)
+    const extractNumber = (masura) => {
+      const match = masura.match(/^([IR])(\d+)/)
       if (match) {
         return parseInt(match[2], 10)
       }
@@ -74,19 +85,26 @@ export function getProcessedComponentsData() {
     }
     
     component.investments.sort((a, b) => {
-      const numA = extractNumber(a.description)
-      const numB = extractNumber(b.description)
+      const numA = extractNumber(a.masura)
+      const numB = extractNumber(b.masura)
       return numA - numB
     })
     
     component.reforms.sort((a, b) => {
-      const numA = extractNumber(a.description)
-      const numB = extractNumber(b.description)
+      const numA = extractNumber(a.masura)
+      const numB = extractNumber(b.masura)
       return numA - numB
     })
   })
   
-  return componentsData
+  // Convert to array and sort by component code (C1, C2, C3, ..., C16)
+  const sortedComponents = Object.values(componentsData).sort((a, b) => {
+    const numA = parseInt(a.code.replace('C', ''));
+    const numB = parseInt(b.code.replace('C', ''));
+    return numA - numB;
+  });
+  
+  return sortedComponents
 }
 
 export default getProcessedComponentsData

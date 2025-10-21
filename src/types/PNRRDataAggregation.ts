@@ -53,7 +53,7 @@ export enum Metric {
  */
 export interface County {
   code: string;           // e.g., "RO-AB", "RO-MULTI"
-  name: string;           // e.g., "Alba", "Multi Județe"
+  name: string;           // e.g., "Alba", "Național"
 }
 
 /**

@@ -222,7 +222,7 @@ function generateMockProjects(countyCode, count) {
 // Mock multi-county data
 export const mockMultiCountyData = {
   code: 'RO-MULTI',
-  name: 'Multi Județe',
+  name: 'Național',
   total: { value: 2000000000, projects: 45 },
   programs: {
     'C1': { value: 200000000, projects: 5 },

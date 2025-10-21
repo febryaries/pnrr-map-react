@@ -9,7 +9,7 @@ function App() {
   const [currentView, setCurrentView] = useState('map') // 'map' or 'county'
   const [selectedCounty, setSelectedCounty] = useState(null)
   const [isLoadingCounty, setIsLoadingCounty] = useState(false)
-  const [viewMode, setViewMode] = useState('general') // 'general', 'multi', 'total', 'program'
+  const [viewMode, setViewMode] = useState('total') // 'general', 'multi', 'total', 'program'
   const [metric, setMetric] = useState('value') // 'value' or 'projects'
   const [activeProgram, setActiveProgram] = useState(null)
   const [data, setData] = useState(mockData)

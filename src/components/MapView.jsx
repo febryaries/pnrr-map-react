@@ -200,18 +200,7 @@ const EnhancedTable = ({
   useEffect(() => {
     let filtered = data
     
-    // Filter out zero values for numeric columns
-    filtered = filtered.filter(item => {
-      // Check if any numeric column has a value greater than 0
-      const hasNonZeroValue = columns.some(column => {
-        if (column.numeric && column.key) {
-          const value = item[column.key]
-          return typeof value === 'number' && value > 0
-        }
-        return false
-      })
-      return hasNonZeroValue
-    })
+    // Don't filter out zero values to maintain correct count
     
     // Apply search filter
     if (searchTerm) {
@@ -641,63 +630,238 @@ const EnhancedTable = ({
             <button
               onClick={handleExportToXLSX}
               style={{
-                padding: '10px 20px',
-                background: '#10b981',
+                padding: '8px 16px',
+                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
                 color: '#fff',
                 border: 'none',
-                borderRadius: '6px',
+                borderRadius: '8px',
                 cursor: 'pointer',
-                fontSize: '14px',
+                fontSize: '13px',
                 fontWeight: '600',
                 whiteSpace: 'nowrap',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                boxShadow: '0 2px 8px rgba(16, 185, 129, 0.3)',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-1px)'
+                e.target.style.boxShadow = '0 4px 12px rgba(16, 185, 129, 0.4)'
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0)'
+                e.target.style.boxShadow = '0 2px 8px rgba(16, 185, 129, 0.3)'
               }}
               title="Exportă toate proiectele în format Excel"
             >
-              📊 Exportă XLSX
+              <div style={{
+                width: '16px',
+                height: '16px',
+                background: '#ffffff',
+                borderRadius: '3px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '10px',
+                fontWeight: 'bold',
+                color: '#10b981'
+              }}>
+                X
+              </div>
+              XLSX
             </button>
             <button
               onClick={handleExportToJSON}
               style={{
-                padding: '10px 20px',
-                background: '#3b82f6',
+                padding: '8px 16px',
+                background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
                 color: '#fff',
                 border: 'none',
-                borderRadius: '6px',
+                borderRadius: '8px',
                 cursor: 'pointer',
-                fontSize: '14px',
+                fontSize: '13px',
                 fontWeight: '600',
                 whiteSpace: 'nowrap',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                boxShadow: '0 2px 8px rgba(59, 130, 246, 0.3)',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-1px)'
+                e.target.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.4)'
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0)'
+                e.target.style.boxShadow = '0 2px 8px rgba(59, 130, 246, 0.3)'
               }}
               title="Exportă toate proiectele în format JSON"
             >
-              📄 Exportă JSON
+              <div style={{
+                width: '16px',
+                height: '16px',
+                background: '#ffffff',
+                borderRadius: '2px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'relative',
+                overflow: 'hidden'
+              }}>
+                <div style={{
+                  position: 'absolute',
+                  top: '2px',
+                  right: '2px',
+                  width: '4px',
+                  height: '4px',
+                  background: '#d1d5db',
+                  borderRadius: '0 2px 0 0'
+                }}></div>
+                <div style={{
+                  position: 'absolute',
+                  left: '3px',
+                  top: '6px',
+                  width: '8px',
+                  height: '1px',
+                  background: '#9ca3af'
+                }}></div>
+                <div style={{
+                  position: 'absolute',
+                  left: '3px',
+                  top: '8px',
+                  width: '6px',
+                  height: '1px',
+                  background: '#9ca3af'
+                }}></div>
+                <div style={{
+                  position: 'absolute',
+                  left: '3px',
+                  top: '10px',
+                  width: '7px',
+                  height: '1px',
+                  background: '#9ca3af'
+                }}></div>
+                <div style={{
+                  position: 'absolute',
+                  left: '3px',
+                  top: '12px',
+                  width: '5px',
+                  height: '1px',
+                  background: '#9ca3af'
+                }}></div>
+              </div>
+              JSON
             </button>
             <button
               onClick={handleExportToCSV}
               style={{
-                padding: '10px 20px',
-                background: '#8b5cf6',
+                padding: '8px 16px',
+                background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
                 color: '#fff',
                 border: 'none',
-                borderRadius: '6px',
+                borderRadius: '8px',
                 cursor: 'pointer',
-                fontSize: '14px',
+                fontSize: '13px',
                 fontWeight: '600',
                 whiteSpace: 'nowrap',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                boxShadow: '0 2px 8px rgba(139, 92, 246, 0.3)',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-1px)'
+                e.target.style.boxShadow = '0 4px 12px rgba(139, 92, 246, 0.4)'
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0)'
+                e.target.style.boxShadow = '0 2px 8px rgba(139, 92, 246, 0.3)'
               }}
               title="Exportă toate proiectele în format CSV"
             >
-              📋 Exportă CSV
+              <div style={{
+                width: '16px',
+                height: '16px',
+                background: '#ffffff',
+                borderRadius: '2px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'relative',
+                overflow: 'hidden'
+              }}>
+                {/* Document with folded corner */}
+                <div style={{
+                  position: 'absolute',
+                  top: '2px',
+                  right: '2px',
+                  width: '4px',
+                  height: '4px',
+                  background: '#d1d5db',
+                  borderRadius: '0 2px 0 0'
+                }}></div>
+                <div style={{
+                  position: 'absolute',
+                  left: '3px',
+                  top: '6px',
+                  width: '8px',
+                  height: '1px',
+                  background: '#9ca3af'
+                }}></div>
+                <div style={{
+                  position: 'absolute',
+                  left: '3px',
+                  top: '8px',
+                  width: '6px',
+                  height: '1px',
+                  background: '#9ca3af'
+                }}></div>
+                <div style={{
+                  position: 'absolute',
+                  left: '3px',
+                  top: '10px',
+                  width: '7px',
+                  height: '1px',
+                  background: '#9ca3af'
+                }}></div>
+                <div style={{
+                  position: 'absolute',
+                  left: '3px',
+                  top: '12px',
+                  width: '5px',
+                  height: '1px',
+                  background: '#9ca3af'
+                }}></div>
+                {/* Green X overlay in bottom-left */}
+                <div style={{
+                  position: 'absolute',
+                  bottom: '1px',
+                  left: '1px',
+                  width: '6px',
+                  height: '6px',
+                  background: '#10b981',
+                  borderRadius: '1px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '4px',
+                  fontWeight: 'bold',
+                  color: '#ffffff'
+                }}>
+                  X
+                </div>
+              </div>
+              CSV
             </button>
           </div>
         )}
       </div>
       
       {searchable && (
-        <div style={{ marginBottom: '12px' }}>
+        <div style={{ marginBottom: '20px' }}>
           {/* Search bar */}
           <input
             type="text"
@@ -706,16 +870,30 @@ const EnhancedTable = ({
             onChange={handleSearchChange}
             style={{
               width: '100%',
-              padding: '8px 12px',
-              border: '1px solid #d1d5db',
-              borderRadius: '6px',
-              fontSize: '14px'
+              padding: '12px 16px',
+              border: '2px solid #e5e7eb',
+              borderRadius: '10px',
+              fontSize: '14px',
+              fontWeight: '500',
+              color: '#374151',
+              background: '#ffffff',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.04)',
+              transition: 'all 0.2s ease',
+              outline: 'none'
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = '#3b82f6'
+              e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)'
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = '#e5e7eb'
+              e.target.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.04)'
             }}
           />
         </div>
       )}
 
-      {/* Sticky Filters - ALL VISIBLE - Independent filtering */}
+      {/* Sticky Filters - Always visible for both endpoints */}
       {searchable && (
         <div className="table-filters-sticky" ref={filtersRef}>
           <div className="table-filters-sticky-content">
@@ -757,6 +935,17 @@ const EnhancedTable = ({
                 </select>
               </div>
               
+              {/* Masura Filter - ALWAYS VISIBLE */}
+              <div className="filter-item">
+                <label>📋 Cod Măsură</label>
+                <select value={filterMasura} onChange={(e) => setFilterMasura(e.target.value)}>
+                  <option value="">Toate măsurile</option>
+                  {uniqueMasuraCodes.map(value => (
+                    <option key={value} value={value}>{value}</option>
+                  ))}
+                </select>
+              </div>
+              
               {/* Stadiu Filter - ALWAYS VISIBLE */}
               <div className="filter-item">
                 <label>📊 Stadiu</label>
@@ -774,17 +963,6 @@ const EnhancedTable = ({
                 <select value={filterFundingSource} onChange={(e) => setFilterFundingSource(e.target.value)}>
                   <option value="">Toate sursele</option>
                   {uniqueFundingSources.map(value => (
-                    <option key={value} value={value}>{value}</option>
-                  ))}
-                </select>
-              </div>
-              
-              {/* Masura Filter - ALWAYS VISIBLE */}
-              <div className="filter-item">
-                <label>📋 Cod Măsură</label>
-                <select value={filterMasura} onChange={(e) => setFilterMasura(e.target.value)}>
-                  <option value="">Toate măsurile</option>
-                  {uniqueMasuraCodes.map(value => (
                     <option key={value} value={value}>{value}</option>
                   ))}
                 </select>
@@ -1056,6 +1234,104 @@ const MapView = ({
         return result
     }
 
+    // Calculate totals for the current filtered data
+    const calculatedTotals = useMemo(() => {
+        const baseCounties = data.filter(d => {
+            if (!d) return false
+            const { code } = getCountyInfo(d)
+            return code && code !== 'RO-MULTI'
+        })
+        const multiData = data.find(d => {
+            if (!d) return false
+            const { code } = getCountyInfo(d)
+            return code === 'RO-MULTI'
+        })
+
+        let totalValue = 0
+        let totalProjects = 0
+
+        // Handle different view modes
+        if (viewMode === 'national') {
+            // For national view, only include RO-MULTI data (national projects)
+            if (multiData && multiData.extras && multiData.extras.rows) {
+                const nationalProjects = activeProgram 
+                    ? multiData.extras.rows.filter(project => project[fieldMappings.componentCode] === activeProgram)
+                    : multiData.extras.rows
+                
+                totalValue = nationalProjects.reduce((sum, project) => sum + getValueField(project), 0)
+                totalProjects = nationalProjects.length
+            }
+        } else if (viewMode === 'local') {
+            // For local view, only include county data (exclude RO-MULTI and Național)
+            baseCounties.forEach(county => {
+                // Skip counties with name "Național"
+                if (county.county?.name === 'Național' || county.name === 'Național') {
+                    return
+                }
+                
+                if (activeProgram && county.extras && county.extras.rows) {
+                    const filteredProjects = county.extras.rows.filter(project =>
+                        project[fieldMappings.componentCode] === activeProgram
+                    )
+                    totalValue += filteredProjects.reduce((sum, project) =>
+                        sum + getValueField(project), 0
+                    )
+                    totalProjects += filteredProjects.length
+                } else {
+                    if (county.extras && county.extras.rows) {
+                        const countyValue = county.extras.rows.reduce((sum, project) =>
+                            sum + getValueField(project), 0
+                        )
+                        totalValue += countyValue
+                        totalProjects += county.extras.rows.length
+                    } else {
+                        totalValue += county.total.value
+                        totalProjects += county.total.projects
+                    }
+                }
+            })
+        } else {
+            // For total view and others, include all data
+            baseCounties.forEach(county => {
+                if (activeProgram && county.extras && county.extras.rows) {
+                    const filteredProjects = county.extras.rows.filter(project =>
+                        project[fieldMappings.componentCode] === activeProgram
+                    )
+                    totalValue += filteredProjects.reduce((sum, project) =>
+                        sum + getValueField(project), 0
+                    )
+                    totalProjects += filteredProjects.length
+                } else {
+                    if (county.extras && county.extras.rows) {
+                        const countyValue = county.extras.rows.reduce((sum, project) =>
+                            sum + getValueField(project), 0
+                        )
+                        totalValue += countyValue
+                        totalProjects += county.extras.rows.length
+                    } else {
+                        totalValue += county.total.value
+                        totalProjects += county.total.projects
+                    }
+                }
+            })
+            
+            // For total view, also include national projects
+            if (viewMode === 'total' && multiData && multiData.extras && multiData.extras.rows) {
+                const nationalProjects = activeProgram 
+                    ? multiData.extras.rows.filter(project => project[fieldMappings.componentCode] === activeProgram)
+                    : multiData.extras.rows
+                
+                totalValue += nationalProjects.reduce((sum, project) => sum + getValueField(project), 0)
+                totalProjects += nationalProjects.length
+            }
+        }
+
+        // Calculate NAȚIONAL projects count (always show total, not filtered by component)
+        const nationalProjects = multiData?.extras?.rows?.length || 0
+
+        return { totalValue, totalProjects, nationalProjects }
+    }, [data, activeProgram, fieldMappings, currency, getValueField, viewMode])
+
     // Process data based on current view mode and metric
     const processedData = useMemo(() => {
         if (!data || data.length === 0) return []
@@ -1082,7 +1358,7 @@ const MapView = ({
         })
         let result = []
 
-        if (viewMode === 'general') {
+        if (viewMode === 'general' || viewMode === 'total' || viewMode === 'local') {
             result = baseCounties.map(county => {
                 let countyValue = county.total.value
                 let countyProjects = county.total.projects
@@ -1106,6 +1382,22 @@ const MapView = ({
                     value: metric === 'value' ? countyValue : countyProjects,
                     money: countyValue,
                     projects: countyProjects
+                }
+            })
+        } else if (viewMode === 'national') {
+            // For national view, use the actual calculated totals from the summary boxes
+            const nationalValue = calculatedTotals.totalValue
+            const nationalProjects = calculatedTotals.totalProjects
+            
+            result = baseCounties.map(county => {
+                const { code, name } = getCountyInfo(county)
+                return {
+                    'hc-key': code.toLowerCase().replace('ro-', 'ro-'),
+                    code: code,
+                    name: name,
+                    value: metric === 'value' ? nationalValue : nationalProjects,
+                    money: nationalValue,
+                    projects: nationalProjects
                 }
             })
         } else if (viewMode === 'program' && activeProgram) {
@@ -1238,7 +1530,7 @@ const MapView = ({
 
         const sortedResult = result.sort((a, b) => (b.value || 0) - (a.value || 0))
         return sortedResult
-    }, [data, viewMode, metric, activeProgram])
+    }, [data, viewMode, metric, activeProgram, calculatedTotals])
 
     // Map chart configuration
     const mapOptions = useMemo(() => {
@@ -1329,14 +1621,19 @@ const MapView = ({
                     const displayValue = metric === 'value' ? fmtMoney(valueToDisplay, currencySymbol) : fmtNum(point.projects)
                     const otherValue = metric === 'value' ? `Proiecte: ${fmtNum(point.projects)}` : `Valoare: ${fmtMoney(valueToDisplay, currencySymbol)}`
 
+                    // For national view mode, always redirect to national projects page
+                    const clickHandler = viewMode === 'national' 
+                        ? "window.handleCountyClick('NATIONAL', 'Proiecte Naționale')"
+                        : `window.handleCountyClick('${point.code}', '${point.name}')`
+
                     return `
           <strong>${point.name}</strong><br/>
           ${metric === 'value' ? 'Valoare' : 'Proiecte'}: <strong>${displayValue}</strong><br/>
           ${otherValue}<br/>
           <div style="margin-top: 8px;">
-            <button onclick="window.handleCountyClick('${point.code}', '${point.name}')" 
+            <button onclick="${clickHandler}" 
                     style="padding: 6px 10px; background: #0ea5e9; color: #fff; border: 0; border-radius: 8px; font-weight: 600; cursor: pointer;">
-              Click pe județ pentru detalii
+              ${viewMode === 'national' ? 'Click pentru proiecte naționale' : 'Click pe județ pentru detalii'}
             </button>
           </div>
         `
@@ -1358,7 +1655,12 @@ const MapView = ({
                 point: {
                     events: {
                         click: function () {
+                            // For national view mode, always redirect to national projects page
+                            if (viewMode === 'national') {
+                                onCountyClick('NATIONAL', 'Proiecte Naționale')
+                            } else {
                             onCountyClick(this.code, this.name)
+                            }
                         }
                     }
                 }
@@ -1392,12 +1694,16 @@ const MapView = ({
             title = `Sursa datelor: ${sourceName} - Proiecte Județene ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}${filterSuffix}`
         } else if (viewMode === 'all') {
             title = `Sursa datelor: ${sourceName} - Toate proiectele ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}${filterSuffix}`
+        } else if (viewMode === 'total') {
+            title = `Sursa datelor: ${sourceName} - Toate proiectele PNRR (${currencySymbol})`
+        } else if (viewMode === 'national') {
+            title = `Sursa datelor: ${sourceName} - Proiecte Naționale (${currencySymbol})`
+        } else if (viewMode === 'local') {
+            title = `Sursa datelor: ${sourceName} - Proiecte Locale ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}${filterSuffix}`
         } else if (viewMode === 'program') {
             title = `Sursa datelor: ${sourceName} - ${componentLabel || activeProgram} - ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}`
-        } else if (viewMode === 'total') {
-            title = `Sursa datelor: ${sourceName} - Total (General + Multi județe) - ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}${filterSuffix}`
         } else {
-            title = `Sursa datelor: ${sourceName} - Multi județe - ${metric === 'value' ? `Valoare (${currencySymbol}, împărțită egal între județe)` : 'Proiecte (plin în fiecare județ)'}${filterSuffix}`
+            title = `Sursa datelor: ${sourceName} - Național - ${metric === 'value' ? `Valoare (${currencySymbol}, împărțită egal între județe)` : 'Proiecte (plin în fiecare județ)'}${filterSuffix}`
         }
 
         // If title is too long (more than 100 chars), add line break after "filtrat:"
@@ -1454,61 +1760,23 @@ const MapView = ({
         return components
     }, [data])
 
-    // Calculate totals for the current filtered data
-    const calculatedTotals = useMemo(() => {
-        const baseCounties = data.filter(d => {
-            if (!d) return false
-            const { code } = getCountyInfo(d)
-            return code && code !== 'RO-MULTI'
-        })
-        const multiData = data.find(d => {
-            if (!d) return false
-            const { code } = getCountyInfo(d)
-            return code === 'RO-MULTI'
-        })
-
-        let totalValue = 0
-        let totalProjects = 0
-
-        // Calculate county totals
-        baseCounties.forEach(county => {
-            if (activeProgram && county.extras && county.extras.rows) {
-                // Filter by component if one is selected
-                const filteredProjects = county.extras.rows.filter(project =>
-                    project[fieldMappings.componentCode] === activeProgram
-                )
-                totalValue += filteredProjects.reduce((sum, project) =>
-                    sum + getValueField(project), 0
-                )
-                totalProjects += filteredProjects.length
-            } else {
-                // Calculate from individual projects to respect currency selection
-                if (county.extras && county.extras.rows) {
-                    const countyValue = county.extras.rows.reduce((sum, project) =>
-                        sum + getValueField(project), 0
-                    )
-                    totalValue += countyValue
-                    totalProjects += county.extras.rows.length
-                } else {
-                    // Fallback to stored totals if no individual project data
-                    totalValue += county.total.value
-                    totalProjects += county.total.projects
-                }
-            }
-        })
-
-        // NOTE: Multi-county data (RO-MULTI) is NOT added here because
-        // NAȚIONAL projects are already included in București via useBucurestiNationalProjects hook
-        // Adding them here would create duplicates
-
-        // Calculate NAȚIONAL projects count (always show total, not filtered by component)
-        const nationalProjects = multiData?.extras?.rows?.length || 0
-
-        return { totalValue, totalProjects, nationalProjects }
-    }, [data, activeProgram, fieldMappings, currency, getValueField])
 
     // Component totals for pie chart
     const componentTotals = useMemo(() => {
+        // Debug: Check if data exists and its structure
+        if (!data || data.length === 0) {
+            console.log('🔍 No data available for component totals')
+            return []
+        }
+        
+        console.log('🔍 Data structure debug:', {
+            dataLength: data.length,
+            firstItem: data[0],
+            dataKeys: data[0] ? Object.keys(data[0]) : 'No data',
+            fieldMappings: fieldMappings,
+            endpoint: endpoint
+        })
+        
         // For 'all' view mode, include all data including RO-MULTI
         // For other modes, exclude RO-MULTI (NAȚIONAL projects are in București)
         const baseCounties = data.filter(d => {
@@ -1532,11 +1800,28 @@ const MapView = ({
             if (county.extras && county.extras.rows) {
                 county.extras.rows.forEach(project => {
                     const componentKey = project[fieldMappings.componentCode]
+                    // Debug: Log first few projects to see structure
+                    if (baseCounties.indexOf(county) < 2 && county.extras.rows.indexOf(project) < 3) {
+                        console.log('🔍 Project Debug:', {
+                            projectKeys: Object.keys(project),
+                            componentCodeField: fieldMappings.componentCode,
+                            componentKey: componentKey,
+                            project: project
+                        })
+                    }
                     if (totals[componentKey]) {
                         const projectValue = getValueField(project)
                         totals[componentKey].value += projectValue
                         totals[componentKey].projects += 1
                     }
+                })
+            } else {
+                // Debug: Log counties without extras.rows structure
+                console.log('🔍 County without extras.rows:', {
+                    countyName: county.name,
+                    countyKeys: Object.keys(county),
+                    hasExtras: !!county.extras,
+                    extrasKeys: county.extras ? Object.keys(county.extras) : 'No extras'
                 })
             }
         })
@@ -1564,35 +1849,66 @@ const MapView = ({
             componentColors[componentKey] = PROGRAM_COLORS[componentKey] || '#94a3b8'
         })
 
-        return Object.entries(totals)
-            .filter(([_, data]) => (metric === 'value' ? data.value : data.projects) > 0)
+        const result = Object.entries(totals)
+            .filter(([_, data]) => data.value > 0)
             .map(([key, data]) => ({
                 name: data.label,
-                y: metric === 'value' ? data.value : data.projects,
+                y: data.value,
                 color: componentColors[key],
                 key
             }))
             .sort((a, b) => b.y - a.y)
-    }, [data, metric, fieldMappings, COMPONENT_MAPPING, currency, getValueField, viewMode])
+        
+        // Debug: Log component totals
+        console.log('🔍 Component Totals Debug:', {
+            endpoint,
+            viewMode,
+            baseCountiesCount: baseCounties.length,
+            multiDataExists: !!multiData,
+            multiDataRows: multiData?.extras?.rows?.length || 0,
+            allTotals: totals,
+            filteredResult: result,
+            dataLength: data.length,
+            dataSample: data.slice(0, 2)
+        })
+        
+        // If no real data is found, create some test data for debugging
+        if (result.length === 0 && data && data.length > 0) {
+            console.log('🔍 No component data found, creating test data for debugging')
+            return [
+                { name: 'Test Component 1', y: 1000000, color: '#0ea5e9', key: 'TEST1' },
+                { name: 'Test Component 2', y: 750000, color: '#22c55e', key: 'TEST2' },
+                { name: 'Test Component 3', y: 500000, color: '#16a34a', key: 'TEST3' }
+            ]
+        }
+        
+        return result
+    }, [data, fieldMappings, COMPONENT_MAPPING, currency, getValueField, viewMode])
 
-    // Pie chart configuration - Reverted to working state
+    // Pie chart configuration - Stable version
     const pieOptions = {
         chart: {
             type: 'pie',
-            height: 400
+            height: 400,
+            backgroundColor: 'transparent',
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
         },
         title: {
-            text: `Distribuție pe componente – ${metric === 'value' ? 'Valoare (EUR)' : 'Proiecte'}`
+            text: `Distribuție pe componente – Valoare (EUR)`
         },
         tooltip: {
             pointFormatter: function () {
-                const val = metric === 'value' ? fmtMoney(this.y) : fmtNum(this.y)
+                const val = fmtMoney(this.y)
                 return `${this.name}: <b>${val}</b>`
             }
         },
         plotOptions: {
             pie: {
                 innerSize: '55%',
+                allowPointSelect: true,
+                cursor: 'pointer',
                 dataLabels: {
                     enabled: true,
                     formatter: function () {
@@ -1606,13 +1922,21 @@ const MapView = ({
                     connectorWidth: 1,
                     connectorColor: '#666'
                 },
-                cursor: 'pointer',
                 point: {
                     events: {
                         click: function () {
                             setViewMode('program')
                             setActiveProgram(this.options.key)
                         }
+                    }
+                },
+                states: {
+                    hover: {
+                        enabled: true,
+                        brightness: 0.1
+                    },
+                    inactive: {
+                        enabled: false
                     }
                 }
             }
@@ -1804,12 +2128,12 @@ const MapView = ({
 
 
             <div className="controls controls--map">
-
-
-                {/* Total segment */}
-                <p className="control-label">Sursa datelor</p>
-
-                <div className="segment">    
+                {/* Data Source and Currency Toggle - Left and Right alignment */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px', width: '100%' }}>
+                    {/* Data Source - Left side */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                        <p className="control-label" style={{ margin: 0 }}>Sursa datelor:</p>
+                        <div className="segment" style={{ margin: 0 }}>    
                     <button
                         className={endpoint === 'payments' ? 'active' : ''}
                         onClick={() => {
@@ -1830,72 +2154,66 @@ const MapView = ({
                     </button>
                 </div>
             </div>
+                    
+                    {/* Currency Toggle - Right side */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                        <p className="control-label" style={{ margin: 0 }}>Moneda:</p>
+                        <div className="segment" style={{ margin: 0 }}>
+                            <button
+                                className={currency === 'EUR' ? 'active' : ''}
+                                onClick={() => setCurrency('EUR')}
+                            >
+                                EUR
+                            </button>
+                            <button
+                                className={currency === 'RON' ? 'active' : ''}
+                                onClick={() => setCurrency('RON')}
+                            >
+                                RON
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            {/* Filtre secundare - Hide View Mode section for Payments */}
+            {endpoint !== 'payments' && (
             <div className="controls controls--map">
-
-            <p className="control-label">Filtre secundare</p>
-
-                {/* General segment */}
-                <div className="segment">
+                {/* View Mode Selection - Full width with inline buttons */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '15px' }}>
+                    <p className="control-label" style={{ margin: 0, minWidth: '120px' }}>Vizualizare:</p>
+                    <div className="segment" style={{ margin: 0 }}>
                     <button
-                        className={metric === 'value' ? 'active' : ''}
+                        className={viewMode === 'total' ? 'active' : ''}
                         onClick={() => {
-                            setViewMode('general');
+                            setViewMode('total');
                             setMetric('value');
-                            // Only reset activeProgram if we're switching from a different view mode
-                            if (viewMode !== 'general') {
                                 setActiveProgram(null);
-                            }
                         }}
                     >
-                        Proiecte Județene · Valoare
+                        Toate Proiectele
                     </button>
                     <button
-                        className={metric === 'projects' ? 'active' : ''}
+                        className={viewMode === 'national' ? 'active' : ''}
                         onClick={() => {
-                            setViewMode('general');
-                            setMetric('projects');
-                            // Only reset activeProgram if we're switching from a different view mode
-                            if (viewMode !== 'general') {
+                            setViewMode('national');
+                            setMetric('value');
                                 setActiveProgram(null);
-                            }
-                        }}
-                    >
-                        Proiecte Județene · Proiecte
-                    </button>
-                    <button
-                        onClick={() => {
-                            onCountyClick('NATIONAL', 'Proiecte Naționale');
                         }}
                     >
                         Proiecte Naționale
                     </button>
                     <button
+                        className={viewMode === 'local' ? 'active' : ''}
                         onClick={() => {
-                            // Switch to projects endpoint and clear all filters to show all projects
-                            if (switchEndpoint) {
-                                switchEndpoint('projects');
-                            }
-                            setViewMode('all');
-                            setMetric('projects');
+                            setViewMode('local');
+                            setMetric('value');
                             setActiveProgram(null);
-                            setSearchTerm('');
-                            setFilterStadiu('');
-                            setFilterLocality('');
-                            setFilterFundingSource('');
-                            setFilterCounty('');
-                            setFilterComponent('');
-                            setFilterMasura('');
-                            // Scroll to table
-                            setTimeout(() => {
-                                const element = document.getElementById('projects-table');
-                                if (element) {
-                                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                }
-                            }, 100);
                         }}
                     >
-                        Toate proiectele
+                        Proiecte Locale
                     </button>
+                    </div>
                 </div>
 
                 {/* Multi segment */}
@@ -1910,7 +2228,7 @@ const MapView = ({
                             }
                         }}
                     >
-                        Multi județe · Valoare
+                        Național · Valoare
                     </button>
                     <button
                         className={viewMode === 'multi' && metric === 'projects' ? 'active' : ''}
@@ -1922,44 +2240,20 @@ const MapView = ({
                             }
                         }}
                     >
-                        Multi județe · Proiecte
+                        Național · Proiecte
                     </button>
                 </div> */}
 
 
-
-
-                {/* Total segment */}
-                <div className="segment">
-                    <button
-                        className={currency === 'EUR' ? 'active' : ''}
-                        onClick={() => setCurrency('EUR')}
-                    >
-                        EUR
-                    </button>
-                    <button
-                        className={currency === 'RON' ? 'active' : ''}
-                        onClick={() => setCurrency('RON')}
-                    >
-                        RON
-                    </button>
                 </div>
-
-
-                {/* Key Areas Section */}
-                <div className="key-areas-section">
-                    {/* <div className="key-areas-header">
-                        <h3 className="control-label">Filtrează  în funcție de Componente din PNRR</h3>
-                        <a
-                            href="https://pnrr.fonduri-ue.ro/ords/pnrr/r/dashboard-status-pnrr/home?T=tb"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="details-button"
-                        >
-                            Află mai multe detalii
-                        </a>
-                    </div> */}
-                    <div className="programs">
+            )}
+            
+            {/* Component Filters - Always visible */}
+            <div className="controls controls--map">
+                {/* Component Filters - Compact label with break rows */}
+                <div style={{ marginBottom: '15px' }}>
+                    <p className="control-label" style={{ margin: '0 0 10px 0', width: 'fit-content' }}>VIZUALIZARE PE COMPONENTE:</p>
+                    <div className="programs" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                         {PROGRAMS.map(program => (
                             <button
                                 key={program.key}
@@ -2149,19 +2443,53 @@ const MapView = ({
                 </section>
             )}
 
-            {/* Pie Chart - Full Row (always show, even when filtering) */}
-            {viewMode !== 'program' && (
-                <section className="pie-chart-section">
-                    <div className="card pie-card">
+            {/* Pie Chart - Full Row (always show) */}
+            <section className="pie-chart-section">
+                <div className="card pie-card">
+                    {isLoadingRealData ? (
+                        <div className="chart-container" style={{ 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center', 
+                            height: '400px',
+                            color: '#64748b',
+                            fontSize: '16px'
+                        }}>
+                            <div style={{ textAlign: 'center' }}>
+                                <div className="loading-spinner-small" style={{ margin: '0 auto 16px auto' }}></div>
+                                <div>Se încarcă datele pentru distribuția pe componente...</div>
+                            </div>
+                        </div>
+                    ) : componentTotals && componentTotals.length > 0 ? (
                         <div className="chart-container">
                             <HighchartsReact
                                 highcharts={Highcharts}
                                 options={pieOptions}
                             />
                         </div>
-                    </div>
-                </section>
-            )}
+                    ) : (
+                        <div className="chart-container" style={{ 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center', 
+                            height: '400px',
+                            color: '#64748b',
+                            fontSize: '16px'
+                        }}>
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{ fontSize: '48px', marginBottom: '16px' }}>📊</div>
+                                <div>Nu există date pentru distribuția pe componente</div>
+                                <div style={{ fontSize: '14px', marginTop: '8px' }}>
+                                    Verifică filtrele sau încarcă datele
+                                </div>
+                                <div style={{ fontSize: '12px', marginTop: '8px', color: '#94a3b8' }}>
+                                    Debug: Data length: {data?.length || 0} | Endpoint: {endpoint}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </section>
 
             {/* County Ranking - Full Row */}
             <section className="ranking-section">
@@ -2172,7 +2500,7 @@ const MapView = ({
                             const percentage = maxValue ? Math.max(2, (county.value / maxValue) * 100) : 0
                             // Convert to RON if needed (county.money is in EUR)
                             const valueToDisplay = currency === 'RON' ? county.money * 5 : county.money
-                            const displayValue = metric === 'value' ? fmtMoney(valueToDisplay, getCurrencySymbol()) : fmtNum(county.projects)
+                            const displayValue = fmtMoney(valueToDisplay, getCurrencySymbol())
                             // Simple display name - no special case for București
                             const displayName = county.name
 
@@ -2213,20 +2541,40 @@ const MapView = ({
                         // Get all projects/payments from all counties
                         const allData = []
                         data.forEach(county => {
-                            // For 'all' view mode, include both county and national projects
-                            // For other modes, exclude RO-MULTI because NAȚIONAL projects are already included in București
-                            if (viewMode !== 'all' && (county.county?.code === 'RO-MULTI' || county.code === 'RO-MULTI')) {
+                            // Handle different view modes for projects endpoint
+                            if (endpoint === 'projects') {
+                                if (viewMode === 'national') {
+                                    // Only include National projects (county = "Național" OR RO-MULTI)
+                                    if (county.county?.name !== 'Național' && county.name !== 'Național' && 
+                                        county.county?.code !== 'RO-MULTI' && county.code !== 'RO-MULTI') {
+                                        return;
+                                    }
+                                } else if (viewMode === 'local') {
+                                    // Only include Local projects (county != "Național" AND != RO-MULTI)
+                                    if (county.county?.name === 'Național' || county.name === 'Național' ||
+                                        county.county?.code === 'RO-MULTI' || county.code === 'RO-MULTI') {
+                                        return;
+                                    }
+                                } else if (viewMode === 'total') {
+                                    // Include all projects (both National and Local)
+                                    // No filtering needed
+                                } else {
+                                    // For other view modes, exclude RO-MULTI
+                            if (county.county?.code === 'RO-MULTI' || county.code === 'RO-MULTI') {
                                 return;
+                                    }
+                                }
+                            } else {
+                                // For payments endpoint, use original logic
+                                if (viewMode !== 'all' && (county.county?.code === 'RO-MULTI' || county.code === 'RO-MULTI')) {
+                                    return;
+                                }
                             }
                             
                             if (county.extras?.rows) {
                                 county.extras.rows.forEach(item => {
-                                    // Create concatenated title from contract number and title
-                                    const contractNumber = item[fieldMappings.contractNumber] || ''
-                                    const contractTitle = item[fieldMappings.title] || ''
-                                    const fullTitle = contractNumber && contractTitle 
-                                        ? `${contractNumber} - ${contractTitle}`
-                                        : contractNumber || contractTitle || 'N/A'
+                                    // Use only the title (titlu_contract) field
+                                    const fullTitle = item[fieldMappings.title] || 'N/A'
                                     
                                     // Handle FinancialAmount object for projects
                                     const financialAmount = item[fieldMappings.value]
@@ -2263,8 +2611,8 @@ const MapView = ({
                             ? allData.filter(item => item.componentCode === activeProgram)
                             : allData
                         
-                        // Filter out zero values
-                        return filteredData.filter(item => item.value > 0)
+                        // Don't filter out zero values to maintain correct count
+                        return filteredData
                     })()}
                     columns={[
                         {
@@ -2307,7 +2655,7 @@ const MapView = ({
                                     // For projects, use the FinancialAmount object directly
                                     const financialAmount = item[fieldMappings.value]
                                     if (financialAmount && typeof financialAmount === 'object') {
-                                        return <div style={{ fontSize: '12px', minWidth: '100px' }}>
+                                        return <div style={{ fontSize: '12px', minWidth: '100px', textAlign: 'center' }}>
                                             {currency === 'RON' 
                                                 ? formatMoneyWithCurrency(financialAmount.ron, financialAmount.ron, item.startDate)
                                                 : formatMoneyWithCurrency(financialAmount.eur, financialAmount.ron, item.startDate)
@@ -2315,7 +2663,7 @@ const MapView = ({
                                         </div>
                                     }
                                 }
-                                return <div style={{ fontSize: '12px', minWidth: '100px' }}>
+                                return <div style={{ fontSize: '12px', minWidth: '100px', textAlign: 'center' }}>
                                     {formatMoneyWithCurrency(value, item.value_ron, item.startDate)}
                                 </div>
                             }
@@ -2403,12 +2751,78 @@ const MapView = ({
                         }
                         return true
                     })}
-                    title={endpoint === 'payments' ? 'Plăți PNRR' : 'Proiecte PNRR'}
+                    title={endpoint === 'payments' ? 'Plăți PNRR' : 
+                           viewMode === 'total' ? 'Toate proiectele PNRR' : 
+                           viewMode === 'national' ? 'Proiecte Naționale PNRR' :
+                           viewMode === 'local' ? 'Proiecte Locale PNRR' : 'Proiecte PNRR'}
                     subtitle={
                         (() => {
                             // Use filtered totals from the table if available, otherwise fallback to calculated values
                             if (filteredTotals.count > 0) {
-                                return `${filteredTotals.count} ${endpoint === 'payments' ? 'plăți' : 'proiecte'} găsite${activeProgram ? ` (${COMPONENT_MAPPING[activeProgram]?.label})` : ''} • ${formatMoneyWithCurrency(filteredTotals.totalValue)} valoare totală`
+                                // For Total Proiecte view, show combined National + Local totals
+                                if (endpoint === 'projects' && viewMode === 'total') {
+                                    // Calculate National and Local totals separately, filtered by activeProgram if selected
+                                    const nationalData = data.filter(county => 
+                                        county.county?.name === 'Național' || county.name === 'Național' ||
+                                        county.county?.code === 'RO-MULTI' || county.code === 'RO-MULTI'
+                                    )
+                                    const localData = data.filter(county => 
+                                        county.county?.name !== 'Național' && county.name !== 'Național' && 
+                                county.county?.code !== 'RO-MULTI' && county.code !== 'RO-MULTI'
+                            )
+                            
+                                    // Calculate counts and values, filtering by activeProgram if selected
+                                    const nationalCount = nationalData.reduce((sum, county) => {
+                                        if (county.extras?.rows) {
+                                            const filteredRows = activeProgram 
+                                                ? county.extras.rows.filter(item => item[fieldMappings.componentCode] === activeProgram)
+                                                : county.extras.rows
+                                            return sum + filteredRows.length
+                                        }
+                                        return sum
+                                    }, 0)
+                                    
+                                    const localCount = localData.reduce((sum, county) => {
+                                        if (county.extras?.rows) {
+                                            const filteredRows = activeProgram 
+                                                ? county.extras.rows.filter(item => item[fieldMappings.componentCode] === activeProgram)
+                                                : county.extras.rows
+                                            return sum + filteredRows.length
+                                        }
+                                        return sum
+                                    }, 0)
+                                    
+                                    const nationalValue = nationalData.reduce((sum, county) => {
+                                        if (county.extras?.rows) {
+                                            const filteredRows = activeProgram 
+                                                ? county.extras.rows.filter(item => item[fieldMappings.componentCode] === activeProgram)
+                                                : county.extras.rows
+                                            return sum + filteredRows.reduce((countySum, item) => {
+                                                const value = getValueField(item)
+                                                return countySum + value
+                                            }, 0)
+                                        }
+                                        return sum
+                                    }, 0)
+                                    
+                                    const localValue = localData.reduce((sum, county) => {
+                                        if (county.extras?.rows) {
+                                            const filteredRows = activeProgram 
+                                                ? county.extras.rows.filter(item => item[fieldMappings.componentCode] === activeProgram)
+                                                : county.extras.rows
+                                            return sum + filteredRows.reduce((countySum, item) => {
+                                                const value = getValueField(item)
+                                                return countySum + value
+                                            }, 0)
+                                        }
+                                        return sum
+                                    }, 0)
+                                    
+                                    const totalCount = nationalCount + localCount
+                                    return `${nationalCount} Naționale + ${localCount} Locale = ${totalCount} proiecte${activeProgram ? ` (${COMPONENT_MAPPING[activeProgram]?.label})` : ''} • ${formatMoneyWithCurrency(nationalValue)} + ${formatMoneyWithCurrency(localValue)} = ${formatMoneyWithCurrency(filteredTotals.totalValue)} valoare totală`
+                                } else {
+                                    return `${filteredTotals.count} ${endpoint === 'payments' ? 'plăți' : 'proiecte'} găsite${activeProgram ? ` (${COMPONENT_MAPPING[activeProgram]?.label})` : ''} • ${formatMoneyWithCurrency(filteredTotals.totalValue)} valoare totală`
+                                }
                             }
                             
                             // Fallback calculation for initial load
@@ -2480,7 +2894,12 @@ const MapView = ({
               currency={currency}
               setActiveProgram={(componentCode) => {
                 setActiveProgram(componentCode)
-                setViewMode('all')
+                // For projects endpoint, default to 'total' view mode to show all projects
+                if (endpoint === 'projects') {
+                  setViewMode('total')
+                } else {
+                  setViewMode('all')
+                }
                 setMetric('projects')
               }}
               setFilterMasura={setFilterMasura}
@@ -2507,14 +2926,14 @@ const MapView = ({
         const componentLabel = activeProgram ? COMPONENT_MAPPING[activeProgram]?.label : null
         const filterSuffix = activeProgram ? ` (filtrat: ${componentLabel})` : ''
 
-        if (viewMode === 'general') return `Proiecte Județene${filterSuffix} · ${metric === 'value' ? 'Valoare' : 'Proiecte'}`
-        if (viewMode === 'all') return `Toate proiectele${filterSuffix} · ${metric === 'value' ? 'Valoare' : 'Proiecte'}`
+        if (viewMode === 'general') return `Proiecte Județene${filterSuffix} · Total Valoare`
+        if (viewMode === 'all') return `Toate proiectele${filterSuffix} · Total Valoare`
         if (viewMode === 'program') {
             const program = PROGRAMS.find(p => p.key === activeProgram)
-            return `${program?.label || activeProgram} · ${metric === 'value' ? 'Valoare' : 'Proiecte'}`
+            return `${program?.label || activeProgram} · Total Valoare`
         }
-        if (viewMode === 'total') return `Total${filterSuffix} · ${metric === 'value' ? 'Valoare' : 'Proiecte'}`
-        return `Multi județe${filterSuffix} · ${metric === 'value' ? 'Valoare' : 'Proiecte'}`
+        if (viewMode === 'total') return `Total${filterSuffix} · Total Valoare`
+        return `Național${filterSuffix} · Total Valoare`
     }
 }
 

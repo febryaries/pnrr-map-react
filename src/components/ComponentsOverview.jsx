@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { fmtMoney, COMPONENT_MAPPING_PAYMENTS } from '../data/data'
 import getProcessedComponentsData from '../data/processComponentsData'
-import alocariComponenteData from '../data/alocariComponente.json'
 
 // Mapping of component codes and descriptions to PNRR dashboard IDs
 const PNRR_IDS = {
@@ -52,9 +51,9 @@ const ComponentsOverview = ({
       switchEndpoint('projects')
     }
     
-    // Set view mode to 'all' to include all 24,907 projects
+    // Set view mode to 'total' to include all 24,907 projects (National + Local)
     if (setViewMode) {
-      setViewMode('all')
+      setViewMode('total')
     }
     
     // Set metric to projects
@@ -92,30 +91,30 @@ const ComponentsOverview = ({
     return fmtMoney(value, currency)
   }
 
-  // Load component data from new JSON
-  const componentsData = alocariComponenteData.components
+  // Load component data from processed JSON
+  const componentsData = getProcessedComponentsData()
 
   const componentsSummary = componentsData.map(component => {
-    const investmentCount = component.masuri.filter(m => m.masura.startsWith('I')).length
-    const reformCount = component.masuri.filter(m => m.masura.startsWith('R')).length
+    const investmentCount = component.investments.length
+    const reformCount = component.reforms.length
     
     return {
-      code: component.componenta,
-      name: component.numeComponenta || component.componenta,
-      totalValue: component.totalAlocare,
-      totalExecuted: component.totalExecutat,
-      executedPercentage: component.totalExecutatProcent,
+      code: component.code,
+      name: component.name,
+      totalValue: component.totalValue,
+      totalExecuted: component.totalExecutedValue,
+      executedPercentage: component.totalValue > 0 ? (component.totalExecutedValue / component.totalValue * 100) : 0,
       investmentCount,
       reformCount
     }
   })
 
   const detailedComponents = Object.fromEntries(
-    componentsData.map(component => [component.componenta, component])
+    componentsData.map(component => [component.code, component])
   )
 
-  const totalValue = alocariComponenteData.totalAlocare
-  const totalExecuted = alocariComponenteData.totalExecutat
+  const totalValue = componentsData.reduce((sum, component) => sum + component.totalValue, 0)
+  const totalExecuted = componentsData.reduce((sum, component) => sum + component.totalExecutedValue, 0)
 
   // Intersection Observer pentru sticky navigation
   useEffect(() => {
@@ -262,22 +261,8 @@ const ComponentsOverview = ({
             const percentage = ((component.totalValue / totalValue) * 100).toFixed(1)
             
             // Count investments vs reforms and sort them
-            const investments = details?.masuri?.filter(m => m.masura.startsWith('I')).sort((a, b) => {
-              // Extract number from measure code (e.g., "I1" -> 1, "I2.1" -> 2.1)
-              const getMeasureNumber = (code) => {
-                const match = code.match(/I(\d+(?:\.\d+)?(?:[a-z])?)/)
-                return match ? parseFloat(match[1]) : 0
-              }
-              return getMeasureNumber(a.masura) - getMeasureNumber(b.masura)
-            }) || []
-            const reforms = details?.masuri?.filter(m => m.masura.startsWith('R')).sort((a, b) => {
-              // Extract number from measure code (e.g., "R1" -> 1, "R2.1" -> 2.1)
-              const getMeasureNumber = (code) => {
-                const match = code.match(/R(\d+(?:\.\d+)?(?:[a-z])?)/)
-                return match ? parseFloat(match[1]) : 0
-              }
-              return getMeasureNumber(a.masura) - getMeasureNumber(b.masura)
-            }) || []
+            const investments = details?.investments || []
+            const reforms = details?.reforms || []
             
             return (
               <div 
@@ -342,12 +327,12 @@ const ComponentsOverview = ({
                                     </div>
                                     <div className="link-indicator">
                                       <span className="link-icon">🔗</span>
-                                      <span className="link-text">Click pentru filtrare</span>
+                                      <span className="link-text">Filtrează</span>
                                     </div>
                                   </div>
                                   <div className="investment-value">
                                     {isZeroCost ? (
-                                      <div className="zero-cost-label">Fără cheltuieli asociate</div>
+                                      <div className="zero-cost-label" style={{ textAlign: 'center', fontSize: '0.875rem', fontWeight: '500', color: '#64748b', fontStyle: 'italic' }}>Fără cheltuieli asociate</div>
                                     ) : (
                                       <>
                                         <div className="value-main">{formatMoney(investment.alocare_financiara_euro)}</div>
@@ -388,12 +373,12 @@ const ComponentsOverview = ({
                                     </div>
                                     <div className="link-indicator">
                                       <span className="link-icon">🔗</span>
-                                      <span className="link-text">Click pentru filtrare</span>
+                                      <span className="link-text">Filtrează</span>
                                     </div>
                                   </div>
                                   <div className="investment-value">
                                     {isZeroCost ? (
-                                      <div className="zero-cost-label">Fără cheltuieli asociate</div>
+                                      <div className="zero-cost-label" style={{ textAlign: 'center', fontSize: '0.875rem', fontWeight: '500', color: '#64748b', fontStyle: 'italic' }}>Fără cheltuieli asociate</div>
                                     ) : (
                                       <>
                                         <div className="value-main">{formatMoney(reform.alocare_financiara_euro)}</div>

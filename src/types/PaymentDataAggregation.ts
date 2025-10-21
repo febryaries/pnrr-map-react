@@ -485,7 +485,7 @@ export class PaymentDataAggregation extends BaseDataAggregation {
       }, {} as Record<string, { value: number; projects: number }>);
     
     return {
-      county: { code: 'RO-MULTI', name: 'Multi Județe' },
+      county: { code: 'RO-MULTI', name: 'Național' },
       total: { value: multiTotalValue, projects: multiCountyProjects.length },
       programs,
       components: {},
@@ -507,7 +507,7 @@ export class PaymentDataAggregation extends BaseDataAggregation {
             measureCode: item.cod_masura || '',
             fundingSource: this.convertRomanianDiacritics(item.sursa_finantare || ''),
             countyCode: 'RO-MULTI',
-            countyName: 'Multi Județe',
+            countyName: 'Național',
             locality: this.convertRomanianDiacritics(item.localitate_beneficiar || ''),
             paymentDate: item.data_plata,
             cri: item.cri,

@@ -566,7 +566,7 @@ export class ProjectDataAggregation extends BaseDataAggregation {
       }, {} as Record<string, { value: number; projects: number }>);
     
     return {
-      county: { code: 'RO-MULTI', name: 'Multi Județe' },
+      county: { code: 'RO-MULTI', name: 'Național' },
       total: { value: multiTotalValue, projects: multiCountyProjects.length },
       programs,
       components: {},
@@ -596,7 +596,7 @@ export class ProjectDataAggregation extends BaseDataAggregation {
             subMeasureCode: item.cod_submasura,
             fundingSource: this.convertRomanianDiacritics(item.sursa_finantare || ''),
             countyCode: 'RO-MULTI',
-            countyName: 'Multi Județe',
+            countyName: 'Național',
             locality: this.convertRomanianDiacritics(item.localitate_implementare || ''),
             progress: this.parseProgress(item.stadiu),
             stage: this.convertRomanianDiacritics(item.stadiu || ''),
