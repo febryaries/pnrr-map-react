@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { fmtMoney, COMPONENT_MAPPING_PAYMENTS } from '../data/data'
 import getProcessedComponentsData from '../data/processComponentsData'
+import alocariComponenteData from '../data/alocariComponente.json'
 
 // Mapping of component codes and descriptions to PNRR dashboard IDs
 const PNRR_IDS = {
@@ -22,16 +23,6 @@ const PNRR_IDS = {
   'C16': { 'I2': 161, 'I4.1': 163, 'I4.2': 190, 'I5.a': 164, 'I5.b': 191, 'I5.c': 192, 'I7': 166, 'I8': 193, 'R1': 167, 'R2': 168 }
 }
 
-// Helper function to get PNRR link for a component and measure
-const getPNRRLink = (componentCode, measureCode) => {
-  const componentIds = PNRR_IDS[componentCode]
-  if (!componentIds) return null
-  
-  const id = componentIds[measureCode]
-  if (!id) return null
-  
-  return `https://pnrr.fonduri-ue.ro/ords/pnrr/r/dashboard-status-pnrr/detalii-masura?masura=${id}`
-}
 
 // Helper function to extract measure code from description
 const extractMeasureCode = (description) => {
@@ -39,11 +30,44 @@ const extractMeasureCode = (description) => {
   return match ? match[1] : null
 }
 
-const ComponentsOverview = ({ currency = 'EUR' }) => {
+const ComponentsOverview = ({ 
+  currency = 'EUR',
+  setActiveProgram = null,
+  setFilterMasura = null,
+  switchEndpoint = null
+}) => {
   const [expandedComponents, setExpandedComponents] = useState(new Set())
   const [isSticky, setIsSticky] = useState(false)
   const sectionRef = useRef(null)
   const headerRef = useRef(null)
+
+  // Helper function to handle measure click - navigate to table and filter
+  const handleMeasureClick = (componentCode, measureCode) => {
+    if (!setActiveProgram || !setFilterMasura || !switchEndpoint) return
+    
+    // Switch to projects endpoint
+    if (switchEndpoint) {
+      switchEndpoint('projects')
+    }
+    
+    // Set the component filter
+    if (setActiveProgram) {
+      setActiveProgram(componentCode)
+    }
+    
+    // Set the measure filter
+    if (setFilterMasura) {
+      setFilterMasura(measureCode)
+    }
+    
+    // Scroll to the table
+    setTimeout(() => {
+      const element = document.getElementById('projects-table')
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }, 500)
+  }
   
   // Helper function to convert EUR to RON if needed
   const convertValue = (eurValue) => {
@@ -56,35 +80,30 @@ const ComponentsOverview = ({ currency = 'EUR' }) => {
     return fmtMoney(value, currency)
   }
 
-  // Load component data from JSON
-  const componentsData = getProcessedComponentsData()
+  // Load component data from new JSON
+  const componentsData = alocariComponenteData.components
 
-  const componentsSummary = Object.entries(COMPONENT_MAPPING_PAYMENTS).map(([key, component]) => {
-    const data = componentsData[key]
-    if (data) {
-      return {
-        code: data.code,
-        name: data.name,
-        totalValue: data.totalValue,
-        investmentCount: data.investments.length,
-        reformCount: data.reforms.length
-      }
-    }
-    // Fallback for components without data
+  const componentsSummary = componentsData.map(component => {
+    const investmentCount = component.masuri.filter(m => m.masura.startsWith('I')).length
+    const reformCount = component.masuri.filter(m => m.masura.startsWith('R')).length
+    
     return {
-      code: key,
-      name: component.label,
-      totalValue: 0,
-      investmentCount: 0,
-      reformCount: 0
+      code: component.componenta,
+      name: component.numeComponenta || component.componenta,
+      totalValue: component.totalAlocare,
+      totalExecuted: component.totalExecutat,
+      executedPercentage: component.totalExecutatProcent,
+      investmentCount,
+      reformCount
     }
   })
 
   const detailedComponents = Object.fromEntries(
-    Object.entries(componentsData).map(([key, data]) => [key, data])
+    componentsData.map(component => [component.componenta, component])
   )
 
-  const totalValue = componentsSummary.reduce((sum, comp) => sum + comp.totalValue, 0)
+  const totalValue = alocariComponenteData.totalAlocare
+  const totalExecuted = alocariComponenteData.totalExecutat
 
   // Intersection Observer pentru sticky navigation
   useEffect(() => {
@@ -213,6 +232,14 @@ const ComponentsOverview = ({ currency = 'EUR' }) => {
                 <div className="stat-label">Valoare totală</div>
                 <div className="stat-value">{formatMoney(totalValue)}</div>
               </div>
+              <div className="stat-box">
+                <div className="stat-label">Valoare executată</div>
+                <div className="stat-value">{formatMoney(totalExecuted)}</div>
+              </div>
+              <div className="stat-box">
+                <div className="stat-label">Procent executat</div>
+                <div className="stat-value">{((totalExecuted / totalValue) * 100).toFixed(1)}%</div>
+              </div>
             </div>
           </div>
 
@@ -222,9 +249,23 @@ const ComponentsOverview = ({ currency = 'EUR' }) => {
             const details = getComponentDetails(component.code)
             const percentage = ((component.totalValue / totalValue) * 100).toFixed(1)
             
-            // Count investments vs reforms
-            const investments = details?.investments || []
-            const reforms = details?.reforms || []
+            // Count investments vs reforms and sort them
+            const investments = details?.masuri?.filter(m => m.masura.startsWith('I')).sort((a, b) => {
+              // Extract number from measure code (e.g., "I1" -> 1, "I2.1" -> 2.1)
+              const getMeasureNumber = (code) => {
+                const match = code.match(/I(\d+(?:\.\d+)?(?:[a-z])?)/)
+                return match ? parseFloat(match[1]) : 0
+              }
+              return getMeasureNumber(a.masura) - getMeasureNumber(b.masura)
+            }) || []
+            const reforms = details?.masuri?.filter(m => m.masura.startsWith('R')).sort((a, b) => {
+              // Extract number from measure code (e.g., "R1" -> 1, "R2.1" -> 2.1)
+              const getMeasureNumber = (code) => {
+                const match = code.match(/R(\d+(?:\.\d+)?(?:[a-z])?)/)
+                return match ? parseFloat(match[1]) : 0
+              }
+              return getMeasureNumber(a.masura) - getMeasureNumber(b.masura)
+            }) || []
             
             return (
               <div 
@@ -248,9 +289,9 @@ const ComponentsOverview = ({ currency = 'EUR' }) => {
                   </div>
                   <div className="component-summary">
                     <div className="component-value">{formatMoney(component.totalValue)}</div>
-                    {details?.totalExecutedValue > 0 && (
+                    {component.totalExecuted > 0 && (
                       <div className="component-executed">
-                        Executat: {formatMoney(details.totalExecutedValue)} • {((details.totalExecutedValue / component.totalValue) * 100).toFixed(1)}%
+                        Executat: {formatMoney(component.totalExecuted)} • {component.executedPercentage.toFixed(1)}%
                       </div>
                     )}
                   </div>
@@ -274,40 +315,36 @@ const ComponentsOverview = ({ currency = 'EUR' }) => {
                           <h5 className="section-title">Investiții</h5>
                           <div className="investments-list">
                             {investments.map((investment, index) => {
-                              const measureCode = extractMeasureCode(investment.description)
-                              const pnrrLink = measureCode ? getPNRRLink(component.code, measureCode) : null
-                              const isZeroCost = investment.value === 0
+                              const measureCode = investment.masura
+                              const isZeroCost = !investment.alocare_financiara_euro || investment.alocare_financiara_euro === 0
                               
                               return (
                                 <div key={index} className={`investment-item ${isZeroCost ? 'zero-cost' : ''}`}>
                                   <div className="investment-description">
-                                    {investment.description}
-                                    {pnrrLink && (
-                                      <a 
-                                        href={pnrrLink} 
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
-                                        className="pnrr-link"
-                                        title="Vezi detalii în PNRR Dashboard"
-                                      >
-                                        🔗
-                                      </a>
-                                    )}
+                                    <div className="investment-description-text">
+                                      {investment.titlul_masurii}
+                                    </div>
+                                    <button 
+                                      onClick={() => handleMeasureClick(component.code, measureCode)}
+                                      className="pnrr-link"
+                                      title="Filtrează tabelul după această măsură"
+                                    >
+                                      🔗
+                                    </button>
                                   </div>
                                   <div className="investment-value">
                                     {isZeroCost ? (
                                       <div className="zero-cost-label">Fără cheltuieli asociate</div>
                                     ) : (
                                       <>
-                                        <div className="value-main">{formatMoney(investment.value)}</div>
-                                        {investment.executedValue !== undefined && investment.executedValue > 0 && (
-                                          <div className="value-executed">
-                                            <span className="executed-label">Executat:</span> {formatMoney(investment.executedValue)}
-                                            {investment.executionPercent && (
-                                              <span className="execution-percent"> • {investment.executionPercent}</span>
-                                            )}
-                                          </div>
-                                        )}
+                                        <div className="value-main">{formatMoney(investment.alocare_financiara_euro)}</div>
+                                        <div className="financing-type">
+                                          {investment.finantare === 'loan' ? 'Loan' : 'Grant'}
+                                        </div>
+                                        <div className="value-executed">
+                                          <span className="executed-label">Executat:</span> {formatMoney(investment.executat_euro)}
+                                          <span className="execution-percent"> • {investment.executat_procent.toFixed(1)}%</span>
+                                        </div>
                                       </>
                                     )}
                                   </div>
@@ -323,40 +360,36 @@ const ComponentsOverview = ({ currency = 'EUR' }) => {
                           <h5 className="section-title">Reforme</h5>
                           <div className="investments-list">
                             {reforms.map((reform, index) => {
-                              const measureCode = extractMeasureCode(reform.description)
-                              const pnrrLink = measureCode ? getPNRRLink(component.code, measureCode) : null
-                              const isZeroCost = reform.value === 0
+                              const measureCode = reform.masura
+                              const isZeroCost = !reform.alocare_financiara_euro || reform.alocare_financiara_euro === 0
                               
                               return (
                                 <div key={index} className={`investment-item ${isZeroCost ? 'zero-cost' : ''}`}>
                                   <div className="investment-description">
-                                    {reform.description}
-                                    {pnrrLink && (
-                                      <a 
-                                        href={pnrrLink} 
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
-                                        className="pnrr-link"
-                                        title="Vezi detalii în PNRR Dashboard"
-                                      >
-                                        🔗
-                                      </a>
-                                    )}
+                                    <div className="investment-description-text">
+                                      {reform.titlul_masurii}
+                                    </div>
+                                    <button 
+                                      onClick={() => handleMeasureClick(component.code, measureCode)}
+                                      className="pnrr-link"
+                                      title="Filtrează tabelul după această măsură"
+                                    >
+                                      🔗
+                                    </button>
                                   </div>
                                   <div className="investment-value">
                                     {isZeroCost ? (
                                       <div className="zero-cost-label">Fără cheltuieli asociate</div>
                                     ) : (
                                       <>
-                                        <div className="value-main">{formatMoney(reform.value)}</div>
-                                        {reform.executedValue !== undefined && reform.executedValue > 0 && (
-                                          <div className="value-executed">
-                                            <span className="executed-label">Executat:</span> {formatMoney(reform.executedValue)}
-                                            {reform.executionPercent && (
-                                              <span className="execution-percent"> • {reform.executionPercent}</span>
-                                            )}
-                                          </div>
-                                        )}
+                                        <div className="value-main">{formatMoney(reform.alocare_financiara_euro)}</div>
+                                        <div className="financing-type">
+                                          {reform.finantare === 'loan' ? 'Loan' : 'Grant'}
+                                        </div>
+                                        <div className="value-executed">
+                                          <span className="executed-label">Executat:</span> {formatMoney(reform.executat_euro)}
+                                          <span className="execution-percent"> • {reform.executat_procent.toFixed(1)}%</span>
+                                        </div>
                                       </>
                                     )}
                                   </div>

@@ -26,19 +26,30 @@ const EnhancedTable = ({
   setActiveProgram = null, // Function to set active program
   searchTerm = '', // Search term from parent
   setSearchTerm = null, // Function to set search term
+  // Filter props
+  filterStadiu = '',
+  setFilterStadiu = null,
+  filterLocality = '',
+  setFilterLocality = null,
+  filterFundingSource = '',
+  setFilterFundingSource = null,
+  filterCounty = '',
+  setFilterCounty = null,
+  filterComponent = '',
+  setFilterComponent = null,
+  filterMasura = '',
+  setFilterMasura = null,
+  filtersRef = null,
+  fieldMappings = null,
+  getValueField = null,
+  formatMoneyWithCurrency = null,
+  getCurrencySymbol = null,
+  currency = 'EUR',
 }) => {
   const [sortColumn, setSortColumn] = useState(defaultSortColumn)
   const [sortDirection, setSortDirection] = useState(defaultSortDirection)
   const [currentPage, setCurrentPage] = useState(1)
   const [filteredData, setFilteredData] = useState(data)
-  const [filterStadiu, setFilterStadiu] = useState('')
-  const [filterLocality, setFilterLocality] = useState('')
-  const [filterFundingSource, setFilterFundingSource] = useState('')
-  const [filterCounty, setFilterCounty] = useState('')
-  const [filterComponent, setFilterComponent] = useState(activeProgram || '')
-  
-  // Ref for sticky filters to scroll to
-  const filtersRef = useRef(null)
   
   // Get COMPONENT_MAPPING based on endpoint
   const COMPONENT_MAPPING = endpoint === 'payments' ? COMPONENT_MAPPING_PAYMENTS : COMPONENT_MAPPING_PROJECTS
@@ -156,6 +167,34 @@ const EnhancedTable = ({
     return Array.from(values).sort()
   }, [data, filterCounty, filterLocality, filterComponent])
 
+  // Get unique measure codes (filtered by active filters)
+  const uniqueMasuraCodes = useMemo(() => {
+    const values = new Set()
+    data.forEach(item => {
+      let shouldInclude = true
+      
+      // Apply county filter if selected
+      if (filterCounty && item.county !== filterCounty) {
+        shouldInclude = false
+      }
+      
+      // Apply locality filter if selected
+      if (filterLocality && item.locality !== filterLocality) {
+        shouldInclude = false
+      }
+      
+      // Apply component filter if selected
+      if (filterComponent && item.componentCode !== filterComponent) {
+        shouldInclude = false
+      }
+      
+      if (shouldInclude && item.measureCode) {
+        values.add(item.measureCode)
+      }
+    })
+    return Array.from(values).sort()
+  }, [data, filterCounty, filterLocality, filterComponent])
+
   // Filter data based on search term, filters, and remove zero values
   useEffect(() => {
     let filtered = data
@@ -214,9 +253,14 @@ const EnhancedTable = ({
       filtered = filtered.filter(item => item.fundingSource === filterFundingSource)
     }
     
+    // Apply Masura filter
+    if (filterMasura) {
+      filtered = filtered.filter(item => item.measureCode === filterMasura)
+    }
+    
     setFilteredData(filtered)
     setCurrentPage(1) // Reset to first page when filtering
-  }, [data, searchTerm, filterStadiu, filterLocality, filterFundingSource, filterCounty, filterComponent, columns])
+  }, [data, searchTerm, filterStadiu, filterLocality, filterFundingSource, filterCounty, filterComponent, filterMasura, columns])
 
   // Sort data
   const sortedData = useMemo(() => {
@@ -719,8 +763,19 @@ const EnhancedTable = ({
                 </select>
               </div>
               
+              {/* Masura Filter - ALWAYS VISIBLE */}
+              <div className="filter-item">
+                <label>📋 Cod Măsură</label>
+                <select value={filterMasura} onChange={(e) => setFilterMasura(e.target.value)}>
+                  <option value="">Toate măsurile</option>
+                  {uniqueMasuraCodes.map(value => (
+                    <option key={value} value={value}>{value}</option>
+                  ))}
+                </select>
+              </div>
+              
               {/* Clear Filters Button - VISIBLE IF ANY FILTER ACTIVE */}
-              {(filterStadiu || filterLocality || filterFundingSource || filterCounty || filterComponent) && (
+              {(filterStadiu || filterLocality || filterFundingSource || filterCounty || filterComponent || filterMasura) && (
                 <button
                   onClick={() => {
                     setFilterStadiu('')
@@ -728,6 +783,7 @@ const EnhancedTable = ({
                     setFilterFundingSource('')
                     setFilterCounty('')
                     setFilterComponent('')
+                    setFilterMasura('')
                     // Sync with parent activeProgram
                     if (setActiveProgram) {
                       setActiveProgram(null)
@@ -819,6 +875,17 @@ const MapView = ({
     const [loadingBeneficiaries, setLoadingBeneficiaries] = useState(false)
     const [showAllBeneficiaries, setShowAllBeneficiaries] = useState(false)
     const [searchTerm, setSearchTerm] = useState('')
+    
+    // Filter states
+    const [filterStadiu, setFilterStadiu] = useState('')
+    const [filterLocality, setFilterLocality] = useState('')
+    const [filterFundingSource, setFilterFundingSource] = useState('')
+    const [filterCounty, setFilterCounty] = useState('')
+    const [filterComponent, setFilterComponent] = useState(activeProgram || '')
+    const [filterMasura, setFilterMasura] = useState('')
+    
+    // Ref for sticky filters to scroll to
+    const filtersRef = useRef(null)
 
     // Get the correct component mapping based on endpoint
     const COMPONENT_MAPPING = endpoint === 'projects' ? COMPONENT_MAPPING_PROJECTS : COMPONENT_MAPPING_PAYMENTS
@@ -2341,11 +2408,34 @@ const MapView = ({
                     setActiveProgram={setActiveProgram}
                     searchTerm={searchTerm}
                     setSearchTerm={setSearchTerm}
+                    filterStadiu={filterStadiu}
+                    setFilterStadiu={setFilterStadiu}
+                    filterLocality={filterLocality}
+                    setFilterLocality={setFilterLocality}
+                    filterFundingSource={filterFundingSource}
+                    setFilterFundingSource={setFilterFundingSource}
+                    filterCounty={filterCounty}
+                    setFilterCounty={setFilterCounty}
+                    filterComponent={filterComponent}
+                    setFilterComponent={setFilterComponent}
+                    filterMasura={filterMasura}
+                    setFilterMasura={setFilterMasura}
+                    filtersRef={filtersRef}
+                    fieldMappings={fieldMappings}
+                    getValueField={getValueField}
+                    formatMoneyWithCurrency={formatMoneyWithCurrency}
+                    getCurrencySymbol={getCurrencySymbol}
+                    currency={currency}
                 />
             </section>
 
             {/* Components Overview */}
-            <ComponentsOverview currency={currency} />
+            <ComponentsOverview 
+              currency={currency}
+              setActiveProgram={setActiveProgram}
+              setFilterMasura={setFilterMasura}
+              switchEndpoint={switchEndpoint}
+            />
 
             {/* Show loading overlay while county details are being prepared */}
             {isCountyLoading && (
