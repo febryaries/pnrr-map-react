@@ -697,7 +697,6 @@ HighchartsMap(Highcharts)
 const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentLoading, useRealData, activeProgram, setActiveProgram, endpoint, currency, setCurrency }) => {
   const [metric, setMetric] = useState('value')
   const [countyMapData, setCountyMapData] = useState(null)
-  const [romaniaMapData, setRomaniaMapData] = useState(null)
   const [localityData, setLocalityData] = useState([])
   const [selectedLocality, setSelectedLocality] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -797,25 +796,6 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
 
   const countyCode = county.county.code.replace('RO-', '')
   const countyData = county
-
-  // Load Romania map for NATIONAL
-  useEffect(() => {
-    if (!isNational) return
-    
-    const loadRomaniaMap = async () => {
-      try {
-        const response = await fetch('https://code.highcharts.com/mapdata/countries/ro/ro-all.topo.json')
-        if (response.ok) {
-          const topology = await response.json()
-          setRomaniaMapData(topology)
-        }
-      } catch (error) {
-        console.warn('Error loading Romania map:', error)
-      }
-    }
-    
-    loadRomaniaMap()
-  }, [isNational])
 
   // Load county map data by filtering Romania topology
   useEffect(() => {
@@ -1057,20 +1037,43 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
 
   // Calculate rankings
   const allCounties = data.filter(d => (d.county?.code || d.code) !== 'RO-MULTI')
-  const valueRanking = allCounties
+  
+  let valueRanking = allCounties
     .map(c => ({ 
       code: c.county?.code || c.code, 
       name: c.county?.name || c.name, 
       value: c.total.value 
     }))
     .sort((a, b) => b.value - a.value)
-  const projectsRanking = allCounties
+    
+  let projectsRanking = allCounties
     .map(c => ({ 
       code: c.county?.code || c.code, 
       name: c.county?.name || c.name, 
       projects: c.total.projects 
     }))
     .sort((a, b) => b.projects - a.projects)
+
+  // Add National entry to rankings
+  if (multiData && multiData.total) {
+    const nationalValueEntry = {
+      code: 'NATIONAL',
+      name: 'Proiecte Naționale',
+      value: multiData.total.value
+    }
+    const nationalProjectsEntry = {
+      code: 'NATIONAL', 
+      name: 'Proiecte Naționale',
+      projects: multiData.total.projects
+    }
+    
+    valueRanking.push(nationalValueEntry)
+    projectsRanking.push(nationalProjectsEntry)
+    
+    // Re-sort after adding National
+    valueRanking = valueRanking.sort((a, b) => b.value - a.value)
+    projectsRanking = projectsRanking.sort((a, b) => b.projects - a.projects)
+  }
 
   const valueRank = valueRanking.findIndex(c => c.code === county.county.code) + 1
   const projectsRank = projectsRanking.findIndex(c => c.code === county.county.code) + 1
@@ -1155,9 +1158,13 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
     }
 
     return top10.map(c => {
-      // Simple display name - no special case for București
+      // Handle National entry display name
+      const displayName = c.code === 'NATIONAL' 
+        ? 'NATIONAL · Proiecte Naționale'
+        : `${c.code.replace('RO-', '')} · ${c.name}`
+      
       return {
-        name: `${c.code.replace('RO-', '')} · ${c.name}`,
+        name: displayName,
         y: metric === 'value' ? c.value : c.projects,
         color: c.code === county.county.code ? '#0ea5e9' : '#cbd5e1'
       }
@@ -1584,62 +1591,32 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
         </div>
 
         {/* County Map */}
-        <section className="county-map-section">
-          <div className="card county-map-card">
-          {countyMapData && countyMapOptions ? (
-            isLoadingLocalityData ? (
-              <div style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>
-                <div className="loading-spinner-small" style={{ margin: '0 auto 16px auto' }}></div>
-                <h3 style={{ margin: '0 0 8px 0', fontSize: '16px' }}>Se încarcă harta județului {county.county.name}</h3>
-                <p style={{ margin: 0 }}>Se procesează datele pentru localități...</p>
-              </div>
+        {!isNational && (
+          <section className="county-map-section">
+            <div className="card county-map-card">
+            {countyMapData && countyMapOptions ? (
+              isLoadingLocalityData ? (
+                <div style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>
+                  <div className="loading-spinner-small" style={{ margin: '0 auto 16px auto' }}></div>
+                  <h3 style={{ margin: '0 0 8px 0', fontSize: '16px' }}>Se încarcă harta județului {county.county.name}</h3>
+                  <p style={{ margin: 0 }}>Se procesează datele pentru localități...</p>
+                </div>
+              ) : (
+                <HighchartsReact
+                  highcharts={Highcharts}
+                  constructorType={'mapChart'}
+                  options={countyMapOptions}
+                />
+              )
             ) : (
-              <HighchartsReact
-                highcharts={Highcharts}
-                constructorType={'mapChart'}
-                options={countyMapOptions}
-              />
-            )
-          ) : isNational && romaniaMapData ? (
-            <HighchartsReact
-              highcharts={Highcharts}
-              constructorType={'mapChart'}
-              options={{
-                chart: {
-                  map: romaniaMapData,
-                  height: 400
-                },
-                title: {
-                  text: 'Proiecte Naționale',
-                  style: { fontSize: '16px', fontWeight: 600 }
-                },
-                subtitle: {
-                  text: 'Proiecte cu impact la nivel național'
-                },
-                mapNavigation: { enabled: false },
-                colorAxis: {
-                  min: 0,
-                  max: 1,
-                  stops: [[0, '#e0e7ff'], [1, '#e0e7ff']]
-                },
-                series: [{
-                  name: 'România',
-                  borderColor: '#94a3b8',
-                  borderWidth: 1,
-                  nullColor: '#e0e7ff',
-                  showInLegend: false
-                }],
-                credits: { enabled: false }
-              }}
-            />
-          ) : (
-            <div style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>
-              <h3 style={{ margin: '0 0 8px 0', fontSize: '16px' }}>Harta județului {county.county.name}</h3>
-              <p style={{ margin: 0 }}>Harta detaliată nu este disponibilă pentru acest județ</p>
+              <div style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>
+                <h3 style={{ margin: '0 0 8px 0', fontSize: '16px' }}>Harta județului {county.county.name}</h3>
+                <p style={{ margin: 0 }}>Harta detaliată nu este disponibilă pentru acest județ</p>
+              </div>
+            )}
             </div>
-          )}
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* Projects in this County */}
         <EnhancedTable

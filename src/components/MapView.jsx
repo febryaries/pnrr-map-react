@@ -24,11 +24,12 @@ const EnhancedTable = ({
   exportFileName = 'export', // File name for export
   activeProgram = null, // Active program from parent
   setActiveProgram = null, // Function to set active program
+  searchTerm = '', // Search term from parent
+  setSearchTerm = null, // Function to set search term
 }) => {
   const [sortColumn, setSortColumn] = useState(defaultSortColumn)
   const [sortDirection, setSortDirection] = useState(defaultSortDirection)
   const [currentPage, setCurrentPage] = useState(1)
-  const [searchTerm, setSearchTerm] = useState('')
   const [filteredData, setFilteredData] = useState(data)
   const [filterStadiu, setFilterStadiu] = useState('')
   const [filterLocality, setFilterLocality] = useState('')
@@ -183,7 +184,7 @@ const EnhancedTable = ({
         
         return searchableKeys.some(key => {
           const value = item[key]
-          return String(value).toLowerCase().includes(searchTerm.toLowerCase())
+          return String(value).toLowerCase().includes(String(searchTerm || '').toLowerCase())
         })
       })
     }
@@ -263,7 +264,9 @@ const EnhancedTable = ({
   // Handle search input changes
   const handleSearchChange = (e) => {
     const value = e.target.value
-    setSearchTerm(value)
+    if (setSearchTerm) {
+      setSearchTerm(value)
+    }
   }
 
   // Handle county change - no reset, just update
@@ -815,6 +818,7 @@ const MapView = ({
     const [topBeneficiaries, setTopBeneficiaries] = useState(null)
     const [loadingBeneficiaries, setLoadingBeneficiaries] = useState(false)
     const [showAllBeneficiaries, setShowAllBeneficiaries] = useState(false)
+    const [searchTerm, setSearchTerm] = useState('')
 
     // Get the correct component mapping based on endpoint
     const COMPONENT_MAPPING = endpoint === 'projects' ? COMPONENT_MAPPING_PROJECTS : COMPONENT_MAPPING_PAYMENTS
@@ -1122,6 +1126,32 @@ const MapView = ({
             })
         }
 
+        // Add National entry to the result
+        if (multiData && multiData.total) {
+            let nationalValue = multiData.total.value
+            let nationalProjects = multiData.total.projects
+
+            // If a specific component is selected, filter national data by component
+            if (activeProgram && multiData.extras && multiData.extras.rows) {
+                const filteredNationalProjects = multiData.extras.rows.filter(project =>
+                    project[fieldMappings.componentCode] === activeProgram
+                )
+                nationalValue = filteredNationalProjects.reduce((sum, project) =>
+                    sum + getValueField(project), 0
+                )
+                nationalProjects = filteredNationalProjects.length
+            }
+
+            result.push({
+                'hc-key': 'ro-national',
+                code: 'NATIONAL',
+                name: 'National',
+                value: metric === 'value' ? nationalValue : nationalProjects,
+                money: nationalValue,
+                projects: nationalProjects
+            })
+        }
+
         const sortedResult = result.sort((a, b) => (b.value || 0) - (a.value || 0))
         return sortedResult
     }, [data, viewMode, metric, activeProgram])
@@ -1254,119 +1284,6 @@ const MapView = ({
             }
         }
     }, [mapData, processedData, metric, onCountyClick, currency, endpoint, viewMode, activeProgram, COMPONENT_MAPPING])
-
-    // Calculate National projects data from multiCountyProjects
-    const nationalData = useMemo(() => {
-        const multiCounty = data.find(d => (d.county?.code || d.code) === 'RO-MULTI')
-        if (!multiCounty) return { value: 0, projects: 0 }
-        
-        return {
-            value: multiCounty.total?.value || 0,
-            projects: multiCounty.total?.projects || 0
-        }
-    }, [data])
-
-    // Mini map configuration for National projects
-    const nationalMiniMapOptions = useMemo(() => {
-        if (!mapData) return null
-        
-        // Format values for tooltip (calculate inside useMemo)
-        const currencySymbol = currency === 'RON' ? 'RON' : 'EUR'
-        const valueToDisplay = currency === 'RON' ? nationalData.value * 5 : nationalData.value
-        const formattedValue = fmtMoney(valueToDisplay, currencySymbol)
-        const formattedProjects = fmtNum(nationalData.projects)
-        
-        return {
-            chart: {
-                map: mapData.topology,
-                height: 250,
-                backgroundColor: 'transparent'
-            },
-            title: {
-                text: 'Proiecte Naționale',
-                align: 'center',
-                style: {
-                    fontSize: '14px',
-                    fontWeight: 600,
-                    color: '#0f172a'
-                }
-            },
-            subtitle: {
-                text: 'Click pentru detalii',
-                align: 'center',
-                style: {
-                    fontSize: '11px',
-                    color: '#64748b'
-                }
-            },
-            mapNavigation: {
-                enabled: false
-            },
-            colorAxis: {
-                min: 0,
-                max: 1,
-                stops: [
-                    [0, '#bae6fd'],
-                    [1, '#0ea5e9']
-                ]
-            },
-            tooltip: {
-                useHTML: true,
-                backgroundColor: '#fff',
-                borderColor: '#0ea5e9',
-                borderRadius: 6,
-                borderWidth: 2,
-                padding: 8,
-                shadow: true,
-                style: {
-                    pointerEvents: 'none'
-                },
-                formatter: function() {
-                    return `
-                        <div style="width: 140px;">
-                            <div style="font-size: 12px; font-weight: 700; margin-bottom: 8px; color: #0f172a; text-align: center;">
-                                Proiecte Naționale
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="background: #0ea5e9; color: #fff; padding: 6px 12px; border-radius: 4px; font-weight: 600; font-size: 11px;">
-                                    Click pentru detalii
-                                </div>
-                            </div>
-                        </div>
-                    `
-                }
-            },
-            series: [{
-                data: processedData.map(d => ({
-                    ...d,
-                    value: 1  // Toate județele aceeași culoare
-                })),
-                name: 'România',
-                borderColor: '#ffffff',
-                borderWidth: 0.5,
-                dataLabels: {
-                    enabled: false
-                },
-                point: {
-                    events: {
-                        click: function() {
-                            // Click pe ORICE județ → National
-                            onCountyClick('NATIONAL', 'Proiecte Naționale')
-                        }
-                    }
-                },
-                cursor: 'pointer',
-                states: {
-                    hover: {
-                        color: '#0284c7'
-                    }
-                }
-            }],
-            credits: {
-                enabled: false
-            }
-        }
-    }, [mapData, processedData, onCountyClick, nationalData, currency])
 
     // Expose county click handler globally for tooltip
     useEffect(() => {
@@ -1857,6 +1774,13 @@ const MapView = ({
                     >
                         General · Proiecte
                     </button>
+                    <button
+                        onClick={() => {
+                            onCountyClick('NATIONAL', 'Proiecte Naționale');
+                        }}
+                    >
+                        Proiecte Naționale
+                    </button>
                 </div>
 
                 {/* Multi segment */}
@@ -1909,7 +1833,7 @@ const MapView = ({
 
                 {/* Key Areas Section */}
                 <div className="key-areas-section">
-                    <div className="key-areas-header">
+                    {/* <div className="key-areas-header">
                         <h3 className="control-label">Filtrează  în funcție de Componente din PNRR</h3>
                         <a
                             href="https://pnrr.fonduri-ue.ro/ords/pnrr/r/dashboard-status-pnrr/home?T=tb"
@@ -1919,7 +1843,7 @@ const MapView = ({
                         >
                             Află mai multe detalii
                         </a>
-                    </div>
+                    </div> */}
                     <div className="programs">
                         {PROGRAMS.map(program => (
                             <button
@@ -1972,28 +1896,11 @@ const MapView = ({
                             <div className="mobile-total-sublabel">{COMPONENT_MAPPING[activeProgram]?.label}</div>
                         )}
                     </div>
-                    <div className="mobile-total-card">
-                        <div className="mobile-total-value">{fmtNum(calculatedTotals.nationalProjects)}</div>
-                        <div className="mobile-total-label">NAȚIONALE</div>
-                    </div>
                 </div>
             </section>
 
             {/* Map */}
             <section className="map-container">
-                {/* National Mini Map - Left Side */}
-                {nationalMiniMapOptions && (
-                    <div className="national-mini-map">
-                        <div className="national-map-card">
-                            <HighchartsReact
-                                highcharts={Highcharts}
-                                constructorType={'mapChart'}
-                                options={nationalMiniMapOptions}
-                            />
-                        </div>
-                    </div>
-                )}
-
                 <div className="map-chart">
                     {mapOptions && (
                         <HighchartsReact
@@ -2030,10 +1937,6 @@ const MapView = ({
                             <div className="map-total-sublabel">{COMPONENT_MAPPING[activeProgram]?.label}</div>
                         )}
                     </div>
-                    <div className="map-total-card">
-                        <div className="map-total-value">{fmtNum(calculatedTotals.nationalProjects)}</div>
-                        <div className="map-total-label">NAȚIONALE</div>
-                    </div>
                 </div>
             </section>
 
@@ -2041,80 +1944,93 @@ const MapView = ({
 
             {/* Top Beneficiaries Section - Only show when no component is selected */}
             {!activeProgram && (
-                <section className="beneficiaries-section">
-                    <h2>Topul beneficiarilor PNRR raportat la plăți (Top 100)</h2>
-                    {loadingBeneficiaries ? (
-                        <div className="beneficiaries-loading">
-                            <div className="loading-spinner-small"></div>
-                            <span>Se încarcă topul beneficiarilor...</span>
-                        </div>
-                    ) : topBeneficiaries && topBeneficiaries.items ? (
-                        <div className="beneficiaries-content">
-                            <div className="beneficiaries-table">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Beneficiar</th>
-                                            <th>CUI</th>
-                                            <th className="num">Total ({getCurrencySymbol()})</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {topBeneficiaries.items
-                                            .slice(0, showAllBeneficiaries ? 100 : 5)
-                                            .map((beneficiary, index) => {
-                                                // Convert RON to EUR (using fixed rate 4.95)
-                                                const amountRON = beneficiary['received amount in lei'] || 0
-                                                const amountEUR = amountRON / 4.95
-                                                const displayAmount = currency === 'RON' ? amountRON : amountEUR
-                                                const isTopFive = index < 5
-                                                
-                                                // Format as millions with currency symbol
-                                                const millions = displayAmount / 1e6
-                                                const formattedAmount = `${millions.toLocaleString('ro-RO', {
-                                                    minimumFractionDigits: 2,
-                                                    maximumFractionDigits: 2
-                                                })} mil ${getCurrencySymbol()}`
+                <section className="ranking-section">
+                    <div className="card rank-card">
+                        <h3>Topul beneficiarilor PNRR raportat la plăți (Top 100)</h3>
+                        {loadingBeneficiaries ? (
+                            <div className="beneficiaries-loading">
+                                <div className="loading-spinner-small"></div>
+                                <span>Se încarcă topul beneficiarilor...</span>
+                            </div>
+                        ) : topBeneficiaries && topBeneficiaries.items ? (
+                            <>
+                                <ol className="rank-list">
+                                    {topBeneficiaries.items
+                                        .slice(0, showAllBeneficiaries ? 100 : 5)
+                                        .map((beneficiary, index) => {
+                                            // Convert RON to EUR (using fixed rate 4.95)
+                                            const amountRON = beneficiary['received amount in lei'] || 0
+                                            const amountEUR = amountRON / 4.95
+                                            const displayAmount = currency === 'RON' ? amountRON : amountEUR
+                                            const isTopFive = index < 5
+                                            
+                                            // Format as millions with currency symbol
+                                            const millions = displayAmount / 1e6
+                                            const formattedAmount = `${millions.toLocaleString('ro-RO', {
+                                                minimumFractionDigits: 2,
+                                                maximumFractionDigits: 2
+                                            })} mil ${getCurrencySymbol()}`
 
-                                                return (
-                                                    <tr key={index}>
-                                                        <td style={{ fontWeight: isTopFive ? 'bold' : 'normal' }}>
-                                                            #{index + 1} {beneficiary['full legal name']}
-                                                        </td>
-                                                        <td style={{ fontWeight: isTopFive ? 'bold' : 'normal' }}>
-                                                            {beneficiary['tax identification number']}
-                                                        </td>
-                                                        <td className="num" style={{ fontWeight: isTopFive ? 'bold' : 'normal' }}>
-                                                            {formattedAmount}
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            })}
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div className="beneficiaries-actions">
-                                <button
-                                    onClick={() => setShowAllBeneficiaries(!showAllBeneficiaries)}
-                                    className="btn btn-primary"
-                                    style={{
-                                        padding: '12px 24px',
-                                        background: '#0ea5e9',
-                                        color: '#fff',
-                                        border: 'none',
-                                        borderRadius: '6px',
-                                        cursor: 'pointer',
-                                        fontSize: '14px',
-                                        fontWeight: '600',
-                                        textDecoration: 'none',
-                                        display: 'inline-block'
-                                    }}
-                                >
-                                    {showAllBeneficiaries ? 'Vezi mai puțin (Top 5)' : 'Vezi toți beneficiarii (Top 100)'}
-                                </button>
-                            </div>
-                        </div>
-                    ) : null}
+                                            // Calculate percentage for bar (similar to county ranking)
+                                            const maxAmount = topBeneficiaries.items[0] ? (topBeneficiaries.items[0]['received amount in lei'] || 0) / 4.95 : 1
+                                            const percentage = maxAmount ? Math.max(2, (amountEUR / maxAmount) * 100) : 0
+
+                                            return (
+                                                <li
+                                                    key={index}
+                                                    className="rank-item"
+                                                    onClick={() => {
+                                                        console.log('Beneficiary clicked:', beneficiary);
+                                                        console.log('CUI:', beneficiary['tax identification number']);
+                                                        
+                                                        // Switch to payments endpoint
+                                                        if (switchEndpoint) {
+                                                            switchEndpoint('payments');
+                                                            console.log('Switched to payments endpoint');
+                                                        }
+                                                        
+                                                        // Set search term to the CUI
+                                                        setSearchTerm(beneficiary['tax identification number']);
+                                                        console.log('Set search term to:', beneficiary['tax identification number']);
+                                                        
+                                                        // Scroll to the table
+                                                        setTimeout(() => {
+                                                            const element = document.getElementById('projects-table');
+                                                            if (element) {
+                                                                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                                                console.log('Scrolled to table');
+                                                            }
+                                                        }, 500);
+                                                    }}
+                                                >
+                                                    <div className="rank-pos">{index + 1}</div>
+                                                    <div className="rank-name" style={{ fontWeight: isTopFive ? 'bold' : 'normal' }}>
+                                                        {beneficiary['full legal name']}
+                                                    </div>
+                                                    <div className="rank-bar-wrap">
+                                                        <div className="rank-bar" style={{ width: `${percentage}%` }}></div>
+                                                    </div>
+                                                    <div className="rank-value" style={{ fontWeight: isTopFive ? 'bold' : 'normal' }}>
+                                                        {formattedAmount}
+                                                    </div>
+                                                </li>
+                                            )
+                                        })}
+                                </ol>
+                                <div className="rank-actions">
+                                    <button
+                                        className="btn ghost"
+                                        onClick={() => setShowAllBeneficiaries(!showAllBeneficiaries)}
+                                    >
+                                        {showAllBeneficiaries ? 'Restrânge' : 'Afișează tot'}
+                                    </button>
+                                </div>
+                                <div className="rank-note">
+                                    Click pe un beneficiar pentru a vedea plățile lui. (Ctrl/⌘-clic pentru un nou tab.)
+                                </div>
+                            </>
+                        ) : null}
+                    </div>
                 </section>
             )}
 
@@ -2176,7 +2092,7 @@ const MapView = ({
             </section>
 
             {/* Projects/Payments Table */}
-            <section className="projects-payments-section">
+            <section id="projects-table" className="projects-payments-section">
                 <EnhancedTable
                     data={(() => {
                         // Get all projects/payments from all counties
@@ -2211,6 +2127,7 @@ const MapView = ({
                                         // Then override with display values
                                         title: fullTitle,
                                         beneficiary: item[fieldMappings.beneficiary],
+                                        cui: endpoint === 'payments' ? item.CUI_BENEFICIAR_FINAL : undefined,
                                         fundingSource: item[fieldMappings.fundingSource],
                                         value: getValueField(item),
                                         value_ron: valueRON,
@@ -2247,6 +2164,12 @@ const MapView = ({
                             searchable: true,
                             render: (value) => <div style={{ maxWidth: '250px', wordWrap: 'break-word', fontSize: '12px', lineHeight: '1.3' }}>{value}</div>
                         },
+                        ...(endpoint === 'payments' ? [{
+                            key: 'cui',
+                            label: 'CUI',
+                            searchable: true,
+                            render: (value) => <div style={{ fontSize: '12px', minWidth: '100px', fontFamily: 'monospace' }}>{value}</div>
+                        }] : []),
                         {
                             key: 'county',
                             label: 'Județ',
@@ -2416,6 +2339,8 @@ const MapView = ({
                     exportFileName={`${endpoint === 'payments' ? 'plati' : 'proiecte'}_pnrr_toate`}
                     activeProgram={activeProgram}
                     setActiveProgram={setActiveProgram}
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
                 />
             </section>
 
