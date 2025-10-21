@@ -45,6 +45,7 @@ const EnhancedTable = ({
   formatMoneyWithCurrency = null,
   getCurrencySymbol = null,
   currency = 'EUR',
+  onFilteredDataChange = null, // Callback to pass filtered data totals to parent
 }) => {
   const [sortColumn, setSortColumn] = useState(defaultSortColumn)
   const [sortDirection, setSortDirection] = useState(defaultSortDirection)
@@ -292,6 +293,21 @@ const EnhancedTable = ({
   const startIndex = (currentPage - 1) * itemsPerPage
   const paginatedData = sortedData.slice(startIndex, startIndex + itemsPerPage)
 
+  // Calculate filtered totals and notify parent
+  useEffect(() => {
+    if (onFilteredDataChange && getValueField) {
+      const totalValue = filteredData.reduce((sum, item) => {
+        const value = getValueField(item)
+        return sum + value
+      }, 0)
+      
+      onFilteredDataChange({
+        count: filteredData.length,
+        totalValue: totalValue
+      })
+    }
+  }, [filteredData, onFilteredDataChange, getValueField])
+
   const handleSort = (column) => {
     if (sortColumn === column) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
@@ -309,7 +325,7 @@ const EnhancedTable = ({
   const handleSearchChange = (e) => {
     const value = e.target.value
     if (setSearchTerm) {
-      setSearchTerm(value)
+    setSearchTerm(value)
     }
   }
 
@@ -883,6 +899,7 @@ const MapView = ({
     const [filterCounty, setFilterCounty] = useState('')
     const [filterComponent, setFilterComponent] = useState(activeProgram || '')
     const [filterMasura, setFilterMasura] = useState('')
+    const [filteredTotals, setFilteredTotals] = useState({ count: 0, totalValue: 0 })
     
     // Ref for sticky filters to scroll to
     const filtersRef = useRef(null)
@@ -1372,7 +1389,9 @@ const MapView = ({
 
         let title = ''
         if (viewMode === 'general') {
-            title = `Sursa datelor: ${sourceName} - General ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}${filterSuffix}`
+            title = `Sursa datelor: ${sourceName} - Proiecte Județene ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}${filterSuffix}`
+        } else if (viewMode === 'all') {
+            title = `Sursa datelor: ${sourceName} - Toate proiectele ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}${filterSuffix}`
         } else if (viewMode === 'program') {
             title = `Sursa datelor: ${sourceName} - ${componentLabel || activeProgram} - ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}`
         } else if (viewMode === 'total') {
@@ -1490,10 +1509,12 @@ const MapView = ({
 
     // Component totals for pie chart
     const componentTotals = useMemo(() => {
+        // For 'all' view mode, include all data including RO-MULTI
+        // For other modes, exclude RO-MULTI (NAȚIONAL projects are in București)
         const baseCounties = data.filter(d => {
             if (!d) return false
             const { code } = getCountyInfo(d)
-            return code && code !== 'RO-MULTI'
+            return viewMode === 'all' ? true : (code && code !== 'RO-MULTI')
         })
         const totals = {}
 
@@ -1552,7 +1573,7 @@ const MapView = ({
                 key
             }))
             .sort((a, b) => b.y - a.y)
-    }, [data, metric, fieldMappings, COMPONENT_MAPPING, currency, getValueField])
+    }, [data, metric, fieldMappings, COMPONENT_MAPPING, currency, getValueField, viewMode])
 
     // Pie chart configuration - Reverted to working state
     const pieOptions = {
@@ -1826,7 +1847,7 @@ const MapView = ({
                             }
                         }}
                     >
-                        General · Valoare
+                        Proiecte Județene · Valoare
                     </button>
                     <button
                         className={metric === 'projects' ? 'active' : ''}
@@ -1839,7 +1860,7 @@ const MapView = ({
                             }
                         }}
                     >
-                        General · Proiecte
+                        Proiecte Județene · Proiecte
                     </button>
                     <button
                         onClick={() => {
@@ -1847,6 +1868,33 @@ const MapView = ({
                         }}
                     >
                         Proiecte Naționale
+                    </button>
+                    <button
+                        onClick={() => {
+                            // Switch to projects endpoint and clear all filters to show all projects
+                            if (switchEndpoint) {
+                                switchEndpoint('projects');
+                            }
+                            setViewMode('all');
+                            setMetric('projects');
+                            setActiveProgram(null);
+                            setSearchTerm('');
+                            setFilterStadiu('');
+                            setFilterLocality('');
+                            setFilterFundingSource('');
+                            setFilterCounty('');
+                            setFilterComponent('');
+                            setFilterMasura('');
+                            // Scroll to table
+                            setTimeout(() => {
+                                const element = document.getElementById('projects-table');
+                                if (element) {
+                                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                }
+                            }, 100);
+                        }}
+                    >
+                        Toate proiectele
                     </button>
                 </div>
 
@@ -2014,35 +2062,35 @@ const MapView = ({
                 <section className="ranking-section">
                     <div className="card rank-card">
                         <h3>Topul beneficiarilor PNRR raportat la plăți (Top 100)</h3>
-                        {loadingBeneficiaries ? (
-                            <div className="beneficiaries-loading">
-                                <div className="loading-spinner-small"></div>
-                                <span>Se încarcă topul beneficiarilor...</span>
-                            </div>
-                        ) : topBeneficiaries && topBeneficiaries.items ? (
+                    {loadingBeneficiaries ? (
+                        <div className="beneficiaries-loading">
+                            <div className="loading-spinner-small"></div>
+                            <span>Se încarcă topul beneficiarilor...</span>
+                        </div>
+                    ) : topBeneficiaries && topBeneficiaries.items ? (
                             <>
                                 <ol className="rank-list">
-                                    {topBeneficiaries.items
-                                        .slice(0, showAllBeneficiaries ? 100 : 5)
-                                        .map((beneficiary, index) => {
-                                            // Convert RON to EUR (using fixed rate 4.95)
-                                            const amountRON = beneficiary['received amount in lei'] || 0
-                                            const amountEUR = amountRON / 4.95
-                                            const displayAmount = currency === 'RON' ? amountRON : amountEUR
-                                            const isTopFive = index < 5
-                                            
-                                            // Format as millions with currency symbol
-                                            const millions = displayAmount / 1e6
-                                            const formattedAmount = `${millions.toLocaleString('ro-RO', {
-                                                minimumFractionDigits: 2,
-                                                maximumFractionDigits: 2
-                                            })} mil ${getCurrencySymbol()}`
+                                        {topBeneficiaries.items
+                                            .slice(0, showAllBeneficiaries ? 100 : 5)
+                                            .map((beneficiary, index) => {
+                                                // Convert RON to EUR (using fixed rate 4.95)
+                                                const amountRON = beneficiary['received amount in lei'] || 0
+                                                const amountEUR = amountRON / 4.95
+                                                const displayAmount = currency === 'RON' ? amountRON : amountEUR
+                                                const isTopFive = index < 5
+                                                
+                                                // Format as millions with currency symbol
+                                                const millions = displayAmount / 1e6
+                                                const formattedAmount = `${millions.toLocaleString('ro-RO', {
+                                                    minimumFractionDigits: 2,
+                                                    maximumFractionDigits: 2
+                                                })} mil ${getCurrencySymbol()}`
 
                                             // Calculate percentage for bar (similar to county ranking)
                                             const maxAmount = topBeneficiaries.items[0] ? (topBeneficiaries.items[0]['received amount in lei'] || 0) / 4.95 : 1
                                             const percentage = maxAmount ? Math.max(2, (amountEUR / maxAmount) * 100) : 0
 
-                                            return (
+                                                return (
                                                 <li
                                                     key={index}
                                                     className="rank-item"
@@ -2078,31 +2126,31 @@ const MapView = ({
                                                         <div className="rank-bar" style={{ width: `${percentage}%` }}></div>
                                                     </div>
                                                     <div className="rank-value" style={{ fontWeight: isTopFive ? 'bold' : 'normal' }}>
-                                                        {formattedAmount}
+                                                            {formattedAmount}
                                                     </div>
                                                 </li>
                                             )
                                         })}
                                 </ol>
                                 <div className="rank-actions">
-                                    <button
+                                <button
                                         className="btn ghost"
-                                        onClick={() => setShowAllBeneficiaries(!showAllBeneficiaries)}
+                                    onClick={() => setShowAllBeneficiaries(!showAllBeneficiaries)}
                                     >
                                         {showAllBeneficiaries ? 'Restrânge' : 'Afișează tot'}
-                                    </button>
-                                </div>
+                                </button>
+                            </div>
                                 <div className="rank-note">
                                     Click pe un beneficiar pentru a vedea plățile lui. (Ctrl/⌘-clic pentru un nou tab.)
-                                </div>
+                        </div>
                             </>
-                        ) : null}
+                    ) : null}
                     </div>
                 </section>
             )}
 
-            {/* Pie Chart - Full Row (hide when component is selected) */}
-            {!activeProgram && (
+            {/* Pie Chart - Full Row (always show, even when filtering) */}
+            {viewMode !== 'program' && (
                 <section className="pie-chart-section">
                     <div className="card pie-card">
                         <div className="chart-container">
@@ -2163,11 +2211,11 @@ const MapView = ({
                 <EnhancedTable
                     data={(() => {
                         // Get all projects/payments from all counties
-                        // EXCLUDE RO-MULTI because NAȚIONAL projects are already included in București
                         const allData = []
                         data.forEach(county => {
-                            // Skip Multi Județe (RO-MULTI) - NAȚIONAL projects are in București
-                            if (county.county?.code === 'RO-MULTI' || county.code === 'RO-MULTI') {
+                            // For 'all' view mode, include both county and national projects
+                            // For other modes, exclude RO-MULTI because NAȚIONAL projects are already included in București
+                            if (viewMode !== 'all' && (county.county?.code === 'RO-MULTI' || county.code === 'RO-MULTI')) {
                                 return;
                             }
                             
@@ -2358,14 +2406,21 @@ const MapView = ({
                     title={endpoint === 'payments' ? 'Plăți PNRR' : 'Proiecte PNRR'}
                     subtitle={
                         (() => {
-                            // EXCLUDE RO-MULTI from calculations (NAȚIONAL projects are in București)
-                            const dataWithoutMulti = data.filter(county => 
+                            // Use filtered totals from the table if available, otherwise fallback to calculated values
+                            if (filteredTotals.count > 0) {
+                                return `${filteredTotals.count} ${endpoint === 'payments' ? 'plăți' : 'proiecte'} găsite${activeProgram ? ` (${COMPONENT_MAPPING[activeProgram]?.label})` : ''} • ${formatMoneyWithCurrency(filteredTotals.totalValue)} valoare totală`
+                            }
+                            
+                            // Fallback calculation for initial load
+                            const dataToUse = viewMode === 'all' 
+                                ? data 
+                                : data.filter(county => 
                                 county.county?.code !== 'RO-MULTI' && county.code !== 'RO-MULTI'
                             )
                             
-                            const totalData = dataWithoutMulti.reduce((sum, county) => sum + (county.extras?.rows?.length || 0), 0)
+                            const totalData = dataToUse.reduce((sum, county) => sum + (county.extras?.rows?.length || 0), 0)
                             const filteredData = activeProgram 
-                                ? dataWithoutMulti.reduce((sum, county) => {
+                                ? dataToUse.reduce((sum, county) => {
                                     if (county.extras?.rows) {
                                         return sum + county.extras.rows.filter(item => item[fieldMappings.componentCode] === activeProgram).length
                                     }
@@ -2373,7 +2428,7 @@ const MapView = ({
                                 }, 0)
                                 : totalData
                             
-                            const totalValue = dataWithoutMulti.reduce((sum, county) => {
+                            const totalValue = dataToUse.reduce((sum, county) => {
                                 if (county.extras?.rows) {
                                     return sum + county.extras.rows.reduce((countySum, item) => {
                                         const value = getValueField(item)
@@ -2382,16 +2437,6 @@ const MapView = ({
                                 }
                                 return sum
                             }, 0)
-                            
-                            // Debug: Log data info
-                            console.log('Data summary:', {
-                                totalCounties: data.length,
-                                totalData,
-                                filteredData,
-                                totalValue,
-                                endpoint,
-                                activeProgram
-                            })
                             
                             return `${filteredData} ${endpoint === 'payments' ? 'plăți' : 'proiecte'} găsite${activeProgram ? ` (${COMPONENT_MAPPING[activeProgram]?.label})` : ''} • ${formatMoneyWithCurrency(totalValue)} valoare totală`
                         })()
@@ -2426,15 +2471,22 @@ const MapView = ({
                     formatMoneyWithCurrency={formatMoneyWithCurrency}
                     getCurrencySymbol={getCurrencySymbol}
                     currency={currency}
+                    onFilteredDataChange={setFilteredTotals}
                 />
             </section>
 
             {/* Components Overview */}
             <ComponentsOverview 
               currency={currency}
-              setActiveProgram={setActiveProgram}
+              setActiveProgram={(componentCode) => {
+                setActiveProgram(componentCode)
+                setViewMode('all')
+                setMetric('projects')
+              }}
               setFilterMasura={setFilterMasura}
               switchEndpoint={switchEndpoint}
+              setViewMode={setViewMode}
+              setMetric={setMetric}
             />
 
             {/* Show loading overlay while county details are being prepared */}
@@ -2455,7 +2507,8 @@ const MapView = ({
         const componentLabel = activeProgram ? COMPONENT_MAPPING[activeProgram]?.label : null
         const filterSuffix = activeProgram ? ` (filtrat: ${componentLabel})` : ''
 
-        if (viewMode === 'general') return `General${filterSuffix} · ${metric === 'value' ? 'Valoare' : 'Proiecte'}`
+        if (viewMode === 'general') return `Proiecte Județene${filterSuffix} · ${metric === 'value' ? 'Valoare' : 'Proiecte'}`
+        if (viewMode === 'all') return `Toate proiectele${filterSuffix} · ${metric === 'value' ? 'Valoare' : 'Proiecte'}`
         if (viewMode === 'program') {
             const program = PROGRAMS.find(p => p.key === activeProgram)
             return `${program?.label || activeProgram} · ${metric === 'value' ? 'Valoare' : 'Proiecte'}`

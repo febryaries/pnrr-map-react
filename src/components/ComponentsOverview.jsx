@@ -34,7 +34,9 @@ const ComponentsOverview = ({
   currency = 'EUR',
   setActiveProgram = null,
   setFilterMasura = null,
-  switchEndpoint = null
+  switchEndpoint = null,
+  setViewMode = null,
+  setMetric = null
 }) => {
   const [expandedComponents, setExpandedComponents] = useState(new Set())
   const [isSticky, setIsSticky] = useState(false)
@@ -48,6 +50,16 @@ const ComponentsOverview = ({
     // Switch to projects endpoint
     if (switchEndpoint) {
       switchEndpoint('projects')
+    }
+    
+    // Set view mode to 'all' to include all 24,907 projects
+    if (setViewMode) {
+      setViewMode('all')
+    }
+    
+    // Set metric to projects
+    if (setMetric) {
+      setMetric('projects')
     }
     
     // Set the component filter
@@ -320,17 +332,18 @@ const ComponentsOverview = ({
                               
                               return (
                                 <div key={index} className={`investment-item ${isZeroCost ? 'zero-cost' : ''}`}>
-                                  <div className="investment-description">
+                                  <div 
+                                    className="investment-description clickable"
+                                    onClick={() => handleMeasureClick(component.code, measureCode)}
+                                    title="Click pentru a filtra tabelul după această măsură"
+                                  >
                                     <div className="investment-description-text">
                                       {investment.titlul_masurii}
                                     </div>
-                                    <button 
-                                      onClick={() => handleMeasureClick(component.code, measureCode)}
-                                      className="pnrr-link"
-                                      title="Filtrează tabelul după această măsură"
-                                    >
-                                      🔗
-                                    </button>
+                                    <div className="link-indicator">
+                                      <span className="link-icon">🔗</span>
+                                      <span className="link-text">Click pentru filtrare</span>
+                                    </div>
                                   </div>
                                   <div className="investment-value">
                                     {isZeroCost ? (
@@ -365,17 +378,18 @@ const ComponentsOverview = ({
                               
                               return (
                                 <div key={index} className={`investment-item ${isZeroCost ? 'zero-cost' : ''}`}>
-                                  <div className="investment-description">
+                                  <div 
+                                    className="investment-description clickable"
+                                    onClick={() => handleMeasureClick(component.code, measureCode)}
+                                    title="Click pentru a filtra tabelul după această măsură"
+                                  >
                                     <div className="investment-description-text">
                                       {reform.titlul_masurii}
                                     </div>
-                                    <button 
-                                      onClick={() => handleMeasureClick(component.code, measureCode)}
-                                      className="pnrr-link"
-                                      title="Filtrează tabelul după această măsură"
-                                    >
-                                      🔗
-                                    </button>
+                                    <div className="link-indicator">
+                                      <span className="link-icon">🔗</span>
+                                      <span className="link-text">Click pentru filtrare</span>
+                                    </div>
                                   </div>
                                   <div className="investment-value">
                                     {isZeroCost ? (
