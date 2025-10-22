@@ -39,6 +39,8 @@ const EnhancedTable = ({
   setFilterComponent = null,
   filterMasura = '',
   setFilterMasura = null,
+  filterCRI = '',
+  setFilterCRI = null,
   filtersRef = null,
   fieldMappings = null,
   getValueField = null,
@@ -46,6 +48,10 @@ const EnhancedTable = ({
   getCurrencySymbol = null,
   currency = 'EUR',
   onFilteredDataChange = null, // Callback to pass filtered data totals to parent
+  // View mode props
+  viewMode = 'total',
+  setViewMode = null,
+  setMetric = null,
 }) => {
   const [sortColumn, setSortColumn] = useState(defaultSortColumn)
   const [sortDirection, setSortDirection] = useState(defaultSortDirection)
@@ -196,6 +202,34 @@ const EnhancedTable = ({
     return Array.from(values).sort()
   }, [data, filterCounty, filterLocality, filterComponent])
 
+  // Get unique CRI values (filtered by active filters)
+  const uniqueCRIValues = useMemo(() => {
+    const values = new Set()
+    data.forEach(item => {
+      let shouldInclude = true
+      
+      // Apply county filter if selected
+      if (filterCounty && item.county !== filterCounty) {
+        shouldInclude = false
+      }
+      
+      // Apply locality filter if selected
+      if (filterLocality && item.locality !== filterLocality) {
+        shouldInclude = false
+      }
+      
+      // Apply component filter if selected
+      if (filterComponent && item.componentCode !== filterComponent) {
+        shouldInclude = false
+      }
+      
+      if (shouldInclude && item.cri) {
+        values.add(item.cri)
+      }
+    })
+    return Array.from(values).sort()
+  }, [data, filterCounty, filterLocality, filterComponent])
+
   // Filter data based on search term, filters, and remove zero values
   useEffect(() => {
     let filtered = data
@@ -248,9 +282,14 @@ const EnhancedTable = ({
       filtered = filtered.filter(item => item.measureCode === filterMasura)
     }
     
+    // Apply CRI filter
+    if (filterCRI) {
+      filtered = filtered.filter(item => item.cri === filterCRI)
+    }
+    
     setFilteredData(filtered)
     setCurrentPage(1) // Reset to first page when filtering
-  }, [data, searchTerm, filterStadiu, filterLocality, filterFundingSource, filterCounty, filterComponent, filterMasura, columns])
+  }, [data, searchTerm, filterStadiu, filterLocality, filterFundingSource, filterCounty, filterComponent, filterMasura, filterCRI, columns])
 
   // Sort data
   const sortedData = useMemo(() => {
@@ -897,6 +936,36 @@ const EnhancedTable = ({
       {searchable && (
         <div className="table-filters-sticky" ref={filtersRef}>
           <div className="table-filters-sticky-content">
+              {/* Visualization Mode Dropdown - Only for projects endpoint */}
+              {endpoint !== 'payments' && (
+                <div className="filter-item">
+                  <label>📊 Vizualizare</label>
+                  <select 
+                    value={viewMode} 
+                    onChange={(e) => {
+                      setViewMode(e.target.value);
+                      setMetric('value');
+                      setActiveProgram(null);
+                    }}
+                  >
+                    <option value="total">Toate Proiectele</option>
+                    <option value="national">Proiecte Naționale</option>
+                    <option value="local">Proiecte Locale</option>
+                  </select>
+                </div>
+              )}
+              
+              {/* CRI Filter - ALWAYS VISIBLE */}
+              <div className="filter-item">
+                <label>🔬 CRI</label>
+                <select value={filterCRI} onChange={(e) => setFilterCRI(e.target.value)}>
+                  <option value="">Toate CRI-urile</option>
+                  {uniqueCRIValues.map(value => (
+                    <option key={value} value={value}>{value}</option>
+                  ))}
+                </select>
+              </div>
+              
               {/* County Filter - ALWAYS VISIBLE */}
               <div className="filter-item">
                 <label>📍 Alege Județul</label>
@@ -969,7 +1038,7 @@ const EnhancedTable = ({
               </div>
               
               {/* Clear Filters Button - VISIBLE IF ANY FILTER ACTIVE */}
-              {(filterStadiu || filterLocality || filterFundingSource || filterCounty || filterComponent || filterMasura) && (
+              {(filterStadiu || filterLocality || filterFundingSource || filterCounty || filterComponent || filterMasura || filterCRI) && (
                 <button
                   onClick={() => {
                     setFilterStadiu('')
@@ -978,6 +1047,7 @@ const EnhancedTable = ({
                     setFilterCounty('')
                     setFilterComponent('')
                     setFilterMasura('')
+                    setFilterCRI('')
                     // Sync with parent activeProgram
                     if (setActiveProgram) {
                       setActiveProgram(null)
@@ -1077,6 +1147,7 @@ const MapView = ({
     const [filterCounty, setFilterCounty] = useState('')
     const [filterComponent, setFilterComponent] = useState(activeProgram || '')
     const [filterMasura, setFilterMasura] = useState('')
+    const [filterCRI, setFilterCRI] = useState('')
     const [filteredTotals, setFilteredTotals] = useState({ count: 0, totalValue: 0 })
     
     // Ref for sticky filters to scroll to
@@ -2534,6 +2605,7 @@ const MapView = ({
                 </div>
             </section>
 
+
             {/* Projects/Payments Table */}
             <section id="projects-table" className="projects-payments-section">
                 <EnhancedTable
@@ -2879,6 +2951,8 @@ const MapView = ({
                     setFilterComponent={setFilterComponent}
                     filterMasura={filterMasura}
                     setFilterMasura={setFilterMasura}
+                    filterCRI={filterCRI}
+                    setFilterCRI={setFilterCRI}
                     filtersRef={filtersRef}
                     fieldMappings={fieldMappings}
                     getValueField={getValueField}
@@ -2886,6 +2960,9 @@ const MapView = ({
                     getCurrencySymbol={getCurrencySymbol}
                     currency={currency}
                     onFilteredDataChange={setFilteredTotals}
+                    viewMode={viewMode}
+                    setViewMode={setViewMode}
+                    setMetric={setMetric}
                 />
             </section>
 

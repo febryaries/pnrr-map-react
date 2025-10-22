@@ -4028,6 +4028,7 @@ td.num {
   box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
 }
 
+
 /* Responsive pentru sticky filters */
 @media (max-width: 960px) {
   .table-filters-sticky {
