@@ -1189,7 +1189,7 @@ const MapView = ({
             }
         }
     }
-
+    
     const fieldMappings = getFieldMappings()
 
     // Currency conversion using actual RON values from API
@@ -2678,9 +2678,9 @@ const MapView = ({
                             }
                         })
                         
-                        // Filter by active program if selected
-                        const filteredData = activeProgram 
-                            ? allData.filter(item => item.componentCode === activeProgram)
+                        // Filter by active program or component filter if selected
+                        const filteredData = (activeProgram || filterComponent)
+                            ? allData.filter(item => item.componentCode === (activeProgram || filterComponent))
                             : allData
                         
                         // Don't filter out zero values to maintain correct count
@@ -2891,9 +2891,9 @@ const MapView = ({
                                     }, 0)
                                     
                                     const totalCount = nationalCount + localCount
-                                    return `${nationalCount} Naționale + ${localCount} Locale = ${totalCount} proiecte${activeProgram ? ` (${COMPONENT_MAPPING[activeProgram]?.label})` : ''} • ${formatMoneyWithCurrency(nationalValue)} + ${formatMoneyWithCurrency(localValue)} = ${formatMoneyWithCurrency(filteredTotals.totalValue)} valoare totală`
+                                    return `${nationalCount} Naționale + ${localCount} Locale = ${totalCount} proiecte${(activeProgram || filterComponent) ? ` (${COMPONENT_MAPPING[activeProgram || filterComponent]?.label})` : ''} • ${formatMoneyWithCurrency(nationalValue)} + ${formatMoneyWithCurrency(localValue)} = ${formatMoneyWithCurrency(filteredTotals.totalValue)} valoare totală`
                                 } else {
-                                    return `${filteredTotals.count} ${endpoint === 'payments' ? 'plăți' : 'proiecte'} găsite${activeProgram ? ` (${COMPONENT_MAPPING[activeProgram]?.label})` : ''} • ${formatMoneyWithCurrency(filteredTotals.totalValue)} valoare totală`
+                                    return `${filteredTotals.count} ${endpoint === 'payments' ? 'plăți' : 'proiecte'} găsite${(activeProgram || filterComponent) ? ` (${COMPONENT_MAPPING[activeProgram || filterComponent]?.label})` : ''} • ${formatMoneyWithCurrency(filteredTotals.totalValue)} valoare totală`
                                 }
                             }
                             
@@ -2924,7 +2924,7 @@ const MapView = ({
                                 return sum
                             }, 0)
                             
-                            return `${filteredData} ${endpoint === 'payments' ? 'plăți' : 'proiecte'} găsite${activeProgram ? ` (${COMPONENT_MAPPING[activeProgram]?.label})` : ''} • ${formatMoneyWithCurrency(totalValue)} valoare totală`
+                            return `${filteredData} ${endpoint === 'payments' ? 'plăți' : 'proiecte'} găsite${(activeProgram || filterComponent) ? ` (${COMPONENT_MAPPING[activeProgram || filterComponent]?.label})` : ''} • ${formatMoneyWithCurrency(totalValue)} valoare totală`
                         })()
                     }
                     itemsPerPage={20}
