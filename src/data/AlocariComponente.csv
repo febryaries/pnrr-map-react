@@ -1,179 +1,75 @@
 ﻿Componenta;Măsura;Finanțare;Titlul măsurii;Alocare Finaciară (euro Exclusiv Tva);Executat (euro);Executat (%)
 C1;I1;loan;I1. Extinderea sistemelor de apă și canalizare în aglomerări mai mari de 2000 de locuitori echivalenți;244.838.539;50.017.454;20,43%
-C1;I2;loan;I2. Colectarea apelor uzate în aglomerări mai mici de 2.000 de locuitori echivalenți, care împiedică atingerea unei stări bune a corpurilor de apă și/sau afectează arii naturale protejate;57.974.587;25.049.710;43,21%
-C1;I4;loan;I4. Adaptarea la schimbările climatice prin automatizarea și digitalizarea echipamentelor de evacuare și stocare a apei la acumulări existente pentru asigurarea debitului ecologic și creșterea siguranței alimentării cu apă a populației și reducerea riscului la inundații.;33.003.856;1.185.419;3,59%
-C1;I5;loan;I5. Dotarea adecvată a administrațiilor bazinale pentru monitorizarea infrastructurii, prevenirea și gestionarea situațiilor de urgență;35.000.000;12.484.331;35,67%
+C1;I2;loan;I2. Colectarea apelor uzate în aglomerări mai mici de 2.000 de locuitori echivalenți;57.974.587;25.049.710;43,21%
+C1;I4;loan;I4. Reabilitarea acumularilor existente care necesita interventii de urgenta pentru siguranta utilizarii;33.003.856;1.185.419;3,59%
+C1;I5;loan;I5. Dotarea adecvată a administrațiilor bazinale pentru monitorizarea infrastructurii, prevenirea și gestionarea situațiilor de urgență ;35.000.000;12.484.331;35,67%
 C1;I6;grant;I6. Realizarea cadastrului apelor;30.000.000;499.002;1,66%
-C1;R2;loan;R2. Reconfigurarea actualului mecanism economic al ANAR în vederea asigurării modernizării și întreținerii sistemului național de gospodărire a apelor, precum și a implementării corespunzătoare a Directivei-cadru privind apa și a Directivei privind inundațiile;2.500.000;2.478.414;99,14%
-C2;I1;grant;I1. Campania națională de împădurire și reîmpădurire, inclusiv păduri urbane;307.547.498;73.088.923;23,77%
-C2;I2;grant;I2. Dezvoltarea de capacități moderne de producere a materialului forestier de reproducere;50.000.000;17.622.067;35,24%
-C2;I3;grant;I3. Actualizarea planurilor de management aprobate și identificarea zonelor potențiale de protecție strictă în habitate naturale terestre și marine în vederea punerii în aplicare a Strategiei UE privind biodiversitatea pentru 2030;5.000.000;0;0,00%
-C2;I4;grant;I4. Investiții integrate de reconstrucție ecologică a habitatelor și conservarea speciilor aferente pajiștilor, zonelor acvatice și dependente de apă;10.001.000;0;0,00%
-C2;I5;grant;I5. Sisteme integrate de reducere a riscurilor generate de viituri torențiale în bazinete forestiere expuse unor astfel de fenomene;22.000.000;12.817.720;58,26%
-C2;R1;grant;R1. Reforma sistemului de management și a celui privind guvernanța în domeniul forestier prin dezvoltarea unei noi Strategii forestiere naționale și a legislației subsecvente;1.000.000;661.400;66,14%
-C3;I1-1;grant;I1. Dezvoltarea, modernizarea și completarea sistemelor de management integrat al deșeurilor municipale la nivel de județ sau la nivel de orașe/comune;240.106.200;22.057.661;9,19%
-C3;I1-2;loan;I1. Dezvoltarea, modernizarea și completarea sistemelor de management integrat al deșeurilor municipale la nivel de județ sau la nivel de orașe/comune;165.643.845;20.313.708;12,26%
-C3;I2;loan;I2. Dezvoltarea infrastructurii pentru managementul gunoiului de grajd și al altor deșeuri agricole compostabile;50.196.850;236.147;0,47%
-C3;I3;grant;I3. Dezvoltarea capacităților instituționale de monitorizare publică și control pentru gestionarea deșeurilor și prevenirea poluării;13.000.000;6.794.785;52,27%
-C4;I1;loan;I1. Modernizarea și reînnoirea infrastructurii feroviare;1.874.376.400;1.029.044.282;54,90%
-C4;I2;loan;I2. Material rulant feroviar;280.829.800;146.803.831;52,28%
-C4;I3-1;loan;I3. Dezvoltarea infrastructurii rutiere durabile aferente rețelei TEN-T, taxarea drumurilor, managementul traficului și siguranța rutieră;1.098.821.134;1.658.641.562;150,95%
-C4;I3-2;grant;I3. Dezvoltarea infrastructurii rutiere durabile aferente rețelei TEN-T, taxarea drumurilor, managementul traficului și siguranța rutieră - 5 loturi A7 si Infrastructura aferentă operaționalizării sistemelor de trafic inteligent – centru de management al traficului, sisteme de informare a utilizatorilor, interoperabilitatea sistemelor de transport;2.169.200.266;0;0,00%
-C4;R1;grant;R1. Transport sustenabil, decarbonizare și siguranță rutieră /Decarbonizarea rutieră în conformitate cu principiul „poluatorul plătește”;10.000.000;0;0,00%
-C4;R2;loan;R2. Management performant pentru transport de calitate - Îmbunătățirea capacității instituționale de management și guvernanță corporativă;19.000.000;1.378.427;7,25%
-C5;I1-1;grant;I1. Instituirea unui fond pentru Valul Renovării care să finanțeze lucrări de îmbunătățire a eficienței energetice a fondului construit;1.387.172.898;0;0,00%
-C5;I1-2;loan;I1. Instituirea unui fond pentru Valul Renovării care să finanțeze lucrări de îmbunătățire a eficienței energetice a fondului construit;526.228.817;1.030.189.366;195,77%
-C5;I2;loan;I2. Implementarea Registrului național al clădirilor;5.000.000;0;0,00%
-C5;I4;loan;I4. Economie circulară și creșterea eficienței energetice a clădirilor istorice;14.850.000;1.313.610;8,85%
-C5;R1;loan;R1. Realizarea unui cadru normativ simplificat și actualizat care să sprijine implementarea investițiilor în tranziția spre clădiri verzi și reziliente;150.000;22.000;14,67%
-C6;I2;loan;I2. Capacitățile de producție a hidrogenului verde care să fie utilizat pentru stocarea energiei electrice și/sau pentru decarbonizarea industriei;86.500.000;2.860.866;3,31%
-C6;I3;loan;I3. Dezvoltarea unei producții combinate de energie termică și energie electrică (CHP) pe gaz flexibile și de înaltă eficiență în sectorul încălzirii centralizate, în vederea atingerii unei decarbonizări adânci;86.377.743;28.787.172;33,33%
-C6;I4-2;loan;I4. Lanț industrial de producție și/sau asamblare și/sau reciclare a bateriilor, a celulelor și panourilor fotovoltaice (inclusiv echipamente auxiliare) și noi capacități de stocare a energiei electrice;50.000.000;6.516;0,01%
-C6;I4-3;grant;I4. Lanț industrial de producție și/sau asamblare și/sau reciclare a bateriilor, a celulelor și panourilor fotovoltaice (inclusiv echipamente auxiliare) și noi capacități de stocare a energiei electrice;80.000.000;0;0,00%
-C6;I5;grant;I5. Asigurarea eficienței energetice în sectorul industrial;64.000.000;8.473.404;13,24%
-C6;R4;loan;R4. Dezvoltarea unui cadru legislativ și de reglementare favorabil tehnologiilor viitorului, în special hidrogen și soluții de stocare;1.000.000;1.000.000;100,00%
-C7;I1;grant;I1. Implementarea infrastructurii de cloud guvernamental;374.728.570;176.504.667;47,10%
-C7;I2;grant;I2. Dezvoltarea cloudului și migrarea în cloud.;187.050.420;4.728.865;2,53%
-C7;I3-1;grant;I3. Realizarea sistemului de eHealth și telemedicină - I3.1 Redimensionare, standardizare și optimizare a Platformei informatice din asigurările de sănătate (PIAS);100.000.000;22.316.977;22,32%
-C7;I3-2;grant;I3. Realizarea sistemului de eHealth și telemedicină - I3.2. Digitalizarea instituțiilor cu atribuții în domeniul sanitar aflate în subordinea MS;100.000.000;0;0,00%
-C7;I3-3;grant;I3. Realizarea sistemului de eHealth și telemedicină - I3.3 Digitalizarea a 200 de unități sanitare publice;100.000.000;0;0,00%
-C7;I4;grant;I4. Digitalizarea sistemului judiciar;242.310.000;46.468.278;19,18%
-C7;I5;grant;I5. Digitalizare în domeniul mediului;47.951.280;8.237.545;17,18%
-C7;I6;grant;I6. Digitalizarea în domeniul muncii și protecției sociale;85.000.000;43.076.266;50,68%
-C7;I7;grant;I7. Implementarea formularelor electronice eForms în domeniul achizițiilor publice;851.600;654.792;76,89%
-C7;I8;grant;I8. Cartea de identitate electronică și semnătura digitală;129.000.000;230.861;0,18%
-C7;I9;grant;I9. Digitalizarea sectorului organizațiilor neguvernamentale;12.000.000;39.196;0,33%
-C7;I10;grant;I10. Transformarea digitală în managementul funcției publice;10.000.000;1.129.813;11,30%
-C7;I11;grant;I11. Implementarea unei scheme de sprijinire a utilizării serviciilor de comunicații prin diferite tipuri de instrumente pentru beneficiari, cu accent pe zonele albe;94.000.000;18.202.922;19,36%
-C7;I12;grant;I12. Asigurarea protecției cibernetice atât pentru infrastructurile TIC publice, cât și pentru cele private cu valențe critic e pentru securitatea națională, prin utilizarea tehnologiilor inteligente;100.000.000;196.840;0,20%
-C7;I13;grant;I13. Dezvoltarea sistemelor de securitate pentru protecția spectrului guvernamental;38.530.000;10.060.486;26,11%
-C7;I14;grant;I14. Sporirea rezilienței și a securității cibernetice a serviciilor de infrastructură ale furnizorilor de servicii de internet pentru autoritățile publice din România;18.393.501;17.589.781;95,63%
-C7;I15;grant;I15. Crearea de noi competențe de securitate cibernetică pentru societate și economie;11.310.000;0;0,00%
-C7;I16;grant;I16. Program de formare de competențe digitale avansate pentru funcționarii publici;20.000.000;5.658.100;28,29%
-C7;I17;grant;I17. Scheme de finanțare pentru biblioteci pentru a deveni hub-uri de dezvoltare a competențelor digitale;22.624.468;6.773.811;29,94%
-C7;I18;loan;I18. Transformarea digitală și adoptarea tehnologiei de automatizare a proceselor de lucru robotice în administrația publică.;14.800.000;50.838;0,34%
-C7;I19;grant;I19. Scheme dedicate perfecționării/recalificării angajaților din firme;19.000.000;925.298;4,87%
-C7;R1;grant;R1. Dezvoltarea unui cadru unitar pentru definirea arhitecturii unui sistem de tip cloud guvernamental;11.889.498;2.255.539;18,97%
-C8;I1;grant;I1. Creșterea conformării voluntare a contribuabililor prin dezvoltarea serviciilor digitale;7.000.000;1.060.414;15,15%
-C8;I2;grant;I2. Îmbunătățirea proceselor de administrare a impozitelor și taxelor, inclusiv prin implementarea managementului integrat al riscurilor;196.400.000;140.547.091;71,56%
-C8;I3;grant;I3. Asigurarea capacității de răspuns la provocările informaționale actuale și viitoare, inclusiv în contextul pandemiei, prin transformarea digitală a Ministerului de Finanțe/Agenției Naționale de Administrare Fiscală;88.000.000;48.223.990;54,80%
-C8;I4;grant;I4. Implementarea vămii electronice;61.999.999;40.674.441;65,60%
-C8;I5;grant;I5. Îmbunătățirea mecanismului de programare bugetară;4.000.000;0;0,00%
-C8;I6;grant;I6. Instrument de modelare economică (set de instrumente de simulare privind opțiunile de reformă a pensiilor) pentru îmbunătățirea capacității instituționale de a prognoza cheltuielile cu pensiile;400.000;347.708;86,93%
-C8;I7;grant;I7. Asistență tehnică pentru revizuirea cadrului fiscal;4.000.000;1.058.610;26,47%
-C8;I8;grant;I8. Operaționalizarea Băncii Naționale de Dezvoltare;10.000.000;9.954.200;99,54%
-C8;I9;grant;I9. Susținerea procesului de evaluare a dosarelor de pensii aflate în plată;19.250.597;20.777.581;107,93%
-C8;I10;grant;I10. Eficiență operațională și servicii electronice avansate pentru sistemul național de pensii prin digitalizare.;61.881.919;20.800.158;33,61%
-C8;I11;loan;I11. Capitalizare BID;100.000.000;0;0,00%
-C8;R6;grant;R6. Rsistemului public de pensii;4.000.000;1.345.288;33,63%
-C9;I1;loan;I1. Platforme digitale privind transparentizarea legislativă, debirocratizarea și simplificarea procedurală destinate mediului de afaceri;5.297.170;3.465.664;65,42%
-C9;I2-1;loan;I2. Instrumente financiare pentru sectorul privat;1.050.000.000;138.547.169;13,19%
-C9;I2-2;grant;I2. Instrumente financiare pentru sectorul privat;200.000.000;91.721.479;45,86%
-C9;I3-1;grant;I3. Scheme de ajutor pentru sectorul privat;256.500.000;1.375.626;0,54%
-C9;I3-2;loan;I3. Scheme de ajutor pentru sectorul privat;600.000;13;0,00%
-C9;I4;loan;I4. Proiecte transfrontaliere și multinaționale – Procesoare cu consum redus de energie și cipuri semiconductoare;400.000.000;0;0,00%
-C9;I5;grant;I5. Înființarea și operaționalizarea centrelor de competență;25.000.000;8.859.103;35,44%
-C9;I8;grant;I8. Dezvoltarea unui program pentru atragerea resurselor umane înalt specializate din străinătate pentru activități de cercetare, dezvoltare, inovare (T284);183.000.000;49.876.430;27,25%
-C9;I9;grant;I9. Program de sprijin pentru posesorii de certificate de excelență primite la competiția pentru burse individuale Marie Sklodowska Curie (T285);1.600.000;1.057.774;66,11%
-C9;I10;grant;I10. Înființarea și susținerea financiară a unei rețele naționale de (8) opt centre regionale de orientare în carieră ca parte a ERA TALENT PLATFORM;4.000.000;1.798.801;44,97%
-C9;R2;grant;R2. Raționalizarea guvernanței în domeniul cercetării, dezvoltării și inovării;3.430.000;4.403.396;128,38%
-C10;I1;grant;I1. Mobilitate urbană durabilă;904.000.000;421.563.069;46,63%
-C10;I2;loan;I2. Construcția de locuințe pentru tineri / locuințe pentru specialiști în sănătate și educație;145.341.508;50.186.292;34,53%
-C10;I3-1;loan;I3. Reabilitarea moderată a clădirilor publice pentru a îmbunătăți furnizarea de servicii publice de către unitățile administrativ-teritoriale;287.500.000;278.369.270;96,82%
-C10;I3-2;grant;I3. Reabilitarea moderată a clădirilor publice pentru a îmbunătăți furnizarea de servicii publice de către unitățile administrativ-teritoriale;287.500.000;0;0,00%
-C10;I4;loan;I4. Elaborarea / actualizarea în format GIS a documentelor de amenajare a teritoriului și de urbanism;25.197.281;14.879.294;59,05%
-C11;I1;loan;I1. Promovarea celor 12 rute turistice/culturale;102.085.000;46.174.569;45,23%
-C11;I2;loan;I2. Modernizarea/crearea de muzee și memoriale;34.728.928;5.637.432;16,23%
-C11;I3;grant;I3. Înființarea și operaționalizarea Centrului Național de Coordonare Velo;1.500.000;47.040;3,14%
-C11;I4;loan;I4. Implementarea a 2404 km de piste pentru biciclete;24.302.153;8.943.931;36,80%
-C11;I5;grant;I5. Sporirea accesului la cultură în zonele defavorizate din punct de vedere cultural;7.790.000;3.609.702;46,34%
-C11;I6;grant;I6. Dezvoltarea unui sistem digital pentru procesele de finanțare a culturii;3.750.000;1.979.771;52,79%
-C11;I7;grant;I7. Accelerarea digitalizării producției și distribuției de filme;5.460.000;5.129.592;93,95%
-C11;R1;loan;R1. Operaționalizarea organizațiilor de management al destinației (OMD-uri);10.000.000;0;0,00%
-C11;R3;grant;R3. Reformarea sistemului de finanțare a sectorului cultural;1.000.000;276.022;27,60%
-C12;I1-1;grant;I1. Dezvoltarea infrastructurii medicale prespitalicești - I1.1 - Cabinete ale medicilor de familie sau asocieri de cabinete de asistență medicală primară – 2000 unități;120.250.000;183.565.552;152,65%
-C12;I1-3;grant;I1. Dezvoltarea infrastructurii medicale prespitalicești - I1.3 – Unități de asistență medicală ambulatorie – 30 unități;80.250.000;0;0,00%
-C12;I1-4;grant;I1. Dezvoltarea infrastructurii medicale prespitalicești - I1.4 – Centre comunitare integrate (nou-construite/renovate și dotate, inclusiv cu personal adecvat) – 200 unități;10.854.000;0;0,00%
-C12;I1-5;grant;I1. Dezvoltarea infrastructurii medicale prespitalicești - I1.5 – Cabinete de planificare familială;2.016.807;0;0,00%
-C12;I2-1;grant;I2 Dezvoltarea infrastructurii spitalicești publice - I2.1 Dezvoltarea infrastructurii spitalicești publice (5 spitale) si I2.2 Echipamente și aparatură medicală;275.549.474;423.615.541;153,73%
-C12;I3;loan;I3. Spitale publice (3 spitale);259.886.530;0;0,00%
-C12;I2-3;grant;I2. Dezvoltarea infrastructurii spitalicești publice - I2.3- Dezvoltarea infrastructurii spitalicești publice (25 Unități de terapie intensivă pentru nou-născuți dotate, inclusiv cu ambulanțe pentru nou-născuți (pentru centrele regionale) (T376);74.026.000;0;0,00%
-C12;I2-4;grant;I2. Dezvoltarea infrastructurii spitalicești publice - I2.4 Echipamente și materiale destinate reducerii riscului de infecții nosocomiale;150.380.000;0;0,00%
-C12;I4;loan;I4. Modernizarea asistenței medicale de urgență (Achiziționarea de noi ambulanțe);183.590.800;0;0,00%
-C12;R1;grant;R1. Dezvoltarea capacității pentru gestionarea fondurilor publice din sănătate;70.180.000;1.700.000;2,42%
-C12;R2;grant;R2. Dezvoltarea capacității de investiții în infrastructura sanitară;30.053.000;0;0,00%
-C12;R3;grant;R3. Dezvoltarea capacității pentru managementul serviciilor de sănătate și managementul resurselor umane din sănătate;80.280.000;15.012.569;18,70%
-C13;I1;grant;I1. Crearea unei rețele de centre de zi pentru copiii expuși riscului de a fi separați de familie;48.611.800;13.613.396;28,00%
-C13;I2;grant;I2. Reabilitarea, renovarea și dezvoltarea infrastructurii sociale pentru persoanele cu dizabilități;34.032.327;5.631.914;16,55%
-C13;I3;grant;I3. Operaționalizarea introducerii tichetelor de muncă pentru activitățile casnice;4.540.000;2.923.075;64,38%
-C13;I4;grant;I4. Crearea unei rețele de centre de îngrijire de zi și de reabilitare pentru persoanele în vârstă;77.694.085;7.638.863;9,83%
-C13;R2;grant;R2. Rsistemului de protecție a persoanelor adulte cu dizabilități;730.000;696.955;95,47%
-C13;R3;grant;R3. Implementarea venitului minim de incluziune (VMI);2.000.000;2.106.911;105,35%
-C13;R6;loan;R6. Îmbunătățirea legislației privind economia socială;300.000;296.652;98,88%
-C13;R7;loan;R7. Rserviciilor de îngrijire pe termen lung pentru persoanele în vârstă;1.190.000;1.185.667;99,64%
-C14;I5;grant;I5. Monitorizarea și implementarea planului;12.841.000;11.471.751;89,34%
-C14;R1;grant;R1. Îmbunătățirea predictibilității și a eficienței proceselor decizionale prin întărirea capacității de coordonare a politicilor și analiză de impact la nivelul guvernului și a ministerelor coordonatoare, precum și prin consolidarea instrumentelor în vederea creșterea calității consultărilor publice la toate palierele administrație;11.930.000;6.924.010;58,04%
-C14;R2;grant;R2. Întărirea coordonării la Centrul Guvernului printr-o abordare integrată și coerentă a inițiativelor în domeniul schimbărilor climatice și a dezvoltării durabile;14.180.000;3.827.288;26,99%
-C14;R3;grant;R3. Management performant al resurselor umane în sectorul public;14.000.000;6.977.026;49,84%
-C14;R4;grant;R4. Dezvoltarea unui sistem de salarizare echitabil și unitar în sectorul public;2.000.000;998.560;49,93%
-C14;R8;grant;R8. Reformarea sistemului național de achiziții publice;4.600.000;2.680.824;58,28%
-C14;R9;grant;R9. Îmbunătățirea cadrului procedural de implementare a principiilor guvernanței corporative în cadrul întreprinderilor de stat;17.830.000;1.041.493;5,84%
-C15;I1-1;grant;I1. Construirea, echiparea și operaționalizarea a unui număr de 110 de creșe;167.273.000;119.504.479;71,44%
-C15;I1-2;loan;I1. Construirea, echiparea și operaționalizarea a unui număr de 110 de creșe;62.727.000;0;0,00%
-C15;I2;grant;I2: Înființarea, echiparea și operaționalizarea unui număr de 90 servicii complementare pentru grupurile dezavantajate;6.236.458;3.021.046;48,44%
-C15;I3;grant;I3.Dezvoltarea programului cadru pentru formarea continuă a profesioniștilor care lucrează în servicii de educație timpurii;3.832.000;708.458;18,49%
-C15;I4;grant;I4: Sprijinirea unităților de învățământ cu risc crescut de abandon școlar;460.000.000;14.447.218;3,14%
-C15;I5;grant;I5: Instruiri pentru utilizatorii (SIIIR) și (MATE) și intervenții sistemice pentru reducerea abandonului școlar;43.000.000;0;0,00%
-C15;I6;grant;I6: Dezvoltarea a 10 consorții regionale și dezvoltarea și dotarea a 10 campusuri profesionale;169.000.000;21.042.120;12,45%
-C15;I8;grant;I8: Program de formare continuă a personalului didactic;80.000.000;20.923.326;26,15%
-C15;I9;grant;I9: Asigurarea echipamentelor și resurselor tehnologice digitale pentru școli;478.500.000;250.736.143;52,40%
-C15;I10-1;grant;I10: Dezvoltarea rețelei de școli verzi și achiziționarea de microbuze verzi;209.144.630;131.043.470;62,66%
-C15;I10-2;loan;I10: Dezvoltarea rețelei de școli verzi și achiziționarea de microbuze verzi;52.960.909;0;0,00%
-C15;I11;grant;I11: Asigurarea dotărilor sălilor de clasa și a laboratoarelor/cabinetelor școlare din sistemul preuniversitar;600.000.000;252.657.953;42,11%
-C15;I13;loan;I13: Echiparea laboratoarelor de informatică din unitățile de învățământ profesional și tehnic;9.000.000;4.861.050;54,01%
-C15;I14;grant;I14: Echiparea atelierelor de practică din unitățile de învățământ profesional și tehnic;50.000.000;20.515.164;41,03%
-C15;I16;grant;I16: Digitalizarea universităților și pregătirea acestora pentru profesiile digitale ale viitorului;234.000.000;111.046.712;47,46%
-C15;I17;loan;I17: Asigurarea infrastructurii universitare (cămine, cantine, spații de recreere);135.791.094;9.418.821;6,94%
-C15;I18;grant;I18: Program de instruire și mentorat pentru manageri și inspectori școlari;30.720.000;65.812;0,21%
-C16;I2;grant;I2. Capacități de producție de energie electrică din surse regenerabile*;460.000.000;72.507.432;15,76%
-C16;I4-1;grant;I4. Schemă de acordare a voucherelor pentru accelerarea instalării de capacități de energie regenerabilă în cadrul gospodăriilor individuale;305.381.134;49.667;0,02%
-C16;I4-2;loan;I4. Schemă de acordare a voucherelor pentru accelerarea instalării de capacități de energie regenerabilă în cadrul gospodăriilor individuale;305.381.134;0;0,00%
-C16;I5-a;grant;I5. Eficientizarea, modernizarea și digitalizarea rețelei naționale de transport a energiei electrice Subinvestiția 5.a - Instalarea de centrale fotovoltaice (CEF) și instalații de stocare a energiei electrice destinate alimentării serviciilor interne instalate în stațiile C.N.T.E.E. Transelectrica S.A;29.557.000;11.717.014;39,64%
-C16;I5-b;grant;I5. Eficientizarea, modernizarea și digitalizarea rețelei naționale de transport a energiei electrice Subinvestiția 5.b - Retehnologizarea SMART SA – filiala C.N.T.E.E. Transelectrica S.A;13.791.327;0;0,00%
-C16;I5-c;grant;I5. Eficientizarea, modernizarea și digitalizarea rețelei naționale de transport a energiei electrice Subinvestiția 5.c - Optimizarea rețelei de comunicații și crearea unui centru de date – Teletrans SA, filiala C.N.T.E.E. Transelectrica S.A;8.440.200;0;0,00%
-C16;I7;grant;I7. Schemă de acordare de vouchere pentru îmbunătățirea eficienței energetice în cadrul gospodăriilor individuale;269.690.200;307.081;0,11%
-C16;I8;grant;I8. Contribuția la schema de ajutor de stat sub formă de contracte pentru diferență pentru producerea de energie electrică din surse regenerabile din energie eoliană terestră și energie solară fotovoltaică;350.088.169;0;0,00%
-C16;R1;grant;R1. Crearea unui cadru juridic pentru utilizarea terenurilor aflate în proprietatea statului ca zone de accelerare pentru investițiile în sursele regenerabile de energie;3.011.752;0;0,00%
-C16;R2;grant;R2. Înființarea de ghișee unice pentru furnizarea către prosumatori de servicii de consiliere în domeniul energiei pentru renovările ce vizează eficiența energetică și producția de energie din surse regenerabile;431.438;0;0,00%
 C1;R1;grant;R1. Consolidarea cadrului de reglementare pentru managementul sustenabil al sectorului de apă și apă uzată și pentru accelerarea accesului populației la servicii de calitate conform directivelor europene;Fără costuri asociate;;
-C2;R2;grant;R2. Reforma sistemului de management al ariilor naturale protejate în vederea implementării coerente și eficace a Strategiei Europene privind biodiversitate;Fără costuri asociate;;
-C3;R1;grant;R1. Îmbunătățirea guvernanței în domeniul gestionării deșeurilor în vederea accelerării tranziției către economia circulară.;Fără costuri asociate;;
-C5;R2;grant;R2. Cadru strategic, normativ și procedural care să sprijine reziliența seismică a fondului construit;Fără costuri asociate;;
-C6;R1;grant;R1. Reforma pieței de energie electrică, prin înlocuirea cărbunelui din mixul energetic și susținerea unui cadru legislativ și de reglementare stimulativ pentru investițiile private în producția de electricitate din surse regenerabile;Fără costuri asociate;;
-C6;R2;grant;R2. Îmbunătățirea guvernanței corporative a întreprinderilor de stat din sectorul energetic;Fără costuri asociate;;
-C6;R3;grant;R3. Bugetarea verde;Fără costuri asociate;;
-C6;R5;grant;R5. Reducerea intensității energetice a economiei prin dezvoltarea unui mecanism sustenabil de stimulare a eficienței energetice în industrie şi de creștere a rezilienței;Fără costuri asociate;;
-C6;R6;grant;R6. Creșterea competitivității și decarbonizarea sectorului de încălzire – răcire;Fără costuri asociate;;
-C7;R2;grant;R2. Tranziția către atingerea obiectivelor de conectivitate UE 2025 și stimularea investițiilor private pentru dezvoltarea rețelelor de foarte mare capacitate;Fără costuri asociate;;
-C8;R1;grant;R1. Reforma Agenției Naționale de Administrare Fiscală (ANAF) prin digitalizare;Fără costuri asociate;;
-C8;R2;grant;R2. Modernizarea sistemului vamal și implementarea vămii electronice;Fără costuri asociate;;
-C8;R3;grant;R3. Îmbunătățirea mecanismului de programare bugetară;Fără costuri asociate;;
-C8;R4;grant;R4. Revizuirea cadrului fiscal;Fără costuri asociate;;
-C8;R5;grant;R5. Crearea și operaționalizarea Băncii Naționale de Dezvoltare;Fără costuri asociate;;
-C9;R1;grant;R1. Transparentizare legislativă, debirocratizare și simplificare procedurală destinate mediului de afaceri;Fără costuri asociate;;
-C9;R3;grant;R3. Reforma carierei de cercetător;Fără costuri asociate;;
-C9;R4;grant;R4. Consolidarea cooperării dintre mediul de afaceri și cel de cercetare;Fără costuri asociate;;
-C9;R5;grant;R5. Sprijin pentru integrarea organizațiilor de cercetare, dezvoltare și inovare din România în Spațiul european de cercetare;Fără costuri asociate;;
+C1;R2;loan;R2. Reconfigurarea actualului mecanism economic al ANAR în vederea asigurării modernizării și întreținerii sistemului național de gospodărire a apelor, precum și a implementării corespunzătoare a Directivei-cadru privind apa și a Directivei privind inundațiile;2.500.000;2.478.414;99,14%
+C10;I1;grant;I1. Mobilitate urbană durabilă ;904.000.000;421.563.069;46,63%
+C10;I2;Loan;I2. Construcția de locuințe pentru tineri / locuințe pentru specialiști în sănătate și educație ;145.341.508;278.369.270;96,82%
+C10;I3;loan;I3. Reabilitarea clădirilor publice pentru a îmbunătăți furnizarea de servicii publice de către unitățile administrativ-teritoriale;287.500.000;0;0,00%
+C10;I3;grant;I3a. Reabilitarea clădirilor publice pentru a îmbunătăți furnizarea de servicii publice de către unitățile administrativ-teritoriale;287.500.000;50.186.292;34,53%
+C10;I4;loan;I4. Elaborarea / actualizarea în format GIS a documentelor de amenajare a teritoriului și de urbanism ;25.197.281;14.879.294;59,05%
 C10;R1;grant;R1. Crearea cadrului pentru mobilitate urbană durabilă;Fără costuri asociate;;
 C10;R2;grant;R2. Crearea cadrului de politică pentru o transformare urbană durabilă – Politica urbană a României;Fără costuri asociate;;
 C10;R3;grant;R3. Crearea unui cadru de politică pentru o transformare rurală durabilă: instituirea de consorții administrative în zonele rurale funcționale ;Fără costuri asociate;;
 C10;R4;grant;R4. Îmbunătățirea calității locuirii;Fără costuri asociate;;
 C10;R5;grant;R5. Dezvoltarea sistemului de planificare – Codul amenajării teritoriului, urbanismului și construcțiilor;Fără costuri asociate;;
+C11;I1;loan;I1. Promovarea celor 12 rute turistice/culturale ;102.085.000;8.943.931;36,80%
+C11;I2;loan;I2. Modernizarea/crearea de muzee și memoriale ;34.728.928;3.609.702;46,34%
+C11;I3;loan;I3. Înființarea și operaționalizarea Centrului Național de Coordonare Velo ;1.500.000;1.979.771;52,79%
+C11;I4;loan;I4. Implementarea a 236,05 km de piste pentru biciclete ;24.302.153;5.129.592;93,95%
+C11;I5;grant;I5. Sporirea accesului la cultură în zonele defavorizate din punct de vedere cultural ;7.790.000;46.174.569;45,23%
+C11;I6;grant;I6. Dezvoltarea unui sistem digital pentru procesele de finanțare a culturii;3.750.000;5.637.432;16,23%
+C11;I7;grant;I7. Accelerarea digitalizării producției și distribuției de filme;5.460.000;47.040;3,14%
+C11;R1;loan;R1. Operaționalizarea organizațiilor de management al destinației (OMD-uri);10.000.000;0;0,00%
 C11;R2;grant;R2. Crearea cadrului pentru operaționalizarea traseelor cicloturistice la nivel național;Fără costuri asociate;;
+C11;R3;grant;R3a. Reformarea sistemului de finanțare a sectorului cultural;1.000.000;276.022;27,60%
+C12;I1;Grant;I1. Dezvoltarea infrastructurii medicale prespitalicești  ;213.370.807;183.565.552;152,65%
+C12;I2;Grant;I2. Dezvoltarea infrastructurii spitalicești publice ;499.955.474;0;0,00%
+C12;I3;Loan;I3. Spitale publice;259.886.530;0;0,00%
+C12;I4;Loan;I4. Modernizarea serviciilor medicale de urgență;183.590.800;0;0,00%
+C12;R1;grant;R1. Dezvoltarea capacității pentru gestionarea fondurilor publice din sănătate;70.180.000;1.700.000;2,42%
+C12;R2;grant;R2. Dezvoltarea capacității de investiții în infrastructura sanitară;30.053.000;0;0,00%
+C12;R3;grant;R3. Dezvoltarea capacității pentru managementul serviciilor de sănătate și managementul resurselor umane din sănătate;80.280.000;15.012.569;18,70%
+C13;I1;grant;I1. Crearea unei rețele de centre de zi pentru copiii expuși riscului de a fi separați de familie;48.611.800;13.613.396;28,00%
+C13;I2;grant;I2. Reabilitarea, renovarea și dezvoltarea infrastructurii sociale pentru persoanele cu dizabilități;34.032.327;5.631.914;16,55%
+C13;I3;grant;I3. Operaționalizarea introducerii tichetelor de muncă pentru activitățile casnice ;4.540.000;2.923.075;64,38%
+C13;I4;grant;I4. Crearea unei rețele de centre de îngrijire de zi și de reabilitare pentru persoanele în vârstă ;77.694.085;7.638.863;9,83%
 C13;R1;grant;R1. Crearea unui nou cadru legal pentru a preveni separarea copiilor de familie;Fără costuri asociate;;
+C13;R2;grant;R2. Rsistemului de protecție a persoanelor adulte cu dizabilități;730.000;696.955;95,47%
+C13;R3;grant;R3. Implementarea venitului minim de incluziune (VMI);2.000.000;2.106.911;105,35%
+C13;R6;loan;R6. Îmbunătățirea legislației privind economia socială;300.000;296.652;98,88%
+C13;R7;loan;R7. Rserviciilor de îngrijire pe termen lung pentru persoanele în vârstă;1.190.000;1.185.667;99,64%
+C14;I4;grant;I4. Intarirea capacitatii organizatiilor societatii civile pentru participare activa in planificarea si implementarea politicilor publice in domeniul drepturilor sociale devoltate in cadrul PNRR si pentru monitorizarea reformelor respective;;;
+C14;I5;grant;I5.  Monitorizarea și implementarea planului;12.841.000;11.471.751;89,34%
+C14;R1;grant;R1. Îmbunătățirea predictibilității și a eficienței proceselor decizionale prin întărirea capacității de coordonare a politicilor și analiză de impact la nivelul guvernului și a ministerelor coordonatoare, precum și prin consolidarea instrumentelor în vederea creșterea calității consultărilor publice la toate palierele administrație;11.930.000;6.924.010;58,04%
+C14;R2;grant;R2. Întărirea coordonării la Centrul Guvernului printr-o abordare integrată și coerentă a inițiativelor în domeniul schimbărilor climatice și a dezvoltării durabile;14.180.000;3.827.288;26,99%
+C14;R3;grant;R3. Management performant al resurselor umane în sectorul public;14.000.000;6.977.026;49,84%
+C14;R4;grant;R4. Dezvoltarea unui sistem de salarizare echitabil și unitar în sectorul public;2.000.000;998.560;49,93%
 C14;R5;grant;R5. Garantarea independenței justiției, creșterea calității și eficienței acesteia;Fără costuri asociate;;
 C14;R6;grant;R6. Intensificarea luptei împotriva corupției;Fără costuri asociate;;
 C14;R7;grant;R7. Evaluarea și actualizarea legislației privind cadrul de integritate;Fără costuri asociate;;
+C14;R8;grant;R8. Reformarea sistemului național de achiziții publice;4.600.000;2.680.824;58,28%
+C14;R9;grant;R9. Îmbunătățirea cadrului procedural de implementare a principiilor guvernanței corporative în cadrul întreprinderilor de stat;17.830.000;1.041.493;5,84%
+C15;I16;Grant;I16a. Digitalizarea universităților și pregătirea acestora pentru profesiile digitale ale viitorului ;234.000.000;131.043.470;62,66%
+C15;I10;Grant;I10a. Dezvoltarea rețelei de școli verzi și achiziționarea de microbuze verzi;209.144.630;0;0,00%
+C15;I11;Grant;I11. Asigurarea dotărilor sălilor de clasa și a laboratoarelor/cabinetelor școlare din sistemul preuniversitar;600.000.000;252.657.953;42,11%
+C15;I1;Grant;I1a. Construirea si echiparea creșelor;167.273.000;119.504.479;71,44%
+C15;I2;Grant;I2. Înființarea, echiparea și operaționalizarea de servicii pentru gupuri dezavantajate ;6.236.458;0;0,00%
+C15;I18;Grant;I18. Program de instruire și mentorat pentru manageri și inspectori școlari ;30.720.000;4.861.050;54,01%
+C15;I1;Loan;I1. Construirea si echiparea creșelor;167.273.000;20.515.164;41,03%
+C15;I13;Loan;I13. Echiparea laboratoarelor de informatică din unitățile de învățământ profesional și tehnic ;9.000.000;111.046.712;47,46%
+C15;I16;Loan;I16. Digitalizarea universităților și pregătirea acestora pentru profesiile digitale ale viitorului ;0;0;0,00%
+C15;I17;Loan;I17. Asigurarea infrastructurii universitare (cămine, cantine, spații de recreere) ;135.791.094;9.418.821;6,94%
+C15;I3;Grant;I3. Dezvoltarea programului cadru pentru formarea continuă a profesioniștilor care lucrează în servicii de educație timpurii;3.832.000;3.021.046;48,44%
+C15;I4;Loan;I4. Sprijinirea unităților de învățământ cu risc crescut de abandon școlar ;460.000.000;708.458;18,49%
+C15;I5;Loan;I5. Instruiri pentru utilizatorii (SIIIR) și (MATE) și intervenții sistemice pentru reducerea abandonului școlar ;43.000.000;14.447.218;3,14%
+C15;I6;Loan;I6. Dezvoltarea si dotarea campusurilor profesionale in cadrul consortiilor regionale ;169.000.000;0;0,00%
+C15;I14;Loan;I14. Echiparea atelierelor de practică din unitățile de învățământ profesional și tehnic ;50.000.000;21.042.120;12,45%
+C15;I8;Loan;I8. Program de formare continuă a personalului didactic ;80.000.000;20.923.326;26,15%
+C15;I9;Loan;I9. Asigurarea echipamentelor și resurselor tehnologice digitale pentru școli;478.500.000;250.736.143;52,40%
 C15;R1;grant;R1. Elaborarea și adoptarea pachetului legislativ pentru implementarea proiectului „România Educată”;Fără costuri asociate;;
 C15;R2;grant;R2. Dezvoltarea unui sistem de servicii de educație timpurie unitar, incluziv și de calitate;Fără costuri asociate;;
 C15;R3;grant;R3. Reforma sistemului de învățământ obligatoriu pentru prevenirea și reducerea părăsirii timpurii a școlii;Fără costuri asociate;;
@@ -181,3 +77,109 @@ C15;R4;grant;R4. Crearea unei rute profesionale complete pentru învățământu
 C15;R5;grant;R5. Adoptarea cadrului legislativ pentru digitalizarea educației;Fără costuri asociate;;
 C15;R6;grant;R6. Actualizarea cadrului legislativ pentru a asigura standarde ecologice de proiectare, construcție și dotare în sistemul de învățământ preuniversitar;Fără costuri asociate;;
 C15;R7;grant;R7. Reforma guvernanței sistemului de învățământ preuniversitar și profesionalizarea managementului;Fără costuri asociate;;
+C16;I2;Grant;I2. Capacități de producție de energie electrică din surse regenerabile;460.000.000;72.507.432;15,76%
+C16;I4;Loan;I4. Schemă de acordare a voucherelor pentru accelerarea instalării de capacități de energie regenerabilă  ;305.381.134;0;0,00%
+C16;I4;Grant;I4a.  Schemă de acordare a voucherelor pentru accelerarea instalării de capacități de energie regenerabilă ;305.381.134;49.667;0,02%
+C16;I5;Grant;I5. Eficientizarea, modernizarea și digitalizarea rețelei naționale de transport a energiei electrice ;51.788.527;0;0,00%
+C16;I7;Loan;I7. Schemă de acordare de vouchere pentru îmbunătățirea eficienței energetice în cadrul gospodăriilor individuale ;269.690.200;11.717.014;39,64%
+C16;I8;Grant;I8. Contribuția la schema de ajutor de stat sub formă de contracte pentru diferență ;350.088.169;0;0,00%
+C2;I1;Grant;I1. Campania națională de împădurire și reîmpădurire, inclusiv păduri urbane ;307547498;73.088.923;23,77%
+C2;I2;Grant;I2. Dezvoltarea de capacități moderne de producere a materialului forestier de reproducere ;50000000;17.622.067;35,24%
+C2;I3;Grant;I3. Identificarea zonelor potențiale de protecție strictă în habitate naturale terestre și marine în vederea punerii în aplicare a Strategiei UE privind biodiversitatea pentru 2030;5000000;0;0,00%
+C2;I4;Grant;I4. Sistem de monitorizare pentru sturioni salbatici in Dunarea de Jos;10001000;0;0,00%
+C2;I5;Grant;I5. Sisteme integrate de reducere a riscurilor generate de viituri torențiale în bazinete forestiere;22000000;12.817.720;58,26%
+C2;R1;grant;R1. Reforma sistemului de management și a celui privind guvernanța în domeniul forestier prin dezvoltarea unei noi Strategii forestiere naționale și a legislației subsecvente;1.000.000;661.400;66,14%
+C2;R2;grant;R2. Reforma sistemului de management al ariilor naturale protejate în vederea implementării coerente și eficace a Strategiei Europene privind biodiversitate;Fără costuri asociate;;
+C3;I1;Loan;I1. Dezvoltarea sistemelor de management integrat al deșeurilor municipale la nivel de județ sau la nivel de orașe/comune ;165.643.845;22.057.661;9,19%
+C3;I1;Grant;I1a. Constructie de centre voluntare de colectare a deseurilor la nivel de judet sau la nivel de orase/comune;240.106.200;20.313.708;12,26%
+C3;I2;Loan;I2. Dezvoltarea infrastructurii pentru managementul gunoiului de grajd și al altor deșeuri agricole compostabile ;50.196.850;236.147;0,47%
+C3;I3;Grant;I3. Dezvoltarea capacităților instituționale de monitorizare publică și control pentru gestionarea deșeurilor  ;13.000.000;6.794.785;52,27%
+C3;R1;grant;R1. Îmbunătățirea guvernanței în domeniul gestionării deșeurilor în vederea accelerării tranziției către economia circulară.;Fără costuri asociate;;
+C4;I1;Loan;I1. Modernizarea și reînnoirea infrastructurii feroviare ;1.874.376.400;1.029.044.282;54,90%
+C4;I2;Loan;I2-  Material rulant feroviar;280.829.800;146.803.831;52,28%
+C4;I3;loan;I3.  Dezvoltarea infrastructurii rutiere durabile aferente rețelei TEN-T, taxarea drumurilor, managementul traficului și siguranța rutieră ;1.098.821.134;1.658.641.562;150,95%
+C4;I3;Grant;I3a.  Dezvoltarea infrastructurii rutiere durabile aferente rețelei TEN-T, taxarea drumurilor, managementul traficului și siguranța rutieră ;2.169.200.266;0;0,00%
+C4;R1;grant;R1. Transport sustenabil, decarbonizare și siguranță rutieră /Decarbonizarea rutieră în conformitate cu principiul „poluatorul plătește”;10.000.000;0;0,00%
+C4;R2;loan;R2. Management performant pentru transport de calitate - Îmbunătățirea capacității instituționale de management și guvernanță corporativă;19.000.000;1.378.427;7,25%
+C5;I1;Loan;I1. Instituirea unui fond pentru Valul Renovării care să finanțeze lucrări de îmbunătățire a eficienței energetice a fondului construit ;526.228.817;1.030.189.366;195,77%
+C5;I1;Grant;I1a. Instituirea unui fond pentru Valul Renovării care să finanțeze lucrări de îmbunătățire a eficienței energetice a fondului construit ;1.387.172.898;0;0,00%
+C5;I2;Loan;I2. Implementarea Registrului național al clădirilor ;5.000.000;0;0,00%
+C5;I4;Loan;I4. Economie circulară și creșterea eficienței energetice a clădirilor istorice;14.850.000;1.313.610;8,85%
+C5;R1;loan;R1. Realizarea unui cadru normativ simplificat și actualizat care să sprijine implementarea investițiilor în tranziția spre clădiri verzi și reziliente;150.000;22.000;14,67%
+C5;R2;grant;R2. Cadru strategic, normativ și procedural care să sprijine reziliența seismică a fondului construit;Fără costuri asociate;;
+C6;I2;Loan;I2. Capacitățile de producție a hidrogenului verde care să fie utilizat pentru stocarea energiei electrice și/sau pentru decarbonizarea industriei ;86.500.000;6.516;0,01%
+C6;I3;Loan;I3. Dezvoltarea unei producții combinate de energie termică și energie electrică (CHP) pe gaz flexibile și de înaltă eficiență în sectorul încălzirii centralizate;86.377.743;0;0,00%
+C6;I4;Loan;I4. Lant industrial de productie a panourilor fotovoltaice;50.000.000;8.473.404;13,24%
+C6;I4;Grant;I4a. Noi capacități de stocare a energiei electrice ;80.000.000;2.860.866;3,31%
+C6;I5;Grant;I5. Asigurarea eficienței energetice în sectorul industrial ;64.000.000;28.787.172;33,33%
+C6;I5;Loan;I5. Asigurarea eficienței energetice în sectorul industrial;0;0;0,00%
+C6;R1;grant;R1. Reforma pieței de energie electrică, prin înlocuirea cărbunelui din mixul energetic și susținerea unui cadru legislativ și de reglementare stimulativ pentru investițiile private în producția de electricitate din surse regenerabile;Fără costuri asociate;;
+C6;R2;grant;R2. Îmbunătățirea guvernanței corporative a întreprinderilor de stat din sectorul energetic;Fără costuri asociate;;
+C6;R4;loan;R4. Dezvoltarea unui cadru legislativ și de reglementare favorabil tehnologiilor viitorului, în special hidrogen și soluții de stocare;1.000.000;1.000.000;100,00%
+C6;R5;grant;R5. Reducerea intensității energetice a economiei prin dezvoltarea unui mecanism sustenabil de stimulare a eficienței energetice în industrie şi de creștere a rezilienței;Fără costuri asociate;;
+C6;R6;grant;R6. Creșterea competitivității și decarbonizarea sectorului de încălzire – răcire;Fără costuri asociate;;
+C7;I1;Grant;I1. Implementarea infrastructurii de cloud guvernamental ;374.728.570;176.504.667;47,10%
+C7;I10;Grant;I10. Transformarea digitală în managementul funcției publice ;10.000.000;230.861;0,18%
+C7;I11;Grant;I11. Implementarea unei scheme de sprijinire a utilizării serviciilor de comunicații prin diferite tipuri de instrumente pentru beneficiari, cu accent pe zonele albe ;94.000.000;39.196;0,33%
+C7;I12;Grant;I12. Asigurarea protecției cibernetice atât pentru infrastructurile TIC publice, cât și pentru cele private cu valențe critic e pentru securitatea națională, prin utilizarea tehnologiilor inteligente ;100.000.000;1.129.813;11,30%
+C7;I13;Grant;I13. Dezvoltarea sistemelor de securitate pentru protecția spectrului guvernamental ;38.530.000;18.202.922;19,36%
+C7;I14;Grant;I14. Sporirea rezilienței și a securității cibernetice a serviciilor de infrastructură ale furnizorilor de servicii de internet ;18.393.501;196.840;0,20%
+C7;I15;Grant;I15. Crearea de noi competențe de securitate cibernetică pentru actori cheie;11.310.000;10.060.486;26,11%
+C7;I16;Grant;I16. Program de formare de competențe digitale avansate pentru funcționarii publici ;20.000.000;17.589.781;95,63%
+C7;I17;Grant;I17. Scheme de finanțare pentru biblioteci pentru a deveni hub-uri de dezvoltare a competențelor digitale;22.624.468;0;0,00%
+C7;I18;Loan;I18. Transformarea digitală și adoptarea tehnologiei de automatizare a proceselor de lucru robotice în administrația publică. ;14.800.000;6.773.811;29,94%
+C7;I19;Loan;I19. Scheme dedicate perfecționării/recalificării angajaților din firme ;0;0;0,00%
+C7;I19;Grant;I19a. Scheme dedicate perfecționării/recalificării angajaților din firme ;19.000.000;5.658.100;28,29%
+C7;I2;Grant;I2. Dezvoltarea cloudului și migrarea în cloud. ;187.050.420;4.728.865;2,53%
+C7;I3;Grant;I3. Realizarea sistemului de eHealth și telemedicină   ;300.000.000;22.316.977;22,32%
+C7;I4;Grant;I4. Digitalizarea sistemului judiciar ;242.310.000;0;0,00%
+C7;I5;Grant;I5. Digitalizare în domeniul mediului ;47.951.280;0;0,00%
+C7;I6;Grant;I6. Digitalizarea în domeniul muncii și protecției sociale ;85.000.000;46.468.278;19,18%
+C7;I7;Grant;I7. Implementarea formularelor electronice eForms în domeniul achizițiilor publice;851.600;8.237.545;17,18%
+C7;I8;Grant;I8. Cartea de identitate electronică și semnătura digitală ;129.000.000;43.076.266;50,68%
+C7;I9;Grant;I9. Digitalizarea sectorului organizațiilor neguvernamentale ;12.000.000;654.792;76,89%
+C7;R1;grant;R1. Dezvoltarea unui cadru unitar pentru definirea arhitecturii unui sistem de tip cloud guvernamental;11.889.498;2.255.539;18,97%
+C7;R2;grant;R2. Tranziția către atingerea obiectivelor de conectivitate UE 2025 și stimularea investițiilor private pentru dezvoltarea rețelelor de foarte mare capacitate;Fără costuri asociate;;
+C8;I1;Grant;I1. Creșterea conformării voluntare a contribuabililor prin dezvoltarea serviciilor digitale ;7.000.000;1.060.414;15,15%
+C8;I10;Grant;I10. Servicii electronice avansate prin digitalizarea sistemului de pensii ;61.881.919;20.800.158;33,61%
+C8;I11;Loan;I11. Capitalizare BID;100.000.000;0;0,00%
+C8;I2;Grant;I2. Îmbunătățirea proceselor de administrare a impozitelor și taxelor, inclusiv prin implementarea managementului integrat al riscurilor ;196.400.000;140.547.091;71,56%
+C8;I3;Grant;I3. Asigurarea capacității de răspuns la provocările informaționale actuale și viitoare, inclusiv în contextul pandemiei, prin transformarea digitală a Ministerului de Finanțe/Agenției Naționale de Administrare Fiscală ;88.000.000;48.223.990;54,80%
+C8;I4;Grant;I4. Implementarea vămii electronice ;61.999.999;40.674.441;65,60%
+C8;I5;Grant;I5. Îmbunătățirea mecanismului de programare bugetară ;4.000.000;0;0,00%
+C8;I6;Grant;I6. Instrument de modelare economică (set de instrumente de simulare privind opțiunile de reformă a pensiilor) pentru îmbunătățirea capacității instituționale de a prognoza cheltuielile cu pensiile ;400.000;347.708;86,93%
+C8;I7;Grant;I7. Asistență tehnică pentru revizuirea cadrului fiscal ;4.000.000;1.058.610;26,47%
+C8;I8;Grant;I8. Operaționalizarea Băncii Naționale de Dezvoltare ;10.000.000;9.954.200;99,54%
+C8;I9;Grant;I9. Susținerea procesului de evaluare a dosarelor de pensii aflate în plată ;19.250.597;20.777.581;107,93%
+C8;R1;grant;R1. Reforma Agenției Naționale de Administrare Fiscală (ANAF) prin digitalizare;Fără costuri asociate;;
+C8;R2;grant;R2. Modernizarea sistemului vamal și implementarea vămii electronice;Fără costuri asociate;;
+C8;R3;grant;R3. Îmbunătățirea mecanismului de programare bugetară;Fără costuri asociate;;
+C8;R4;grant;R4. Revizuirea cadrului fiscal;Fără costuri asociate;;
+C8;R5;grant;R5. Crearea și operaționalizarea Băncii Naționale de Dezvoltare;Fără costuri asociate;;
+C8;R6;grant;R6. Rsistemului public de pensii;4.000.000;1.345.288;33,63%
+C9;I2;Grant;I2a. Instrumente financiare pentru sectorul privat  - Sub inv 2a Portofoliul de Garantii pentru Actiune Climatica;200.000.000;3.465.664;65,42%
+C9;I3;Grant;I3a. Scheme de ajutor pentru sectorul privat - Sub inv 3a Scheme de ajutor pentru digitalizarea IMM;256.500.000;138.547.169;13,19%
+C9;I5;Grant;I5a. Înființarea centrelor de competență ;25.000.000;91.721.479;45,86%
+C9;I8;Grant;I8. Dezvoltarea unui program pentru atragerea resurselor umane înalt specializate din străinătate pentru activități de cercetare, dezvoltare, inovare;183.000.000;1.375.626;0,54%
+C9;I9;Grant;I9. Program de sprijin pentru posesorii de certificate de excelență primite la competiția pentru burse individuale Marie Sklodowska Curie;1.600.000;13;0,00%
+C9;I10;Grant;I10. Înființarea și susținerea financiară a unei rețele naționale de (8) opt centre regionale de orientare în carieră ;4.000.000;1.798.801;44,97%
+C9;I1;Loan;I1. Platforme digitale privind transparentizarea legislativă, debirocratizarea și simplificarea procedurală destinate mediului de afaceri ;5.297.170;8.859.103;35,44%
+C9;I2;Loan;"I2. Instrumente financiare pentru sectorul privat  - Sub inv 2.1 Portofoliu de Garantii pentru Rezilienta; Sub inv 2.2 Portofoliu de Garantii pentru Actiune Climatica; Sub Inv 2.3 pentru IMM si comp cu capitalizare medie: Fond de capital de risc de recuperare; Sub masura 2.4. Fondul fondurilor pt digitalizare, actiune climatica si alte domenii; sub inv 2.5: Investitii in eficienta energetica in sectorul rezidential si de business";1.050.000.000;49.876.430;27,25%
+C9;I3;Loan;"I3. Scheme de ajutor pentru sectorul privat - Sub in 3.1 Scheme de ajutor pt digitalizarea IMM; Sub in 3.2 Scheme de minimis pt listare la bursa a firmelor romanesti";600.000;1.057.774;66,11%
+C9;I4;Loan;I4. Proiecte transfrontaliere și multinaționale – Procesoare cu consum redus de energie și cipuri semiconductoare ;400.000.000;0;0,00%
+C9;I5;Loan;I5. Înființarea și operaționalizarea centrelor de competență ;0;0;0,00%
+C9;R1;Loan;R1. Transparentizare legislativă, debirocratizare și simplificare procedurală destinate mediului de afaceri;Fără costuri asociate;;
+C9;R2;grant;R2a. Raționalizarea guvernanței în domeniul cercetării, dezvoltării și inovării;3.430.000;4.403.396;128,38%
+C9;R3;grant;R3. Reforma carierei de cercetător;Fără costuri asociate;;
+C9;R4;Loan;R4. Consolidarea cooperării dintre mediul de afaceri și cel de cercetare;Fără costuri asociate;;
+C9;R5;Loan;R5. Sprijin pentru integrarea organizațiilor de cercetare, dezvoltare și inovare din România în Spațiul european de cercetare;Fără costuri asociate;;
+C15;I10;Loan;I10. Dezvoltarea rețelei de școli verzi ;52.960.909;0;0,00%
+C11;R3;Loan;R3. Reformarea sistemului de finanțare a sectorului cultural;Fără costuri asociate;;
+C13;R4;grant;R4. Introducerea cadrurilor de munca si formalizarea muncii lucratorilor casnici;Fără costuri asociate;;
+C13;R5;grant;R5. Mecanism de stabilire a salariului minim;Fără costuri asociate;;
+C16;R1;Grant;R1. Crearea unui cadru juridic pentru utilizarea terenurilor aflate în proprietatea statului ca zone de accelerare pentru investițiile în sursele regenerabile de energie;3020000;;
+C16;R2;Grant;R2. Înființarea de ghișee unice pentru furnizarea către prosumatori de servicii de consiliere î;440000;;
+C6;R3;grant;R3. Bugetare verde;Fără costuri asociate;;
+C7;R3;Grant;R3 Asigurarea securitatii cibernetice pentru entitatile publice sau private care au infrastructura critica;Fără costuri asociate;;
+C7;R4;Grant;R4. Dezvoltarea competentelor digitale pentru serviciul public si educatie digitala pe tot parcursul vietii pentru cetateni;Fără costuri asociate;;
+C9;R2;Loan;R2. Raționalizarea guvernanței în domeniul cercetării, dezvoltării și inovării;Fără costuri asociate;;

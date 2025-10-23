@@ -3960,6 +3960,18 @@ td.num {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
+/* Desktop layout: 4 filters per row, 2 rows */
+@media (min-width: 1024px) {
+  .table-filters-sticky-content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: 12px;
+    align-items: end;
+  }
+}
+
+/* Default mobile layout: flex wrap */
 .table-filters-sticky-content {
   display: flex;
   gap: 12px;
@@ -3967,6 +3979,17 @@ td.num {
   flex-wrap: wrap;
 }
 
+/* Desktop grid layout for filter items */
+@media (min-width: 1024px) {
+  .table-filters-sticky .filter-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0; /* Allow grid items to shrink */
+  }
+}
+
+/* Default mobile flex layout for filter items */
 .table-filters-sticky .filter-item {
   flex: 1 1 180px;
   min-width: 180px;

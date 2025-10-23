@@ -314,6 +314,7 @@ const ComponentsOverview = ({
                             {investments.map((investment, index) => {
                               const measureCode = investment.masura
                               const isZeroCost = !investment.alocare_financiara_euro || investment.alocare_financiara_euro === 0
+                              const isZeroExecuted = !investment.executat_euro || investment.executat_euro === 0
                               
                               return (
                                 <div key={index} className={`investment-item ${isZeroCost ? 'zero-cost' : ''}`}>
@@ -335,13 +336,13 @@ const ComponentsOverview = ({
                                       <div className="zero-cost-label" style={{ textAlign: 'center', fontSize: '0.875rem', fontWeight: '500', color: '#64748b', fontStyle: 'italic' }}>Fără cheltuieli asociate</div>
                                     ) : (
                                       <>
-                                        <div className="value-main">{formatMoney(investment.alocare_financiara_euro)}</div>
+                                        <div className="value-main">{isZeroExecuted ? '0,00 mil EUR' : formatMoney(investment.alocare_financiara_euro)}</div>
                                         <div className="financing-type">
                                           {investment.finantare === 'loan' ? 'Loan' : 'Grant'}
                                         </div>
                                         <div className="value-executed">
-                                          <span className="executed-label">Executat:</span> {formatMoney(investment.executat_euro)}
-                                          <span className="execution-percent"> • {investment.executat_procent.toFixed(1)}%</span>
+                                          <span className="executed-label">Executat:</span> {isZeroExecuted ? '0,00 mil EUR' : formatMoney(investment.executat_euro)}
+                                          <span className="execution-percent"> • {isZeroExecuted ? '0%' : `${investment.executat_procent.toFixed(1)}%`}</span>
                                         </div>
                                       </>
                                     )}
@@ -360,6 +361,7 @@ const ComponentsOverview = ({
                             {reforms.map((reform, index) => {
                               const measureCode = reform.masura
                               const isZeroCost = !reform.alocare_financiara_euro || reform.alocare_financiara_euro === 0
+                              const isZeroExecuted = !reform.executat_euro || reform.executat_euro === 0
                               
                               return (
                                 <div key={index} className={`investment-item ${isZeroCost ? 'zero-cost' : ''}`}>
@@ -386,8 +388,8 @@ const ComponentsOverview = ({
                                           {reform.finantare === 'loan' ? 'Loan' : 'Grant'}
                                         </div>
                                         <div className="value-executed">
-                                          <span className="executed-label">Executat:</span> {formatMoney(reform.executat_euro)}
-                                          <span className="execution-percent"> • {reform.executat_procent.toFixed(1)}%</span>
+                                          <span className="executed-label">Executat:</span> {isZeroExecuted ? '0,00 mil EUR' : formatMoney(reform.executat_euro)}
+                                          <span className="execution-percent"> • {isZeroExecuted ? '0%' : `${reform.executat_procent.toFixed(1)}%`}</span>
                                         </div>
                                       </>
                                     )}

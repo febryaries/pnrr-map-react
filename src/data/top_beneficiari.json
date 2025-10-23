@@ -1,0 +1,62 @@
+{
+    "items": [
+        {
+            "beneficiar": "COMPANIA NAŢIONALĂ DE ADMINISTRARE A INFRASTRUCTURII RUTIERE S.A.",
+            "cui": 16054368,
+            "nerambursabil": 8224938647.520000457763671875,
+            "rambursabil": null,
+            "total": 8224938647.520000457763671875,
+            "total_euro": 1644822374.3900001049041748046875
+        },
+        {
+            "beneficiar": "COMPANIA NATIONALA DE CAI FERATE \"CFR\" SA",
+            "cui": 11054529,
+            "nerambursabil": null,
+            "rambursabil": 5149287496.4899997711181640625,
+            "total": 5149287496.4899997711181640625,
+            "total_euro": 1029044282.41999995708465576171875
+        },
+        {
+            "beneficiar": "MINISTERUL INVESTITIILOR SI PROIECTELOR EUROPENE",
+            "cui": 38918422,
+            "nerambursabil": 3277407326,
+            "rambursabil": null,
+            "total": 3277407326,
+            "total_euro": 656178934.7200000286102294921875
+        },
+        {
+            "beneficiar": "SECTORUL 4 AL MUNICIPIULUI BUCURESTI",
+            "cui": 4316422,
+            "nerambursabil": 981691736.9500000476837158203125,
+            "rambursabil": 127442648.79000000655651092529296875,
+            "total": 1109134385.7400000095367431640625,
+            "total_euro": 221670557.8400000035762786865234375
+        },
+        {
+            "beneficiar": "MINISTERUL FINANTELOR",
+            "cui": 4221306,
+            "nerambursabil": null,
+            "rambursabil": 698563888.4900000095367431640625,
+            "total": 698563888.4900000095367431640625,
+            "total_euro": 140267784.5800000131130218505859375
+        }
+    ],
+    "hasMore": false,
+    "limit": 25,
+    "offset": 0,
+    "count": 5,
+    "links": [
+        {
+            "rel": "self",
+            "href": "http:\/\/pnrr.fonduri-ue.ro\/ords\/pnrr\/mfe\/top_beneficiari"
+        },
+        {
+            "rel": "describedby",
+            "href": "http:\/\/pnrr.fonduri-ue.ro\/ords\/pnrr\/metadata-catalog\/mfe\/item"
+        },
+        {
+            "rel": "first",
+            "href": "http:\/\/pnrr.fonduri-ue.ro\/ords\/pnrr\/mfe\/top_beneficiari"
+        }
+    ]
+}

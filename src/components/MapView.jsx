@@ -2,10 +2,16 @@ import { useState, useEffect, useMemo, useRef } from 'react'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import HighchartsMap from 'highcharts/modules/map'
+import HighchartsAccessibility from 'highcharts/modules/accessibility'
+
+// Initialize Highcharts modules
+HighchartsMap(Highcharts)
+HighchartsAccessibility(Highcharts)
 import { PROGRAMS, PROGRAM_COLORS, fmtMoney, fmtNum, fmtMoneyShort, COMPONENT_MAPPING_PAYMENTS, COMPONENT_MAPPING_PROJECTS } from '../data/data'
 import ComponentsOverview from './ComponentsOverview'
 import { useTotalIndicators } from '../hooks/useTotalIndicators'
 import { convertRONToEUR } from '../services/ExchangeRateService'
+import { useCRIData } from '../hooks/useCRIData'
 import * as XLSX from 'xlsx'
 
 // Enhanced Table Component (copied from CountyDetails.jsx)
@@ -52,6 +58,10 @@ const EnhancedTable = ({
   viewMode = 'total',
   setViewMode = null,
   setMetric = null,
+  // CRI data props
+  criData = [],
+  criLoading = false,
+  criError = null,
 }) => {
   const [sortColumn, setSortColumn] = useState(defaultSortColumn)
   const [sortDirection, setSortDirection] = useState(defaultSortDirection)
@@ -202,33 +212,46 @@ const EnhancedTable = ({
     return Array.from(values).sort()
   }, [data, filterCounty, filterLocality, filterComponent])
 
-  // Get unique CRI values (filtered by active filters)
+  // Get unique CRI values from API data (with descriptions)
   const uniqueCRIValues = useMemo(() => {
-    const values = new Set()
-    data.forEach(item => {
-      let shouldInclude = true
-      
-      // Apply county filter if selected
-      if (filterCounty && item.county !== filterCounty) {
-        shouldInclude = false
-      }
-      
-      // Apply locality filter if selected
-      if (filterLocality && item.locality !== filterLocality) {
-        shouldInclude = false
-      }
-      
-      // Apply component filter if selected
-      if (filterComponent && item.componentCode !== filterComponent) {
-        shouldInclude = false
-      }
-      
-      if (shouldInclude && item.cri) {
-        values.add(item.cri)
-      }
-    })
-    return Array.from(values).sort()
-  }, [data, filterCounty, filterLocality, filterComponent])
+    if (!criData || criData.length === 0) {
+      // Fallback to local data if API data not available
+      const values = new Set()
+      data.forEach(item => {
+        let shouldInclude = true
+        
+        // Apply county filter if selected
+        if (filterCounty && item.county !== filterCounty) {
+          shouldInclude = false
+        }
+        
+        // Apply locality filter if selected
+        if (filterLocality && item.locality !== filterLocality) {
+          shouldInclude = false
+        }
+        
+        // Apply component filter if selected
+        if (filterComponent && item.componentCode !== filterComponent) {
+          shouldInclude = false
+        }
+        
+        if (shouldInclude && item.cri) {
+          values.add(item.cri)
+        }
+      })
+      return Array.from(values).sort()
+    }
+
+    // Use ALL API CRI data with descriptions (not filtered by current data)
+    // This ensures all available CRI values are shown in the dropdown
+    const sortedCRIs = criData
+      .sort((a, b) => a.cri.localeCompare(b.cri));
+    
+    console.log('🔍 MapView: Processing CRI data:', sortedCRIs.length, 'entries');
+    console.log('🔍 MapView: Sample CRI entries:', sortedCRIs.slice(0, 5));
+    
+    return sortedCRIs;
+  }, [criData])
 
   // Filter data based on search term, filters, and remove zero values
   useEffect(() => {
@@ -321,6 +344,23 @@ const EnhancedTable = ({
   const startIndex = (currentPage - 1) * itemsPerPage
   const paginatedData = sortedData.slice(startIndex, startIndex + itemsPerPage)
 
+  // Debug pagination
+  console.log('🔍 Pagination Debug:', {
+    sortedDataLength: sortedData.length,
+    itemsPerPage,
+    totalPages,
+    currentPage,
+    startIndex,
+    paginatedDataLength: paginatedData.length
+  });
+
+  // Ensure current page is valid when total pages change
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages)
+    }
+  }, [totalPages, currentPage])
+
   // Calculate filtered totals and notify parent
   useEffect(() => {
     if (onFilteredDataChange && getValueField) {
@@ -346,6 +386,7 @@ const EnhancedTable = ({
   }
 
   const handlePageChange = (page) => {
+    console.log('🔍 Pagination: Changing page from', currentPage, 'to', page, 'of', totalPages);
     setCurrentPage(page)
   }
 
@@ -960,10 +1001,29 @@ const EnhancedTable = ({
                 <label>🔬 CRI</label>
                 <select value={filterCRI} onChange={(e) => setFilterCRI(e.target.value)}>
                   <option value="">Toate CRI-urile</option>
-                  {uniqueCRIValues.map(value => (
-                    <option key={value} value={value}>{value}</option>
-                  ))}
+                  {uniqueCRIValues.map(cri => {
+                    // Handle both string values (fallback) and CRI objects (from API)
+                    const criCode = typeof cri === 'string' ? cri : cri.cri
+                    const criDescription = typeof cri === 'string' ? cri : cri.cri_denumire
+                    const displayText = typeof cri === 'string' ? cri : `${criCode} - ${criDescription}`
+                    
+                    return (
+                      <option key={criCode} value={criCode} title={criDescription}>
+                        {displayText}
+                      </option>
+                    )
+                  })}
                 </select>
+                {criLoading && (
+                  <div style={{ fontSize: '10px', color: '#666', marginTop: '2px' }}>
+                    Se încarcă CRI-urile...
+                  </div>
+                )}
+                {criError && (
+                  <div style={{ fontSize: '10px', color: '#ef4444', marginTop: '2px' }}>
+                    Eroare la încărcarea CRI-urilor
+                  </div>
+                )}
               </div>
               
               {/* County Filter - ALWAYS VISIBLE */}
@@ -1139,6 +1199,9 @@ const MapView = ({
     const [loadingBeneficiaries, setLoadingBeneficiaries] = useState(false)
     const [showAllBeneficiaries, setShowAllBeneficiaries] = useState(false)
     const [searchTerm, setSearchTerm] = useState('')
+    
+    // CRI data hook
+    const { criData, loading: criLoading, error: criError } = useCRIData()
     
     // Filter states
     const [filterStadiu, setFilterStadiu] = useState('')
@@ -2927,7 +2990,7 @@ const MapView = ({
                             return `${filteredData} ${endpoint === 'payments' ? 'plăți' : 'proiecte'} găsite${(activeProgram || filterComponent) ? ` (${COMPONENT_MAPPING[activeProgram || filterComponent]?.label})` : ''} • ${formatMoneyWithCurrency(totalValue)} valoare totală`
                         })()
                     }
-                    itemsPerPage={20}
+                    itemsPerPage={5}
                     searchable={true}
                     searchPlaceholder={`Caută ${endpoint === 'payments' ? 'plată' : 'proiect'}, beneficiar, componentă, localitate...`}
                     defaultSortColumn="value"
@@ -2963,6 +3026,9 @@ const MapView = ({
                     viewMode={viewMode}
                     setViewMode={setViewMode}
                     setMetric={setMetric}
+                    criData={criData}
+                    criLoading={criLoading}
+                    criError={criError}
                 />
             </section>
 
