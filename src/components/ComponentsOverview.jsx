@@ -1,6 +1,26 @@
 import { useState, useEffect, useRef } from 'react'
 import { fmtMoney, COMPONENT_MAPPING_PAYMENTS } from '../data/data'
-import getProcessedComponentsData from '../data/processComponentsData'
+import alocariComponenteData from '../data/alocariComponente.json'
+
+// Component names mapping (from DETALII_COMPONENTE.md documentation)
+const COMPONENT_NAMES = {
+  'C1': 'Managementul apei',
+  'C2': 'Protejarea pădurilor și a biodiversității',
+  'C3': 'Managementul deșeurilor',
+  'C4': 'Transport sustenabil',
+  'C5': 'Valul Renovării',
+  'C6': 'Energie',
+  'C7': 'Transformare digitală',
+  'C8': 'Reforme fiscale și pensiilor',
+  'C9': 'Sprijin pentru mediul de afaceri și cercetare',
+  'C10': 'Fondul local',
+  'C11': 'Turism și cultura',
+  'C12': 'Sănătate',
+  'C13': 'Reforme sociale',
+  'C14': 'Buna guvernanță',
+  'C15': 'Educație',
+  'C16': 'RePOWER EU'
+}
 
 // Mapping of component codes and descriptions to PNRR dashboard IDs
 const PNRR_IDS = {
@@ -91,10 +111,72 @@ const ComponentsOverview = ({
     return fmtMoney(value, currency)
   }
 
-  // Load component data from processed JSON
-  const componentsData = getProcessedComponentsData()
+  // Process component data from alocariComponente.json
+  const processedComponents = alocariComponenteData.components.map(component => {
+    // Separate investments and reforms
+    const investments = []
+    const reforms = []
+    
+    component.masuri.forEach(masura => {
+      const measureItem = {
+        masura: masura.masura,
+        titlul_masurii: masura.titlul_masurii,
+        alocare_financiara_euro: masura.alocare_financiara_euro,
+        executat_euro: masura.executat_euro,
+        executat_procent: masura.executat_procent,
+        finantare: masura.finantare,
+        isZeroCost: masura.alocare_financiara_euro === 0
+      }
+      
+      if (masura.masura.startsWith('I')) {
+        investments.push(measureItem)
+      } else if (masura.masura.startsWith('R')) {
+        reforms.push(measureItem)
+      }
+    })
+    
+    // Sort investments and reforms by measure code (I1, I2, R1, R2, etc.)
+    const extractNumber = (masura) => {
+      const match = masura.match(/^([IR])(\d+)/)
+      if (match) {
+        return parseInt(match[2], 10)
+      }
+      return 999 // Put items without code at the end
+    }
+    
+    investments.sort((a, b) => {
+      const numA = extractNumber(a.masura)
+      const numB = extractNumber(b.masura)
+      return numA - numB
+    })
+    
+    reforms.sort((a, b) => {
+      const numA = extractNumber(a.masura)
+      const numB = extractNumber(b.masura)
+      return numA - numB
+    })
+    
+    // Calculate totals (only for non-zero cost items)
+    const totalValue = investments.reduce((sum, inv) => sum + inv.alocare_financiara_euro, 0) + 
+                      reforms.reduce((sum, ref) => sum + ref.alocare_financiara_euro, 0)
+    const totalExecutedValue = investments.reduce((sum, inv) => sum + inv.executat_euro, 0) + 
+                              reforms.reduce((sum, ref) => sum + ref.executat_euro, 0)
+    
+    return {
+      code: component.componenta,
+      name: COMPONENT_NAMES[component.componenta] || component.numeComponenta,
+      totalValue,
+      totalExecutedValue,
+      investments,
+      reforms
+    }
+  }).sort((a, b) => {
+    const numA = parseInt(a.code.replace('C', ''));
+    const numB = parseInt(b.code.replace('C', ''));
+    return numA - numB;
+  });
 
-  const componentsSummary = componentsData.map(component => {
+  const componentsSummary = processedComponents.map(component => {
     const investmentCount = component.investments.length
     const reformCount = component.reforms.length
     
@@ -110,11 +192,11 @@ const ComponentsOverview = ({
   })
 
   const detailedComponents = Object.fromEntries(
-    componentsData.map(component => [component.code, component])
+    processedComponents.map(component => [component.code, component])
   )
 
-  const totalValue = componentsData.reduce((sum, component) => sum + component.totalValue, 0)
-  const totalExecuted = componentsData.reduce((sum, component) => sum + component.totalExecutedValue, 0)
+  const totalValue = processedComponents.reduce((sum, component) => sum + component.totalValue, 0)
+  const totalExecuted = processedComponents.reduce((sum, component) => sum + component.totalExecutedValue, 0)
 
   // Intersection Observer pentru sticky navigation
   useEffect(() => {
@@ -313,11 +395,11 @@ const ComponentsOverview = ({
                           <div className="investments-list">
                             {investments.map((investment, index) => {
                               const measureCode = investment.masura
-                              const isZeroCost = !investment.alocare_financiara_euro || investment.alocare_financiara_euro === 0
+                              const isZeroCost = investment.isZeroCost || !investment.alocare_financiara_euro || investment.alocare_financiara_euro === 0
                               const isZeroExecuted = !investment.executat_euro || investment.executat_euro === 0
                               
                               return (
-                                <div key={index} className={`investment-item ${isZeroCost ? 'zero-cost' : ''}`}>
+                                <div key={index} className="investment-item">
                                   <div 
                                     className="investment-description clickable"
                                     onClick={() => handleMeasureClick(component.code, measureCode)}
@@ -332,20 +414,16 @@ const ComponentsOverview = ({
                                     </div>
                                   </div>
                                   <div className="investment-value">
-                                    {isZeroCost ? (
-                                      <div className="zero-cost-label" style={{ textAlign: 'center', fontSize: '0.875rem', fontWeight: '500', color: '#64748b', fontStyle: 'italic' }}>Fără cheltuieli asociate</div>
-                                    ) : (
-                                      <>
-                                        <div className="value-main">{isZeroExecuted ? '0,00 mil EUR' : formatMoney(investment.alocare_financiara_euro)}</div>
-                                        <div className="financing-type">
-                                          {investment.finantare === 'loan' ? 'Loan' : 'Grant'}
-                                        </div>
-                                        <div className="value-executed">
-                                          <span className="executed-label">Executat:</span> {isZeroExecuted ? '0,00 mil EUR' : formatMoney(investment.executat_euro)}
-                                          <span className="execution-percent"> • {isZeroExecuted ? '0%' : `${investment.executat_procent.toFixed(1)}%`}</span>
-                                        </div>
-                                      </>
-                                    )}
+                                    <>
+                                      <div className="value-main">{isZeroCost ? '0,00 mil EUR' : formatMoney(investment.alocare_financiara_euro)}</div>
+                                      <div className="financing-type">
+                                        {investment.finantare === 'loan' ? 'Loan' : 'Grant'}
+                                      </div>
+                                      <div className="value-executed">
+                                        <span className="executed-label">Executat:</span> {isZeroCost || isZeroExecuted ? '0,00 mil EUR' : formatMoney(investment.executat_euro)}
+                                        <span className="execution-percent"> • {isZeroCost || isZeroExecuted ? '0%' : `${investment.executat_procent.toFixed(1)}%`}</span>
+                                      </div>
+                                    </>
                                   </div>
                                 </div>
                               )
@@ -360,7 +438,7 @@ const ComponentsOverview = ({
                           <div className="investments-list">
                             {reforms.map((reform, index) => {
                               const measureCode = reform.masura
-                              const isZeroCost = !reform.alocare_financiara_euro || reform.alocare_financiara_euro === 0
+                              const isZeroCost = reform.isZeroCost || !reform.alocare_financiara_euro || reform.alocare_financiara_euro === 0
                               const isZeroExecuted = !reform.executat_euro || reform.executat_euro === 0
                               
                               return (
@@ -383,7 +461,7 @@ const ComponentsOverview = ({
                                       <div className="zero-cost-label" style={{ textAlign: 'center', fontSize: '0.875rem', fontWeight: '500', color: '#64748b', fontStyle: 'italic' }}>Fără cheltuieli asociate</div>
                                     ) : (
                                       <>
-                                        <div className="value-main">{formatMoney(reform.alocare_financiara_euro)}</div>
+                                        <div className="value-main">{isZeroExecuted ? '0,00 mil EUR' : formatMoney(reform.alocare_financiara_euro)}</div>
                                         <div className="financing-type">
                                           {reform.finantare === 'loan' ? 'Loan' : 'Grant'}
                                         </div>

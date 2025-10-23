@@ -42,7 +42,6 @@ export class CRIService {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json',
         },
         // Add timeout
         signal: AbortSignal.timeout(30000) // 30 seconds timeout
@@ -52,8 +51,13 @@ export class CRIService {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
-      console.log('📊 Fetched CRI data:', data.length, 'records');
+      const responseData = await response.json();
+      console.log('📊 Fetched CRI data response:', responseData);
+      
+      // Extract items from the API response structure
+      const data = responseData.items || responseData;
+      console.log('📊 Extracted CRI data:', data.length, 'records');
+      console.log('🔍 Raw CRI data sample:', data.slice(0, 3));
 
       // Extract unique CRI codes and descriptions
       const criMap = new Map<string, CRIData>();
@@ -85,22 +89,15 @@ export class CRIService {
     } catch (error) {
       console.error('❌ Error fetching CRI data:', error);
       
-      // Return fallback data if API fails
+      // Return fallback data if API fails - using actual API data
       const fallbackCRIs: CRIData[] = [
-        { cri: 'MMFTSS', cri_denumire: 'Ministerul Muncii, Familiei, Tineretului și Sportului' },
-        { cri: 'MECS', cri_denumire: 'Ministerul Educației, Cercetării și Sportului' },
-        { cri: 'MT', cri_denumire: 'Ministerul Transporturilor' },
-        { cri: 'MEEMA', cri_denumire: 'Ministerul Energiei, Mediului și Acțiunii pentru Clima' },
-        { cri: 'MF', cri_denumire: 'Ministerul Finanțelor' },
-        { cri: 'MAI', cri_denumire: 'Ministerul Afacerilor Interne' },
-        { cri: 'MS', cri_denumire: 'Ministerul Sănătății' },
-        { cri: 'MDRAP', cri_denumire: 'Ministerul Dezvoltării Regionale și Administrației Publice' },
-        { cri: 'MCID', cri_denumire: 'Ministerul Culturii și Identității Naționale' },
-        { cri: 'MFP', cri_denumire: 'Ministerul Familiei și Protecției Sociale' },
-        { cri: 'MJD', cri_denumire: 'Ministerul Justiției' },
-        { cri: 'MFA', cri_denumire: 'Ministerul Afacerilor Externe' },
-        { cri: 'MAA', cri_denumire: 'Ministerul Agriculturii și Dezvoltării Rurale' },
-        { cri: 'MECTS', cri_denumire: 'Ministerul Economiei, Cercetării și Inovării' }
+        { cri: 'MMFTSS', cri_denumire: 'Ministerul Muncii, Familiei, Tineretului și Solidarității Sociale' },
+        { cri: 'MC', cri_denumire: 'Ministerul Culturii' },
+        { cri: 'MIPE', cri_denumire: 'Ministerul Investițiilor și Proiectelor Europene' },
+        { cri: 'MEDAT', cri_denumire: 'Ministerul Economiei, Digitalizării, Antreprenoriatului și Turismului' },
+        { cri: 'MTI', cri_denumire: 'Ministerul Transporturilor și Infrastructurii' },
+        { cri: 'MMAP', cri_denumire: 'Ministerul Mediului, Apelor și Pădurilor' },
+        { cri: 'MEC', cri_denumire: 'Ministerul Educației și Cercetării' }
       ];
 
       console.log('🔄 Using fallback CRI data');

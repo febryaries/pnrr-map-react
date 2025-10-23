@@ -66,6 +66,8 @@ const EnhancedTable = ({
   const [sortColumn, setSortColumn] = useState(defaultSortColumn)
   const [sortDirection, setSortDirection] = useState(defaultSortDirection)
   const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(itemsPerPage)
+  const [jumpToPage, setJumpToPage] = useState('')
   const [filteredData, setFilteredData] = useState(data)
   
   // Get COMPONENT_MAPPING based on endpoint
@@ -216,29 +218,14 @@ const EnhancedTable = ({
   const uniqueCRIValues = useMemo(() => {
     if (!criData || criData.length === 0) {
       // Fallback to local data if API data not available
+      // Don't filter by other filters to show all available CRIs
       const values = new Set()
       data.forEach(item => {
-        let shouldInclude = true
-        
-        // Apply county filter if selected
-        if (filterCounty && item.county !== filterCounty) {
-          shouldInclude = false
-        }
-        
-        // Apply locality filter if selected
-        if (filterLocality && item.locality !== filterLocality) {
-          shouldInclude = false
-        }
-        
-        // Apply component filter if selected
-        if (filterComponent && item.componentCode !== filterComponent) {
-          shouldInclude = false
-        }
-        
-        if (shouldInclude && item.cri) {
-          values.add(item.cri)
+        if (item[fieldMappings.cri]) {
+          values.add(item[fieldMappings.cri])
         }
       })
+      console.log('🔍 MapView: Fallback CRI data:', Array.from(values).sort());
       return Array.from(values).sort()
     }
 
@@ -249,6 +236,8 @@ const EnhancedTable = ({
     
     console.log('🔍 MapView: Processing CRI data:', sortedCRIs.length, 'entries');
     console.log('🔍 MapView: Sample CRI entries:', sortedCRIs.slice(0, 5));
+    console.log('🔍 MapView: All CRI codes:', sortedCRIs.map(cri => cri.cri));
+    console.log('🔍 MapView: Looking for MEC vs MECTS:', sortedCRIs.filter(cri => cri.cri.includes('MEC')));
     
     return sortedCRIs;
   }, [criData])
@@ -307,12 +296,12 @@ const EnhancedTable = ({
     
     // Apply CRI filter
     if (filterCRI) {
-      filtered = filtered.filter(item => item.cri === filterCRI)
+      filtered = filtered.filter(item => item[fieldMappings.cri] === filterCRI)
     }
     
     setFilteredData(filtered)
     setCurrentPage(1) // Reset to first page when filtering
-  }, [data, searchTerm, filterStadiu, filterLocality, filterFundingSource, filterCounty, filterComponent, filterMasura, filterCRI, columns])
+  }, [data, searchTerm, filterStadiu, filterLocality, filterFundingSource, filterCounty, filterComponent, filterMasura, filterCRI])
 
   // Sort data
   const sortedData = useMemo(() => {
@@ -340,14 +329,14 @@ const EnhancedTable = ({
   }, [filteredData, sortColumn, sortDirection])
 
   // Paginate data
-  const totalPages = Math.ceil(sortedData.length / itemsPerPage)
-  const startIndex = (currentPage - 1) * itemsPerPage
-  const paginatedData = sortedData.slice(startIndex, startIndex + itemsPerPage)
+  const totalPages = Math.ceil(sortedData.length / pageSize)
+  const startIndex = (currentPage - 1) * pageSize
+  const paginatedData = sortedData.slice(startIndex, startIndex + pageSize)
 
   // Debug pagination
   console.log('🔍 Pagination Debug:', {
     sortedDataLength: sortedData.length,
-    itemsPerPage,
+    pageSize,
     totalPages,
     currentPage,
     startIndex,
@@ -388,6 +377,20 @@ const EnhancedTable = ({
   const handlePageChange = (page) => {
     console.log('🔍 Pagination: Changing page from', currentPage, 'to', page, 'of', totalPages);
     setCurrentPage(page)
+  }
+
+  const handlePageSizeChange = (newSize) => {
+    const newPageSize = parseInt(newSize)
+    setPageSize(newPageSize)
+    setCurrentPage(1) // Reset to first page when changing page size
+  }
+
+  const handleJumpToPage = () => {
+    const page = parseInt(jumpToPage)
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page)
+      setJumpToPage('')
+    }
   }
 
   // Handle search input changes
@@ -573,7 +576,7 @@ const EnhancedTable = ({
     return (
       <div className="pagination" role="navigation" aria-label="Paginare">
         <div className="pagination-info">
-          Afișez {startIndex + 1}-{Math.min(startIndex + itemsPerPage, sortedData.length)} din {sortedData.length}
+          Afișez {startIndex + 1}-{Math.min(startIndex + pageSize, sortedData.length)} din {sortedData.length}
         </div>
   
         <div className="pagination-controls">
@@ -620,6 +623,47 @@ const EnhancedTable = ({
           >
             »
           </button>
+        </div>
+
+        {/* Page size selector and jump to page */}
+        <div className="pagination-advanced">
+          <div className="pagination-page-size">
+            <label htmlFor="page-size-select">Afișează:</label>
+            <select 
+              id="page-size-select"
+              value={pageSize} 
+              onChange={(e) => handlePageSizeChange(e.target.value)}
+              className="pagination-select"
+            >
+              <option value={5}>5 pe pagină</option>
+              <option value={10}>10 pe pagină</option>
+              <option value={25}>25 pe pagină</option>
+              <option value={50}>50 pe pagină</option>
+              <option value={100}>100 pe pagină</option>
+            </select>
+          </div>
+          
+          <div className="pagination-jump">
+            <label htmlFor="jump-to-page">Sari la pagina:</label>
+            <input
+              id="jump-to-page"
+              type="number"
+              min="1"
+              max={totalPages}
+              value={jumpToPage}
+              onChange={(e) => setJumpToPage(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleJumpToPage()}
+              className="pagination-input"
+              placeholder="Nr. pagină"
+            />
+            <button 
+              onClick={handleJumpToPage}
+              className="pagination-jump-btn"
+              disabled={!jumpToPage || jumpToPage < 1 || jumpToPage > totalPages}
+            >
+              Du-te
+            </button>
+          </div>
         </div>
       </div>
     )
@@ -1005,10 +1049,11 @@ const EnhancedTable = ({
                     // Handle both string values (fallback) and CRI objects (from API)
                     const criCode = typeof cri === 'string' ? cri : cri.cri
                     const criDescription = typeof cri === 'string' ? cri : cri.cri_denumire
-                    const displayText = typeof cri === 'string' ? cri : `${criCode} - ${criDescription}`
+                    // Show only the cri_denumire (full name) as requested
+                    const displayText = typeof cri === 'string' ? cri : criDescription
                     
                     return (
-                      <option key={criCode} value={criCode} title={criDescription}>
+                      <option key={criCode} value={criCode} title={criCode}>
                         {displayText}
                       </option>
                     )
@@ -1234,6 +1279,7 @@ const MapView = ({
                 title: 'title', // From aggregated data
                 contractNumber: 'contractNumber', // From aggregated data
                 fundingSource: 'fundingSource', // From aggregated data
+                cri: 'cri', // CRI identifier
                 startDate: 'data_inceput' // Original field for currency conversion
             }
         } else {
@@ -1248,7 +1294,8 @@ const MapView = ({
                 locality: 'LOCALITATE_BENEFICIAR',
                 title: 'TITLU_PROIECT',
                 contractNumber: 'NR_CONTRACT',
-                fundingSource: 'SURSA_FINANTARE'
+                fundingSource: 'SURSA_FINANTARE',
+                cri: 'cri' // CRI identifier
             }
         }
     }
@@ -2734,6 +2781,7 @@ const MapView = ({
                                         measureCode: item[fieldMappings.measureCode],
                                         componentLabel: item[fieldMappings.componentLabel] || '',
                                         locality: item[fieldMappings.locality] || '',
+                                        cri: item[fieldMappings.cri] || '',
                                         county: county.county?.name || county.name || 'N/A',
                                         startDate: item[fieldMappings.startDate] || ''
                                     })
@@ -2878,6 +2926,12 @@ const MapView = ({
                             label: 'Localitate',
                             searchable: true,
                             render: (value) => value ? <div style={{ maxWidth: '100px', wordWrap: 'break-word', fontSize: '12px', lineHeight: '1.3' }}>{value}</div> : <div style={{ fontSize: '12px' }}>-</div>
+                        },
+                        {
+                            key: 'cri',
+                            label: 'CRI',
+                            searchable: true,
+                            render: (value) => <div style={{ fontSize: '12px', minWidth: '60px', textAlign: 'center', fontWeight: '600' }}>{value || '-'}</div>
                         }
                     ].filter(col => {
                         // Ascundem coloanele 'title' și 'progress' doar pentru tabelul de plăți
@@ -2990,7 +3044,7 @@ const MapView = ({
                             return `${filteredData} ${endpoint === 'payments' ? 'plăți' : 'proiecte'} găsite${(activeProgram || filterComponent) ? ` (${COMPONENT_MAPPING[activeProgram || filterComponent]?.label})` : ''} • ${formatMoneyWithCurrency(totalValue)} valoare totală`
                         })()
                     }
-                    itemsPerPage={5}
+                    itemsPerPage={10}
                     searchable={true}
                     searchPlaceholder={`Caută ${endpoint === 'payments' ? 'plată' : 'proiect'}, beneficiar, componentă, localitate...`}
                     defaultSortColumn="value"
