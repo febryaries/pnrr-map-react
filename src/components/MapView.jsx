@@ -2535,7 +2535,7 @@ const MapView = ({
                 {/* Data Source and Currency Toggle - Left and Right alignment */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px', width: '100%' }}>
                     {/* Data Source - Left side */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                    <div className="control-group">
                         <p className="control-label" style={{ margin: 0 }}>Sursa datelor:</p>
                         <div className="segment" style={{ margin: 0 }}>    
                     <button
@@ -2560,7 +2560,7 @@ const MapView = ({
             </div>
                     
                     {/* Currency Toggle - Right side */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                    <div className="control-group">
                         <p className="control-label" style={{ margin: 0 }}>Moneda:</p>
                         <div className="segment" style={{ margin: 0 }}>
                             <button
