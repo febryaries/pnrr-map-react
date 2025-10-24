@@ -3,6 +3,8 @@
  * Service for fetching and managing CRI (Cercetare, Dezvoltare și Inovare) data
  */
 
+import criMappingData from '../data/criMapping.json';
+
 export interface CRIData {
   cri: string;
   cri_denumire: string;
@@ -24,7 +26,8 @@ export class CRIService {
   }
 
   /**
-   * Fetch CRI data from the API endpoint
+   * Fetch CRI data from local mapping file
+   * This ensures all 17 CRI codes are available with proper descriptions
    */
   async fetchCRIData(): Promise<CRIData[]> {
     const now = Date.now();
@@ -36,60 +39,28 @@ export class CRIService {
     }
 
     try {
-      console.log('🌐 Fetching CRI data from API...');
+      console.log('📂 Loading CRI data from local mapping...');
       
-      const response = await fetch('https://pnrr.fonduri-ue.ro/ords/pnrr/mfe/progres_tehnic_proiecte', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-        },
-        // Add timeout
-        signal: AbortSignal.timeout(30000) // 30 seconds timeout
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const responseData = await response.json();
-      console.log('📊 Fetched CRI data response:', responseData);
+      // Use local mapping data (imported from criMapping.json)
+      const criData = criMappingData as CRIData[];
       
-      // Extract items from the API response structure
-      const data = responseData.items || responseData;
-      console.log('📊 Extracted CRI data:', data.length, 'records');
-      console.log('🔍 Raw CRI data sample:', data.slice(0, 3));
-
-      // Extract unique CRI codes and descriptions
-      const criMap = new Map<string, CRIData>();
+      // Sort alphabetically by CRI code
+      const sortedCRIs = criData.sort((a, b) => a.cri.localeCompare(b.cri));
       
-      data.forEach((item: any) => {
-        if (item.cri) {
-          // Use cri_denumire if available, otherwise use a default description
-          const criDescription = item.cri_denumire || `CRI ${item.cri}`;
-          criMap.set(item.cri, {
-            cri: item.cri,
-            cri_denumire: criDescription
-          });
-        }
-      });
-
-      const uniqueCRIs = Array.from(criMap.values()).sort((a, b) => a.cri.localeCompare(b.cri));
-      
-      console.log('📊 Extracted CRI data:', uniqueCRIs.length, 'unique CRI entries');
-      console.log('🔍 Sample CRI entries:', uniqueCRIs.slice(0, 5));
+      console.log('✅ Loaded CRI data:', sortedCRIs.length, 'unique CRI entries');
+      console.log('🔍 Sample CRI entries:', sortedCRIs.slice(0, 5));
       
       // Cache the data
       this.criCache = new Map();
-      this.criCache.set('all', uniqueCRIs);
+      this.criCache.set('all', sortedCRIs);
       this.cacheTimestamp = now;
 
-      console.log('✅ CRI data processed:', uniqueCRIs.length, 'unique CRI entries');
-      return uniqueCRIs;
+      return sortedCRIs;
 
     } catch (error) {
-      console.error('❌ Error fetching CRI data:', error);
+      console.error('❌ Error loading CRI data:', error);
       
-      // Return fallback data if API fails - using actual API data
+      // Return minimal fallback data if local file fails
       const fallbackCRIs: CRIData[] = [
         { cri: 'MMFTSS', cri_denumire: 'Ministerul Muncii, Familiei, Tineretului și Solidarității Sociale' },
         { cri: 'MC', cri_denumire: 'Ministerul Culturii' },
@@ -97,7 +68,7 @@ export class CRIService {
         { cri: 'MEDAT', cri_denumire: 'Ministerul Economiei, Digitalizării, Antreprenoriatului și Turismului' },
         { cri: 'MTI', cri_denumire: 'Ministerul Transporturilor și Infrastructurii' },
         { cri: 'MMAP', cri_denumire: 'Ministerul Mediului, Apelor și Pădurilor' },
-        { cri: 'MEC', cri_denumire: 'Ministerul Educației și Cercetării' }
+        { cri: 'MEC', cri_denumire: 'Ministerul Educației' }
       ];
 
       console.log('🔄 Using fallback CRI data');

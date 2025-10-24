@@ -908,10 +908,15 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
     
     const loadLocalityData = async () => {
       try {
+        console.log('🚀 Starting locality data processing...')
+        const startTime = performance.now()
+        
         // Filter localities for this county
         const countyCities = ro_localities.filter(city => 
           (city.county || '').toUpperCase() === countyCode
         )
+        
+        console.log(`📍 Found ${countyCities.length} cities for county ${countyCode}`)
         
         // Build city index with aliases for matching
         const cityIndex = countyCities.map(city => {
@@ -936,9 +941,12 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
           }
         })
         
-        // Count localities from project scopes
-        const localityCounts = countLocalitiesFromScope(cityIndex)
+        // Count localities from project scopes - ASYNC VERSION
+        const localityCounts = await countLocalitiesFromScopeAsync(cityIndex)
         setLocalityData(localityCounts)
+        
+        const endTime = performance.now()
+        console.log(`✅ Locality processing completed in ${(endTime - startTime).toFixed(2)}ms`)
         
         // Mark locality data loading as complete
         setIsLoadingLocalityData(false)
@@ -962,7 +970,85 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
   // Helper function to escape regex
   const escapeRegExp = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
-  // Count projects & sum values per locality (restored with real coordinates)
+  // Count projects & sum values per locality (ASYNC VERSION with chunking)
+  const countLocalitiesFromScopeAsync = async (cityIndex) => {
+    const counts = new Map()
+    const projectRows = activeProgram 
+      ? (countyData.extras?.rows || []).filter(project => project[fieldMappings.componentCode] === activeProgram)
+      : (countyData.extras?.rows || [])
+    
+    console.log(`📊 Processing ${projectRows.length} projects...`)
+    
+    // If no projects, return empty array immediately
+    if (projectRows.length === 0) {
+      return []
+    }
+    
+    // Process in chunks to avoid blocking UI
+    const CHUNK_SIZE = 50
+    const totalChunks = Math.ceil(projectRows.length / CHUNK_SIZE)
+    
+    for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
+      const start = chunkIndex * CHUNK_SIZE
+      const end = Math.min(start + CHUNK_SIZE, projectRows.length)
+      const chunk = projectRows.slice(start, end)
+      
+      // Process chunk synchronously
+      for (const row of chunk) {
+        // Use the getProjectLocality function to get the locality
+        const locality = getProjectLocality(row)
+        if (!locality) {
+          continue
+        }
+
+        // Find which cities match this locality
+        const matched = []
+        for (const city of cityIndex) {
+          let hit = false
+          for (const alias of city.aliases) {
+            if (!alias) continue
+            const re = new RegExp(`(^|[^a-z0-9])${escapeRegExp(alias)}([^a-z0-9]|$)`, 'i')
+            if (re.test(norm(locality))) {
+              hit = true
+              break
+            }
+          }
+          if (hit) matched.push(city)
+        }
+        
+        if (!matched.length) continue
+
+        const rowShareValue = Number(row?.__share_value || 0) || 0
+        const perCityValue = matched.length ? (rowShareValue / matched.length) : 0
+
+        for (const city of matched) {
+          const prev = counts.get(city.name) || { city, count: 0, money: 0 }
+          prev.count += 1
+          prev.money += perCityValue
+          counts.set(city.name, prev)
+        }
+      }
+      
+      // Allow browser to breathe between chunks
+      if (chunkIndex < totalChunks - 1) {
+        await new Promise(resolve => setTimeout(resolve, 0))
+      }
+      
+      // Log progress every 5 chunks
+      if ((chunkIndex + 1) % 5 === 0 || chunkIndex === totalChunks - 1) {
+        console.log(`⏳ Processed ${end}/${projectRows.length} projects (${Math.round((end / projectRows.length) * 100)}%)`)
+      }
+    }
+    
+    console.log(`✅ Found ${counts.size} localities with projects`)
+    
+    // Sort by count desc, then money desc, then name
+    return Array.from(counts.values()).sort((a, b) =>
+      (b.count - a.count) || (b.money - a.money) || a.city.name.localeCompare(b.city.name)
+    )
+  }
+  
+  // Keep the old synchronous version as fallback (not used anymore)
   const countLocalitiesFromScope = (cityIndex) => {
     const counts = new Map()
     const projectRows = activeProgram 

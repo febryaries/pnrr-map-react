@@ -1,0 +1,70 @@
+[
+  {
+    "cri": "ANAP",
+    "cri_denumire": "Agenția Națională pentru Achiziții Publice"
+  },
+  {
+    "cri": "ANC",
+    "cri_denumire": "Autoritatea Națională pentru Cetățenie"
+  },
+  {
+    "cri": "ANFP",
+    "cri_denumire": "Agenția Națională a Funcționarilor Publici"
+  },
+  {
+    "cri": "MAI",
+    "cri_denumire": "Ministerul Afacerilor Interne"
+  },
+  {
+    "cri": "MC",
+    "cri_denumire": "Ministerul Culturii"
+  },
+  {
+    "cri": "MDLPA",
+    "cri_denumire": "Ministerul Dezvoltării, Lucrărilor Publice și Administrației"
+  },
+  {
+    "cri": "MEC",
+    "cri_denumire": "Ministerul Educației"
+  },
+  {
+    "cri": "MEDAT",
+    "cri_denumire": "Ministerul Economiei, Digitalizării, Antreprenoriatului și Turismului"
+  },
+  {
+    "cri": "MENERGIEI",
+    "cri_denumire": "Ministerul Energiei"
+  },
+  {
+    "cri": "MF",
+    "cri_denumire": "Ministerul Finanțelor"
+  },
+  {
+    "cri": "MIPE",
+    "cri_denumire": "Ministerul Investițiilor și Proiectelor Europene"
+  },
+  {
+    "cri": "MJ",
+    "cri_denumire": "Ministerul Justiției"
+  },
+  {
+    "cri": "MMAP",
+    "cri_denumire": "Ministerul Mediului, Apelor și Pădurilor"
+  },
+  {
+    "cri": "MMFTSS",
+    "cri_denumire": "Ministerul Muncii, Familiei, Tineretului și Solidarității Sociale"
+  },
+  {
+    "cri": "MS",
+    "cri_denumire": "Ministerul Sănătății"
+  },
+  {
+    "cri": "MTI",
+    "cri_denumire": "Ministerul Transporturilor și Infrastructurii"
+  },
+  {
+    "cri": "SGG",
+    "cri_denumire": "Secretariatul General al Guvernului"
+  }
+]

@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react'
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import HighchartsMap from 'highcharts/modules/map'
@@ -7,6 +7,22 @@ import HighchartsAccessibility from 'highcharts/modules/accessibility'
 // Initialize Highcharts modules
 HighchartsMap(Highcharts)
 HighchartsAccessibility(Highcharts)
+
+// Suppress Highcharts warning #33 for onclick in tooltip HTML (valid use case)
+Highcharts.setOptions({
+  lang: {
+    // Suppress warning by setting it to empty
+  }
+})
+// Disable warning #33 specifically
+if (Highcharts.error) {
+  const originalError = Highcharts.error
+  Highcharts.error = function(code) {
+    if (code !== 33) {
+      originalError.apply(this, arguments)
+    }
+  }
+}
 import { PROGRAMS, PROGRAM_COLORS, fmtMoney, fmtNum, fmtMoneyShort, COMPONENT_MAPPING_PAYMENTS, COMPONENT_MAPPING_PROJECTS } from '../data/data'
 import ComponentsOverview from './ComponentsOverview'
 import { useTotalIndicators } from '../hooks/useTotalIndicators'
@@ -70,8 +86,58 @@ const EnhancedTable = ({
   const [jumpToPage, setJumpToPage] = useState('')
   const [filteredData, setFilteredData] = useState(data)
   
+  // Mobile filters sidebar state
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false)
+  const [showMobileButton, setShowMobileButton] = useState(false)
+  const [renderMobileButton, setRenderMobileButton] = useState(false)
+  
+  // Ref for table container to detect scroll position
+  const tableContainerRef = useRef(null)
+  
+  // Scroll detection for mobile button visibility
+  useEffect(() => {
+    const handleScroll = () => {
+      if (tableContainerRef.current) {
+        const rect = tableContainerRef.current.getBoundingClientRect()
+        const tableTop = rect.top
+        const tableBottom = rect.bottom
+        
+        // Show button when user is in table area
+        // Button appears when table is visible on screen
+        const isInTableArea = tableTop < window.innerHeight - 100 && tableBottom > 100
+        
+        if (isInTableArea && !renderMobileButton) {
+          // Start rendering button
+          setRenderMobileButton(true)
+          // Trigger fade in after a tiny delay to ensure DOM is ready
+          setTimeout(() => setShowMobileButton(true), 10)
+        } else if (!isInTableArea && renderMobileButton) {
+          // Trigger fade out
+          setShowMobileButton(false)
+          // Remove from DOM after animation completes (400ms)
+          setTimeout(() => setRenderMobileButton(false), 400)
+        }
+        
+        console.log('Scroll debug:', { tableTop, tableBottom, isInTableArea, windowHeight: window.innerHeight })
+      }
+    }
+    
+    // Add listener for both desktop and mobile (will be hidden on desktop via CSS)
+    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('resize', handleScroll)
+    handleScroll() // Check initial position
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
+    }
+  }, [renderMobileButton])
+  
   // Get COMPONENT_MAPPING based on endpoint
-  const COMPONENT_MAPPING = endpoint === 'payments' ? COMPONENT_MAPPING_PAYMENTS : COMPONENT_MAPPING_PROJECTS
+  // Memoized to prevent recreation on every render
+  const COMPONENT_MAPPING = useMemo(() => {
+    return endpoint === 'payments' ? COMPONENT_MAPPING_PAYMENTS : COMPONENT_MAPPING_PROJECTS
+  }, [endpoint])
   
   // Scroll to filters when any filter changes
   const scrollToFilters = () => {
@@ -225,7 +291,7 @@ const EnhancedTable = ({
           values.add(item[fieldMappings.cri])
         }
       })
-      console.log('🔍 MapView: Fallback CRI data:', Array.from(values).sort());
+      // console.log('🔍 MapView: Fallback CRI data:', Array.from(values).sort());
       return Array.from(values).sort()
     }
 
@@ -234,10 +300,10 @@ const EnhancedTable = ({
     const sortedCRIs = criData
       .sort((a, b) => a.cri.localeCompare(b.cri));
     
-    console.log('🔍 MapView: Processing CRI data:', sortedCRIs.length, 'entries');
-    console.log('🔍 MapView: Sample CRI entries:', sortedCRIs.slice(0, 5));
-    console.log('🔍 MapView: All CRI codes:', sortedCRIs.map(cri => cri.cri));
-    console.log('🔍 MapView: Looking for MEC vs MECTS:', sortedCRIs.filter(cri => cri.cri.includes('MEC')));
+    // console.log('🔍 MapView: Processing CRI data:', sortedCRIs.length, 'entries');
+    // console.log('🔍 MapView: Sample CRI entries:', sortedCRIs.slice(0, 5));
+    // console.log('🔍 MapView: All CRI codes:', sortedCRIs.map(cri => cri.cri));
+    // console.log('🔍 MapView: Looking for MEC vs MECTS:', sortedCRIs.filter(cri => cri.cri.includes('MEC')));
     
     return sortedCRIs;
   }, [criData])
@@ -334,36 +400,50 @@ const EnhancedTable = ({
   const paginatedData = sortedData.slice(startIndex, startIndex + pageSize)
 
   // Debug pagination
-  console.log('🔍 Pagination Debug:', {
-    sortedDataLength: sortedData.length,
-    pageSize,
-    totalPages,
-    currentPage,
-    startIndex,
-    paginatedDataLength: paginatedData.length
-  });
+  // console.log('🔍 Pagination Debug:', {
+  //   sortedDataLength: sortedData.length,
+  //   pageSize,
+  //   totalPages,
+  //   currentPage,
+  //   startIndex,
+  //   paginatedDataLength: paginatedData.length
+  // });
 
   // Ensure current page is valid when total pages change
   useEffect(() => {
-    if (currentPage > totalPages && totalPages > 0) {
-      setCurrentPage(totalPages)
-    }
-  }, [totalPages, currentPage])
+    // Only check when totalPages changes, not when currentPage changes
+    // This prevents infinite loop
+    setCurrentPage(prev => {
+      if (prev > totalPages && totalPages > 0) {
+        return totalPages
+      }
+      return prev
+    })
+  }, [totalPages])
 
   // Calculate filtered totals and notify parent
+  // Store callbacks in refs to avoid infinite loop
+  const onFilteredDataChangeRef = useRef(onFilteredDataChange)
+  const getValueFieldRef = useRef(getValueField)
+  
   useEffect(() => {
-    if (onFilteredDataChange && getValueField) {
+    onFilteredDataChangeRef.current = onFilteredDataChange
+    getValueFieldRef.current = getValueField
+  }, [onFilteredDataChange, getValueField])
+  
+  useEffect(() => {
+    if (onFilteredDataChangeRef.current && getValueFieldRef.current) {
       const totalValue = filteredData.reduce((sum, item) => {
-        const value = getValueField(item)
+        const value = getValueFieldRef.current(item)
         return sum + value
       }, 0)
       
-      onFilteredDataChange({
+      onFilteredDataChangeRef.current({
         count: filteredData.length,
         totalValue: totalValue
       })
     }
-  }, [filteredData, onFilteredDataChange, getValueField])
+  }, [filteredData])
 
   const handleSort = (column) => {
     if (sortColumn === column) {
@@ -404,27 +484,44 @@ const EnhancedTable = ({
   // Handle county change - no reset, just update
   const handleCountyChange = (value) => {
     setFilterCounty(value)
+    closeMobileSidebar()
     // No scroll - user is already at the filters
   }
 
   // Handle locality change - no reset, just update
   const handleLocalityChange = (value) => {
     setFilterLocality(value)
+    closeMobileSidebar()
     // No scroll - user is already at the filters
   }
 
   // Sync filterComponent with activeProgram from parent
   useEffect(() => {
-    setFilterComponent(activeProgram || '')
+    // Only update if different to prevent infinite loop
+    setFilterComponent(prev => {
+      const newValue = activeProgram || ''
+      return prev !== newValue ? newValue : prev
+    })
   }, [activeProgram])
+
+  // Helper to close mobile sidebar after filter selection
+  const closeMobileSidebar = () => {
+    setIsMobileFiltersOpen(false)
+  }
 
   // Handle component change - no reset, just update
   const handleComponentChange = (value) => {
     setFilterComponent(value)
-    // Sync with parent activeProgram
-    if (setActiveProgram) {
-      setActiveProgram(value || null)
-    }
+    // DO NOT sync back to parent to prevent infinite loop
+    // Parent will sync down to us via useEffect when needed
+    // if (setActiveProgram) {
+    //   const newValue = value || null
+    //   if (activeProgram !== newValue) {
+    //     setActiveProgram(newValue)
+    //   }
+    // }
+    // Close mobile sidebar after selection
+    closeMobileSidebar()
     // No scroll - user is already at the filters
   }
 
@@ -739,7 +836,7 @@ const EnhancedTable = ({
   }
 
   return (
-    <div className="card">
+    <div className="card" ref={tableContainerRef}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', gap: '12px' }}>
         <div>
           <h3 style={{ margin: '0 0 8px 0' }}>{title}</h3>
@@ -1017,9 +1114,51 @@ const EnhancedTable = ({
         </div>
       )}
 
-      {/* Sticky Filters - Always visible for both endpoints */}
+      {/* Mobile Hamburger Button - Only visible on mobile when in table area */}
+      {searchable && renderMobileButton && (
+        <button
+          className="mobile-filters-toggle"
+          onClick={() => setIsMobileFiltersOpen(!isMobileFiltersOpen)}
+          style={{
+            display: 'none', // Hidden by default, shown via CSS media query
+            position: 'fixed',
+            top: '50%',
+            left: '20px',
+            transform: 'translateY(-50%)',
+            zIndex: 999,
+            padding: '12px 20px',
+            background: '#0ea5e9',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '12px',
+            fontSize: '15px',
+            fontWeight: '600',
+            boxShadow: '0 4px 12px rgba(14, 165, 233, 0.3)',
+            cursor: 'pointer',
+            animation: showMobileButton ? 'buttonFadeIn 0.4s ease forwards' : 'buttonFadeOut 0.4s ease forwards',
+            pointerEvents: showMobileButton ? 'auto' : 'none'
+          }}
+        >
+          ☰ FILTRE
+          {(filterStadiu || filterLocality || filterFundingSource || filterCounty || filterComponent || filterMasura || filterCRI) && (
+            <span style={{
+              marginLeft: '8px',
+              background: '#fff',
+              color: '#0ea5e9',
+              padding: '2px 8px',
+              borderRadius: '10px',
+              fontSize: '14px',
+              fontWeight: '700'
+            }}>
+              {[filterStadiu, filterLocality, filterFundingSource, filterCounty, filterComponent, filterMasura, filterCRI].filter(Boolean).length}
+            </span>
+          )}
+        </button>
+      )}
+
+      {/* Sticky Filters - Hidden on mobile by default, shown when button clicked */}
       {searchable && (
-        <div className="table-filters-sticky" ref={filtersRef}>
+        <div className="table-filters-sticky" ref={filtersRef} data-mobile-visible={isMobileFiltersOpen}>
           <div className="table-filters-sticky-content">
               {/* Visualization Mode Dropdown - Only for projects endpoint */}
               {endpoint !== 'payments' && (
@@ -1043,7 +1182,7 @@ const EnhancedTable = ({
               {/* CRI Filter - ALWAYS VISIBLE */}
               <div className="filter-item">
                 <label>🔬 CRI</label>
-                <select value={filterCRI} onChange={(e) => setFilterCRI(e.target.value)}>
+                <select value={filterCRI} onChange={(e) => { setFilterCRI(e.target.value); closeMobileSidebar(); }}>
                   <option value="">Toate CRI-urile</option>
                   {uniqueCRIValues.map(cri => {
                     // Handle both string values (fallback) and CRI objects (from API)
@@ -1112,7 +1251,7 @@ const EnhancedTable = ({
               {/* Masura Filter - ALWAYS VISIBLE */}
               <div className="filter-item">
                 <label>📋 Cod Măsură</label>
-                <select value={filterMasura} onChange={(e) => setFilterMasura(e.target.value)}>
+                <select value={filterMasura} onChange={(e) => { setFilterMasura(e.target.value); closeMobileSidebar(); }}>
                   <option value="">Toate măsurile</option>
                   {uniqueMasuraCodes.map(value => (
                     <option key={value} value={value}>{value}</option>
@@ -1123,7 +1262,7 @@ const EnhancedTable = ({
               {/* Stadiu Filter - ALWAYS VISIBLE */}
               <div className="filter-item">
                 <label>📊 Stadiu</label>
-                <select value={filterStadiu} onChange={(e) => setFilterStadiu(e.target.value)}>
+                <select value={filterStadiu} onChange={(e) => { setFilterStadiu(e.target.value); closeMobileSidebar(); }}>
                   <option value="">Toate stadiile</option>
                   {uniqueStadiu.map(value => (
                     <option key={value} value={value}>{value}</option>
@@ -1134,7 +1273,7 @@ const EnhancedTable = ({
               {/* Funding Source Filter - ALWAYS VISIBLE */}
               <div className="filter-item">
                 <label>💰 Sursă Finanțare</label>
-                <select value={filterFundingSource} onChange={(e) => setFilterFundingSource(e.target.value)}>
+                <select value={filterFundingSource} onChange={(e) => { setFilterFundingSource(e.target.value); closeMobileSidebar(); }}>
                   <option value="">Toate sursele</option>
                   {uniqueFundingSources.map(value => (
                     <option key={value} value={value}>{value}</option>
@@ -1262,10 +1401,14 @@ const MapView = ({
     const filtersRef = useRef(null)
 
     // Get the correct component mapping based on endpoint
-    const COMPONENT_MAPPING = endpoint === 'projects' ? COMPONENT_MAPPING_PROJECTS : COMPONENT_MAPPING_PAYMENTS
+    // Memoized to prevent recreation on every render
+    const COMPONENT_MAPPING = useMemo(() => {
+      return endpoint === 'projects' ? COMPONENT_MAPPING_PROJECTS : COMPONENT_MAPPING_PAYMENTS
+    }, [endpoint])
 
     // Get field mappings based on endpoint
-    const getFieldMappings = () => {
+    // Memoized to prevent object recreation on every render
+    const fieldMappings = useMemo(() => {
         if (endpoint === 'projects') {
             return {
                 beneficiary: 'beneficiaryName', // From aggregated data
@@ -1298,9 +1441,7 @@ const MapView = ({
                 cri: 'cri' // CRI identifier
             }
         }
-    }
-    
-    const fieldMappings = getFieldMappings()
+    }, [endpoint])
 
     // Currency conversion using actual RON values from API
     const convertCurrency = (amountInEUR, originalRON = null, startDate = null) => {
@@ -1315,7 +1456,8 @@ const MapView = ({
     }
 
     // Get the correct value field based on currency selection
-    const getValueField = (project) => {
+    // Memoized to prevent infinite re-renders in useMemo dependencies
+    const getValueField = useCallback((project) => {
         if (endpoint === 'projects') {
             // For projects, handle FinancialAmount object
             const financialAmount = project[fieldMappings.value]
@@ -1331,7 +1473,7 @@ const MapView = ({
                 return project[fieldMappings.value] || 0
             }
         }
-    }
+    }, [endpoint, currency, fieldMappings])
 
     const getCurrencySymbol = () => {
         return currency === 'RON' ? 'RON' : 'EUR'
@@ -2040,18 +2182,19 @@ const MapView = ({
             }))
             .sort((a, b) => b.y - a.y)
         
-        // Debug: Log component totals
-        console.log('🔍 Component Totals Debug:', {
-            endpoint,
-            viewMode,
-            baseCountiesCount: baseCounties.length,
-            multiDataExists: !!multiData,
-            multiDataRows: multiData?.extras?.rows?.length || 0,
-            allTotals: totals,
-            filteredResult: result,
-            dataLength: data.length,
-            dataSample: data.slice(0, 2)
-        })
+        // Debug: Log component totals with detailed breakdown
+        // console.log('📊 TOTALS OBJECT:', totals)
+        // console.log('📊 TOTALS ENTRIES:', Object.entries(totals))
+        // console.log('📊 RESULT ARRAY LENGTH:', result.length)
+        // console.log('📊 RESULT ARRAY:', result)
+        // console.log('🔍 Component Totals Debug:', {
+        //     endpoint,
+        //     viewMode,
+        //     baseCountiesCount: baseCounties.length,
+        //     multiDataExists: !!multiData,
+        //     multiDataRows: multiData?.extras?.rows?.length || 0,
+        //     resultLength: result.length
+        // })
         
         // If no real data is found, create some test data for debugging
         if (result.length === 0 && data && data.length > 0) {
@@ -2065,6 +2208,86 @@ const MapView = ({
         
         return result
     }, [data, fieldMappings, COMPONENT_MAPPING, currency, getValueField, viewMode])
+
+    // Memoize table data to prevent recreation on every render
+    const tableData = useMemo(() => {
+        // Get all projects/payments from all counties
+        const allData = []
+        data.forEach(county => {
+            // Handle different view modes for projects endpoint
+            if (endpoint === 'projects') {
+                if (viewMode === 'national') {
+                    // Only include National projects (county = "Național" OR RO-MULTI)
+                    if (county.county?.name !== 'Național' && county.name !== 'Național' && 
+                        county.county?.code !== 'RO-MULTI' && county.code !== 'RO-MULTI') {
+                        return;
+                    }
+                } else if (viewMode === 'local') {
+                    // Only include Local projects (county != "Național" AND != RO-MULTI)
+                    if (county.county?.name === 'Național' || county.name === 'Național' ||
+                        county.county?.code === 'RO-MULTI' || county.code === 'RO-MULTI') {
+                        return;
+                    }
+                } else if (viewMode === 'total') {
+                    // Include all projects (both National and Local)
+                    // No filtering needed
+                } else {
+                    // For other view modes, exclude RO-MULTI
+                    if (county.county?.code === 'RO-MULTI' || county.code === 'RO-MULTI') {
+                        return;
+                    }
+                }
+            } else {
+                // For payments endpoint, use original logic
+                if (viewMode !== 'all' && (county.county?.code === 'RO-MULTI' || county.code === 'RO-MULTI')) {
+                    return;
+                }
+            }
+            
+            if (county.extras?.rows) {
+                county.extras.rows.forEach(item => {
+                    // Use only the title (titlu_contract) field
+                    const fullTitle = item[fieldMappings.title] || 'N/A'
+                    
+                    // Handle FinancialAmount object for projects
+                    const financialAmount = item[fieldMappings.value]
+                    const valueRON = endpoint === 'projects' && financialAmount && typeof financialAmount === 'object' 
+                        ? financialAmount.ron 
+                        : item[fieldMappings.valueRON] || 0
+                    
+                    const progressValue = item[fieldMappings.progress] !== undefined && item[fieldMappings.progress] !== null && item[fieldMappings.progress] !== '' ? item[fieldMappings.progress] : '-';
+                    
+                    allData.push({
+                        // Add original data for semantic search first
+                        ...item,
+                        // Then override with display values
+                        title: fullTitle,
+                        beneficiary: item[fieldMappings.beneficiary],
+                        cui: endpoint === 'payments' ? item.CUI_BENEFICIAR_FINAL : undefined,
+                        fundingSource: item[fieldMappings.fundingSource],
+                        value: getValueField(item),
+                        value_ron: valueRON,
+                        progress: progressValue,
+                        componentCode: item[fieldMappings.componentCode],
+                        measureCode: item[fieldMappings.measureCode],
+                        componentLabel: item[fieldMappings.componentLabel] || '',
+                        locality: item[fieldMappings.locality] || '',
+                        cri: item[fieldMappings.cri] || '',
+                        county: county.county?.name || county.name || 'N/A',
+                        startDate: item[fieldMappings.startDate] || ''
+                    })
+                })
+            }
+        })
+        
+        // Filter by active program or component filter if selected
+        const filteredData = (activeProgram || filterComponent)
+            ? allData.filter(item => item.componentCode === (activeProgram || filterComponent))
+            : allData
+        
+        // Don't filter out zero values to maintain correct count
+        return filteredData
+    }, [data, endpoint, viewMode, fieldMappings, activeProgram, filterComponent, getValueField])
 
     // Pie chart configuration - Stable version
     const pieOptions = {
@@ -2719,84 +2942,7 @@ const MapView = ({
             {/* Projects/Payments Table */}
             <section id="projects-table" className="projects-payments-section">
                 <EnhancedTable
-                    data={(() => {
-                        // Get all projects/payments from all counties
-                        const allData = []
-                        data.forEach(county => {
-                            // Handle different view modes for projects endpoint
-                            if (endpoint === 'projects') {
-                                if (viewMode === 'national') {
-                                    // Only include National projects (county = "Național" OR RO-MULTI)
-                                    if (county.county?.name !== 'Național' && county.name !== 'Național' && 
-                                        county.county?.code !== 'RO-MULTI' && county.code !== 'RO-MULTI') {
-                                        return;
-                                    }
-                                } else if (viewMode === 'local') {
-                                    // Only include Local projects (county != "Național" AND != RO-MULTI)
-                                    if (county.county?.name === 'Național' || county.name === 'Național' ||
-                                        county.county?.code === 'RO-MULTI' || county.code === 'RO-MULTI') {
-                                        return;
-                                    }
-                                } else if (viewMode === 'total') {
-                                    // Include all projects (both National and Local)
-                                    // No filtering needed
-                                } else {
-                                    // For other view modes, exclude RO-MULTI
-                            if (county.county?.code === 'RO-MULTI' || county.code === 'RO-MULTI') {
-                                return;
-                                    }
-                                }
-                            } else {
-                                // For payments endpoint, use original logic
-                                if (viewMode !== 'all' && (county.county?.code === 'RO-MULTI' || county.code === 'RO-MULTI')) {
-                                    return;
-                                }
-                            }
-                            
-                            if (county.extras?.rows) {
-                                county.extras.rows.forEach(item => {
-                                    // Use only the title (titlu_contract) field
-                                    const fullTitle = item[fieldMappings.title] || 'N/A'
-                                    
-                                    // Handle FinancialAmount object for projects
-                                    const financialAmount = item[fieldMappings.value]
-                                    const valueRON = endpoint === 'projects' && financialAmount && typeof financialAmount === 'object' 
-                                        ? financialAmount.ron 
-                                        : item[fieldMappings.valueRON] || 0
-                                    
-                                    const progressValue = item[fieldMappings.progress] !== undefined && item[fieldMappings.progress] !== null && item[fieldMappings.progress] !== '' ? item[fieldMappings.progress] : '-';
-                                    
-                                    allData.push({
-                                        // Add original data for semantic search first
-                                        ...item,
-                                        // Then override with display values
-                                        title: fullTitle,
-                                        beneficiary: item[fieldMappings.beneficiary],
-                                        cui: endpoint === 'payments' ? item.CUI_BENEFICIAR_FINAL : undefined,
-                                        fundingSource: item[fieldMappings.fundingSource],
-                                        value: getValueField(item),
-                                        value_ron: valueRON,
-                                        progress: progressValue,
-                                        componentCode: item[fieldMappings.componentCode],
-                                        measureCode: item[fieldMappings.measureCode],
-                                        componentLabel: item[fieldMappings.componentLabel] || '',
-                                        locality: item[fieldMappings.locality] || '',
-                                        cri: item[fieldMappings.cri] || '',
-                                        county: county.county?.name || county.name || 'N/A',
-                                        startDate: item[fieldMappings.startDate] || ''
-                                    })
-                                })
-                            }
-                        })
-                        
-                        // Filter by active program or component filter if selected
-                        const filteredData = (activeProgram || filterComponent)
-                            ? allData.filter(item => item.componentCode === (activeProgram || filterComponent))
-                            : allData
-                        
-                        // Don't filter out zero values to maintain correct count
-                        return filteredData
-                    })()}
+                    data={tableData}
                     columns={[
                         {
                             key: 'title',

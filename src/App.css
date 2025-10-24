@@ -4420,3 +4420,94 @@ td.num {
   color: #3b82f6;
   font-weight: 600;
 }
+
+/* ============================================
+   MOBILE FILTERS HAMBURGER MENU
+   ============================================ */
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Fade in/out animation for mobile button */
+@keyframes buttonFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+@keyframes buttonFadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-50%) translateX(-20px);
+  }
+}
+
+/* Mobile Filters Toggle Button - Only visible on mobile */
+@media (max-width: 768px) {
+  .mobile-filters-toggle {
+    display: block !important;
+  }
+  
+  /* Hide filters on mobile by default */
+  .table-filters-sticky {
+    display: none !important;
+  }
+  
+  /* Show filters when button is clicked */
+  .table-filters-sticky[data-mobile-visible="true"] {
+    display: block !important;
+  }
+  
+  /* Hide pagination controls on mobile */
+  .pagination {
+    display: none !important;
+  }
+}
+
+/* Desktop - Hide mobile button */
+@media (min-width: 769px) {
+  .mobile-filters-toggle,
+  .mobile-filters-overlay,
+  .mobile-filters-sidebar {
+    display: none !important;
+  }
+}
+
+/* Mobile Filters Styling */
+@media (max-width: 768px) {
+  /* No custom font sizing - keep default styles */
+}
