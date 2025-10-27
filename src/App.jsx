@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import MapView from './components/MapView'
 import CountyDetails from './components/CountyDetails'
+import SemanticSearchPage from './pages/SemanticSearchPage'
 import { mockData } from './data/data'
 import { useDataEndpoint } from './hooks/useDataEndpoint'
 import './App.css'
@@ -126,55 +128,60 @@ function App() {
 
   return (
     <div className="app">
-      {currentView === 'map' ? (
-        <MapView 
-          data={data}
-          viewMode={viewMode}
-          setViewMode={setViewMode}
-          metric={metric}
-          setMetric={setMetric}
-          activeProgram={activeProgram}
-          setActiveProgram={setActiveProgram}
-          onCountyClick={handleCountyClick}
-          isLoadingRealData={isLoadingRealData}
-          useRealData={useRealData}
-          endpoint={endpoint}
-          switchEndpoint={switchEndpoint}
-          endpointInfo={endpointInfo}
-          dataError={dataError}
-          currency={currency}
-          setCurrency={setCurrency}
-          useMockData={useMockData}
-          setUseMockData={setUseMockData}
-          isCountyLoading={isLoadingCounty}
-        />
-      ) : (
-        <>
-          <CountyDetails 
-            county={selectedCounty}
-            data={data}
-            onBackToMap={handleBackToMap}
-            onLoadingComplete={() => setIsLoadingCounty(false)}
-            isParentLoading={isLoadingCounty}
-            useRealData={useRealData}
-            activeProgram={activeProgram}
-            setActiveProgram={setActiveProgram}
-            endpoint={endpoint}
-            currency={currency}
-            setCurrency={setCurrency}
-          />
-          {/* Show loading overlay while county details are being prepared */}
-          {isLoadingCounty && (
-            <div className="loading-overlay">
-              <div className="loading-content">
-                <div className="loading-spinner"></div>
-                <h2>Se încarcă detaliile județului...</h2>
-                <p>Pregătim harta și datele pentru {selectedCounty?.county?.name || 'județul selectat'}</p>
-              </div>
-            </div>
-          )}
-        </>
-      )}
+      <Routes>
+        <Route path="/" element={
+          currentView === 'map' ? (
+            <MapView 
+              data={data}
+              viewMode={viewMode}
+              setViewMode={setViewMode}
+              metric={metric}
+              setMetric={setMetric}
+              activeProgram={activeProgram}
+              setActiveProgram={setActiveProgram}
+              onCountyClick={handleCountyClick}
+              isLoadingRealData={isLoadingRealData}
+              useRealData={useRealData}
+              endpoint={endpoint}
+              switchEndpoint={switchEndpoint}
+              endpointInfo={endpointInfo}
+              dataError={dataError}
+              currency={currency}
+              setCurrency={setCurrency}
+              useMockData={useMockData}
+              setUseMockData={setUseMockData}
+              isCountyLoading={isLoadingCounty}
+            />
+          ) : (
+            <>
+              <CountyDetails 
+                county={selectedCounty}
+                data={data}
+                onBackToMap={handleBackToMap}
+                onLoadingComplete={() => setIsLoadingCounty(false)}
+                isParentLoading={isLoadingCounty}
+                useRealData={useRealData}
+                activeProgram={activeProgram}
+                setActiveProgram={setActiveProgram}
+                endpoint={endpoint}
+                currency={currency}
+                setCurrency={setCurrency}
+              />
+              {/* Show loading overlay while county details are being prepared */}
+              {isLoadingCounty && (
+                <div className="loading-overlay">
+                  <div className="loading-content">
+                    <div className="loading-spinner"></div>
+                    <h2>Se încarcă detaliile județului...</h2>
+                    <p>Pregătim harta și datele pentru {selectedCounty?.county?.name || 'județul selectat'}</p>
+                  </div>
+                </div>
+              )}
+            </>
+          )
+        } />
+        <Route path="/semantic-search" element={<SemanticSearchPage />} />
+      </Routes>
     </div>
   )
 }

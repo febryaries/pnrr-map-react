@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import HighchartsMap from 'highcharts/modules/map'
@@ -2551,36 +2552,29 @@ const MapView = ({
             </section>
 
 
+            {/* Controls layout */}
             <div className="controls controls--map">
-                {/* Data Source and Currency Toggle - Left and Right alignment */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px', width: '100%' }}>
-                    {/* Data Source - Left side */}
+                {/* Row 1: Data Source + Currency */}
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '15px', width: '100%' }}>
                     <div className="control-group">
                         <p className="control-label" style={{ margin: 0 }}>Sursa datelor:</p>
                         <div className="segment" style={{ margin: 0 }}>    
-                    <button
-                        className={endpoint === 'payments' ? 'active' : ''}
-                        onClick={() => {
-                            switchEndpoint('payments');
-                            // Don't reset view state - preserve current viewMode, metric, and activeProgram
-                        }}
-                    >
-                        Plăți PNRR
-                    </button>
-                    <button
-                        className={endpoint === 'projects' ? 'active' : ''}
-                        onClick={() => {
-                            switchEndpoint('projects');
-                            // Don't reset view state - preserve current viewMode, metric, and activeProgram
-                        }}
-                    >
-                        Proiecte PNRR în execuție
-                    </button>
-                </div>
-            </div>
+                            <button
+                                className={endpoint === 'payments' ? 'active' : ''}
+                                onClick={() => switchEndpoint('payments')}
+                            >
+                                Plăți PNRR
+                            </button>
+                            <button
+                                className={endpoint === 'projects' ? 'active' : ''}
+                                onClick={() => switchEndpoint('projects')}
+                            >
+                                Proiecte PNRR în execuție
+                            </button>
+                        </div>
+                    </div>
                     
-                    {/* Currency Toggle - Right side */}
-                    <div className="control-group">
+                    <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <p className="control-label" style={{ margin: 0 }}>Moneda:</p>
                         <div className="segment" style={{ margin: 0 }}>
                             <button
@@ -2598,45 +2592,60 @@ const MapView = ({
                         </div>
                     </div>
                 </div>
+                
+                {/* Row 2: Vizualizare + Căutare Semantică - only show if not payments */}
+                {endpoint !== 'payments' && (
+                    <div style={{ display: 'flex', alignItems: 'flex-start', width: '100%' }}>
+                        <div className="control-group">
+                            <p className="control-label" style={{ margin: 0 }}>Vizualizare:</p>
+                            <div className="segment" style={{ margin: 0 }}>
+                                <button
+                                    className={viewMode === 'total' ? 'active' : ''}
+                                    onClick={() => {
+                                        setViewMode('total');
+                                        setMetric('value');
+                                        setActiveProgram(null);
+                                    }}
+                                >
+                                    Toate Proiectele
+                                </button>
+                                <button
+                                    className={viewMode === 'national' ? 'active' : ''}
+                                    onClick={() => {
+                                        setViewMode('national');
+                                        setMetric('value');
+                                        setActiveProgram(null);
+                                    }}
+                                >
+                                    Proiecte Naționale
+                                </button>
+                                <button
+                                    className={viewMode === 'local' ? 'active' : ''}
+                                    onClick={() => {
+                                        setViewMode('local');
+                                        setMetric('value');
+                                        setActiveProgram(null);
+                                    }}
+                                >
+                                    Proiecte Locale
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div style={{ marginLeft: 'auto' }}>
+                            <SemanticSearchCard endpoint={endpoint} />
+                        </div>
+                    </div>
+                )}
             </div>
             
             {/* Filtre secundare - Hide View Mode section for Payments */}
             {endpoint !== 'payments' && (
-            <div className="controls controls--map">
-                {/* View Mode Selection - Full width with inline buttons */}
+            <div className="controls controls--map" style={{ display: 'none' }}>
+                {/* This section is now integrated in the grid above */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '15px' }}>
                     <p className="control-label" style={{ margin: 0, minWidth: '120px' }}>Vizualizare:</p>
                     <div className="segment" style={{ margin: 0 }}>
-                    <button
-                        className={viewMode === 'total' ? 'active' : ''}
-                        onClick={() => {
-                            setViewMode('total');
-                            setMetric('value');
-                                setActiveProgram(null);
-                        }}
-                    >
-                        Toate Proiectele
-                    </button>
-                    <button
-                        className={viewMode === 'national' ? 'active' : ''}
-                        onClick={() => {
-                            setViewMode('national');
-                            setMetric('value');
-                                setActiveProgram(null);
-                        }}
-                    >
-                        Proiecte Naționale
-                    </button>
-                    <button
-                        className={viewMode === 'local' ? 'active' : ''}
-                        onClick={() => {
-                            setViewMode('local');
-                            setMetric('value');
-                            setActiveProgram(null);
-                        }}
-                    >
-                        Proiecte Locale
-                    </button>
                     </div>
                 </div>
 
@@ -3305,6 +3314,113 @@ const MapView = ({
         if (viewMode === 'total') return `Total${filterSuffix} · Total Valoare`
         return `Național${filterSuffix} · Total Valoare`
     }
+}
+
+/**
+ * Semantic Search Card Component
+ * Card pentru căutare semantică cu input și butoane de exemple
+ */
+function SemanticSearchCard({ endpoint }) {
+    const navigate = useNavigate()
+    const [semanticQuery, setSemanticQuery] = useState('')
+    
+    const handleSemanticSearch = (query = semanticQuery) => {
+        if (!query.trim()) return
+        
+        // Navigare către pagina de căutare semantică
+        navigate(`/semantic-search?q=${encodeURIComponent(query)}&endpoint=${endpoint}`)
+    }
+    
+    const exampleTerms = ['apă uzată', 'spital', 'drum', 'energie', 'școală']
+    
+    return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                <p className="control-label" style={{ margin: 0, minWidth: '120px' }}>Căutare Semantică:</p>
+                <div style={{ display: 'flex', gap: '10px', flex: 1 }}>
+                    <input
+                        type="text"
+                        placeholder="Ex: apă uzată, spital, drum..."
+                        value={semanticQuery}
+                        onChange={(e) => setSemanticQuery(e.target.value)}
+                        onKeyPress={(e) => {
+                            if (e.key === 'Enter') handleSemanticSearch()
+                        }}
+                        style={{
+                            padding: '10px 16px',
+                            border: '2px solid #e5e7eb',
+                            borderRadius: '10px',
+                            fontSize: '14px',
+                            flex: 1,
+                            outline: 'none',
+                            transition: 'border-color 0.2s'
+                        }}
+                        onFocus={(e) => e.target.style.borderColor = '#0ea5e9'}
+                        onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+                    />
+                    <button
+                        onClick={() => handleSemanticSearch()}
+                        style={{
+                            padding: '10px 24px',
+                            background: '#0ea5e9',
+                            color: '#fff',
+                            border: 'none',
+                            borderRadius: '10px',
+                            fontSize: '14px',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            transition: 'background 0.2s'
+                        }}
+                        onMouseEnter={(e) => e.target.style.background = '#0284c7'}
+                        onMouseLeave={(e) => e.target.style.background = '#0ea5e9'}
+                    >
+                        🔍 Caută
+                    </button>
+                </div>
+            </div>
+            
+            {/* Exemple quick search */}
+            <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '8px', 
+                fontSize: '13px',
+                color: '#64748b',
+                paddingLeft: '135px'
+            }}>
+                <span>Exemple:</span>
+                {exampleTerms.map(term => (
+                    <button
+                        key={term}
+                        onClick={() => {
+                            setSemanticQuery(term)
+                            handleSemanticSearch(term)
+                        }}
+                        style={{
+                            padding: '4px 10px',
+                            background: '#f1f5f9',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            fontSize: '12px',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s',
+                            color: '#475569'
+                        }}
+                        onMouseEnter={(e) => {
+                            e.target.style.background = '#e2e8f0'
+                            e.target.style.borderColor = '#cbd5e1'
+                        }}
+                        onMouseLeave={(e) => {
+                            e.target.style.background = '#f1f5f9'
+                            e.target.style.borderColor = '#e2e8f0'
+                        }}
+                    >
+                        {term}
+                    </button>
+                ))}
+            </div>
+        </div>
+    )
 }
 
 export default MapView

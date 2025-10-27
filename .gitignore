@@ -9,3 +9,8 @@ node_modules
 dist
 dist-ssr
 *.local
+
+# Documentation and changelogs (local only)
+CHANGELOG*.md
+**/README.md
+!README.md
