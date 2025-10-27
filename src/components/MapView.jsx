@@ -2948,7 +2948,7 @@ const MapView = ({
                             key: 'title',
                             label: endpoint === 'payments' ? 'Titlu Plată' : 'Titlu Proiect',
                             searchable: true,
-                            render: (value) => <div style={{ maxWidth: '350px', wordWrap: 'break-word', fontSize: '12px', lineHeight: '1.3' }}>{value}</div>
+                            render: (value) => <div style={{ maxWidth: '350px', wordWrap: 'break-word', fontSize: '12px', lineHeight: '1.3', textTransform: 'uppercase' }}>{value}</div>
                         },
                         {
                             key: 'beneficiary',
