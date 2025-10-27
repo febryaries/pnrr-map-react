@@ -26,7 +26,7 @@ if (typeof Highcharts === 'object') {
  * - Export CSV
  */
 export default function SemanticSearchPage() {
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
   
   const query = searchParams.get('q') || ''
@@ -36,6 +36,7 @@ export default function SemanticSearchPage() {
   const [allProjects, setAllProjects] = useState([])
   const [filteredProjects, setFilteredProjects] = useState([])
   const [mapData, setMapData] = useState(null)
+  const [searchQuery, setSearchQuery] = useState(query)
   
   // Load data on mount
   useEffect(() => {
@@ -48,6 +49,11 @@ export default function SemanticSearchPage() {
       filterData()
     }
   }, [query, allProjects])
+  
+  // Sync searchQuery with URL query
+  useEffect(() => {
+    setSearchQuery(query)
+  }, [query])
   
   // Load Romania map topology
   useEffect(() => {
@@ -152,37 +158,36 @@ export default function SemanticSearchPage() {
     navigate('/')
   }
   
+  const handleNewSearch = (newQuery = searchQuery) => {
+    if (!newQuery.trim()) return
+    
+    // Update URL with new query
+    setSearchParams({ q: newQuery, endpoint })
+  }
+  
+  const exampleTerms = ['apă uzată', 'spital', 'drum', 'energie', 'școală']
+  
   // Prepare map options with pins
   const mapOptions = useMemo(() => {
     if (!mapData || filteredProjects.length === 0) return null
     
-    // Aggregate projects by locality to create pins (1 pin per locality)
-    const localityMap = new Map()
-    
-    filteredProjects.forEach(project => {
+    // Create 1 pin per project (no aggregation)
+    const projectPins = filteredProjects.map((project, index) => {
       const locality = project.LOCALIZARE_LOCALITATE || project.locality || 'Necunoscut'
       const countyName = project.countyName || project.JUDET_IMPLEMENTARE || project.county?.name || ''
       const value = project.__share_value || project.valoare_fe || project.value || 0
       const smis = project.COD_SMIS || project.contractNumber || ''
+      const projectName = project.DENUMIRE_PROIECT || project.projectName || 'Proiect'
+      const beneficiary = project.BENEFICIAR || project.beneficiary || ''
       
-      // Use locality + county as unique key
-      const key = `${locality}|${countyName}`.toUpperCase()
-      
-      if (!localityMap.has(key)) {
-        localityMap.set(key, {
-          locality: locality,
-          county: countyName,
-          value: 0,
-          count: 0,
-          smis: []
-        })
-      }
-      
-      const loc = localityMap.get(key)
-      loc.value += Number(value)
-      loc.count += 1
-      if (smis && !loc.smis.includes(smis)) {
-        loc.smis.push(smis)
+      return {
+        locality,
+        county: countyName,
+        value: Number(value),
+        smis,
+        projectName,
+        beneficiary,
+        index  // unique identifier
       }
     })
     
@@ -204,12 +209,18 @@ export default function SemanticSearchPage() {
       'VÂLCEA': [45.10, 24.37], 'VRANCEA': [45.70, 27.18], 'BUCUREȘTI': [44.43, 26.10]
     }
     
-    // Create pin data points - 1 pin per locality
-    const pins = Array.from(localityMap.values()).map((loc) => {
+    // Romania bounds (restrictive to keep all pins within country)
+    const romaniaBounds = {
+      minLat: 43.8, maxLat: 48.2,  // Increased minLat to avoid Bulgaria
+      minLon: 20.3, maxLon: 28.2   // Reduced maxLon to avoid Black Sea
+    }
+    
+    // Create pin data points - 1 pin per project
+    const pins = projectPins.map((proj) => {
       // Match county name to coordinates
       let lat = 45.94, lon = 24.97 // Center of Romania as fallback
       
-      const countyUpper = loc.county.toUpperCase()
+      const countyUpper = proj.county.toUpperCase()
         .replace(/Ă/g, 'A').replace(/Â/g, 'A')
         .replace(/Î/g, 'I').replace(/Ș/g, 'S')
         .replace(/Ț/g, 'T')
@@ -220,24 +231,29 @@ export default function SemanticSearchPage() {
           .replace(/Î/g, 'I').replace(/Ș/g, 'S').replace(/Ț/g, 'T')
         
         if (countyUpper.includes(keyNorm) || keyNorm.includes(countyUpper) || countyUpper === keyNorm) {
-          // Add random offset so multiple localities in same county don't overlap
+          // Add random offset so multiple projects in same county don't overlap
           lat = coords[0] + (Math.random() - 0.5) * 0.4
           lon = coords[1] + (Math.random() - 0.5) * 0.4
+          
+          // Clamp coordinates within Romania bounds
+          lat = Math.max(romaniaBounds.minLat, Math.min(romaniaBounds.maxLat, lat))
+          lon = Math.max(romaniaBounds.minLon, Math.min(romaniaBounds.maxLon, lon))
+          
           break
         }
       }
       
       return {
-        name: `${loc.locality}${loc.county ? `, ${loc.county}` : ''}`,
-        locality: loc.locality,
-        county: loc.county,
+        name: proj.projectName,
+        locality: proj.locality,
+        county: proj.county,
         lat,
         lon,
-        value: loc.value,
-        count: loc.count,
-        smis: loc.smis,
+        value: proj.value,
+        smis: proj.smis,
+        beneficiary: proj.beneficiary,
         marker: {
-          radius: Math.min(10, 4 + Math.log(loc.count + 1)),
+          radius: 5,  // Fixed size for all pins
           fillColor: '#ef4444',
           lineColor: '#fff',
           lineWidth: 2
@@ -274,14 +290,11 @@ export default function SemanticSearchPage() {
           fontSize: '13px'
         },
         formatter: function() {
-          const smisList = this.point.smis.slice(0, 3).join(', ')
-          const moreSmis = this.point.smis.length > 3 ? `, +${this.point.smis.length - 3} altele` : ''
-          
-          return `<div style="font-weight: 700; margin-bottom: 6px;">${this.point.locality || this.point.name}</div>` +
-                 (this.point.county ? `<div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">Județul ${this.point.county}</div>` : '') +
-                 `<div>Proiecte: <b>${this.point.count}</b></div>` +
-                 `<div>Valoare: <b>${fmtMoney(this.point.value, 'EUR')}</b></div>` +
-                 (this.point.smis.length > 0 ? `<div style="margin-top: 4px; font-size: 11px; color: #64748b;">SMIS: ${smisList}${moreSmis}</div>` : '')
+          return `<div style="font-weight: 700; margin-bottom: 6px; max-width: 300px;">${this.point.name}</div>` +
+                 (this.point.beneficiary ? `<div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">Beneficiar: ${this.point.beneficiary}</div>` : '') +
+                 (this.point.locality ? `<div style="font-size: 12px; color: #64748b;">Localitate: ${this.point.locality}, ${this.point.county}</div>` : '') +
+                 `<div style="margin-top: 4px;">Valoare: <b>${fmtMoney(this.point.value, 'EUR')}</b></div>` +
+                 (this.point.smis ? `<div style="margin-top: 4px; font-size: 11px; color: #64748b;">SMIS: ${this.point.smis}</div>` : '')
         }
       },
       series: [{
@@ -412,6 +425,99 @@ export default function SemanticSearchPage() {
           </div>
         </div>
         
+        {/* Căutare nouă */}
+        <div style={{
+          background: '#fff',
+          borderRadius: '16px',
+          padding: '20px',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+          marginBottom: '24px'
+        }}>
+          <div style={{ display: 'flex', gap: '10px', marginBottom: '12px', flexWrap: 'wrap' }}>
+            <input
+              type="text"
+              placeholder="Ex: apă uzată, spital, drum..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') handleNewSearch()
+              }}
+              style={{
+                padding: '12px 16px',
+                border: '2px solid #e5e7eb',
+                borderRadius: '10px',
+                fontSize: '14px',
+                flex: 1,
+                minWidth: '200px',
+                outline: 'none',
+                transition: 'border-color 0.2s'
+              }}
+              onFocus={(e) => e.target.style.borderColor = '#0ea5e9'}
+              onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+            />
+            <button
+              onClick={() => handleNewSearch()}
+              style={{
+                padding: '12px 28px',
+                background: '#0ea5e9',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '10px',
+                fontSize: '14px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'background 0.2s',
+                whiteSpace: 'nowrap'
+              }}
+              onMouseEnter={(e) => e.target.style.background = '#0284c7'}
+              onMouseLeave={(e) => e.target.style.background = '#0ea5e9'}
+            >
+              🔍 Caută
+            </button>
+          </div>
+          
+          {/* Exemple quick search */}
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '8px', 
+            fontSize: '13px',
+            color: '#64748b',
+            flexWrap: 'wrap'
+          }}>
+            <span style={{ fontWeight: '500' }}>Exemple:</span>
+            {exampleTerms.map(term => (
+              <button
+                key={term}
+                onClick={() => {
+                  setSearchQuery(term)
+                  handleNewSearch(term)
+                }}
+                style={{
+                  padding: '6px 12px',
+                  background: '#f1f5f9',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '6px',
+                  fontSize: '12px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  color: '#475569'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = '#e2e8f0'
+                  e.target.style.borderColor = '#cbd5e1'
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = '#f1f5f9'
+                  e.target.style.borderColor = '#e2e8f0'
+                }}
+              >
+                {term}
+              </button>
+            ))}
+          </div>
+        </div>
+        
         {/* Hartă cu pin-uri */}
         <div style={{
           background: '#fff',
@@ -465,49 +571,123 @@ export default function SemanticSearchPage() {
               </p>
             </div>
           ) : (
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{
-                width: '100%',
-                borderCollapse: 'collapse',
-                fontSize: '14px'
-              }}>
-                <thead>
-                  <tr style={{ borderBottom: '2px solid #e5e7eb' }}>
-                    <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600', color: '#64748b' }}>Proiect</th>
-                    <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600', color: '#64748b' }}>Beneficiar</th>
-                    <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600', color: '#64748b' }}>Localitate</th>
-                    <th style={{ padding: '12px', textAlign: 'right', fontWeight: '600', color: '#64748b' }}>Valoare (EUR)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredProjects.slice(0, 50).map((project, index) => {
-                    const title = project.SCOP_PROIECT || project.Scop_Proiect || project.title || 'N/A'
-                    const beneficiary = project.DENUMIRE_BENEFICIAR || project.beneficiaryName || 'N/A'
-                    const locality = project.LOCALIZARE_LOCALITATE || project.locality || project.countyName || 'N/A'
-                    const value = project.__share_value || project.valoare_fe || project.value || 0
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {filteredProjects.slice(0, 50).map((project, index) => {
+                const title = project.DENUMIRE_PROIECT || project.SCOP_PROIECT || project.title || 'N/A'
+                const beneficiary = project.BENEFICIAR || project.DENUMIRE_BENEFICIAR || 'N/A'
+                const locality = project.LOCALIZARE_LOCALITATE || project.locality || 'N/A'
+                const county = project.countyName || project.JUDET_IMPLEMENTARE || 'N/A'
+                const value = project.__share_value || project.valoare_fe || project.value || 0
+                const smis = project.COD_SMIS || project.contractNumber || ''
+                const component = project.COD_COMPONENTA || project.component || ''
+                const measure = project.COD_MASURA || project.measure || ''
+                const status = project.STADIU || project.status || ''
+                const fundingSource = project.SURSA_FINANTARE || project.fundingSource || 'Grant/loan'
+                
+                return (
+                  <div key={index} style={{
+                    background: '#fff',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '12px',
+                    padding: '16px',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+                  }}>
+                    {/* Titlu proiect */}
+                    <h3 style={{
+                      fontSize: '15px',
+                      fontWeight: '700',
+                      color: '#0f172a',
+                      marginBottom: '12px',
+                      lineHeight: '1.4'
+                    }}>
+                      {title}
+                    </h3>
                     
-                    return (
-                      <tr key={index} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                        <td style={{ padding: '12px', maxWidth: '300px' }}>
-                          <div style={{ 
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                            color: '#0f172a'
-                          }}>
-                            {title}
-                          </div>
-                        </td>
-                        <td style={{ padding: '12px', color: '#475569' }}>{beneficiary}</td>
-                        <td style={{ padding: '12px', color: '#475569' }}>{locality}</td>
-                        <td style={{ padding: '12px', textAlign: 'right', fontWeight: '600', color: '#0f172a' }}>
-                          {fmtMoney(value, 'EUR')}
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
+                    {/* Valoare */}
+                    <div style={{
+                      background: '#d1fae5',
+                      borderRadius: '8px',
+                      padding: '12px',
+                      marginBottom: '16px',
+                      textAlign: 'center'
+                    }}>
+                      <div style={{
+                        fontSize: '20px',
+                        fontWeight: '800',
+                        color: '#059669'
+                      }}>
+                        {fmtMoney(value, 'EUR')}
+                      </div>
+                    </div>
+                    
+                    {/* Beneficiar */}
+                    <div style={{
+                      borderLeft: '3px solid #3b82f6',
+                      paddingLeft: '12px',
+                      marginBottom: '16px'
+                    }}>
+                      <div style={{ fontSize: '11px', color: '#64748b', marginBottom: '4px' }}>
+                        BENEFICIAR
+                      </div>
+                      <div style={{ fontSize: '14px', fontWeight: '600', color: '#0f172a' }}>
+                        {beneficiary}
+                      </div>
+                    </div>
+                    
+                    {/* Grid 2 coloane */}
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 1fr',
+                      gap: '12px',
+                      fontSize: '13px'
+                    }}>
+                      <div>
+                        <div style={{ color: '#64748b', marginBottom: '4px' }}>JUDEȚ</div>
+                        <div style={{ fontWeight: '600', color: '#0f172a' }}>{county}</div>
+                      </div>
+                      <div>
+                        <div style={{ color: '#64748b', marginBottom: '4px' }}>SURSĂ FINANȚARE</div>
+                        <div style={{ fontWeight: '600', color: '#0f172a' }}>{fundingSource}</div>
+                      </div>
+                      <div>
+                        <div style={{ color: '#64748b', marginBottom: '4px' }}>STADIU</div>
+                        <div style={{ fontWeight: '600', color: status.includes('IMPLEMENTARE') ? '#10b981' : '#0f172a' }}>
+                          {status || 'N/A'}
+                        </div>
+                      </div>
+                      <div>
+                        <div style={{ color: '#64748b', marginBottom: '4px' }}>LOCALITATE</div>
+                        <div style={{ fontWeight: '600', color: '#0f172a' }}>{locality}</div>
+                      </div>
+                      {component && (
+                        <div>
+                          <div style={{ color: '#64748b', marginBottom: '4px' }}>COD COMPONENTĂ</div>
+                          <div style={{ fontWeight: '600', color: '#0f172a' }}>{component}</div>
+                        </div>
+                      )}
+                      {measure && (
+                        <div>
+                          <div style={{ color: '#64748b', marginBottom: '4px' }}>COD MĂSURĂ</div>
+                          <div style={{ fontWeight: '600', color: '#0f172a' }}>{measure}</div>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* SMIS */}
+                    {smis && (
+                      <div style={{
+                        marginTop: '12px',
+                        paddingTop: '12px',
+                        borderTop: '1px solid #f1f5f9',
+                        fontSize: '11px',
+                        color: '#64748b'
+                      }}>
+                        SMIS: {smis}
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
               
               {filteredProjects.length > 50 && (
                 <div style={{ marginTop: '16px', textAlign: 'center', color: '#64748b', fontSize: '13px' }}>
