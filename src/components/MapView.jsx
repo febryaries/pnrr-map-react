@@ -2555,7 +2555,14 @@ const MapView = ({
             {/* Controls layout */}
             <div className="controls controls--map">
                 {/* Row 1: Data Source + Currency */}
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '15px', width: '100%' }}>
+                <div style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    marginBottom: '15px', 
+                    width: '100%',
+                    flexWrap: 'wrap',
+                    gap: '15px'
+                }}>
                     <div className="control-group">
                         <p className="control-label" style={{ margin: 0 }}>Sursa datelor:</p>
                         <div className="segment" style={{ margin: 0 }}>    
@@ -2574,9 +2581,14 @@ const MapView = ({
                         </div>
                     </div>
                     
-                    <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <p className="control-label" style={{ margin: 0 }}>Moneda:</p>
-                        <div className="segment" style={{ margin: 0 }}>
+                    <div className="control-group" style={{ 
+                        marginLeft: 'auto', 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: '10px'
+                    }}>
+                        <p className="control-label" style={{ margin: 0, whiteSpace: 'nowrap' }}>Moneda:</p>
+                        <div className="segment" style={{ margin: 0, display: 'flex', whiteSpace: 'nowrap' }}>
                             <button
                                 className={currency === 'EUR' ? 'active' : ''}
                                 onClick={() => setCurrency('EUR')}
@@ -2595,7 +2607,13 @@ const MapView = ({
                 
                 {/* Row 2: Vizualizare + Căutare Semantică - only show if not payments */}
                 {endpoint !== 'payments' && (
-                    <div style={{ display: 'flex', alignItems: 'flex-start', width: '100%' }}>
+                    <div style={{ 
+                        display: 'flex', 
+                        alignItems: 'flex-start', 
+                        width: '100%',
+                        flexWrap: 'wrap',
+                        gap: '15px'
+                    }}>
                         <div className="control-group">
                             <p className="control-label" style={{ margin: 0 }}>Vizualizare:</p>
                             <div className="segment" style={{ margin: 0 }}>
@@ -3334,10 +3352,10 @@ function SemanticSearchCard({ endpoint }) {
     const exampleTerms = ['apă uzată', 'spital', 'drum', 'energie', 'școală']
     
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                <p className="control-label" style={{ margin: 0, minWidth: '120px' }}>Căutare Semantică:</p>
-                <div style={{ display: 'flex', gap: '10px', flex: 1 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '15px', flexWrap: 'wrap' }}>
+                <p className="control-label" style={{ margin: 0 }}>Căutare Semantică:</p>
+                <div style={{ display: 'flex', gap: '10px', flex: 1, minWidth: '250px' }}>
                     <input
                         type="text"
                         placeholder="Ex: apă uzată, spital, drum..."
@@ -3353,7 +3371,8 @@ function SemanticSearchCard({ endpoint }) {
                             fontSize: '14px',
                             flex: 1,
                             outline: 'none',
-                            transition: 'border-color 0.2s'
+                            transition: 'border-color 0.2s',
+                            minWidth: '150px'
                         }}
                         onFocus={(e) => e.target.style.borderColor = '#0ea5e9'}
                         onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
@@ -3369,7 +3388,8 @@ function SemanticSearchCard({ endpoint }) {
                             fontSize: '14px',
                             fontWeight: '600',
                             cursor: 'pointer',
-                            transition: 'background 0.2s'
+                            transition: 'background 0.2s',
+                            whiteSpace: 'nowrap'
                         }}
                         onMouseEnter={(e) => e.target.style.background = '#0284c7'}
                         onMouseLeave={(e) => e.target.style.background = '#0ea5e9'}
@@ -3386,7 +3406,7 @@ function SemanticSearchCard({ endpoint }) {
                 gap: '8px', 
                 fontSize: '13px',
                 color: '#64748b',
-                paddingLeft: '135px'
+                flexWrap: 'wrap'
             }}>
                 <span>Exemple:</span>
                 {exampleTerms.map(term => (
