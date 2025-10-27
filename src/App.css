@@ -26,6 +26,25 @@ h1, h2, h3, h4, h5, h6, p, span, div, a, button, input, textarea, select, label,
   font-family: inherit;
 }
 
+/* Responsive display utilities */
+.desktop-only {
+  display: block;
+}
+
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
+  
+  .mobile-only {
+    display: block;
+  }
+}
+
 /* Enhanced Filter Styling */
 .table-filters-sticky {
   background: #ffffff;

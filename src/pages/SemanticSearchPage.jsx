@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
@@ -37,6 +37,7 @@ export default function SemanticSearchPage() {
   const [filteredProjects, setFilteredProjects] = useState([])
   const [mapData, setMapData] = useState(null)
   const [searchQuery, setSearchQuery] = useState(query)
+  const [selectedProjectIndex, setSelectedProjectIndex] = useState(null)
   
   // Load data on mount
   useEffect(() => {
@@ -167,6 +168,35 @@ export default function SemanticSearchPage() {
   
   const exampleTerms = ['apă uzată', 'spital', 'drum', 'energie', 'școală']
   
+  // Get projects to display in table (filtered by pin selection)
+  const displayedProjects = useMemo(() => {
+    if (selectedProjectIndex !== null) {
+      // Show only selected project
+      return [filteredProjects[selectedProjectIndex]].filter(Boolean)
+    }
+    // Show first 50 projects
+    return filteredProjects.slice(0, 50)
+  }, [filteredProjects, selectedProjectIndex])
+  
+  // Handle pin click - filter table to show only selected project
+  const handlePinClick = useCallback((projectIndex) => {
+    if (selectedProjectIndex === projectIndex) {
+      // Deselect - show all projects
+      setSelectedProjectIndex(null)
+    } else {
+      // Select - show only this project
+      setSelectedProjectIndex(projectIndex)
+      
+      // Scroll to table
+      setTimeout(() => {
+        const tableElement = document.querySelector('.projects-table-container')
+        if (tableElement) {
+          tableElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }, 100)
+    }
+  }, [selectedProjectIndex])
+  
   // Prepare map options with pins
   const mapOptions = useMemo(() => {
     if (!mapData || filteredProjects.length === 0) return null
@@ -252,6 +282,7 @@ export default function SemanticSearchPage() {
         value: proj.value,
         smis: proj.smis,
         beneficiary: proj.beneficiary,
+        projectIndex: proj.index,  // Store index for click handling
         marker: {
           radius: 5,  // Fixed size for all pins
           fillColor: '#ef4444',
@@ -311,10 +342,21 @@ export default function SemanticSearchPage() {
         data: pins,
         dataLabels: {
           enabled: false
+        },
+        cursor: 'pointer',
+        point: {
+          events: {
+            click: function() {
+              // Handle pin click - scroll to project
+              if (this.projectIndex !== undefined) {
+                handlePinClick(this.projectIndex)
+              }
+            }
+          }
         }
       }]
     }
-  }, [mapData, filteredProjects])
+  }, [mapData, filteredProjects, handlePinClick])
   
   return (
     <div className="semantic-search-page">
@@ -548,15 +590,34 @@ export default function SemanticSearchPage() {
         </div>
         
         {/* Tabel rezultate */}
-        <div style={{
+        <div className="projects-table-container" style={{
           background: '#fff',
           borderRadius: '16px',
           padding: '24px',
           boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
         }}>
-          <h2 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '16px', color: '#0f172a' }}>
-            Proiecte – „{query}"
-          </h2>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#0f172a', margin: 0 }}>
+              Proiecte – „{query}"
+            </h2>
+            {selectedProjectIndex !== null && (
+              <button
+                onClick={() => setSelectedProjectIndex(null)}
+                style={{
+                  padding: '8px 16px',
+                  background: '#f1f5f9',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '8px',
+                  fontSize: '13px',
+                  cursor: 'pointer',
+                  color: '#475569',
+                  fontWeight: '500'
+                }}
+              >
+                ✕ Arată toate
+              </button>
+            )}
+          </div>
           
           {loading ? (
             <div style={{ textAlign: 'center', padding: '40px' }}>
@@ -571,8 +632,62 @@ export default function SemanticSearchPage() {
               </p>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              {filteredProjects.slice(0, 50).map((project, index) => {
+            <>
+              {/* Desktop: Tabel clasic */}
+              <div className="desktop-only" style={{ overflowX: 'auto' }}>
+                <table style={{
+                  width: '100%',
+                  borderCollapse: 'collapse',
+                  fontSize: '14px'
+                }}>
+                  <thead>
+                    <tr style={{ borderBottom: '2px solid #e5e7eb' }}>
+                      <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600', color: '#64748b' }}>Proiect</th>
+                      <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600', color: '#64748b' }}>Beneficiar</th>
+                      <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600', color: '#64748b' }}>Localitate</th>
+                      <th style={{ padding: '12px', textAlign: 'right', fontWeight: '600', color: '#64748b' }}>Valoare (EUR)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {displayedProjects.map((project, index) => {
+                      const title = project.DENUMIRE_PROIECT || project.SCOP_PROIECT || project.title || 'N/A'
+                      const beneficiary = project.BENEFICIAR || project.DENUMIRE_BENEFICIAR || 'N/A'
+                      const locality = project.LOCALIZARE_LOCALITATE || project.locality || 'N/A'
+                      const value = project.__share_value || project.valoare_fe || project.value || 0
+                      
+                      return (
+                        <tr 
+                          key={index} 
+                          id={`project-${index}`}
+                          style={{ 
+                            borderBottom: '1px solid #f1f5f9'
+                          }}
+                        >
+                          <td style={{ padding: '12px', maxWidth: '400px' }}>
+                            <div style={{ 
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                              color: '#0f172a'
+                            }}>
+                              {title}
+                            </div>
+                          </td>
+                          <td style={{ padding: '12px', color: '#475569' }}>{beneficiary}</td>
+                          <td style={{ padding: '12px', color: '#475569' }}>{locality}</td>
+                          <td style={{ padding: '12px', textAlign: 'right', fontWeight: '600', color: '#0f172a' }}>
+                            {fmtMoney(value, 'EUR')}
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              
+              {/* Mobile: Carduri */}
+              <div className="mobile-only" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {displayedProjects.map((project, index) => {
                 const title = project.DENUMIRE_PROIECT || project.SCOP_PROIECT || project.title || 'N/A'
                 const beneficiary = project.BENEFICIAR || project.DENUMIRE_BENEFICIAR || 'N/A'
                 const locality = project.LOCALIZARE_LOCALITATE || project.locality || 'N/A'
@@ -585,13 +700,17 @@ export default function SemanticSearchPage() {
                 const fundingSource = project.SURSA_FINANTARE || project.fundingSource || 'Grant/loan'
                 
                 return (
-                  <div key={index} style={{
-                    background: '#fff',
-                    border: '1px solid #e5e7eb',
-                    borderRadius: '12px',
-                    padding: '16px',
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
-                  }}>
+                  <div 
+                    key={index} 
+                    id={`project-${index}`}
+                    style={{
+                      background: '#fff',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '12px',
+                      padding: '16px',
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+                    }}
+                  >
                     {/* Titlu proiect */}
                     <h3 style={{
                       fontSize: '15px',
@@ -688,13 +807,20 @@ export default function SemanticSearchPage() {
                   </div>
                 )
               })}
+              </div>
               
-              {filteredProjects.length > 50 && (
+              {selectedProjectIndex === null && filteredProjects.length > 50 && (
                 <div style={{ marginTop: '16px', textAlign: 'center', color: '#64748b', fontSize: '13px' }}>
                   Afișate primele 50 din {fmtNum(filteredProjects.length)} proiecte găsite
                 </div>
               )}
-            </div>
+              
+              {selectedProjectIndex !== null && (
+                <div style={{ marginTop: '16px', textAlign: 'center', color: '#64748b', fontSize: '13px' }}>
+                  Afișat 1 proiect selectat din {fmtNum(filteredProjects.length)} proiecte găsite
+                </div>
+              )}
+            </>
           )}
         </div>
         
