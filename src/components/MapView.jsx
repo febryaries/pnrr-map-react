@@ -2257,6 +2257,26 @@ const MapView = ({
                     
                     const progressValue = item[fieldMappings.progress] !== undefined && item[fieldMappings.progress] !== null && item[fieldMappings.progress] !== '' ? item[fieldMappings.progress] : '-';
                     
+                    // Check if this is one of the 14 specific component/investment combinations
+                    const componentCode = item[fieldMappings.componentCode]
+                    const measureCode = item[fieldMappings.measureCode]
+                    const isSpecialCombination = (
+                        (componentCode === 'C10' && measureCode === 'I3') ||
+                        (componentCode === 'C15' && measureCode === 'I16') ||
+                        (componentCode === 'C15' && measureCode === 'I10') ||
+                        (componentCode === 'C15' && measureCode === 'I1') ||
+                        (componentCode === 'C16' && measureCode === 'I4') ||
+                        (componentCode === 'C3' && measureCode === 'I1') ||
+                        (componentCode === 'C4' && measureCode === 'I3') ||
+                        (componentCode === 'C5' && measureCode === 'I1') ||
+                        (componentCode === 'C6' && measureCode === 'I4') ||
+                        (componentCode === 'C6' && measureCode === 'I5') ||
+                        (componentCode === 'C7' && measureCode === 'I19') ||
+                        (componentCode === 'C9' && measureCode === 'I2') ||
+                        (componentCode === 'C9' && measureCode === 'I3') ||
+                        (componentCode === 'C9' && measureCode === 'I5')
+                    )
+                    
                     allData.push({
                         // Add original data for semantic search first
                         ...item,
@@ -2264,12 +2284,12 @@ const MapView = ({
                         title: fullTitle,
                         beneficiary: item[fieldMappings.beneficiary],
                         cui: endpoint === 'payments' ? item.CUI_BENEFICIAR_FINAL : undefined,
-                        fundingSource: item[fieldMappings.fundingSource],
+                        fundingSource: isSpecialCombination ? 'Grant/Loan' : item[fieldMappings.fundingSource],
                         value: getValueField(item),
                         value_ron: valueRON,
                         progress: progressValue,
-                        componentCode: item[fieldMappings.componentCode],
-                        measureCode: item[fieldMappings.measureCode],
+                        componentCode: componentCode,
+                        measureCode: measureCode,
                         componentLabel: item[fieldMappings.componentLabel] || '',
                         locality: item[fieldMappings.locality] || '',
                         cri: item[fieldMappings.cri] || '',
@@ -2972,7 +2992,14 @@ const MapView = ({
                             key: 'fundingSource',
                             label: 'Sursă Finanțare',
                             searchable: true,
-                            render: (value) => <div style={{ fontSize: '12px', minWidth: '70px' }}>{value ? value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() : '-'}</div>
+                            render: (value) => {
+                                // Keep "Grant/Loan" exactly as is for the 14 special combinations
+                                if (value === 'Grant/Loan') {
+                                    return <div style={{ fontSize: '12px', minWidth: '70px' }}>{value}</div>
+                                }
+                                // For other values, capitalize first letter
+                                return <div style={{ fontSize: '12px', minWidth: '70px' }}>{value ? value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() : '-'}</div>
+                            }
                         },
                         {
                             key: 'value',
