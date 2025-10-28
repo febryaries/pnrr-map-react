@@ -668,7 +668,8 @@ export default function SemanticSearchPage() {
                               overflow: 'hidden',
                               textOverflow: 'ellipsis',
                               whiteSpace: 'nowrap',
-                              color: '#0f172a'
+                              color: '#0f172a',
+                              textTransform: 'uppercase'
                             }}>
                               {title}
                             </div>
@@ -717,7 +718,8 @@ export default function SemanticSearchPage() {
                       fontWeight: '700',
                       color: '#0f172a',
                       marginBottom: '12px',
-                      lineHeight: '1.4'
+                      lineHeight: '1.4',
+                      textTransform: 'uppercase'
                     }}>
                       {title}
                     </h3>
