@@ -1058,9 +1058,9 @@
           "masura": "I2",
           "finantare": "grant",
           "titlul_masurii": "I2. Dezvoltarea infrastructurii spitalicești publice (5 spitale construite/echipate)",
-          "alocare_financiara_euro": 499955474,
+          "alocare_financiara_euro": 501455474,
           "executat_euro": 423615541,
-          "executat_procent": 84.73
+          "executat_procent": 84.48
         },
         {
           "masura": "I3",
@@ -1394,7 +1394,7 @@
         },
         {
           "masura": "I4",
-          "finantare": "loan",
+          "finantare": "grant",
           "titlul_masurii": "I4. Sprijinirea unităților de învățământ cu risc crescut de abandon școlar",
           "alocare_financiara_euro": 460000000,
           "executat_euro": 14446062,
@@ -1402,7 +1402,7 @@
         },
         {
           "masura": "I5",
-          "finantare": "loan",
+          "finantare": "grant",
           "titlul_masurii": "I5. Instruiri pentru utilizatorii (SIIIR) și (MATE) și intervenții sistemice pentru reducerea abandonului școlar",
           "alocare_financiara_euro": 43000000,
           "executat_euro": 0,
@@ -1434,7 +1434,7 @@
         },
         {
           "masura": "I9",
-          "finantare": "loan",
+          "finantare": "grant",
           "titlul_masurii": "I9. Asigurarea echipamentelor și resurselor tehnologice digitale pentru școli",
           "alocare_financiara_euro": 478500000,
           "executat_euro": 250736144,
