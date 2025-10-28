@@ -7,11 +7,69 @@ import { createSemanticMatcher } from '../utils/semanticSearch'
 import { fmtMoney, fmtNum } from '../data/data'
 import { getPNRRDataService } from '../services/PNRRDataService'
 import { DATA_ENDPOINTS } from '../constants/PNRRConstants'
+import roLocalities from '../data/ro_localities.min.json'
 import '../App.css'
 
 // Initialize Highcharts Map module
 if (typeof Highcharts === 'object') {
   HighchartsMap(Highcharts)
+}
+
+/**
+ * Normalizează nume localitate pentru matching
+ * Elimină diacritice, cratimă, spații multiple
+ */
+const normalizeLocalityName = (name) => {
+  if (!name) return ''
+  return name
+    .toString()
+    .toUpperCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/Ș|Ş/gi, 'S')
+    .replace(/Ț|Ţ/gi, 'T')
+    .replace(/Ă/gi, 'A')
+    .replace(/Â/gi, 'A')
+    .replace(/Î/gi, 'I')
+    .replace(/-/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+/**
+ * Creează index rapid pentru localități (o singură dată)
+ * Map: nume normalizat → { lat, lon }
+ */
+const createLocalitiesIndex = () => {
+  const index = new Map()
+  
+  for (const loc of roLocalities) {
+    // Index pe nume
+    const normalized = normalizeLocalityName(loc.name)
+    index.set(normalized, { lat: loc.lat, lon: loc.lon })
+    
+    // Index pe aliasuri
+    if (loc.aliases) {
+      for (const alias of loc.aliases) {
+        const aliasNormalized = normalizeLocalityName(alias)
+        index.set(aliasNormalized, { lat: loc.lat, lon: loc.lon })
+      }
+    }
+  }
+  
+  return index
+}
+
+// Creează index-ul o singură dată (la nivel global)
+const localitiesIndex = createLocalitiesIndex()
+
+/**
+ * Găsește coordonate exacte pentru o localitate (RAPID cu index)
+ */
+const findLocalityCoordinates = (localityName) => {
+  if (!localityName) return null
+  const normalized = normalizeLocalityName(localityName)
+  return localitiesIndex.get(normalized) || null
 }
 
 /**
@@ -247,31 +305,40 @@ export default function SemanticSearchPage() {
     
     // Create pin data points - 1 pin per project
     const pins = projectPins.map((proj) => {
-      // Match county name to coordinates
-      let lat = 45.94, lon = 24.97 // Center of Romania as fallback
+      // Default to center of Romania as fallback
+      let lat = 45.94, lon = 24.97
       
-      const countyUpper = proj.county.toUpperCase()
-        .replace(/Ă/g, 'A').replace(/Â/g, 'A')
-        .replace(/Î/g, 'I').replace(/Ș/g, 'S')
-        .replace(/Ț/g, 'T')
+      // Try to find exact locality coordinates first
+      const localityCoords = findLocalityCoordinates(proj.locality, null)
       
-      // Try to find county coordinates
-      for (const [countyKey, coords] of Object.entries(countyCoords)) {
-        const keyNorm = countyKey.replace(/Ă/g, 'A').replace(/Â/g, 'A')
-          .replace(/Î/g, 'I').replace(/Ș/g, 'S').replace(/Ț/g, 'T')
+      if (localityCoords) {
+        // Use exact locality coordinates
+        lat = localityCoords.lat
+        lon = localityCoords.lon
+      } else {
+        // Fallback to county center with small random offset
+        const countyUpper = proj.county.toUpperCase()
+          .replace(/Ă/g, 'A').replace(/Â/g, 'A')
+          .replace(/Î/g, 'I').replace(/Ș/g, 'S')
+          .replace(/Ț/g, 'T')
         
-        if (countyUpper.includes(keyNorm) || keyNorm.includes(countyUpper) || countyUpper === keyNorm) {
-          // Add random offset so multiple projects in same county don't overlap
-          lat = coords[0] + (Math.random() - 0.5) * 0.4
-          lon = coords[1] + (Math.random() - 0.5) * 0.4
+        // Try to find county coordinates
+        for (const [countyKey, coords] of Object.entries(countyCoords)) {
+          const keyNorm = countyKey.replace(/Ă/g, 'A').replace(/Â/g, 'A')
+            .replace(/Î/g, 'I').replace(/Ș/g, 'S').replace(/Ț/g, 'T')
           
-          // Clamp coordinates within Romania bounds
-          lat = Math.max(romaniaBounds.minLat, Math.min(romaniaBounds.maxLat, lat))
-          lon = Math.max(romaniaBounds.minLon, Math.min(romaniaBounds.maxLon, lon))
-          
-          break
+          if (countyUpper.includes(keyNorm) || keyNorm.includes(countyUpper) || countyUpper === keyNorm) {
+            // Add small random offset for county-level projects
+            lat = coords[0] + (Math.random() - 0.5) * 0.2
+            lon = coords[1] + (Math.random() - 0.5) * 0.2
+            break
+          }
         }
       }
+      
+      // Clamp coordinates within Romania bounds (safety check)
+      lat = Math.max(romaniaBounds.minLat, Math.min(romaniaBounds.maxLat, lat))
+      lon = Math.max(romaniaBounds.minLon, Math.min(romaniaBounds.maxLon, lon))
       
       return {
         name: proj.projectName,

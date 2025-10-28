@@ -2387,7 +2387,7 @@ const MapView = ({
                 {/* Transparency Banner */}
                 <div className="transparency-banner">
                     <div className="transparency-banner-content">
-                        <p>Acest tablou de bord reprezintă angajamentul României față de transparența publică privind fondurile NextGenerationEU și reflectă cifrele preliminare prezentate în PNRR, după depunerea oficială a amendamentului la 12 septembrie 2025, în conformitate cu procedura prevăzută la articolul 21 din Regulamentul (UE) 2021/241 de instituire a Mecanismului de Redresare și Reziliență.</p>
+                        <p>Acest tablou de bord reprezintă angajamentul României față de transparența publică în ceea ce privește fondurile NextGenerationEU și reflectă cifrele prezentate în PNRR, în urma aprobării de către Comisia Europeană, la 22 octombrie 2025, a propunerii de decizie de punere în aplicare a Consiliului de modificare a CID a planului României, în conformitate cu procedura prevăzută la articolul 21 din Regulamentul (UE) 2021/241 de instituire a Mecanismului de redresare și reziliență.</p>
                     </div>
                 </div>
                 
@@ -2421,7 +2421,7 @@ const MapView = ({
             {/* Transparency Banner */}
             <div className="transparency-banner">
                 <div className="transparency-banner-content">
-                    <p>Acest tablou de bord reprezintă angajamentul României față de transparența publică privind fondurile NextGenerationEU și reflectă cifrele preliminare prezentate în PNRR, după depunerea oficială a amendamentului la 12 septembrie 2025, în conformitate cu procedura prevăzută la articolul 21 din Regulamentul (UE) 2021/241 de instituire a Mecanismului de Redresare și Reziliență.</p>
+                    <p>Acest tablou de bord reprezintă angajamentul României față de transparența publică în ceea ce privește fondurile NextGenerationEU și reflectă cifrele prezentate în PNRR, în urma aprobării de către Comisia Europeană, la 22 octombrie 2025, a propunerii de decizie de punere în aplicare a Consiliului de modificare a CID a planului României, în conformitate cu procedura prevăzută la articolul 21 din Regulamentul (UE) 2021/241 de instituire a Mecanismului de redresare și reziliență.</p>
                 </div>
             </div>
             
