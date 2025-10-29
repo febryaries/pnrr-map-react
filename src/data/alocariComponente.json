@@ -1306,7 +1306,7 @@
         },
         {
           "masura": "I10",
-          "finantare": "grant",
+          "finantare": "loan",
           "titlul_masurii": "I10a. Dezvoltarea rețelei de școli verzi și achiziționarea de microbuze verzi",
           "alocare_financiara_euro": 209144630,
           "executat_euro": 131043469,
@@ -1314,7 +1314,7 @@
         },
         {
           "masura": "I10",
-          "finantare": "loan",
+          "finantare": "grant",
           "titlul_masurii": "I10. Dezvoltarea rețelei de școli verzi și achiziționarea de microbuze verzi",
           "alocare_financiara_euro": 52960909,
           "executat_euro": 0,
@@ -1330,7 +1330,7 @@
         },
         {
           "masura": "I1",
-          "finantare": "loan",
+          "finantare": "grant",
           "titlul_masurii": "I1. Construirea si echiparea creșelor",
           "alocare_financiara_euro": 62727000,
           "executat_euro": 0,
@@ -1354,7 +1354,7 @@
         },
         {
           "masura": "I1",
-          "finantare": "grant",
+          "finantare": "loan",
           "titlul_masurii": "I1a. Construirea si echiparea creșelor",
           "alocare_financiara_euro": 167273000,
           "executat_euro": 121987711,
@@ -1410,7 +1410,7 @@
         },
         {
           "masura": "I6",
-          "finantare": "loan",
+          "finantare": "grant",
           "titlul_masurii": "I6. Dezvoltarea si dotarea campusurilor profesionale in cadrul consortiilor regionale",
           "alocare_financiara_euro": 169000000,
           "executat_euro": 21042119,
@@ -1418,7 +1418,7 @@
         },
         {
           "masura": "I14",
-          "finantare": "loan",
+          "finantare": "grant",
           "titlul_masurii": "I14. Echiparea atelierelor de practică din unitățile de învățământ profesional și tehnic",
           "alocare_financiara_euro": 50000000,
           "executat_euro": 20515164,
@@ -1426,7 +1426,7 @@
         },
         {
           "masura": "I8",
-          "finantare": "loan",
+          "finantare": "grant",
           "titlul_masurii": "I8. Program de formare continuă a personalului didactic",
           "alocare_financiara_euro": 80000000,
           "executat_euro": 20923325,
