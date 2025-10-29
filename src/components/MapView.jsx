@@ -1620,8 +1620,74 @@ const MapView = ({
                 if (processedData?.items?.[0]) {
                     console.log('Sample beneficiary item:', processedData.items[0])
                     console.log('Sample beneficiary keys:', Object.keys(processedData.items[0]))
-                    console.log('All keys in first item:', Object.keys(processedData.items[0]))
                 }
+                
+                // Normalize and sort the data
+                if (processedData && processedData.items && processedData.items.length > 0) {
+                    // Normalize field names (handle different case variations)
+                    const normalizedItems = processedData.items.map(item => {
+                        const normalized = {}
+                        // Find field names (case-insensitive)
+                        const keys = Object.keys(item)
+                        const lowerKeys = keys.map(k => k.toLowerCase())
+                        
+                        // Helper function to find key by lowercase match
+                        const findKey = (...lowerNames) => {
+                            for (const lowerName of lowerNames) {
+                                const idx = lowerKeys.indexOf(lowerName)
+                                if (idx >= 0) return keys[idx]
+                            }
+                            return null
+                        }
+                        
+                        // Map to our expected field names
+                        const beneficiarKey = findKey('beneficiar', 'nume_beneficiar', 'denumire_beneficiar', 'name', 'nume')
+                        const cuiKey = findKey('cui', 'cui_beneficiar', 'tax_id', 'cui_beneficiar_final')
+                        const totalEuroKey = findKey('total_euro', 'valoare_euro', 'amount_euro', 'valoare_plata_fe_euro')
+                        const totalRONKey = findKey('total', 'total_ron', 'valoare_ron', 'amount_ron', 'valoare_plata_fe')
+                        
+                        normalized.beneficiar = beneficiarKey ? item[beneficiarKey] : null
+                        normalized.cui = cuiKey ? item[cuiKey] : null
+                        normalized.total_euro = totalEuroKey ? (Number(item[totalEuroKey]) || 0) : 0
+                        normalized.total = totalRONKey ? (Number(item[totalRONKey]) || 0) : 0
+                        
+                        // If we couldn't find the expected fields, try to use all original fields (lowercase keys)
+                        if (!normalized.beneficiar && normalized.total_euro === 0 && normalized.total === 0) {
+                            // Keep original item but normalize key case for lookup
+                            const lowerCaseMap = {}
+                            Object.keys(item).forEach(key => {
+                                lowerCaseMap[key.toLowerCase()] = item[key]
+                            })
+                            // Try common field variations
+                            normalized.beneficiar = lowerCaseMap.beneficiar || lowerCaseMap.nume_beneficiar || lowerCaseMap.denumire_beneficiar || lowerCaseMap.name || lowerCaseMap.nume || null
+                            normalized.cui = lowerCaseMap.cui || lowerCaseMap.cui_beneficiar || lowerCaseMap.cui_beneficiar_final || lowerCaseMap.tax_id || null
+                            normalized.total_euro = Number(lowerCaseMap.total_euro || lowerCaseMap.valoare_euro || lowerCaseMap.amount_euro || lowerCaseMap.valoare_plata_fe_euro || 0) || 0
+                            normalized.total = Number(lowerCaseMap.total || lowerCaseMap.total_ron || lowerCaseMap.valoare_ron || lowerCaseMap.amount_ron || lowerCaseMap.valoare_plata_fe || 0) || 0
+                        }
+                        
+                        return normalized
+                    })
+                    
+                    // Filter out invalid entries (must have name and at least one amount > 0)
+                    const validItems = normalizedItems.filter(item => {
+                        const hasName = item.beneficiar && item.beneficiar !== 'N/A' && String(item.beneficiar).trim() !== ''
+                        const hasAmount = (item.total_euro && item.total_euro > 0) || (item.total && item.total > 0)
+                        return hasName && hasAmount
+                    })
+                    
+                    // Sort by EUR amount (descending) for display
+                    validItems.sort((a, b) => {
+                        const amountA = a.total_euro || 0
+                        const amountB = b.total_euro || 0
+                        return amountB - amountA
+                    })
+                    
+                    console.log('Normalized and filtered items:', validItems.length, 'out of', normalizedItems.length)
+                    console.log('Sample normalized item:', validItems[0])
+                    
+                    processedData.items = validItems
+                }
+                
                 setTopBeneficiaries(processedData)
             } catch (error) {
                 console.error('Error fetching top beneficiaries:', error)
@@ -3033,7 +3099,8 @@ const MapView = ({
                 </div>
             </section>
 
-            {/* County Ranking - Full Row */}
+            {/* County Ranking - Full Row - Hide when viewing National Projects */}
+            {viewMode !== 'national' && (
             <section className="ranking-section">
                 <div className="card rank-card">
                     <h3>Clasament județe – {getSelectionLabel()}</h3>
@@ -3075,6 +3142,7 @@ const MapView = ({
                     </div>
                 </div>
             </section>
+            )}
 
 
             {/* Projects/Payments Table */}
