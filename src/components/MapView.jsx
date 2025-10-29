@@ -1542,7 +1542,7 @@ const MapView = ({
         const fetchTopBeneficiaries = async () => {
             setLoadingBeneficiaries(true)
             try {
-                const url = 'http://mfe.gov.ro/generator/data/20251029-top_beneficiari.json.gz'
+                const url = 'http://mfe.gov.ro/generator/data/20251029-persons.json.gz'
                 const response = await fetch(url, {
                     headers: {
                         'Accept-Encoding': 'gzip, deflate'
