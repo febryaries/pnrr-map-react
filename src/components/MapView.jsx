@@ -814,7 +814,7 @@ const EnhancedTable = ({
                 {endpoint === 'payments' 
                   ? `${item.progress}%` 
                   : (item.PROGRES_FIZIC && item.PROGRES_FIZIC !== '' 
-                      ? `${Math.round(parseFloat(item.PROGRES_FIZIC.replace(',', '.')) * 100)}%` 
+                      ? `${Math.round(parseFloat(String(item.PROGRES_FIZIC).replace(',', '.')) * 100)}%` 
                       : (item.progress || '-')
                     )
                 }
@@ -1194,19 +1194,19 @@ const EnhancedTable = ({
                 </div>
               )}
               
-              {/* CRI Filter - HIDDEN (coloana eliminată din tabel) */}
-              {/* <div className="filter-item">
+              {/* CRI Filter - Visible in filters but not in table */}
+              <div className="filter-item">
                 <label>🔬 CRI</label>
                 <select value={filterCRI} onChange={(e) => { setFilterCRI(e.target.value); closeMobileSidebar(); }}>
                   <option value="">Toate CRI-urile</option>
                   {uniqueCRIValues.map(cri => {
                     const criCode = typeof cri === 'string' ? cri : cri.cri
                     const criDescription = typeof cri === 'string' ? cri : cri.cri_denumire
-                    const displayText = typeof cri === 'string' ? cri : criDescription
+                    const displayText = typeof cri === 'string' ? cri : (criDescription || criCode)
                     
                     return (
                       <option key={criCode} value={criCode} title={criCode}>
-                        {displayText}
+                        {criCode} {criDescription ? `- ${criDescription}` : ''}
                       </option>
                     )
                   })}
@@ -1221,7 +1221,7 @@ const EnhancedTable = ({
                     Eroare la încărcarea CRI-urilor
                   </div>
                 )}
-              </div> */}
+              </div>
               
               {/* County Filter - ALWAYS VISIBLE */}
               <div className="filter-item">
@@ -1542,13 +1542,91 @@ const MapView = ({
         const fetchTopBeneficiaries = async () => {
             setLoadingBeneficiaries(true)
             try {
-                const response = await fetch('https://pnrr.fonduri-ue.ro/ords/pnrr/mfe/persons')
-                if (response.ok) {
-                    const data = await response.json()
-                    setTopBeneficiaries(data)
+                const url = 'http://mfe.gov.ro/generator/data/20251029-top_beneficiari.json.gz'
+                const response = await fetch(url, {
+                    headers: {
+                        'Accept-Encoding': 'gzip, deflate'
+                    }
+                })
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`)
                 }
+                
+                // Get arrayBuffer to handle both compressed and uncompressed data
+                const arrayBuffer = await response.arrayBuffer()
+                const uint8Array = new Uint8Array(arrayBuffer)
+                let data
+                
+                // For .gz files, try gzip decompression first
+                // Check if it starts with gzip magic number (0x1f 0x8b)
+                const isGzip = uint8Array.length >= 2 && uint8Array[0] === 0x1f && uint8Array[1] === 0x8b
+                
+                if (isGzip) {
+                    // File is gzipped, decompress it
+                    try {
+                        // @ts-ignore - dynamic import
+                        const pako = await import('pako')
+                        const decompressed = pako.ungzip(uint8Array)
+                        const jsonString = new TextDecoder().decode(decompressed)
+                        data = JSON.parse(jsonString)
+                        console.log('Successfully decompressed gzip and parsed JSON')
+                    } catch (gzipError) {
+                        console.error('Gzip decompression failed:', gzipError)
+                        throw gzipError
+                    }
+                } else {
+                    // File is not gzipped, try to parse as JSON directly
+                    try {
+                        const text = new TextDecoder().decode(uint8Array)
+                        data = JSON.parse(text)
+                        console.log('Successfully parsed JSON (not compressed)')
+                    } catch (textError) {
+                        console.error('JSON parsing failed:', textError)
+                        throw textError
+                    }
+                }
+                
+                // Handle different data structures
+                // API might return { items: [...] } or directly [...]
+                console.log('Top beneficiaries raw data:', data)
+                console.log('Top beneficiaries data type:', typeof data, 'Is array:', Array.isArray(data))
+                
+                let processedData = null
+                if (data && Array.isArray(data)) {
+                    console.log('Data is direct array, length:', data.length)
+                    processedData = { items: data }
+                } else if (data && data.items && Array.isArray(data.items)) {
+                    console.log('Data has items property, length:', data.items.length)
+                    processedData = data
+                } else if (data && typeof data === 'object') {
+                    // Try to find any array property
+                    const arrayProp = Object.values(data).find(v => Array.isArray(v))
+                    if (arrayProp) {
+                        console.log('Found array property in object, length:', arrayProp.length)
+                        processedData = { items: arrayProp }
+                    } else {
+                        console.warn('Top beneficiaries data structure unexpected:', data)
+                        console.warn('Data keys:', Object.keys(data))
+                        processedData = { items: [] }
+                    }
+                } else {
+                    console.warn('Top beneficiaries data is not in expected format:', data)
+                    processedData = { items: [] }
+                }
+                
+                console.log('Setting top beneficiaries:', processedData)
+                console.log('Number of items:', processedData?.items?.length)
+                if (processedData?.items?.[0]) {
+                    console.log('Sample beneficiary item:', processedData.items[0])
+                    console.log('Sample beneficiary keys:', Object.keys(processedData.items[0]))
+                    console.log('All keys in first item:', Object.keys(processedData.items[0]))
+                }
+                setTopBeneficiaries(processedData)
             } catch (error) {
                 console.error('Error fetching top beneficiaries:', error)
+                console.error('Error details:', error.message, error.stack)
+                setTopBeneficiaries({ items: [] })
             } finally {
                 setLoadingBeneficiaries(false)
             }
@@ -2739,7 +2817,7 @@ const MapView = ({
                         title="Click pentru a vedea componentele PNRR"
                     >
                         <div className="mobile-total-value">{formatMoneyWithCurrency(calculatedTotals.totalValue)}</div>
-                        <div className="mobile-total-label">{endpoint === 'payments' ?  "TOTAL PLĂTIT" : "TOTAL VALOARE PROIECTE" }</div>
+                        <div className="mobile-total-label">{endpoint === 'payments' ?  "TOTAL PLĂTIT" : "VALOARE PNRR CONTRACTATĂ" }</div>
                         {activeProgram && (
                             <div className="mobile-total-sublabel">{COMPONENT_MAPPING[activeProgram]?.label}</div>
                         )}
@@ -2780,7 +2858,7 @@ const MapView = ({
                         title="Click pentru a vedea componentele PNRR"
                     >
                         <div className="map-total-value">{formatMoneyWithCurrency(calculatedTotals.totalValue)}</div>
-                        <div className="map-total-label">{endpoint === 'payments' ? "TOTAL PLĂTIT" : "TOTAL VALOARE PROIECTE" }</div>
+                        <div className="map-total-label">{endpoint === 'payments' ? "TOTAL PLĂTIT" : "VALOARE PNRR CONTRACTATĂ" }</div>
                         {activeProgram && (
                             <div className="map-total-sublabel">{COMPONENT_MAPPING[activeProgram]?.label}</div>
                         )}
@@ -2807,15 +2885,22 @@ const MapView = ({
                             <div className="loading-spinner-small"></div>
                             <span>Se încarcă topul beneficiarilor...</span>
                         </div>
-                    ) : topBeneficiaries && topBeneficiaries.items ? (
+                    ) : topBeneficiaries && topBeneficiaries.items && topBeneficiaries.items.length > 0 ? (
                             <>
                                 <ol className="rank-list">
                                         {topBeneficiaries.items
                                             .slice(0, showAllBeneficiaries ? 100 : 5)
                                             .map((beneficiary, index) => {
-                                                // Convert RON to EUR (using fixed rate 4.95)
-                                                const amountRON = beneficiary['received amount in lei'] || 0
-                                                const amountEUR = amountRON / 4.95
+                                                // Use actual API field names: beneficiar, cui, total_euro, total
+                                                // total = RON amount, total_euro = EUR amount (from API)
+                                                const amountRON = beneficiary['total'] || 0
+                                                const amountEUR = beneficiary['total_euro'] || 0 // Use total_euro directly from API
+                                                
+                                                const beneficiaryName = beneficiary['beneficiar'] || 'N/A'
+                                                
+                                                const taxId = beneficiary['cui'] ? String(beneficiary['cui']) : ''
+                                                
+                                                // Use correct currency amount based on selection
                                                 const displayAmount = currency === 'RON' ? amountRON : amountEUR
                                                 const isTopFive = index < 5
                                                 
@@ -2826,9 +2911,13 @@ const MapView = ({
                                                     maximumFractionDigits: 2
                                                 })} mil ${getCurrencySymbol()}`
 
-                                            // Calculate percentage for bar (similar to county ranking)
-                                            const maxAmount = topBeneficiaries.items[0] ? (topBeneficiaries.items[0]['received amount in lei'] || 0) / 4.95 : 1
-                                            const percentage = maxAmount ? Math.max(2, (amountEUR / maxAmount) * 100) : 0
+                                                // Calculate percentage for bar (similar to county ranking)
+                                                // Use total_euro for EUR comparison when currency is EUR, total for RON
+                                                const firstItem = topBeneficiaries.items[0]
+                                                const maxAmount = firstItem 
+                                                    ? (currency === 'EUR' ? (firstItem['total_euro'] || 0) : (firstItem['total'] || 0))
+                                                    : 1
+                                                const percentage = maxAmount ? Math.max(2, (displayAmount / maxAmount) * 100) : 0
 
                                                 return (
                                                 <li
@@ -2836,7 +2925,7 @@ const MapView = ({
                                                     className="rank-item"
                                                     onClick={() => {
                                                         console.log('Beneficiary clicked:', beneficiary);
-                                                        console.log('CUI:', beneficiary['tax identification number']);
+                                                        console.log('Tax ID:', taxId);
                                                         
                                                         // Switch to payments endpoint
                                                         if (switchEndpoint) {
@@ -2844,9 +2933,11 @@ const MapView = ({
                                                             console.log('Switched to payments endpoint');
                                                         }
                                                         
-                                                        // Set search term to the CUI
-                                                        setSearchTerm(beneficiary['tax identification number']);
-                                                        console.log('Set search term to:', beneficiary['tax identification number']);
+                                                        // Set search term to the CUI/tax ID
+                                                        if (taxId) {
+                                                            setSearchTerm(taxId);
+                                                            console.log('Set search term to:', taxId);
+                                                        }
                                                         
                                                         // Scroll to the table
                                                         setTimeout(() => {
@@ -2860,7 +2951,7 @@ const MapView = ({
                                                 >
                                                     <div className="rank-pos">{index + 1}</div>
                                                     <div className="rank-name" style={{ fontWeight: isTopFive ? 'bold' : 'normal' }}>
-                                                        {beneficiary['full legal name']}
+                                                        {beneficiaryName}
                                                     </div>
                                                     <div className="rank-bar-wrap">
                                                         <div className="rank-bar" style={{ width: `${percentage}%` }}></div>
@@ -2882,9 +2973,14 @@ const MapView = ({
                             </div>
                                 <div className="rank-note">
                                     Click pe un beneficiar pentru a vedea plățile lui. (Ctrl/⌘-clic pentru un nou tab.)
-                        </div>
+                                </div>
                             </>
-                    ) : null}
+                    ) : (
+                        <div className="beneficiaries-empty">
+                            <p>Nu s-au găsit date despre beneficiari sau datele nu sunt încă disponibile.</p>
+                            {topBeneficiaries && console.log('Top beneficiaries state:', topBeneficiaries)}
+                        </div>
+                    )}
                     </div>
                 </section>
             )}
@@ -3064,8 +3160,9 @@ const MapView = ({
                                 const progresFizic = item.PROGRES_FIZIC
                                 
                                 if (progresFizic !== null && progresFizic !== undefined && progresFizic !== '') {
-                                    // Convert Romanian decimal format (0,3 -> 30%)
-                                    const percentage = Math.round(parseFloat(progresFizic.replace(',', '.')) * 100)
+                                    // Convert to string first, then convert Romanian decimal format (0,3 -> 30%)
+                                    const progresFizicStr = String(progresFizic)
+                                    const percentage = Math.round(parseFloat(progresFizicStr.replace(',', '.')) * 100)
                                     return <div style={{ 
                                         fontSize: '12px', 
                                         minWidth: '100px', 

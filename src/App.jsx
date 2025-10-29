@@ -31,7 +31,7 @@ function App() {
     initialLoadError
   } = useDataEndpoint()
 
-  // Load real data on component mount and when endpoint changes
+  // Load real data when endpoint changes (initial load is handled by useDataEndpoint)
   useEffect(() => {
     const loadRealData = async () => {
       // If mock data is forced, use it
@@ -57,8 +57,11 @@ function App() {
       }
     }
     
-    loadRealData()
-  }, [endpoint, fetchData, endpointInfo.name, useMockData])
+    // Only load if not initializing (to avoid duplicate loads)
+    if (!isInitialLoading) {
+      loadRealData()
+    }
+  }, [endpoint, fetchData, useMockData, isInitialLoading])
 
   const handleCountyClick = (countyCode, countyName) => {
     // Scroll to top when opening county details

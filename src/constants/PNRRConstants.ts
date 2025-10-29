@@ -80,9 +80,9 @@ export const COUNTY_MAP = {
 
 // API Endpoints
 export const API_ENDPOINTS = {
-  PAYMENTS: 'https://pnrr.fonduri-ue.ro/ords/pnrr/mfe/plati_pnrr',
-  PROJECTS: 'https://pnrr.fonduri-ue.ro/ords/pnrr/mfe/progres_tehnic_proiecte',
-  TOP_BENEFICIARIES: 'https://pnrr.fonduri-ue.ro/ords/pnrr/mfe/top_beneficiari'
+  PAYMENTS: 'http://mfe.gov.ro/generator/data/20251029-plati_pnrr.json.gz',
+  PROJECTS: 'https://mfe.gov.ro/generator/data/20251029-progres_tehnic_proiecte.json.gz',
+  TOP_BENEFICIARIES: 'http://mfe.gov.ro/generator/data/20251029-top_beneficiari.json.gz'
 };
 
 // Data endpoint types

@@ -300,19 +300,59 @@ export class TotalIndicatorsAggregation extends BaseDataAggregation {
    * Fetch total indicators from the API
    */
   private async fetchTotalIndicators(): Promise<RawTotalIndicatorsData> {
-    const url = 'https://pnrr.fonduri-ue.ro/ords/pnrr/mfe/indicatori_total';
+    const url = 'http://mfe.gov.ro/generator/data/20251029-indicatori_total.json.gz';
     
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    try {
+      // First try to get as text (automatic decompression)
+      const response = await fetch(url, {
+        headers: {
+          'Accept-Encoding': 'gzip, deflate'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      // Try to parse as JSON text first (browser may auto-decompress)
+      try {
+        const text = await response.text();
+        const data = JSON.parse(text);
+        if (!data.items || data.items.length === 0) {
+          // Try direct data access if items array is empty
+          if (data && typeof data === 'object' && !Array.isArray(data)) {
+            return data as RawTotalIndicatorsData;
+          }
+          throw new Error('No total indicators data received from API');
+        }
+        return data.items[0];
+      } catch (textError) {
+        // If text parsing fails, try gzip decompression
+        try {
+          const arrayBuffer = await response.arrayBuffer();
+          // @ts-ignore - dynamic import
+          const pako = await import('pako');
+          const uint8Array = new Uint8Array(arrayBuffer);
+          const decompressed = pako.ungzip(uint8Array) as Uint8Array;
+          const jsonString = new TextDecoder().decode(decompressed);
+          const data = JSON.parse(jsonString);
+          if (!data.items || data.items.length === 0) {
+            // Try direct data access if items array is empty
+            if (data && typeof data === 'object' && !Array.isArray(data)) {
+              return data as RawTotalIndicatorsData;
+            }
+            throw new Error('No total indicators data received from API');
+          }
+          return data.items[0];
+        } catch (gzipError) {
+          console.error('Both text and gzip parsing failed:', gzipError);
+          throw gzipError;
+        }
+      }
+    } catch (error) {
+      console.error(`Error fetching total indicators:`, error);
+      throw error;
     }
-    
-    const data = await response.json();
-    if (!data.items || data.items.length === 0) {
-      throw new Error('No total indicators data received from API');
-    }
-    
-    return data.items[0];
   }
 
   /**

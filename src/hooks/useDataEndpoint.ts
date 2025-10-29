@@ -21,7 +21,7 @@ export const useDataEndpoint = () => {
   const [isInitialLoading, setIsInitialLoading] = useState(true)
   const [initialLoadError, setInitialLoadError] = useState<string | null>(null)
 
-  // Load only the active endpoint on mount (lazy loading for better performance)
+  // Load only the active endpoint on mount and when endpoint changes (lazy loading for better performance)
   useEffect(() => {
     const loadInitialData = async () => {
       setIsInitialLoading(true)
@@ -30,6 +30,7 @@ export const useDataEndpoint = () => {
       try {
         const dataService = getPNRRDataService()
         // Only load the current endpoint instead of all data sources
+        // Cache check is inside loadData, so this won't duplicate loads
         await dataService.loadData(endpoint)
       } catch (err) {
         console.error('Failed to load initial data:', err)
@@ -40,7 +41,7 @@ export const useDataEndpoint = () => {
     }
     
     loadInitialData()
-  }, [])
+  }, [endpoint]) // Add endpoint as dependency to reload when it changes
 
   // Get data from current endpoint
   const fetchData = useCallback(async (): Promise<CountyAggregation[]> => {

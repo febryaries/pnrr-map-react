@@ -353,48 +353,56 @@ export class PaymentDataAggregation extends BaseDataAggregation {
   // ========================================================================
   
   /**
-   * Fetch all payment data from the API with pagination
+   * Fetch all payment data from the API
    */
   private async fetchAllPaymentData(): Promise<RawAPIData[]> {
-    const allData: RawAPIData[] = [];
-    let offset = 0;
-    const limit = 5000;
-    let hasMoreData = true;
+    const url = `http://mfe.gov.ro/generator/data/20251029-plati_pnrr.json.gz`;
     
-    while (hasMoreData) {
-      try {
-        const batchData = await this.fetchPaymentBatch(offset, limit);
-        
-        if (batchData.length === 0) {
-          hasMoreData = false;
-        } else {
-          allData.push(...batchData);
-          offset += limit;
-          
-          // No delay needed - API can handle sequential requests
+    try {
+      // First try to get as text (automatic decompression)
+      const response = await fetch(url, {
+        headers: {
+          'Accept-Encoding': 'gzip, deflate'
         }
-      } catch (error) {
-        console.error(`Error fetching batch at offset ${offset}:`, error);
-        hasMoreData = false;
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+      
+      // Try to parse as JSON text first (browser may auto-decompress)
+      try {
+        const text = await response.text();
+        const data = JSON.parse(text);
+        return data.items || data || [];
+      } catch (textError) {
+        // If text parsing fails, try gzip decompression
+        try {
+          const arrayBuffer = await response.arrayBuffer();
+          // @ts-ignore - dynamic import
+          const pako = await import('pako');
+          const uint8Array = new Uint8Array(arrayBuffer);
+          const decompressed = pako.ungzip(uint8Array) as Uint8Array;
+          const jsonString = new TextDecoder().decode(decompressed);
+          const data = JSON.parse(jsonString);
+          return data.items || data || [];
+        } catch (gzipError) {
+          console.error('Both text and gzip parsing failed:', gzipError);
+          throw gzipError;
+        }
+      }
+    } catch (error) {
+      console.error(`Error fetching payment data:`, error);
+      throw error;
     }
-    
-    return allData;
   }
   
   /**
-   * Fetch a single batch of payment data
+   * Fetch a single batch of payment data (kept for compatibility but unused with .gz files)
    */
   private async fetchPaymentBatch(offset: number, limit: number): Promise<RawAPIData[]> {
-    const url = `https://pnrr.fonduri-ue.ro/ords/pnrr/mfe/plati_pnrr?offset=${offset}&limit=${limit}`;
-    
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    return data.items || [];
+    // For .gz files, we fetch everything at once
+    return this.fetchAllPaymentData();
   }
   
   /**

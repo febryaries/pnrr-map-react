@@ -39,6 +39,8 @@ import { convertRONToEUR, convertEURToRON } from '../services/ExchangeRateServic
  * This data represents project progress and technical details.
  */
 export class ProjectDataAggregation extends BaseDataAggregation {
+  private isLoading: boolean = false;
+  private loadPromise: Promise<void> | null = null;
   
   constructor() {
     super({
@@ -53,10 +55,40 @@ export class ProjectDataAggregation extends BaseDataAggregation {
   
   /**
    * Load project data from the PNRR API
+   * Ensures only one fetch happens at a time
    */
   async loadData(): Promise<void> {
+    // Skip if data is already loaded
+    if (this.data && this.data.length > 0) {
+      console.log('Project data already loaded, skipping fetch');
+      return;
+    }
+    
+    // If already loading, return the existing promise to prevent duplicate fetches
+    if (this.isLoading && this.loadPromise) {
+      console.log('Project data fetch already in progress, waiting for existing request...');
+      return this.loadPromise;
+    }
+    
+    // Mark as loading and create a promise
+    this.isLoading = true;
+    this.loadPromise = this.fetchAndProcessData();
+    
     try {
-      // Fetch data from the API with pagination
+      await this.loadPromise;
+    } finally {
+      this.isLoading = false;
+      this.loadPromise = null;
+    }
+  }
+  
+  /**
+   * Internal method to fetch and process data
+   */
+  private async fetchAndProcessData(): Promise<void> {
+    try {
+      // Fetch data from the API
+      console.log('Fetching project data from API (only once)...');
       const allData = await this.fetchAllProjectData();
       
       if (allData.length === 0) {
@@ -65,7 +97,9 @@ export class ProjectDataAggregation extends BaseDataAggregation {
       }
       
       // Process the raw data
+      console.log(`Processing ${allData.length} project records...`);
       this.data = this.processData(allData);
+      console.log(`✅ Project data loaded and cached: ${this.data.length} counties`);
     } catch (error) {
       console.error('Error loading project data:', error);
       throw error;
@@ -422,48 +456,56 @@ export class ProjectDataAggregation extends BaseDataAggregation {
   // ========================================================================
   
   /**
-   * Fetch all project data from the API with pagination
+   * Fetch all project data from the API
    */
   private async fetchAllProjectData(): Promise<RawAPIData[]> {
-    const allData: RawAPIData[] = [];
-    let offset = 0;
-    const limit = 5000;
-    let hasMoreData = true;
+    const url = `https://mfe.gov.ro/generator/data/20251029-progres_tehnic_proiecte.json.gz`;
     
-    while (hasMoreData) {
-      try {
-        const batchData = await this.fetchProjectBatch(offset, limit);
-        
-        if (batchData.length === 0) {
-          hasMoreData = false;
-        } else {
-          allData.push(...batchData);
-          offset += limit;
-          
-          // No delay needed - API can handle sequential requests
+    try {
+      // First try to get as text (automatic decompression)
+      const response = await fetch(url, {
+        headers: {
+          'Accept-Encoding': 'gzip, deflate'
         }
-      } catch (error) {
-        console.error(`Error fetching batch at offset ${offset}:`, error);
-        hasMoreData = false;
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+      
+      // Try to parse as JSON text first (browser may auto-decompress)
+      try {
+        const text = await response.text();
+        const data = JSON.parse(text);
+        return data.items || data || [];
+      } catch (textError) {
+        // If text parsing fails, try gzip decompression
+        try {
+          const arrayBuffer = await response.arrayBuffer();
+          // @ts-ignore - dynamic import
+          const pako = await import('pako');
+          const uint8Array = new Uint8Array(arrayBuffer);
+          const decompressed = pako.ungzip(uint8Array) as Uint8Array;
+          const jsonString = new TextDecoder().decode(decompressed);
+          const data = JSON.parse(jsonString);
+          return data.items || data || [];
+        } catch (gzipError) {
+          console.error('Both text and gzip parsing failed:', gzipError);
+          throw gzipError;
+        }
+      }
+    } catch (error) {
+      console.error(`Error fetching project data:`, error);
+      throw error;
     }
-    
-    return allData;
   }
   
   /**
-   * Fetch a single batch of project data
+   * Fetch a single batch of project data (kept for compatibility but unused with .gz files)
    */
   private async fetchProjectBatch(offset: number, limit: number): Promise<RawAPIData[]> {
-    const url = `https://pnrr.fonduri-ue.ro/ords/pnrr/mfe/progres_tehnic_proiecte?offset=${offset}&limit=${limit}`;
-    
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    return data.items || [];
+    // For .gz files, we fetch everything at once
+    return this.fetchAllProjectData();
   }
   
   /**
