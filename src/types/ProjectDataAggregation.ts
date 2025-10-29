@@ -216,6 +216,7 @@ export class ProjectDataAggregation extends BaseDataAggregation {
         COD_MASURA: item.cod_masura || '',
         COD_SUBMASURA: item.cod_submasura || '',
         STADIU: this.convertRomanianDiacritics(item.stadiu || ''),
+        PROGRES_FIZIC: item.progres_fizic || null,
         IMPACT: this.convertRomanianDiacritics(item.impact || ''),
         NR_CONTRACT: item.nr_contract || '',
         CUI: item.cui || '',

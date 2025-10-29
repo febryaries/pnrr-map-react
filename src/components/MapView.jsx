@@ -811,7 +811,13 @@ const EnhancedTable = ({
             <div className="mobile-table-card-detail">
               <div className="mobile-table-card-detail-label">{endpoint === 'payments' ? 'Progres Fizic (%)' : 'Stadiu'}</div>
               <div className="mobile-table-card-detail-value" style={endpoint === 'projects' ? { color: '#059669', fontWeight: '500', fontSize: '10px' } : {}}>
-                {endpoint === 'payments' ? `${item.progress}%` : (item.progress || '-')}
+                {endpoint === 'payments' 
+                  ? `${item.progress}%` 
+                  : (item.PROGRES_FIZIC && item.PROGRES_FIZIC !== '' 
+                      ? `${Math.round(parseFloat(item.PROGRES_FIZIC.replace(',', '.')) * 100)}%` 
+                      : (item.progress || '-')
+                    )
+                }
               </div>
             </div>
             <div className="mobile-table-card-detail">
@@ -3035,7 +3041,7 @@ const MapView = ({
                             label: endpoint === 'payments' ? 'Progres Fizic (%)' : 'Stadiu',
                             numeric: false,
                             searchable: false,
-                            render: (value) => {
+                            render: (value, item) => {
                                 if (endpoint === 'payments') {
                                     const displayValue = value !== undefined && value !== null ? `${value}%` : '-'
                                     return <div style={{ 
@@ -3048,7 +3054,24 @@ const MapView = ({
                                     }}>{displayValue}</div>
                                 }
                                 
-                                // For projects, handle line break for "(sub X%)" or "(peste X%)"
+                                // For projects: if progres_fizic exists, show percentage, otherwise show stadiu text
+                                const progresFizic = item.PROGRES_FIZIC
+                                
+                                if (progresFizic !== null && progresFizic !== undefined && progresFizic !== '') {
+                                    // Convert Romanian decimal format (0,3 -> 30%)
+                                    const percentage = Math.round(parseFloat(progresFizic.replace(',', '.')) * 100)
+                                    return <div style={{ 
+                                        fontSize: '12px', 
+                                        minWidth: '100px', 
+                                        textAlign: 'center',
+                                        fontWeight: '700',
+                                        whiteSpace: 'nowrap',
+                                        padding: '2px 4px',
+                                        color: '#059669'
+                                    }}>{percentage}%</div>
+                                }
+                                
+                                // No progres_fizic - show stadiu text
                                 const displayValue = value || '-'
                                 const parts = displayValue.match(/^(.*?)(\s*\([^)]+\))$/)
                                 

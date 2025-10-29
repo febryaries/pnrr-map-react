@@ -215,6 +215,7 @@ export interface RawAPIData {
   data_inceput?: string;
   data_finalizare?: string;
   stadiu?: string;
+  progres_fizic?: string;
   impact?: string;
   judet_implementare?: string;
   localitate_implementare?: string;
