@@ -806,10 +806,10 @@ const EnhancedTable = ({
             </div>
           </div>
           
-          {/* Row 2: Stadiu/Progres Fizic & Localitate */}
+          {/* Row 2: Progres Tehnic/Progres Fizic & Progres Financiar */}
           <div className="mobile-table-card-row">
             <div className="mobile-table-card-detail">
-              <div className="mobile-table-card-detail-label">{endpoint === 'payments' ? 'Progres Fizic (%)' : 'Stadiu'}</div>
+              <div className="mobile-table-card-detail-label">{endpoint === 'payments' ? 'Progres Fizic (%)' : 'Progres Tehnic'}</div>
               <div className="mobile-table-card-detail-value" style={endpoint === 'projects' ? { color: '#059669', fontWeight: '500', fontSize: '10px' } : {}}>
                 {endpoint === 'payments' 
                   ? `${item.progress}%` 
@@ -821,17 +821,25 @@ const EnhancedTable = ({
               </div>
             </div>
             <div className="mobile-table-card-detail">
-              <div className="mobile-table-card-detail-label">Localitate</div>
-              <div className="mobile-table-card-detail-value">{item.locality || '-'}</div>
+              <div className="mobile-table-card-detail-label">Progres Financiar</div>
+              <div className="mobile-table-card-detail-value" style={{ color: '#94a3b8', fontStyle: 'italic' }}>-</div>
             </div>
           </div>
           
-          {/* Row 3: Cod Componentă & Cod Măsură */}
+          {/* Row 3: Localitate & Cod Componentă */}
           <div className="mobile-table-card-row">
+            <div className="mobile-table-card-detail">
+              <div className="mobile-table-card-detail-label">Localitate</div>
+              <div className="mobile-table-card-detail-value">{item.locality || '-'}</div>
+            </div>
             <div className="mobile-table-card-detail">
               <div className="mobile-table-card-detail-label">Cod Componentă</div>
               <div className="mobile-table-card-detail-value">{item.componentCode}</div>
             </div>
+          </div>
+          
+          {/* Row 4: Cod Măsură */}
+          <div className="mobile-table-card-row">
             <div className="mobile-table-card-detail">
               <div className="mobile-table-card-detail-label">Cod Măsură</div>
               <div className="mobile-table-card-detail-value">{item.measureCode}</div>
@@ -1186,16 +1194,14 @@ const EnhancedTable = ({
                 </div>
               )}
               
-              {/* CRI Filter - ALWAYS VISIBLE */}
-              <div className="filter-item">
+              {/* CRI Filter - HIDDEN (coloana eliminată din tabel) */}
+              {/* <div className="filter-item">
                 <label>🔬 CRI</label>
                 <select value={filterCRI} onChange={(e) => { setFilterCRI(e.target.value); closeMobileSidebar(); }}>
                   <option value="">Toate CRI-urile</option>
                   {uniqueCRIValues.map(cri => {
-                    // Handle both string values (fallback) and CRI objects (from API)
                     const criCode = typeof cri === 'string' ? cri : cri.cri
                     const criDescription = typeof cri === 'string' ? cri : cri.cri_denumire
-                    // Show only the cri_denumire (full name) as requested
                     const displayText = typeof cri === 'string' ? cri : criDescription
                     
                     return (
@@ -1215,7 +1221,7 @@ const EnhancedTable = ({
                     Eroare la încărcarea CRI-urilor
                   </div>
                 )}
-              </div>
+              </div> */}
               
               {/* County Filter - ALWAYS VISIBLE */}
               <div className="filter-item">
@@ -1266,11 +1272,11 @@ const EnhancedTable = ({
                 </select>
               </div>
               
-              {/* Stadiu Filter - ALWAYS VISIBLE */}
+              {/* Progres Tehnic Filter - ALWAYS VISIBLE */}
               <div className="filter-item">
-                <label>📊 Stadiu</label>
+                <label>📊 Progres Tehnic</label>
                 <select value={filterStadiu} onChange={(e) => { setFilterStadiu(e.target.value); closeMobileSidebar(); }}>
-                  <option value="">Toate stadiile</option>
+                  <option value="">Toate valorile</option>
                   {uniqueStadiu.map(value => (
                     <option key={value} value={value}>{value}</option>
                   ))}
@@ -3002,7 +3008,7 @@ const MapView = ({
                             key: 'county',
                             label: 'Județ',
                             searchable: true,
-                            render: (value) => <div style={{ fontSize: '12px', minWidth: '80px' }}>{value}</div>
+                            render: (value) => <div style={{ fontSize: '12px', minWidth: '70px' }}>{value}</div>
                         },
                         {
                             key: 'fundingSource',
@@ -3010,7 +3016,7 @@ const MapView = ({
                             searchable: true,
                             render: (value) => {
                                 // Capitalize first letter for all values
-                                return <div style={{ fontSize: '12px', minWidth: '70px' }}>{value ? value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() : '-'}</div>
+                                return <div style={{ fontSize: '12px', minWidth: '120px' }}>{value ? value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() : '-'}</div>
                             }
                         },
                         {
@@ -3023,7 +3029,7 @@ const MapView = ({
                                     // For projects, use the FinancialAmount object directly
                                     const financialAmount = item[fieldMappings.value]
                                     if (financialAmount && typeof financialAmount === 'object') {
-                                        return <div style={{ fontSize: '12px', minWidth: '100px', textAlign: 'center' }}>
+                                        return <div style={{ fontSize: '12px', minWidth: '120px', textAlign: 'center' }}>
                                             {currency === 'RON' 
                                                 ? formatMoneyWithCurrency(financialAmount.ron, financialAmount.ron, item.startDate)
                                                 : formatMoneyWithCurrency(financialAmount.eur, financialAmount.ron, item.startDate)
@@ -3031,14 +3037,14 @@ const MapView = ({
                                         </div>
                                     }
                                 }
-                                return <div style={{ fontSize: '12px', minWidth: '100px', textAlign: 'center' }}>
+                                return <div style={{ fontSize: '12px', minWidth: '120px', textAlign: 'center' }}>
                                     {formatMoneyWithCurrency(value, item.value_ron, item.startDate)}
                                 </div>
                             }
                         },
                         {
                             key: 'progress',
-                            label: endpoint === 'payments' ? 'Progres Fizic (%)' : 'Stadiu',
+                            label: endpoint === 'payments' ? 'Progres Fizic (%)' : 'Progres Tehnic',
                             numeric: false,
                             searchable: false,
                             render: (value, item) => {
@@ -3112,6 +3118,22 @@ const MapView = ({
                             }
                         },
                         {
+                            key: 'financialProgress',
+                            label: 'Progres Financiar',
+                            numeric: false,
+                            searchable: false,
+                            render: (value, item) => {
+                                // Placeholder - va fi populat mâine dimineață
+                                return <div style={{ 
+                                    fontSize: '12px', 
+                                    minWidth: '100px', 
+                                    textAlign: 'center',
+                                    color: '#94a3b8',
+                                    fontStyle: 'italic'
+                                }}>-</div>
+                            }
+                        },
+                        {
                             key: 'componentCode',
                             label: 'Cod Componentă',
                             searchable: true,
@@ -3128,12 +3150,6 @@ const MapView = ({
                             label: 'Localitate',
                             searchable: true,
                             render: (value) => value ? <div style={{ maxWidth: '100px', wordWrap: 'break-word', fontSize: '12px', lineHeight: '1.3' }}>{value}</div> : <div style={{ fontSize: '12px' }}>-</div>
-                        },
-                        {
-                            key: 'cri',
-                            label: 'CRI',
-                            searchable: true,
-                            render: (value) => <div style={{ fontSize: '12px', minWidth: '60px', textAlign: 'center', fontWeight: '600' }}>{value || '-'}</div>
                         }
                     ].filter(col => {
                         // Ascundem coloanele 'title' și 'progress' doar pentru tabelul de plăți

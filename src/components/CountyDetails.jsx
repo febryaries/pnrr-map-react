@@ -412,7 +412,7 @@ const EnhancedTable = ({
             </div>
           </div>
           
-          {/* Row 2: Sursă Finanțare & Stadiu */}
+          {/* Row 2: Sursă Finanțare & Progres Tehnic */}
           <div className="mobile-table-card-row">
             <div className="mobile-table-card-detail">
               <div className="mobile-table-card-detail-label">Sursă Finanțare</div>
@@ -421,8 +421,16 @@ const EnhancedTable = ({
               </div>
             </div>
             <div className="mobile-table-card-detail">
-              <div className="mobile-table-card-detail-label">Stadiu</div>
+              <div className="mobile-table-card-detail-label">Progres Tehnic</div>
               <div className="mobile-table-card-detail-value">{item.stage || '-'}</div>
+            </div>
+          </div>
+          
+          {/* Row 2.5: Progres Financiar */}
+          <div className="mobile-table-card-row">
+            <div className="mobile-table-card-detail">
+              <div className="mobile-table-card-detail-label">Progres Financiar</div>
+              <div className="mobile-table-card-detail-value" style={{ color: '#94a3b8', fontStyle: 'italic' }}>-</div>
             </div>
           </div>
           
@@ -541,10 +549,10 @@ const EnhancedTable = ({
           
           {/* Filters */}
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-            {/* Stadiu Filter */}
+            {/* Progres Tehnic Filter */}
             <div style={{ flex: '1 1 200px', minWidth: '200px' }}>
               <label style={{ display: 'block', fontSize: '12px', fontWeight: '500', marginBottom: '4px', color: '#64748b' }}>
-                Stadiu
+                Progres Tehnic
               </label>
               <select
                 value={filterStadiu}
@@ -552,14 +560,14 @@ const EnhancedTable = ({
                 style={{
                   width: '100%',
                   padding: '8px 12px',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '6px',
-                  fontSize: '14px',
-                  backgroundColor: '#fff',
-                  cursor: 'pointer'
+                  border: '2px solid #e5e7eb',
+                  borderRadius: '8px',
+                  fontSize: '13px',
+                  fontWeight: '500',
+                  outline: 'none'
                 }}
               >
-                <option value="">Toate stadiile</option>
+                <option value="">Toate valorile</option>
                 {uniqueStadiu.map(value => (
                   <option key={value} value={value}>{value}</option>
                 ))}
@@ -1738,13 +1746,13 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
               key: 'title',
               label: 'Titlu Proiect',
               searchable: true,
-              render: (value) => <div style={{ maxWidth: '200px', wordWrap: 'break-word' }}>{value}</div>
+              render: (value) => <div style={{ maxWidth: '200px', wordWrap: 'break-word', fontSize: '11px', lineHeight: '1.3' }}>{value}</div>
             },
             {
               key: 'beneficiary',
               label: 'Nume Beneficiar',
               searchable: true,
-              render: (value) => <div style={{ maxWidth: '150px', wordWrap: 'break-word' }}>{value}</div>
+              render: (value) => <div style={{ maxWidth: '180px', wordWrap: 'break-word', fontSize: '11px', lineHeight: '1.3' }}>{value}</div>
             },
             {
               key: 'fundingSource',
@@ -1765,9 +1773,15 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
             },
             {
               key: 'stage',
-              label: 'Stadiu',
+              label: 'Progres Tehnic',
               searchable: true,
               render: (value) => value || '-'
+            },
+            {
+              key: 'financialProgress',
+              label: 'Progres Financiar',
+              searchable: false,
+              render: (value) => <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>-</span>
             },
             {
               key: 'componentCode',

@@ -2978,13 +2978,13 @@ table td {
 
 .projects-payments-section table th:nth-child(1),
 .projects-payments-section table td:nth-child(1) {
-  width: 22%; /* Title column */
+  width: 18%; /* Title column */
   min-width: 200px;
 }
 
 .projects-payments-section table th:nth-child(2),
 .projects-payments-section table td:nth-child(2) {
-  width: 20%; /* Beneficiary column */
+  width: 13%; /* Beneficiary column */
   min-width: 180px;
 }
 
@@ -3014,19 +3014,19 @@ table td {
 
 .projects-payments-section table th:nth-child(7),
 .projects-payments-section table td:nth-child(7) {
-  width: 6%; /* Component code column */
+  width: 9%; /* Component code column */
   min-width: 60px;
 }
 
 .projects-payments-section table th:nth-child(8),
 .projects-payments-section table td:nth-child(8) {
-  width: 6%; /* Measure code column */
+  width: 8%; /* Measure code column */
   min-width: 60px;
 }
 
 .projects-payments-section table th:nth-child(9),
 .projects-payments-section table td:nth-child(9) {
-  width: 10%; /* Locality column */
+  width: 6%; /* Locality column */
   min-width: 100px;
 }
 
