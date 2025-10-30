@@ -356,7 +356,7 @@ export class PaymentDataAggregation extends BaseDataAggregation {
    * Fetch all payment data from the API
    */
   private async fetchAllPaymentData(): Promise<RawAPIData[]> {
-    const url = `http://mfe.gov.ro/generator/data/20251029-plati_pnrr.json.gz`;
+    const url = `http://mfe.gov.ro/generator/data/20251030-plati_pnrr.json.gz`;
     
     try {
       // First try to get as text (automatic decompression)

@@ -1542,25 +1542,31 @@ const MapView = ({
         const fetchTopBeneficiaries = async () => {
             setLoadingBeneficiaries(true)
             try {
-                const url = 'http://mfe.gov.ro/generator/data/20251029-persons.json.gz'
+                const url = 'http://mfe.gov.ro/generator/data/20251030-persons.json.gz'
+                console.log('🔥 FETCHING BENEFICIARIES FROM:', url)
                 const response = await fetch(url, {
                     headers: {
                         'Accept-Encoding': 'gzip, deflate'
                     }
                 })
                 
+                console.log('✅ Response received, status:', response.status)
+                
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`)
                 }
                 
                 // Get arrayBuffer to handle both compressed and uncompressed data
+                console.log('📦 Getting arrayBuffer...')
                 const arrayBuffer = await response.arrayBuffer()
+                console.log('📦 ArrayBuffer size:', arrayBuffer.byteLength, 'bytes')
                 const uint8Array = new Uint8Array(arrayBuffer)
                 let data
                 
                 // For .gz files, try gzip decompression first
                 // Check if it starts with gzip magic number (0x1f 0x8b)
                 const isGzip = uint8Array.length >= 2 && uint8Array[0] === 0x1f && uint8Array[1] === 0x8b
+                console.log('🔍 Is GZIP?', isGzip, '(first 2 bytes:', uint8Array[0]?.toString(16), uint8Array[1]?.toString(16) + ')')
                 
                 if (isGzip) {
                     // File is gzipped, decompress it
@@ -1641,10 +1647,10 @@ const MapView = ({
                         }
                         
                         // Map to our expected field names
-                        const beneficiarKey = findKey('beneficiar', 'nume_beneficiar', 'denumire_beneficiar', 'name', 'nume')
-                        const cuiKey = findKey('cui', 'cui_beneficiar', 'tax_id', 'cui_beneficiar_final')
+                        const beneficiarKey = findKey('beneficiar', 'nume_beneficiar', 'denumire_beneficiar', 'name', 'nume', 'full legal name')
+                        const cuiKey = findKey('cui', 'cui_beneficiar', 'tax_id', 'cui_beneficiar_final', 'tax identification number')
                         const totalEuroKey = findKey('total_euro', 'valoare_euro', 'amount_euro', 'valoare_plata_fe_euro')
-                        const totalRONKey = findKey('total', 'total_ron', 'valoare_ron', 'amount_ron', 'valoare_plata_fe')
+                        const totalRONKey = findKey('total', 'total_ron', 'valoare_ron', 'amount_ron', 'valoare_plata_fe', 'received amount in lei')
                         
                         normalized.beneficiar = beneficiarKey ? item[beneficiarKey] : null
                         normalized.cui = cuiKey ? item[cuiKey] : null

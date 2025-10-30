@@ -459,7 +459,7 @@ export class ProjectDataAggregation extends BaseDataAggregation {
    * Fetch all project data from the API
    */
   private async fetchAllProjectData(): Promise<RawAPIData[]> {
-    const url = `https://mfe.gov.ro/generator/data/20251029-progres_tehnic_proiecte.json.gz`;
+    const url = `https://mfe.gov.ro/generator/data/20251030-progres_tehnic_proiecte.json.gz`;
     
     try {
       // First try to get as text (automatic decompression)
