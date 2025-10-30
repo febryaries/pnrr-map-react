@@ -5,6 +5,7 @@ import CountyDetails from './components/CountyDetails'
 import SemanticSearchPage from './pages/SemanticSearchPage'
 import { mockData } from './data/data'
 import { useDataEndpoint } from './hooks/useDataEndpoint'
+import { fetchTopBeneficiaries } from './services/TopBeneficiariesService'
 import './App.css'
 
 function App() {
@@ -18,6 +19,14 @@ function App() {
   const [useRealData, setUseRealData] = useState(false)
   const [useMockData, setUseMockData] = useState(false) // Force mock data for testing
   const [currency, setCurrency] = useState('EUR') // 'EUR' or 'RON'
+
+  // Prefetch top beneficiaries data before page loads
+  useEffect(() => {
+    // Fetch top beneficiaries in the background (don't block page load)
+    fetchTopBeneficiaries().catch(error => {
+      console.error('Failed to prefetch top beneficiaries:', error);
+    });
+  }, []);
 
   // Use the data endpoint hook
   const { 
