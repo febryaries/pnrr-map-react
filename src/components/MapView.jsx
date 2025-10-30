@@ -1657,6 +1657,14 @@ const MapView = ({
                         normalized.total_euro = totalEuroKey ? (Number(item[totalEuroKey]) || 0) : 0
                         normalized.total = totalRONKey ? (Number(item[totalRONKey]) || 0) : 0
                         
+                        // Debug logging for first item
+                        if (processedData.items.indexOf(item) === 0) {
+                            console.log('🔍 First item keys:', Object.keys(item))
+                            console.log('🔍 totalRONKey found:', totalRONKey)
+                            console.log('🔍 totalRONKey value:', totalRONKey ? item[totalRONKey] : 'NOT FOUND')
+                            console.log('🔍 normalized.total:', normalized.total)
+                        }
+                        
                         // If we couldn't find the expected fields, try to use all original fields (lowercase keys)
                         if (!normalized.beneficiar && normalized.total_euro === 0 && normalized.total === 0) {
                             // Keep original item but normalize key case for lookup
@@ -1668,7 +1676,17 @@ const MapView = ({
                             normalized.beneficiar = lowerCaseMap.beneficiar || lowerCaseMap.nume_beneficiar || lowerCaseMap.denumire_beneficiar || lowerCaseMap.name || lowerCaseMap.nume || null
                             normalized.cui = lowerCaseMap.cui || lowerCaseMap.cui_beneficiar || lowerCaseMap.cui_beneficiar_final || lowerCaseMap.tax_id || null
                             normalized.total_euro = Number(lowerCaseMap.total_euro || lowerCaseMap.valoare_euro || lowerCaseMap.amount_euro || lowerCaseMap.valoare_plata_fe_euro || 0) || 0
-                            normalized.total = Number(lowerCaseMap.total || lowerCaseMap.total_ron || lowerCaseMap.valoare_ron || lowerCaseMap.amount_ron || lowerCaseMap.valoare_plata_fe || 0) || 0
+                            normalized.total = Number(lowerCaseMap.total || lowerCaseMap.total_ron || lowerCaseMap.valoare_ron || lowerCaseMap.amount_ron || lowerCaseMap.valoare_plata_fe || lowerCaseMap['received amount in lei'] || 0) || 0
+                            
+                            // Calculate EUR from RON if needed
+                            if (normalized.total_euro === 0 && normalized.total > 0) {
+                                normalized.total_euro = normalized.total / 4.95
+                            }
+                        }
+                        
+                        // Calculate EUR from RON if not already set (outside fallback too)
+                        if (normalized.total_euro === 0 && normalized.total > 0) {
+                            normalized.total_euro = normalized.total / 4.95
                         }
                         
                         return normalized
