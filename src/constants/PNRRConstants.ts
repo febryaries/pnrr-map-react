@@ -80,9 +80,9 @@ export const COUNTY_MAP = {
 
 // API Endpoints
 export const API_ENDPOINTS = {
-  PAYMENTS: 'http://mfe.gov.ro/generator/data/20251030-plati_pnrr.json.gz',
+  PAYMENTS: 'https://mfe.gov.ro/generator/data/20251030-plati_pnrr.json.gz',
   PROJECTS: 'https://mfe.gov.ro/generator/data/20251030-progres_tehnic_proiecte.json.gz',
-  TOP_BENEFICIARIES: 'http://mfe.gov.ro/generator/data/20251030-persons.json.gz'
+  TOP_BENEFICIARIES: 'https://mfe.gov.ro/generator/data/20251030-persons.json.gz'
 };
 
 // Data endpoint types

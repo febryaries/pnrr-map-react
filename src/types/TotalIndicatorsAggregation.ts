@@ -300,7 +300,7 @@ export class TotalIndicatorsAggregation extends BaseDataAggregation {
    * Fetch total indicators from the API
    */
   private async fetchTotalIndicators(): Promise<RawTotalIndicatorsData> {
-    const url = 'http://mfe.gov.ro/generator/data/20251030-indicatori_total.json.gz';
+    const url = 'https://mfe.gov.ro/generator/data/20251030-indicatori_total.json.gz';
     
     try {
       // First try to get as text (automatic decompression)
