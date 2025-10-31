@@ -3375,12 +3375,34 @@ const MapView = ({
                                 county.county?.code !== 'RO-MULTI' && county.code !== 'RO-MULTI'
                             )
                             
-                                    // Calculate counts and values, filtering by activeProgram if selected
+                                    // Helper function to apply all filters to a row
+                                    const applyAllFilters = (item) => {
+                                        // Component filter
+                                        if (activeProgram && item[fieldMappings.componentCode] !== activeProgram) return false
+                                        if (filterComponent && item[fieldMappings.componentCode] !== filterComponent) return false
+                                        
+                                        // Progress/Stage filter
+                                        if (filterStadiu && item[fieldMappings.progress] !== filterStadiu) return false
+                                        
+                                        // Locality filter
+                                        if (filterLocality && item[fieldMappings.locality] !== filterLocality) return false
+                                        
+                                        // Funding source filter
+                                        if (filterFundingSource && item[fieldMappings.fundingSource] !== filterFundingSource) return false
+                                        
+                                        // Measure filter
+                                        if (filterMasura && item[fieldMappings.measureCode] !== filterMasura) return false
+                                        
+                                        // CRI filter
+                                        if (filterCRI && item[fieldMappings.cri] !== filterCRI) return false
+                                        
+                                        return true
+                                    }
+                                    
+                                    // Calculate counts and values with ALL filters applied
                                     const nationalCount = nationalData.reduce((sum, county) => {
                                         if (county.extras?.rows) {
-                                            const filteredRows = activeProgram 
-                                                ? county.extras.rows.filter(item => item[fieldMappings.componentCode] === activeProgram)
-                                                : county.extras.rows
+                                            const filteredRows = county.extras.rows.filter(applyAllFilters)
                                             return sum + filteredRows.length
                                         }
                                         return sum
@@ -3388,9 +3410,7 @@ const MapView = ({
                                     
                                     const localCount = localData.reduce((sum, county) => {
                                         if (county.extras?.rows) {
-                                            const filteredRows = activeProgram 
-                                                ? county.extras.rows.filter(item => item[fieldMappings.componentCode] === activeProgram)
-                                                : county.extras.rows
+                                            const filteredRows = county.extras.rows.filter(applyAllFilters)
                                             return sum + filteredRows.length
                                         }
                                         return sum
@@ -3398,9 +3418,7 @@ const MapView = ({
                                     
                                     const nationalValue = nationalData.reduce((sum, county) => {
                                         if (county.extras?.rows) {
-                                            const filteredRows = activeProgram 
-                                                ? county.extras.rows.filter(item => item[fieldMappings.componentCode] === activeProgram)
-                                                : county.extras.rows
+                                            const filteredRows = county.extras.rows.filter(applyAllFilters)
                                             return sum + filteredRows.reduce((countySum, item) => {
                                                 const value = getValueField(item)
                                                 return countySum + value
@@ -3411,9 +3429,7 @@ const MapView = ({
                                     
                                     const localValue = localData.reduce((sum, county) => {
                                         if (county.extras?.rows) {
-                                            const filteredRows = activeProgram 
-                                                ? county.extras.rows.filter(item => item[fieldMappings.componentCode] === activeProgram)
-                                                : county.extras.rows
+                                            const filteredRows = county.extras.rows.filter(applyAllFilters)
                                             return sum + filteredRows.reduce((countySum, item) => {
                                                 const value = getValueField(item)
                                                 return countySum + value
