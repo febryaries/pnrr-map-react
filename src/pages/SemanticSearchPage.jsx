@@ -346,6 +346,10 @@ export default function SemanticSearchPage() {
         county: proj.county,
         lat,
         lon,
+        geometry: {
+          type: 'Point',
+          coordinates: [lon, lat]  // Highcharts Maps expects [longitude, latitude]
+        },
         value: proj.value,
         smis: proj.smis,
         beneficiary: proj.beneficiary,
