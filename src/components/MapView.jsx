@@ -2055,7 +2055,36 @@ const MapView = ({
         return {
             chart: {
                 map: mapData.topology,
-                height: 500
+                height: 500,
+                animation: false, // Disable default animation
+                events: {
+                    load: function() {
+                        const chart = this
+                        const points = chart.series[0].points
+                        
+                        // Shuffle points for random order
+                        const shuffled = [...points].sort(() => Math.random() - 0.5)
+                        
+                        // Hide all points initially
+                        points.forEach(point => {
+                            if (point.graphic) {
+                                point.graphic.attr({ opacity: 0 })
+                            }
+                        })
+                        
+                        // Animate each point with delay
+                        shuffled.forEach((point, index) => {
+                            setTimeout(() => {
+                                if (point.graphic) {
+                                    point.graphic.animate(
+                                        { opacity: 1 },
+                                        { duration: 800, easing: 'easeOutBack' }
+                                    )
+                                }
+                            }, index * 120) // 120ms delay between each county (slower)
+                        })
+                    }
+                }
             },
             title: {
                 text: getMapTitle(),
@@ -2101,8 +2130,17 @@ const MapView = ({
                 labels: {
                     formatter: function () {
                         return metric === 'value' ? fmtMoneyShort(this.value) : fmtNum(this.value)
+                    },
+                    style: {
+                        fontSize: '11px',
+                        fontWeight: '500'
                     }
-                }
+                },
+                marker: {
+                    color: '#0ea5e9'
+                },
+                minColor: '#f0f9ff',
+                maxColor: '#0c4a6e'
             },
             tooltip: {
                 useHTML: true,
@@ -2146,16 +2184,24 @@ const MapView = ({
             series: [{
                 data: seriesData,
                 name: 'Counties',
+                animation: false, // Animation handled in chart.events.load
                 states: {
                     hover: {
-                        color: '#a4edba'
+                        brightness: 0.2,
+                        borderColor: '#0ea5e9',
+                        borderWidth: 2
+                    },
+                    select: {
+                        color: '#10b981',
+                        borderColor: '#059669'
                     }
                 },
                 borderColor: '#ffffff',
-                borderWidth: 0.6,
+                borderWidth: 1,
                 dataLabels: {
                     enabled: false
                 },
+                cursor: 'pointer',
                 point: {
                     events: {
                         click: function () {
@@ -2537,6 +2583,612 @@ const MapView = ({
             enabled: false
         }
     }
+
+    // Helper functions for formatting charts
+    const fmtMoney = useCallback((value) => {
+        const millions = value / 1e6
+        const symbol = getCurrencySymbol()
+        return `${millions.toLocaleString('ro-RO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} mil ${symbol}`
+    }, [currency, getCurrencySymbol])
+    
+    const fmtNum = useCallback((value) => {
+        return value.toLocaleString('ro-RO')
+    }, [])
+
+    // ========== NEW CHARTS DATA PROCESSING ==========
+
+    // 1. Top 10 Measures (Măsuri) data
+    const top10MeasuresData = useMemo(() => {
+        // Color palette for measures
+        const colors = [
+            '#8b5cf6', // Purple - #1
+            '#ec4899', // Pink - #2
+            '#f59e0b', // Orange - #3
+            '#10b981', // Green - #4
+            '#0ea5e9', // Blue - #5
+            '#f97316', // Deep Orange - #6
+            '#14b8a6', // Teal - #7
+            '#6366f1', // Indigo - #8
+            '#84cc16', // Lime - #9
+            '#06b6d4'  // Cyan - #10
+        ]
+        
+        // Aggregate all measures across all counties
+        const measuresMap = {}
+        
+        data.forEach(county => {
+            if (!county.extras?.rows) return
+            
+            county.extras.rows.forEach(project => {
+                const measureCode = project.COD_MASURA || project.measureCode
+                const measureLabel = project.MASURA_LABEL || project.measureLabel || measureCode
+                const value = project.VALOARE_FE || project.VALOARE_PLATA_EURO || 0
+                
+                if (!measureCode) return
+                
+                if (!measuresMap[measureCode]) {
+                    measuresMap[measureCode] = {
+                        code: measureCode,
+                        label: measureLabel,
+                        value: 0
+                    }
+                }
+                
+                measuresMap[measureCode].value += value
+            })
+        })
+        
+        // Convert to array, sort by value, take top 10
+        return Object.values(measuresMap)
+            .sort((a, b) => b.value - a.value)
+            .slice(0, 10)
+            .map((measure, index) => {
+                const value = currency === 'RON' ? measure.value * 5 : measure.value
+                // Truncate long labels
+                const shortLabel = measure.label.length > 40 
+                    ? measure.label.substring(0, 37) + '...'
+                    : measure.label
+                
+                return {
+                    name: `${measure.code} · ${shortLabel}`,
+                    y: value,
+                    code: measure.code,
+                    color: colors[index]
+                }
+            })
+    }, [data, currency])
+
+    // 3. Top 10 National Beneficiaries data
+    const top10BeneficiariesData = useMemo(() => {
+        if (!topBeneficiaries?.items || topBeneficiaries.items.length === 0) return []
+        
+        // Filter out items with zero or invalid amounts, then take top 10
+        const validBeneficiaries = topBeneficiaries.items
+            .filter(beneficiary => {
+                const amount = currency === 'EUR' 
+                    ? (beneficiary['total_euro'] || 0)
+                    : (beneficiary['total'] || 0)
+                return amount > 0
+            })
+            .slice(0, 10)
+        
+        return validBeneficiaries.map((beneficiary, index) => {
+            const beneficiaryName = beneficiary['beneficiar'] || beneficiary['NUME_BENEFICIAR'] || 'N/A'
+            const taxId = beneficiary['cui'] || beneficiary['CUI'] || ''
+            const displayAmount = currency === 'EUR' 
+                ? (beneficiary['total_euro'] || 0)
+                : (beneficiary['total'] || 0)
+            
+            return {
+                name: beneficiaryName.length > 35 ? beneficiaryName.substring(0, 32) + '...' : beneficiaryName,
+                fullName: beneficiaryName,
+                y: displayAmount,
+                cui: taxId
+            }
+        })
+    }, [topBeneficiaries, currency])
+
+    // 4. Stacked Column - Progress by Component
+    const stackedProgressData = useMemo(() => {
+        // Get all unique stages from all projects
+        const stagesSet = new Set()
+        const allProjects = data.flatMap(county => county.extras?.rows || [])
+        
+        allProjects.forEach(project => {
+            const stage = project.STADIU || project.PROGRES_FIZIC || 'NECUNOSCUT'
+            stagesSet.add(stage)
+        })
+        
+        const stages = Array.from(stagesSet).sort()
+        
+        // Group by component and stage
+        const componentStageMap = {}
+        
+        Object.keys(COMPONENT_MAPPING).forEach(componentCode => {
+            componentStageMap[componentCode] = {}
+            stages.forEach(stage => {
+                componentStageMap[componentCode][stage] = { count: 0, value: 0 }
+            })
+        })
+        
+        allProjects.forEach(project => {
+            const component = project.COD_COMPONENTA
+            const stage = project.STADIU || project.PROGRES_FIZIC || 'NECUNOSCUT'
+            const value = project.VALOARE_FE || project.VALOARE_PLATA_EURO || 0
+            
+            if (componentStageMap[component] && componentStageMap[component][stage]) {
+                componentStageMap[component][stage].count += 1
+                componentStageMap[component][stage].value += value
+            }
+        })
+        
+        // Helper function for stage colors
+        const getStageColor = (stage) => {
+            const stageStr = String(stage || '')
+            const stageUpper = stageStr.toUpperCase()
+            if (stageUpper.includes('FINALIZAT')) return '#10b981'
+            if (stageUpper.includes('IMPLEMENTARE') && stageUpper.includes('SUB 30')) return '#f59e0b'
+            if (stageUpper.includes('IMPLEMENTARE')) return '#0ea5e9'
+            if (stageUpper.includes('SUSPENDAT')) return '#ef4444'
+            return '#94a3b8'
+        }
+        
+        // Build series
+        const series = stages.map(stage => ({
+            name: stage,
+            color: getStageColor(stage),
+            data: Object.keys(COMPONENT_MAPPING)
+                .filter(code => Object.values(componentStageMap[code] || {}).some(s => s.count > 0))
+                .map(code => componentStageMap[code][stage].count)
+        }))
+        
+        const categories = Object.keys(COMPONENT_MAPPING)
+            .filter(code => Object.values(componentStageMap[code] || {}).some(s => s.count > 0))
+        
+        return { series, categories }
+    }, [data, COMPONENT_MAPPING])
+
+    // 5. Donut Chart - Grant vs Grant/loan
+    const grantDistributionData = useMemo(() => {
+        const allProjects = data.flatMap(county => county.extras?.rows || [])
+        
+        const grantMap = {
+            'Grant': 0,
+            'Grant/loan': 0,
+            'Loan': 0,
+            'Altele': 0
+        }
+        
+        allProjects.forEach(project => {
+            const source = (project.SURSA_FINANTARE || '').toLowerCase()
+            const value = project.VALOARE_FE || project.VALOARE_PLATA_EURO || 0
+            
+            if (source.includes('grant') && source.includes('loan')) {
+                grantMap['Grant/loan'] += value
+            } else if (source.includes('grant')) {
+                grantMap['Grant'] += value
+            } else if (source.includes('loan')) {
+                grantMap['Loan'] += value
+            } else if (value > 0) {
+                grantMap['Altele'] += value
+            }
+        })
+        
+        return [
+            { name: 'Grant', y: grantMap['Grant'], color: '#10b981' },
+            { name: 'Grant/loan', y: grantMap['Grant/loan'], color: '#0ea5e9' },
+            { name: 'Loan', y: grantMap['Loan'], color: '#f59e0b' },
+            { name: 'Altele', y: grantMap['Altele'], color: '#94a3b8' }
+        ].filter(item => item.y > 0)
+    }, [data])
+
+    // 6. Line Chart - Evolution over Time (works for both projects and payments)
+    const contractsEvolutionData = useMemo(() => {
+        const allItems = data.flatMap(county => county.extras?.rows || [])
+        
+        // Group by quarter - use DATA_ANGAJAMENT for projects, DATA_PLATA for payments
+        const quarterMap = {}
+        let validDates = 0
+        
+        allItems.forEach(item => {
+            // Try multiple date fields
+            const dateStr = item.DATA_ANGAJAMENT || item.DATA_PLATA || item.DATA_INCEPUT
+            if (!dateStr || dateStr === 'undefined') return
+            
+            try {
+                let month, year
+                
+                // Check if it's ISO format (2023-03-12T22:00:00Z)
+                if (dateStr.includes('T') || dateStr.includes('-')) {
+                    const date = new Date(dateStr)
+                    if (!isNaN(date.getTime())) {
+                        month = date.getMonth() + 1 // 0-indexed
+                        year = date.getFullYear()
+                    }
+                } else {
+                    // Try DD.MM.YYYY format
+                    const parts = dateStr.split('.')
+                    if (parts.length === 3) {
+                        month = parseInt(parts[1])
+                        year = parts[2]
+                    }
+                }
+                
+                if (month && year) {
+                    const quarter = Math.ceil(month / 3)
+                    const key = `${year}-Q${quarter}`
+                    
+                    if (!quarterMap[key]) {
+                        quarterMap[key] = { count: 0, value: 0 }
+                    }
+                    
+                    quarterMap[key].count += 1
+                    quarterMap[key].value += (item.VALOARE_FE || item.VALOARE_PLATA_EURO || item.VALOARE_TOTAL || 0)
+                    validDates++
+                }
+            } catch (e) {
+                // Skip invalid dates
+            }
+        })
+        
+        // Sort by date and create series
+        const sortedKeys = Object.keys(quarterMap).sort()
+        
+        // Take last 12 quarters for better visibility
+        const recentKeys = sortedKeys.slice(-12)
+        
+        return {
+            categories: recentKeys.length > 0 ? recentKeys : ['N/A'],
+            counts: recentKeys.length > 0 ? recentKeys.map(key => quarterMap[key].count) : [0],
+            values: recentKeys.length > 0 ? recentKeys.map(key => quarterMap[key].value) : [0]
+        }
+    }, [data])
+
+    // 7. Bar Race Chart - Top 10 Counties with animation and colors
+    const barRaceData = useMemo(() => {
+        if (!processedData || processedData.length === 0) {
+            return []
+        }
+        
+        // Color palette - vibrant colors for top 10
+        const colors = [
+            '#0ea5e9', // Blue - #1
+            '#10b981', // Green - #2
+            '#f59e0b', // Orange - #3
+            '#8b5cf6', // Purple - #4
+            '#ec4899', // Pink - #5
+            '#14b8a6', // Teal - #6
+            '#f97316', // Deep Orange - #7
+            '#6366f1', // Indigo - #8
+            '#84cc16', // Lime - #9
+            '#06b6d4'  // Cyan - #10
+        ]
+        
+        // Get top 10 counties sorted by value
+        return processedData
+            .slice(0, 10)
+            .map((county, index) => {
+                const value = currency === 'RON' ? county.value * 5 : county.value
+                return {
+                    name: county.name,
+                    y: value,
+                    color: colors[index]
+                }
+            })
+    }, [processedData, currency])
+
+    // ========== END NEW CHARTS DATA ==========
+
+    // ========== NEW CHARTS OPTIONS ==========
+
+    // 1. Pie Chart Options (înlocuiește Treemap)
+    const componentPieOptions = {
+        chart: { type: 'pie', height: 400 },
+        title: { text: 'Distribuție Componente PNRR', style: { fontSize: '16px', fontWeight: '600' } },
+        tooltip: {
+            pointFormatter: function() {
+                return `${this.name}: <b>${fmtMoney(this.y)}</b>`
+            }
+        },
+        plotOptions: {
+            pie: {
+                innerSize: '55%',
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    formatter: function() {
+                        return this.percentage > 3 ? Highcharts.numberFormat(this.percentage, 1) + '%' : null
+                    },
+                    style: { fontSize: '11px', fontWeight: '500' },
+                    distance: 10
+                },
+                showInLegend: true
+            }
+        },
+        legend: {
+            align: 'right',
+            verticalAlign: 'middle',
+            layout: 'vertical',
+            itemStyle: { fontSize: '11px' }
+        },
+        series: [{ name: 'Componente', data: componentTotals }],
+        credits: { enabled: false }
+    }
+
+    // 2. Top 10 Measures Bar Chart
+    const top10MeasuresOptions = {
+        chart: { type: 'bar', height: 400 },
+        title: { text: 'Top 10 Măsuri PNRR', style: { fontSize: '16px', fontWeight: '600' } },
+        xAxis: {
+            categories: top10MeasuresData.map(m => m.name),
+            title: { text: null },
+            labels: {
+                style: { fontSize: '10px' }
+            }
+        },
+        yAxis: {
+            title: { text: null },
+            labels: { formatter: function() { return fmtMoney(this.value) } }
+        },
+        tooltip: {
+            useHTML: true,
+            formatter: function() {
+                return `<b>${this.x}</b><br/>Valoare: <b>${fmtMoney(this.y)}</b>`
+            }
+        },
+        plotOptions: {
+            bar: {
+                dataLabels: { enabled: false },
+                colorByPoint: true // Use individual colors for each bar
+            }
+        },
+        series: [{ name: 'Valoare', data: top10MeasuresData }],
+        legend: { enabled: false },
+        credits: { enabled: false }
+    }
+
+    // 3. Top 10 Beneficiaries Column Chart (with click functionality)
+    const top10BeneficiariesOptions = {
+        chart: { type: 'column', height: 400 },
+        title: { 
+            text: `Top ${top10BeneficiariesData.length} Beneficiari Naționali`, 
+            style: { fontSize: '16px', fontWeight: '600' } 
+        },
+        xAxis: {
+            categories: top10BeneficiariesData.map(b => b.name),
+            labels: { 
+                rotation: -45, 
+                style: { fontSize: '10px' },
+                step: 1 // Force showing all labels
+            }
+        },
+        yAxis: {
+            title: { text: null },
+            labels: { formatter: function() { return fmtMoney(this.value) } }
+        },
+        tooltip: {
+            useHTML: true,
+            formatter: function() {
+                const beneficiary = top10BeneficiariesData[this.point.index]
+                return `<b>${beneficiary.fullName}</b><br/>Valoare: <b>${fmtMoney(this.y)}</b><br/><span style="font-size: 11px; color: #64748b;">Click pentru detalii</span>`
+            }
+        },
+        plotOptions: {
+            column: { 
+                color: '#0ea5e9', 
+                dataLabels: { enabled: false },
+                cursor: 'pointer',
+                point: {
+                    events: {
+                        click: function() {
+                            const beneficiary = top10BeneficiariesData[this.index]
+                            const taxId = beneficiary.cui
+                            
+                            console.log('Beneficiary clicked from chart:', beneficiary.fullName)
+                            console.log('Tax ID:', taxId)
+                            
+                            // Switch to payments endpoint
+                            if (switchEndpoint) {
+                                switchEndpoint('payments')
+                            }
+                            
+                            // Set search term to the CUI/tax ID
+                            if (taxId) {
+                                setSearchTerm(taxId)
+                            }
+                            
+                            // Scroll to the table
+                            setTimeout(() => {
+                                const element = document.getElementById('projects-table')
+                                if (element) {
+                                    element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                                }
+                            }, 500)
+                        }
+                    }
+                }
+            }
+        },
+        series: [{ name: 'Valoare', data: top10BeneficiariesData.map(b => b.y) }],
+        legend: { enabled: false },
+        credits: { enabled: false }
+    }
+
+    // 4. Stacked Column - Progress
+    const stackedProgressOptions = {
+        chart: { type: 'column', height: 400 },
+        title: { text: 'Progres pe Componente', style: { fontSize: '16px', fontWeight: '600' } },
+        xAxis: {
+            categories: stackedProgressData.categories,
+            title: { text: null }
+        },
+        yAxis: {
+            title: { text: null },
+            labels: { formatter: function() { return fmtNum(this.value) } },
+            stackLabels: {
+                enabled: true,
+                formatter: function() { return fmtNum(this.total) }
+            }
+        },
+        tooltip: {
+            useHTML: true,
+            formatter: function() {
+                return `<b>${this.x}</b><br/>${this.series.name}: <b>${fmtNum(this.y)}</b>`
+            }
+        },
+        plotOptions: {
+            column: { stacking: 'normal', dataLabels: { enabled: false } }
+        },
+        series: stackedProgressData.series,
+        legend: { enabled: true, align: 'center', verticalAlign: 'bottom' },
+        credits: { enabled: false }
+    }
+
+    // 5. Donut Chart - Grant Distribution
+    const grantDistributionOptions = {
+        chart: { type: 'pie', height: 400 },
+        title: { text: 'Distribuție Surse Finanțare', style: { fontSize: '16px', fontWeight: '600' } },
+        tooltip: {
+            pointFormatter: function() {
+                return `${this.name}: <b>${fmtMoney(this.y)}</b>`
+            }
+        },
+        plotOptions: {
+            pie: {
+                innerSize: '55%',
+                dataLabels: {
+                    enabled: true,
+                    formatter: function() {
+                        return this.percentage ? Highcharts.numberFormat(this.percentage, 1) + '%' : null
+                    }
+                }
+            }
+        },
+        series: [{ name: 'Surse', data: grantDistributionData }],
+        credits: { enabled: false }
+    }
+
+    // 6. Line Chart - Evolution (dynamic title based on endpoint)
+    const evolutionTitle = endpoint === 'payments' ? 'Evoluție Plăți în Timp (pe Trimestre)' : 'Evoluție Contracte în Timp (pe Trimestre)'
+    const contractsEvolutionOptions = {
+        chart: { type: 'line', height: 400 },
+        title: { text: evolutionTitle, style: { fontSize: '16px', fontWeight: '600' } },
+        xAxis: {
+            categories: contractsEvolutionData.categories,
+            title: { text: null },
+            labels: { style: { fontSize: '10px' } }
+        },
+        yAxis: {
+            title: { text: endpoint === 'payments' ? 'Număr Plăți' : 'Număr Contracte', style: { fontSize: '12px' } },
+            labels: { formatter: function() { return fmtNum(this.value) } }
+        },
+        tooltip: {
+            useHTML: true,
+            formatter: function() {
+                const label = endpoint === 'payments' ? 'Plăți' : 'Contracte'
+                return `<b>${this.x}</b><br/>${label}: <b>${fmtNum(this.y)}</b>`
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: { 
+                    enabled: true,
+                    formatter: function() { return fmtNum(this.y) },
+                    style: { fontSize: '9px' }
+                },
+                color: '#0ea5e9',
+                marker: { enabled: true, radius: 4 },
+                lineWidth: 2
+            }
+        },
+        series: [{ name: 'Contracte', data: contractsEvolutionData.counts }],
+        legend: { enabled: false },
+        credits: { enabled: false }
+    }
+
+    // 7. Bar Race Chart Options
+    const barRaceOptions = {
+        chart: {
+            type: 'bar',
+            height: 500,
+            animation: {
+                duration: 3500 // 3.5 seconds for smooth viewing
+            }
+        },
+        title: {
+            text: 'Top 10 Județe PNRR',
+            style: { fontSize: '18px', fontWeight: '600' }
+        },
+        subtitle: {
+            text: 'Clasament după valoarea totală a fondurilor',
+            style: { fontSize: '13px', color: '#64748b' }
+        },
+        xAxis: {
+            type: 'category',
+            title: { text: null },
+            labels: {
+                style: { fontSize: '12px', fontWeight: '500' }
+            }
+        },
+        yAxis: {
+            title: { text: null },
+            labels: {
+                formatter: function() {
+                    return fmtMoney(this.value)
+                },
+                style: { fontSize: '11px' }
+            },
+            gridLineWidth: 1,
+            gridLineColor: '#e2e8f0'
+        },
+        tooltip: {
+            useHTML: true,
+            formatter: function() {
+                return `<b>${this.point.name}</b><br/>Valoare: <b>${fmtMoney(this.y)}</b>`
+            }
+        },
+        plotOptions: {
+            bar: {
+                dataLabels: {
+                    enabled: true,
+                    formatter: function() {
+                        return fmtMoney(this.y)
+                    },
+                    style: {
+                        fontSize: '11px',
+                        fontWeight: '500',
+                        color: '#1e293b'
+                    }
+                },
+                borderRadius: 6,
+                animation: {
+                    duration: 3500,
+                    easing: 'easeOutQuad' // Smooth animation
+                },
+                point: {
+                    events: {
+                        click: function() {
+                            const countyData = processedData.find(c => c.name === this.name)
+                            if (countyData && onCountyClick) {
+                                onCountyClick(countyData.code, countyData.name)
+                            }
+                        }
+                    }
+                },
+                cursor: 'pointer'
+            }
+        },
+        series: [{
+            name: 'Valoare',
+            data: barRaceData,
+            colorByPoint: true // Use individual colors for each bar
+        }],
+        legend: { enabled: false },
+        credits: { enabled: false }
+    }
+
+    // ========== END NEW CHARTS OPTIONS ==========
 
     const rankingData = processedData.slice(0, showAllRanking ? processedData.length : 10)
     const maxValue = processedData.length > 0 ? processedData[0].value : 1
@@ -2965,208 +3617,73 @@ const MapView = ({
 
 
 
-            {/* Top Beneficiaries Section - Only show when no component is selected */}
-            {!activeProgram && (
+            {/* Bar Race Chart - Clasament Județe - Only show when no component is selected */}
+            {!activeProgram && viewMode !== 'national' && (
                 <section className="ranking-section">
                     <div className="card rank-card">
-                        <h3>Topul beneficiarilor PNRR raportat la plăți (Top 100)</h3>
-                    {loadingBeneficiaries ? (
-                        <div className="beneficiaries-loading">
-                            <div className="loading-spinner-small"></div>
-                            <span>Se încarcă topul beneficiarilor...</span>
-                        </div>
-                    ) : topBeneficiaries && topBeneficiaries.items && topBeneficiaries.items.length > 0 ? (
+                        {barRaceData && barRaceData.length > 0 ? (
                             <>
-                                <ol className="rank-list">
-                                        {topBeneficiaries.items
-                                            .slice(0, showAllBeneficiaries ? 100 : 5)
-                                            .map((beneficiary, index) => {
-                                                // Use actual API field names: beneficiar, cui, total_euro, total
-                                                // total = RON amount, total_euro = EUR amount (from API)
-                                                const amountRON = beneficiary['total'] || 0
-                                                const amountEUR = beneficiary['total_euro'] || 0 // Use total_euro directly from API
-                                                
-                                                const beneficiaryName = beneficiary['beneficiar'] || 'N/A'
-                                                
-                                                const taxId = beneficiary['cui'] ? String(beneficiary['cui']) : ''
-                                                
-                                                // Use correct currency amount based on selection
-                                                const displayAmount = currency === 'RON' ? amountRON : amountEUR
-                                                const isTopFive = index < 5
-                                                
-                                                // Format as millions with currency symbol
-                                                const millions = displayAmount / 1e6
-                                                const formattedAmount = `${millions.toLocaleString('ro-RO', {
-                                                    minimumFractionDigits: 2,
-                                                    maximumFractionDigits: 2
-                                                })} mil ${getCurrencySymbol()}`
-
-                                                // Calculate percentage for bar (similar to county ranking)
-                                                // Use total_euro for EUR comparison when currency is EUR, total for RON
-                                                const firstItem = topBeneficiaries.items[0]
-                                                const maxAmount = firstItem 
-                                                    ? (currency === 'EUR' ? (firstItem['total_euro'] || 0) : (firstItem['total'] || 0))
-                                                    : 1
-                                                const percentage = maxAmount ? Math.max(2, (displayAmount / maxAmount) * 100) : 0
-
-                                                return (
-                                                <li
-                                                    key={index}
-                                                    className="rank-item"
-                                                    onClick={() => {
-                                                        console.log('Beneficiary clicked:', beneficiary);
-                                                        console.log('Tax ID:', taxId);
-                                                        
-                                                        // Switch to payments endpoint
-                                                        if (switchEndpoint) {
-                                                            switchEndpoint('payments');
-                                                            console.log('Switched to payments endpoint');
-                                                        }
-                                                        
-                                                        // Set search term to the CUI/tax ID
-                                                        if (taxId) {
-                                                            setSearchTerm(taxId);
-                                                            console.log('Set search term to:', taxId);
-                                                        }
-                                                        
-                                                        // Scroll to the table
-                                                        setTimeout(() => {
-                                                            const element = document.getElementById('projects-table');
-                                                            if (element) {
-                                                                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                                                console.log('Scrolled to table');
-                                                            }
-                                                        }, 500);
-                                                    }}
-                                                >
-                                                    <div className="rank-pos">{index + 1}</div>
-                                                    <div className="rank-name" style={{ fontWeight: isTopFive ? 'bold' : 'normal' }}>
-                                                        {beneficiaryName}
-                                                    </div>
-                                                    <div className="rank-bar-wrap">
-                                                        <div className="rank-bar" style={{ width: `${percentage}%` }}></div>
-                                                    </div>
-                                                    <div className="rank-value" style={{ fontWeight: isTopFive ? 'bold' : 'normal' }}>
-                                                            {formattedAmount}
-                                                    </div>
-                                                </li>
-                                            )
-                                        })}
-                                </ol>
-                                <div className="rank-actions">
-                                <button
-                                        className="btn ghost"
-                                    onClick={() => setShowAllBeneficiaries(!showAllBeneficiaries)}
-                                    >
-                                        {showAllBeneficiaries ? 'Restrânge' : 'Afișează tot'}
-                                </button>
-                            </div>
-                                <div className="rank-note">
-                                    Click pe un beneficiar pentru a vedea plățile lui. (Ctrl/⌘-clic pentru un nou tab.)
+                                <HighchartsReact
+                                    highcharts={Highcharts}
+                                    options={barRaceOptions}
+                                />
+                                <div className="rank-note" style={{ marginTop: '16px', textAlign: 'center' }}>
+                                    Click pe un județ pentru a vedea detaliile. Barele au animație automată la încărcare.
                                 </div>
                             </>
-                    ) : (
-                        <div className="beneficiaries-empty">
-                            <p>Nu s-au găsit date despre beneficiari sau datele nu sunt încă disponibile.</p>
-                            {topBeneficiaries && console.log('Top beneficiaries state:', topBeneficiaries)}
-                        </div>
-                    )}
+                        ) : (
+                            <div style={{ padding: '40px', textAlign: 'center', color: '#64748b' }}>
+                                <div style={{ fontSize: '48px', marginBottom: '16px' }}>📈</div>
+                                <div style={{ fontSize: '16px', marginBottom: '8px' }}>Se încarcă graficul...</div>
+                            </div>
+                        )}
                     </div>
                 </section>
             )}
 
-            {/* Pie Chart - Full Row (always show) */}
-            <section className="pie-chart-section">
-                <div className="card pie-card">
-                    {isLoadingRealData ? (
-                        <div className="chart-container" style={{ 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            justifyContent: 'center', 
-                            height: '400px',
-                            color: '#64748b',
-                            fontSize: '16px'
-                        }}>
-                            <div style={{ textAlign: 'center' }}>
-                                <div className="loading-spinner-small" style={{ margin: '0 auto 16px auto' }}></div>
-                                <div>Se încarcă datele pentru distribuția pe componente...</div>
-                            </div>
-                        </div>
-                    ) : componentTotals && componentTotals.length > 0 ? (
-                        <div className="chart-container">
-                            <HighchartsReact
-                                highcharts={Highcharts}
-                                options={pieOptions}
-                            />
-                        </div>
-                    ) : (
-                        <div className="chart-container" style={{ 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            justifyContent: 'center', 
-                            height: '400px',
-                            color: '#64748b',
-                            fontSize: '16px'
-                        }}>
-                            <div style={{ textAlign: 'center' }}>
-                                <div style={{ fontSize: '48px', marginBottom: '16px' }}>📊</div>
-                                <div>Nu există date pentru distribuția pe componente</div>
-                                <div style={{ fontSize: '14px', marginTop: '8px' }}>
-                                    Verifică filtrele sau încarcă datele
-                                </div>
-                                <div style={{ fontSize: '12px', marginTop: '8px', color: '#94a3b8' }}>
-                                    Debug: Data length: {data?.length || 0} | Endpoint: {endpoint}
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </section>
-
-            {/* County Ranking - Full Row - Hide when viewing National Projects */}
-            {viewMode !== 'national' && (
-            <section className="ranking-section">
-                <div className="card rank-card">
-                    <h3>Clasament județe – {getSelectionLabel()}</h3>
-                    <ol className="rank-list">
-                        {rankingData.map((county, index) => {
-                            const percentage = maxValue ? Math.max(2, (county.value / maxValue) * 100) : 0
-                            // Convert to RON if needed (county.money is in EUR)
-                            const valueToDisplay = currency === 'RON' ? county.money * 5 : county.money
-                            const displayValue = fmtMoney(valueToDisplay, getCurrencySymbol())
-                            // Simple display name - no special case for București
-                            const displayName = county.name
-
-                            return (
-                                <li
-                                    key={county.code}
-                                    className="rank-item"
-                                    onClick={() => onCountyClick(county.code, county.name)}
-                                >
-                                    <div className="rank-pos">{index + 1}</div>
-                                    <div className="rank-name">{displayName}</div>
-                                    <div className="rank-bar-wrap">
-                                        <div className="rank-bar" style={{ width: `${percentage}%` }}></div>
-                                    </div>
-                                    <div className="rank-value">{displayValue}</div>
-                                </li>
-                            )
-                        })}
-                    </ol>
-                    <div className="rank-actions">
-                        <button
-                            className="btn ghost"
-                            onClick={() => setShowAllRanking(!showAllRanking)}
-                        >
-                            {showAllRanking ? 'Restrânge' : 'Afișează tot'}
-                        </button>
+            {/* NEW CHARTS GRID - 2x3 Layout */}
+            <section className="main-charts-grid-section">
+                <div className="main-charts-grid">
+                    {/* Row 1 - Overview */}
+                    <div className="card">
+                        <HighchartsReact
+                            highcharts={Highcharts}
+                            options={componentPieOptions}
+                        />
                     </div>
-                    <div className="rank-note">
-                        Click pe un județ pentru a deschide pagina lui. (Ctrl/⌘-clic pentru un nou tab.)
+                    <div className="card">
+                        <HighchartsReact
+                            highcharts={Highcharts}
+                            options={top10MeasuresOptions}
+                        />
+                    </div>
+                    <div className="card">
+                        <HighchartsReact
+                            highcharts={Highcharts}
+                            options={top10BeneficiariesOptions}
+                        />
+                    </div>
+                    {/* Row 2 - Details */}
+                    <div className="card">
+                        <HighchartsReact
+                            highcharts={Highcharts}
+                            options={stackedProgressOptions}
+                        />
+                    </div>
+                    <div className="card">
+                        <HighchartsReact
+                            highcharts={Highcharts}
+                            options={grantDistributionOptions}
+                        />
+                    </div>
+                    <div className="card">
+                        <HighchartsReact
+                            highcharts={Highcharts}
+                            options={contractsEvolutionOptions}
+                        />
                     </div>
                 </div>
             </section>
-            )}
 
 
             {/* Projects/Payments Table */}
