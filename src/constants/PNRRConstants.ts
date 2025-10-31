@@ -78,12 +78,25 @@ export const COUNTY_MAP = {
   'TM': 'Timiș', 'TR': 'Teleorman', 'VL': 'Vâlcea', 'VN': 'Vrancea', 'VS': 'Vaslui', 'BI': 'București'
 };
 
-// API Endpoints
-export const API_ENDPOINTS = {
-  PAYMENTS: 'https://mfe.gov.ro/generator/data/20251030-plati_pnrr.json.gz',
-  PROJECTS: 'https://mfe.gov.ro/generator/data/20251030-progres_tehnic_proiecte.json.gz',
-  TOP_BENEFICIARIES: 'https://mfe.gov.ro/generator/data/20251030-persons.json.gz'
-};
+// Available data dates
+export const AVAILABLE_DATA_DATES = [
+  { value: '20251030', label: '30 octombrie 2025' },
+  { value: '20251031', label: '31 octombrie 2025' }
+];
+
+// Default data date
+export const DEFAULT_DATA_DATE = '20251030';
+
+// Helper function to generate API URLs with dynamic date
+export const getAPIEndpoints = (dataDate: string = DEFAULT_DATA_DATE) => ({
+  PAYMENTS: `https://mfe.gov.ro/generator/data/${dataDate}-plati_pnrr.json.gz`,
+  PROJECTS: `https://mfe.gov.ro/generator/data/${dataDate}-progres_tehnic_proiecte.json.gz`,
+  TOP_BENEFICIARIES: `https://mfe.gov.ro/generator/data/${dataDate}-persons.json.gz`,
+  INDICATORS: `https://mfe.gov.ro/generator/data/${dataDate}-indicatori_total.json.gz`
+});
+
+// API Endpoints (default - for backward compatibility)
+export const API_ENDPOINTS = getAPIEndpoints(DEFAULT_DATA_DATE);
 
 // Data endpoint types
 export const DATA_ENDPOINTS = {

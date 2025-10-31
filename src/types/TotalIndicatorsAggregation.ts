@@ -11,6 +11,7 @@ import {
   DataValidationResult,
   Currency
 } from './PNRRDataAggregation';
+import { getAPIEndpoints, DEFAULT_DATA_DATE } from '../constants/PNRRConstants';
 
 /**
  * Total Indicators Data Structure
@@ -47,9 +48,11 @@ export class TotalIndicatorsAggregation extends BaseDataAggregation {
   private totalIndicators: TotalIndicatorsData | null = null;
   private isLoading: boolean = false;
   private error: string | null = null;
+  private dataDate: string;
 
-  constructor(config: DataProcessingConfig) {
+  constructor(config: DataProcessingConfig, dataDate: string = DEFAULT_DATA_DATE) {
     super(config);
+    this.dataDate = dataDate;
   }
 
   /**
@@ -300,7 +303,8 @@ export class TotalIndicatorsAggregation extends BaseDataAggregation {
    * Fetch total indicators from the API
    */
   private async fetchTotalIndicators(): Promise<RawTotalIndicatorsData> {
-    const url = 'https://mfe.gov.ro/generator/data/20251030-indicatori_total.json.gz';
+    const endpoints = getAPIEndpoints(this.dataDate);
+    const url = endpoints.INDICATORS;
     
     try {
       // First try to get as text (automatic decompression)

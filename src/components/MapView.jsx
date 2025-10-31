@@ -25,6 +25,7 @@ if (Highcharts.error) {
   }
 }
 import { PROGRAMS, PROGRAM_COLORS, fmtMoney, fmtNum, fmtMoneyShort, COMPONENT_MAPPING_PAYMENTS, COMPONENT_MAPPING_PROJECTS } from '../data/data'
+import { AVAILABLE_DATA_DATES } from '../constants/PNRRConstants'
 import ComponentsOverview from './ComponentsOverview'
 import { useTotalIndicators } from '../hooks/useTotalIndicators'
 import { convertRONToEUR } from '../services/ExchangeRateService'
@@ -1388,7 +1389,9 @@ const MapView = ({
     setCurrency,
     useMockData,
     setUseMockData,
-    isCountyLoading
+    isCountyLoading,
+    dataDate,
+    setDataDate
 }) => {
     const [showAllRanking, setShowAllRanking] = useState(false)
     const [mapData, setMapData] = useState(null)
@@ -1522,7 +1525,7 @@ const MapView = ({
         totalIndicators,
         isLoading: loadingIndicators,
         error: indicatorsError
-    } = useTotalIndicators()
+    } = useTotalIndicators(dataDate)
 
     // Format money for total indicators with currency conversion
     const formatMoneyEUR = (amountEUR) => {
@@ -1542,7 +1545,7 @@ const MapView = ({
         const fetchTopBeneficiaries = async () => {
             setLoadingBeneficiaries(true)
             try {
-                const url = 'https://mfe.gov.ro/generator/data/20251030-persons.json.gz'
+                const url = `https://mfe.gov.ro/generator/data/${dataDate}-persons.json.gz`
                 console.log('🔥 FETCHING BENEFICIARIES FROM:', url)
                 const response = await fetch(url, {
                     headers: {
@@ -1723,7 +1726,7 @@ const MapView = ({
         }
 
         fetchTopBeneficiaries()
-    }, [])
+    }, [dataDate])
 
     // Helper function to get county info from either format
     const getCountyInfo = (county) => {
@@ -2596,14 +2599,19 @@ const MapView = ({
                     <div className="header-info-left">
                         <div className="data-timestamp">
                             <div className="timestamp-content">
-                                <span className="timestamp-label">Data vizualizării:</span>
-                                <span className="timestamp-value">{new Date().toLocaleDateString('ro-RO', {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric',
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                })}</span>
+                                <span className="timestamp-label">Set de date:</span>
+                                <select 
+                                    className="data-date-selector"
+                                    value={dataDate}
+                                    onChange={(e) => setDataDate(e.target.value)}
+                                    title="Selectează setul de date PNRR"
+                                >
+                                    {AVAILABLE_DATA_DATES.map(date => (
+                                        <option key={date.value} value={date.value}>
+                                            {date.label}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
                         </div>
                     </div>

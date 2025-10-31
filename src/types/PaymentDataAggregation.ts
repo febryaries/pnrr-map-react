@@ -25,7 +25,9 @@ import {
 import { 
   COMPONENT_MAPPING, 
   COUNTY_MAP, 
-  API_ENDPOINTS, 
+  API_ENDPOINTS,
+  getAPIEndpoints,
+  DEFAULT_DATA_DATE,
   convertRomanianDiacritics,
   normalizeCountyName
 } from '../constants/PNRRConstants';
@@ -38,8 +40,9 @@ import { convertRONToEUR, convertEURToRON } from '../services/ExchangeRateServic
  * This data represents actual payments made to beneficiaries.
  */
 export class PaymentDataAggregation extends BaseDataAggregation {
+  private dataDate: string;
   
-  constructor() {
+  constructor(dataDate: string = DEFAULT_DATA_DATE) {
     super({
       source: 'payments' as any,
       currency: 'EUR' as any,
@@ -48,6 +51,7 @@ export class PaymentDataAggregation extends BaseDataAggregation {
       countyMapping: COUNTY_MAP,
       fieldMappings: {}
     });
+    this.dataDate = dataDate;
   }
   
   /**
@@ -356,7 +360,8 @@ export class PaymentDataAggregation extends BaseDataAggregation {
    * Fetch all payment data from the API
    */
   private async fetchAllPaymentData(): Promise<RawAPIData[]> {
-    const url = `https://mfe.gov.ro/generator/data/20251030-plati_pnrr.json.gz`;
+    const endpoints = getAPIEndpoints(this.dataDate);
+    const url = endpoints.PAYMENTS;
     
     try {
       // First try to get as text (automatic decompression)

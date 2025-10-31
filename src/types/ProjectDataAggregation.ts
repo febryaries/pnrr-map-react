@@ -26,7 +26,9 @@ import {
 import { 
   COMPONENT_MAPPING, 
   COUNTY_MAP, 
-  API_ENDPOINTS, 
+  API_ENDPOINTS,
+  getAPIEndpoints,
+  DEFAULT_DATA_DATE,
   convertRomanianDiacritics,
   normalizeCountyName
 } from '../constants/PNRRConstants';
@@ -41,8 +43,9 @@ import { convertRONToEUR, convertEURToRON } from '../services/ExchangeRateServic
 export class ProjectDataAggregation extends BaseDataAggregation {
   private isLoading: boolean = false;
   private loadPromise: Promise<void> | null = null;
+  private dataDate: string;
   
-  constructor() {
+  constructor(dataDate: string = DEFAULT_DATA_DATE) {
     super({
       source: 'projects' as any,
       currency: 'EUR' as any,
@@ -51,6 +54,7 @@ export class ProjectDataAggregation extends BaseDataAggregation {
       countyMapping: COUNTY_MAP,
       fieldMappings: {}
     });
+    this.dataDate = dataDate;
   }
   
   /**
@@ -459,7 +463,8 @@ export class ProjectDataAggregation extends BaseDataAggregation {
    * Fetch all project data from the API
    */
   private async fetchAllProjectData(): Promise<RawAPIData[]> {
-    const url = `https://mfe.gov.ro/generator/data/20251030-progres_tehnic_proiecte.json.gz`;
+    const endpoints = getAPIEndpoints(this.dataDate);
+    const url = endpoints.PROJECTS;
     
     try {
       // First try to get as text (automatic decompression)

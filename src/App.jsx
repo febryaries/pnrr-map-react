@@ -5,6 +5,7 @@ import CountyDetails from './components/CountyDetails'
 import SemanticSearchPage from './pages/SemanticSearchPage'
 import { mockData } from './data/data'
 import { useDataEndpoint } from './hooks/useDataEndpoint'
+import { DEFAULT_DATA_DATE } from './constants/PNRRConstants'
 import './App.css'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
   const [useRealData, setUseRealData] = useState(false)
   const [useMockData, setUseMockData] = useState(false) // Force mock data for testing
   const [currency, setCurrency] = useState('EUR') // 'EUR' or 'RON'
+  const [dataDate, setDataDate] = useState(DEFAULT_DATA_DATE) // Selected data date
 
   // Use the data endpoint hook
   const { 
@@ -154,6 +156,8 @@ function App() {
               useMockData={useMockData}
               setUseMockData={setUseMockData}
               isCountyLoading={isLoadingCounty}
+              dataDate={dataDate}
+              setDataDate={setDataDate}
             />
           ) : (
             <>
