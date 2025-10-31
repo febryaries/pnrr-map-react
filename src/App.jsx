@@ -19,6 +19,7 @@ function App() {
   const [useRealData, setUseRealData] = useState(false)
   const [useMockData, setUseMockData] = useState(false) // Force mock data for testing
   const [currency, setCurrency] = useState('EUR') // 'EUR' or 'RON'
+  const [pendingCountyCode, setPendingCountyCode] = useState(null) // Store county code when switching viewMode
 
   // Prefetch top beneficiaries data before page loads
   useEffect(() => {
@@ -27,6 +28,19 @@ function App() {
       console.error('Failed to prefetch top beneficiaries:', error);
     });
   }, []);
+
+  // Handle pending county selection after viewMode change
+  useEffect(() => {
+    if (pendingCountyCode && data && data.length > 0) {
+      const county = data.find(c => (c.county?.code || c.code) === pendingCountyCode)
+      if (county) {
+        setIsLoadingCounty(true)
+        setSelectedCounty(county)
+        setCurrentView('county')
+        setPendingCountyCode(null) // Clear pending
+      }
+    }
+  }, [data, pendingCountyCode])
 
   // Use the data endpoint hook
   const { 
@@ -98,6 +112,15 @@ function App() {
       setIsLoadingCounty(true)
       setSelectedCounty(nationalCounty)
       setCurrentView('county')
+      return
+    }
+    
+    // If we're in 'national' viewMode and clicking a real county,
+    // switch to 'total' viewMode to load all data
+    if (viewMode === 'national') {
+      setPendingCountyCode(countyCode) // Store county code
+      setViewMode('total') // This will trigger data reload
+      // useEffect will handle opening the county after data loads
       return
     }
     

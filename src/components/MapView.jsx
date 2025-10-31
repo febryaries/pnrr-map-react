@@ -2163,10 +2163,8 @@ const MapView = ({
                     const displayValue = metric === 'value' ? fmtMoney(valueToDisplay, currencySymbol) : fmtNum(point.projects)
                     const otherValue = metric === 'value' ? `Proiecte: ${fmtNum(point.projects)}` : `Valoare: ${fmtMoney(valueToDisplay, currencySymbol)}`
 
-                    // For national view mode, always redirect to national projects page
-                    const clickHandler = viewMode === 'national' 
-                        ? "window.handleCountyClick('NATIONAL', 'Proiecte Naționale')"
-                        : `window.handleCountyClick('${point.code}', '${point.name}')`
+                    // Always show county details button (even in national view)
+                    const clickHandler = `window.handleCountyClick('${point.code}', '${point.name}')`
 
                     return `
           <strong>${point.name}</strong><br/>
@@ -2175,7 +2173,7 @@ const MapView = ({
           <div style="margin-top: 8px;">
             <button onclick="${clickHandler}" 
                     style="padding: 6px 10px; background: #0ea5e9; color: #fff; border: 0; border-radius: 8px; font-weight: 600; cursor: pointer;">
-              ${viewMode === 'national' ? 'Click pentru proiecte naționale' : 'Click pe județ pentru detalii'}
+              Click pe județ pentru detalii
             </button>
           </div>
         `
@@ -2205,12 +2203,8 @@ const MapView = ({
                 point: {
                     events: {
                         click: function () {
-                            // For national view mode, always redirect to national projects page
-                            if (viewMode === 'national') {
-                                onCountyClick('NATIONAL', 'Proiecte Naționale')
-                            } else {
+                            // Always open county details (even in national view)
                             onCountyClick(this.code, this.name)
-                            }
                         }
                     }
                 }
@@ -2613,50 +2607,84 @@ const MapView = ({
             '#06b6d4'  // Cyan - #10
         ]
         
-        // Aggregate all measures across all counties
+        // Aggregate all measures from processedData (works for all views)
         const measuresMap = {}
         
-        data.forEach(county => {
-            if (!county.extras?.rows) return
+        // Use processedData which contains programs breakdown
+        processedData.forEach(county => {
+            if (!county.programs) return
             
-            county.extras.rows.forEach(project => {
-                const measureCode = project.COD_MASURA || project.measureCode
-                const measureLabel = project.MASURA_LABEL || project.measureLabel || measureCode
-                const value = project.VALOARE_FE || project.VALOARE_PLATA_EURO || 0
+            // Iterate through programs to get measures
+            Object.entries(county.programs).forEach(([programKey, programData]) => {
+                if (!programData.measures) return
                 
-                if (!measureCode) return
-                
-                if (!measuresMap[measureCode]) {
-                    measuresMap[measureCode] = {
-                        code: measureCode,
-                        label: measureLabel,
-                        value: 0
+                Object.entries(programData.measures).forEach(([measureCode, measureData]) => {
+                    const measureLabel = measureData.label || measureCode
+                    const value = measureData.value || 0
+                    
+                    if (!measureCode) return
+                    
+                    if (!measuresMap[measureCode]) {
+                        measuresMap[measureCode] = {
+                            code: measureCode,
+                            label: measureLabel,
+                            value: 0
+                        }
                     }
-                }
-                
-                measuresMap[measureCode].value += value
+                    
+                    measuresMap[measureCode].value += value
+                })
             })
         })
         
+        // If no measures found in programs, try extras.rows (fallback)
+        if (Object.keys(measuresMap).length === 0) {
+            data.forEach(county => {
+                if (!county.extras?.rows) return
+                
+                county.extras.rows.forEach(project => {
+                    const measureCode = project.COD_MASURA || project.measureCode
+                    const measureLabel = project.MASURA_LABEL || project.measureLabel || measureCode
+                    const value = project.VALOARE_FE || project.VALOARE_PLATA_EURO || 0
+                    
+                    if (!measureCode) return
+                    
+                    if (!measuresMap[measureCode]) {
+                        measuresMap[measureCode] = {
+                            code: measureCode,
+                            label: measureLabel,
+                            value: 0
+                        }
+                    }
+                    
+                    measuresMap[measureCode].value += value
+                })
+            })
+        }
+        
         // Convert to array, sort by value, take top 10
-        return Object.values(measuresMap)
+        const measures = Object.values(measuresMap)
             .sort((a, b) => b.value - a.value)
             .slice(0, 10)
-            .map((measure, index) => {
-                const value = currency === 'RON' ? measure.value * 5 : measure.value
-                // Truncate long labels
-                const shortLabel = measure.label.length > 40 
-                    ? measure.label.substring(0, 37) + '...'
-                    : measure.label
-                
-                return {
-                    name: `${measure.code} · ${shortLabel}`,
-                    y: value,
-                    code: measure.code,
-                    color: colors[index]
-                }
-            })
-    }, [data, currency])
+        
+        // Return empty array if no measures
+        if (measures.length === 0) return []
+        
+        return measures.map((measure, index) => {
+            const value = currency === 'RON' ? measure.value * 5 : measure.value
+            // Truncate long labels
+            const shortLabel = measure.label.length > 40 
+                ? measure.label.substring(0, 37) + '...'
+                : measure.label
+            
+            return {
+                name: `${measure.code} · ${shortLabel}`,
+                y: value,
+                code: measure.code,
+                color: colors[index]
+            }
+        })
+    }, [processedData, data, currency])
 
     // 3. Top 10 National Beneficiaries data
     const top10BeneficiariesData = useMemo(() => {
@@ -3652,10 +3680,18 @@ const MapView = ({
                         />
                     </div>
                     <div className="card">
-                        <HighchartsReact
-                            highcharts={Highcharts}
-                            options={top10MeasuresOptions}
-                        />
+                        {top10MeasuresData && top10MeasuresData.length > 0 ? (
+                            <HighchartsReact
+                                highcharts={Highcharts}
+                                options={top10MeasuresOptions}
+                            />
+                        ) : (
+                            <div style={{ padding: '40px', textAlign: 'center', color: '#64748b' }}>
+                                <div style={{ fontSize: '48px', marginBottom: '16px' }}>📊</div>
+                                <div style={{ fontSize: '16px', marginBottom: '8px' }}>Top 10 Măsuri PNRR</div>
+                                <div style={{ fontSize: '14px' }}>Nu sunt date disponibile pentru această vizualizare</div>
+                            </div>
+                        )}
                     </div>
                     <div className="card">
                         <HighchartsReact
