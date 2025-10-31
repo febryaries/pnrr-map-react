@@ -13,7 +13,7 @@ const DATA_URLS = {
   indicators: 'https://victorciobanu.com/bm/data/indicatori_total.json.gz',
   payments: 'https://victorciobanu.com/bm/data/plati_pnrr.json.gz',
   projects: 'https://victorciobanu.com/bm/data/progres_tehnic_proiecte.json.gz',
-  beneficiaries: 'https://mfe.gov.ro/generator/data/20251029-persons.json.gz'
+  beneficiaries: 'https://victorciobanu.com/bm/data/top_beneficiari.json.gz'
 }
 
 // Sample project data - this would be replaced with actual data from your Excel files
