@@ -478,19 +478,21 @@ export default function SemanticSearchPage() {
         dataLabels: {
           enabled: true,
           format: '{point.properties.hc-a2}',  // County code (BV, SV, etc.)
+          allowOverlap: true,  // Allow labels to overlap with pins
           style: {
-            fontSize: '16px',  // Mărit de la 14px
+            fontSize: '16px',
             fontWeight: '700',
             color: '#64748b',
             textOutline: '2px white',
-            opacity: 0.6
+            opacity: 0.6,
+            pointerEvents: 'none'  // Labels don't block mouse events
           },
           states: {
             hover: {
               style: {
                 color: '#0ea5e9',
                 opacity: 1,
-                fontSize: '18px'  // Mărit de la 16px
+                fontSize: '18px'
               }
             }
           }
@@ -528,6 +530,7 @@ export default function SemanticSearchPage() {
         name: 'Proiecte',
         color: '#ef4444',
         data: pins,
+        zIndex: 10,  // Pins above counties and labels
         dataLabels: {
           enabled: false
         },
