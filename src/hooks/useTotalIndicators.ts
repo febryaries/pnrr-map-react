@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react'
 import { TotalIndicatorsAggregation, TotalIndicatorsData, DataProcessingConfig, DataSource, Currency } from '../types'
-import { DEFAULT_DATA_DATE } from '../constants/PNRRConstants'
+import { FALLBACK_DATA_DATE } from '../constants/PNRRConstants'
 
 // Default configuration for total indicators
 const TOTAL_INDICATORS_CONFIG: DataProcessingConfig = {
@@ -18,7 +18,7 @@ const TOTAL_INDICATORS_CONFIG: DataProcessingConfig = {
  * This hook handles the total indicators data from the indicatori_total endpoint.
  * The data is always displayed in EUR and doesn't change based on currency selection.
  */
-export const useTotalIndicators = (dataDate: string = DEFAULT_DATA_DATE) => {
+export const useTotalIndicators = (dataDate: string = FALLBACK_DATA_DATE) => {
   const [aggregation, setAggregation] = useState(() => new TotalIndicatorsAggregation(TOTAL_INDICATORS_CONFIG, dataDate))
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)

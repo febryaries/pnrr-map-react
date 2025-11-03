@@ -28,7 +28,7 @@ import {
   COUNTY_MAP, 
   API_ENDPOINTS,
   getAPIEndpoints,
-  DEFAULT_DATA_DATE,
+  FALLBACK_DATA_DATE,
   convertRomanianDiacritics,
   normalizeCountyName
 } from '../constants/PNRRConstants';
@@ -45,7 +45,7 @@ export class ProjectDataAggregation extends BaseDataAggregation {
   private loadPromise: Promise<void> | null = null;
   private dataDate: string;
   
-  constructor(dataDate: string = DEFAULT_DATA_DATE) {
+  constructor(dataDate: string = FALLBACK_DATA_DATE) {
     super({
       source: 'projects' as any,
       currency: 'EUR' as any,
@@ -255,6 +255,7 @@ export class ProjectDataAggregation extends BaseDataAggregation {
         COD_SUBMASURA: item.cod_submasura || '',
         STADIU: this.convertRomanianDiacritics(item.stadiu || ''),
         PROGRES_FIZIC: item.progres_fizic || null,
+        PROGRES_FINANCIAR: item.progres_financiar ?? null,
         IMPACT: this.convertRomanianDiacritics(item.impact || ''),
         NR_CONTRACT: item.nr_contract || '',
         CUI: item.cui || '',

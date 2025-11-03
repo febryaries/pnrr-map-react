@@ -27,7 +27,7 @@ import {
   COUNTY_MAP, 
   API_ENDPOINTS,
   getAPIEndpoints,
-  DEFAULT_DATA_DATE,
+  FALLBACK_DATA_DATE,
   convertRomanianDiacritics,
   normalizeCountyName
 } from '../constants/PNRRConstants';
@@ -42,7 +42,7 @@ import { convertRONToEUR, convertEURToRON } from '../services/ExchangeRateServic
 export class PaymentDataAggregation extends BaseDataAggregation {
   private dataDate: string;
   
-  constructor(dataDate: string = DEFAULT_DATA_DATE) {
+  constructor(dataDate: string = FALLBACK_DATA_DATE) {
     super({
       source: 'payments' as any,
       currency: 'EUR' as any,

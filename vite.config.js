@@ -7,6 +7,16 @@ export default defineConfig({
     react(),
     viteSingleFile()
   ],
+  server: {
+    proxy: {
+      '/api/mfe': {
+        target: 'https://mfe.gov.ro',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/mfe/, ''),
+        secure: false
+      }
+    }
+  },
   build: {
     rollupOptions: {
       output: {

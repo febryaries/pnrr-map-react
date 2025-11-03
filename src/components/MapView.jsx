@@ -25,7 +25,7 @@ if (Highcharts.error) {
   }
 }
 import { PROGRAMS, PROGRAM_COLORS, fmtMoney, fmtNum, fmtMoneyShort, COMPONENT_MAPPING_PAYMENTS, COMPONENT_MAPPING_PROJECTS } from '../data/data'
-import { AVAILABLE_DATA_DATES } from '../constants/PNRRConstants'
+// AVAILABLE_DATA_DATES removed - now passed as prop from App.jsx
 import ComponentsOverview from './ComponentsOverview'
 import { useTotalIndicators } from '../hooks/useTotalIndicators'
 import { convertRONToEUR } from '../services/ExchangeRateService'
@@ -823,7 +823,15 @@ const EnhancedTable = ({
             </div>
             <div className="mobile-table-card-detail">
               <div className="mobile-table-card-detail-label">Progres Financiar</div>
-              <div className="mobile-table-card-detail-value" style={{ color: '#94a3b8', fontStyle: 'italic' }}>-</div>
+              <div className="mobile-table-card-detail-value" style={{ 
+                color: item.PROGRES_FINANCIAR !== null && item.PROGRES_FINANCIAR !== undefined ? '#000' : '#94a3b8', 
+                fontStyle: item.PROGRES_FINANCIAR !== null && item.PROGRES_FINANCIAR !== undefined ? 'normal' : 'italic',
+                fontWeight: item.PROGRES_FINANCIAR !== null && item.PROGRES_FINANCIAR !== undefined ? '500' : 'normal'
+              }}>
+                {item.PROGRES_FINANCIAR !== null && item.PROGRES_FINANCIAR !== undefined 
+                  ? `${Math.round(item.PROGRES_FINANCIAR * 100)}%` 
+                  : '-'}
+              </div>
             </div>
           </div>
           
@@ -1391,7 +1399,9 @@ const MapView = ({
     setUseMockData,
     isCountyLoading,
     dataDate,
-    setDataDate
+    setDataDate,
+    availableDates,
+    isLoadingDates
 }) => {
     const [showAllRanking, setShowAllRanking] = useState(false)
     const [mapData, setMapData] = useState(null)
@@ -2605,12 +2615,20 @@ const MapView = ({
                                     value={dataDate}
                                     onChange={(e) => setDataDate(e.target.value)}
                                     title="Selectează setul de date PNRR"
+                                    disabled={isLoadingDates}
                                 >
-                                    {AVAILABLE_DATA_DATES.map(date => (
-                                        <option key={date.value} value={date.value}>
-                                            {date.label}
-                                        </option>
-                                    ))}
+                                    {isLoadingDates ? (
+                                        <option>Se încarcă date...</option>
+                                    ) : availableDates && availableDates.length > 0 ? (
+                                        availableDates.map(date => (
+                                            <option key={date.value} value={date.value}>
+                                                {date.label}
+                                                {!date.hasAllEndpoints && ' ⚠️'}
+                                            </option>
+                                        ))
+                                    ) : (
+                                        <option value={dataDate}>{dataDate}</option>
+                                    )}
                                 </select>
                             </div>
                         </div>
@@ -3320,14 +3338,27 @@ const MapView = ({
                             numeric: false,
                             searchable: false,
                             render: (value, item) => {
-                                // Placeholder - va fi populat mâine dimineață
+                                const progresFinanciar = item.PROGRES_FINANCIAR;
+                                
+                                if (progresFinanciar === null || progresFinanciar === undefined) {
+                                    return <div style={{ 
+                                        fontSize: '12px', 
+                                        minWidth: '100px', 
+                                        textAlign: 'center',
+                                        color: '#94a3b8',
+                                        fontStyle: 'italic'
+                                    }}>-</div>
+                                }
+                                
+                                // Convert 0.58 -> 58%
+                                const percentage = Math.round(progresFinanciar * 100);
+                                
                                 return <div style={{ 
                                     fontSize: '12px', 
                                     minWidth: '100px', 
                                     textAlign: 'center',
-                                    color: '#94a3b8',
-                                    fontStyle: 'italic'
-                                }}>-</div>
+                                    fontWeight: '500'
+                                }}>{percentage}%</div>
                             }
                         },
                         {

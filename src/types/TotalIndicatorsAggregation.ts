@@ -11,7 +11,7 @@ import {
   DataValidationResult,
   Currency
 } from './PNRRDataAggregation';
-import { getAPIEndpoints, DEFAULT_DATA_DATE } from '../constants/PNRRConstants';
+import { getAPIEndpoints, FALLBACK_DATA_DATE } from '../constants/PNRRConstants';
 
 /**
  * Total Indicators Data Structure
@@ -50,7 +50,7 @@ export class TotalIndicatorsAggregation extends BaseDataAggregation {
   private error: string | null = null;
   private dataDate: string;
 
-  constructor(config: DataProcessingConfig, dataDate: string = DEFAULT_DATA_DATE) {
+  constructor(config: DataProcessingConfig, dataDate: string = FALLBACK_DATA_DATE) {
     super(config);
     this.dataDate = dataDate;
   }
