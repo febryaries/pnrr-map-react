@@ -38,21 +38,26 @@ const normalizeLocalityName = (name) => {
 
 /**
  * Creează index rapid pentru localități (o singură dată)
- * Map: nume normalizat → { lat, lon }
+ * Map: "COUNTY_LOCALITY" → { lat, lon }
+ * Folosește județ + localitate pentru a evita confuzii între localități cu același nume
  */
 const createLocalitiesIndex = () => {
   const index = new Map()
   
   for (const loc of roLocalities) {
-    // Index pe nume
-    const normalized = normalizeLocalityName(loc.name)
-    index.set(normalized, { lat: loc.lat, lon: loc.lon })
+    const countyNorm = (loc.county || '').toUpperCase().trim()
     
-    // Index pe aliasuri
+    // Index pe nume cu județ
+    const normalized = normalizeLocalityName(loc.name)
+    const key = `${countyNorm}_${normalized}`
+    index.set(key, { lat: loc.lat, lon: loc.lon, county: loc.county })
+    
+    // Index pe aliasuri cu județ
     if (loc.aliases) {
       for (const alias of loc.aliases) {
         const aliasNormalized = normalizeLocalityName(alias)
-        index.set(aliasNormalized, { lat: loc.lat, lon: loc.lon })
+        const aliasKey = `${countyNorm}_${aliasNormalized}`
+        index.set(aliasKey, { lat: loc.lat, lon: loc.lon, county: loc.county })
       }
     }
   }
@@ -65,11 +70,64 @@ const localitiesIndex = createLocalitiesIndex()
 
 /**
  * Găsește coordonate exacte pentru o localitate (RAPID cu index)
+ * Caută după județ + localitate pentru a evita confuzii
  */
-const findLocalityCoordinates = (localityName) => {
+const findLocalityCoordinates = (localityName, countyName) => {
   if (!localityName) return null
-  const normalized = normalizeLocalityName(localityName)
-  return localitiesIndex.get(normalized) || null
+  
+  const localityNorm = normalizeLocalityName(localityName)
+  
+  // Dacă avem județ, caută cu județ + localitate (CORECT)
+  if (countyName) {
+    // Normalizează județul - încearcă să găsim codul județului (AB, CJ, etc.)
+    const countyUpper = countyName.toUpperCase()
+      .replace(/Ă/g, 'A').replace(/Â/g, 'A')
+      .replace(/Î/g, 'I').replace(/Ș/g, 'S')
+      .replace(/Ț/g, 'T')
+      .trim()
+    
+    // Mapare județe la coduri (pentru matching)
+    const countyCodeMap = {
+      'ALBA': 'AB', 'ARAD': 'AR', 'ARGES': 'AG', 'BACAU': 'BC', 'BIHOR': 'BH',
+      'BISTRITA-NASAUD': 'BN', 'BOTOSANI': 'BT', 'BRASOV': 'BV', 'BRAILA': 'BR',
+      'BUZAU': 'BZ', 'CARAS-SEVERIN': 'CS', 'CALARASI': 'CL', 'CLUJ': 'CJ',
+      'CONSTANTA': 'CT', 'COVASNA': 'CV', 'DAMBOVITA': 'DB', 'DOLJ': 'DJ',
+      'GALATI': 'GL', 'GIURGIU': 'GR', 'GORJ': 'GJ', 'HARGHITA': 'HR',
+      'HUNEDOARA': 'HD', 'IALOMITA': 'IL', 'IASI': 'IS', 'ILFOV': 'IF',
+      'MARAMURES': 'MM', 'MEHEDINTI': 'MH', 'MURES': 'MS', 'NEAMT': 'NT',
+      'OLT': 'OT', 'PRAHOVA': 'PH', 'SATU MARE': 'SM', 'SALAJ': 'SJ',
+      'SIBIU': 'SB', 'SUCEAVA': 'SV', 'TELEORMAN': 'TR', 'TIMIS': 'TM',
+      'TULCEA': 'TL', 'VASLUI': 'VS', 'VALCEA': 'VL', 'VRANCEA': 'VN',
+      'BUCURESTI': 'B', 'MUNICIPIUL BUCURESTI': 'B'
+    }
+    
+    // Încearcă să găsești codul județului
+    let countyCode = null
+    
+    // Dacă e deja cod (2 litere), folosește direct
+    if (countyUpper.length === 2) {
+      countyCode = countyUpper
+    } else {
+      // Caută în mapare
+      for (const [fullName, code] of Object.entries(countyCodeMap)) {
+        if (countyUpper.includes(fullName) || fullName.includes(countyUpper)) {
+          countyCode = code
+          break
+        }
+      }
+    }
+    
+    // Încearcă cu codul județului
+    if (countyCode) {
+      const key = `${countyCode}_${localityNorm}`
+      const result = localitiesIndex.get(key)
+      if (result) return result
+    }
+  }
+  
+  // Fallback: caută fără județ (poate returna localitate greșită dacă există duplicate)
+  // Acest fallback e doar pentru cazuri excepționale
+  return null
 }
 
 /**
@@ -96,6 +154,7 @@ export default function SemanticSearchPage() {
   const [mapData, setMapData] = useState(null)
   const [searchQuery, setSearchQuery] = useState(query)
   const [selectedProjectIndex, setSelectedProjectIndex] = useState(null)
+  const [hoveredCounty, setHoveredCounty] = useState(null)
   
   // Load data on mount
   useEffect(() => {
@@ -308,8 +367,8 @@ export default function SemanticSearchPage() {
       // Default to center of Romania as fallback
       let lat = 45.94, lon = 24.97
       
-      // Try to find exact locality coordinates first
-      const localityCoords = findLocalityCoordinates(proj.locality, null)
+      // Try to find exact locality coordinates with county matching
+      const localityCoords = findLocalityCoordinates(proj.locality, proj.county)
       
       if (localityCoords) {
         // Use exact locality coordinates
@@ -402,10 +461,68 @@ export default function SemanticSearchPage() {
       series: [{
         name: 'România',
         borderColor: '#cbd5e1',
-        borderWidth: 1,
+        borderWidth: 1.5,
         nullColor: '#f8fafc',
         showInLegend: false,
-        enableMouseTracking: false
+        enableMouseTracking: true,
+        states: {
+          hover: {
+            color: '#e0f2fe',
+            borderColor: '#0ea5e9',
+            borderWidth: 2
+          },
+          inactive: {
+            opacity: 0.1  // Fade out non-hovered counties
+          }
+        },
+        dataLabels: {
+          enabled: true,
+          format: '{point.properties.hc-a2}',  // County code (BV, SV, etc.)
+          style: {
+            fontSize: '16px',  // Mărit de la 14px
+            fontWeight: '700',
+            color: '#64748b',
+            textOutline: '2px white',
+            opacity: 0.6
+          },
+          states: {
+            hover: {
+              style: {
+                color: '#0ea5e9',
+                opacity: 1,
+                fontSize: '18px'  // Mărit de la 16px
+              }
+            }
+          }
+        },
+        point: {
+          events: {
+            mouseOver: function(e) {
+              // Only trigger if hovering directly on county (not on pins)
+              if (e.target && e.target.point && e.target.point.series.name === 'România') {
+                // Highlight only this county, fade others
+                const chart = this.series.chart
+                chart.series[0].points.forEach(point => {
+                  if (point !== this) {
+                    point.setState('inactive')
+                  } else {
+                    point.setState('hover')
+                  }
+                })
+              }
+            },
+            mouseOut: function(e) {
+              // Only reset if leaving county (not moving to pin)
+              if (e.target && e.target.point && e.target.point.series.name === 'România') {
+                // Reset all counties to normal state
+                const chart = this.series.chart
+                chart.series[0].points.forEach(point => {
+                  point.setState('')
+                })
+              }
+            }
+          }
+        }
       }, {
         type: 'mappoint',
         name: 'Proiecte',
@@ -415,6 +532,16 @@ export default function SemanticSearchPage() {
           enabled: false
         },
         cursor: 'pointer',
+        enableMouseTracking: true,  // Keep tooltip on pins
+        stickyTracking: false,  // Don't stick to pins
+        states: {
+          hover: {
+            enabled: true  // Allow pin hover
+          },
+          inactive: {
+            enabled: false  // Pins are NEVER faded out
+          }
+        },
         point: {
           events: {
             click: function() {
@@ -422,6 +549,26 @@ export default function SemanticSearchPage() {
               if (this.projectIndex !== undefined) {
                 handlePinClick(this.projectIndex)
               }
+            },
+            mouseOver: function(e) {
+              // Prevent county fade when hovering pins
+              // Stop event propagation to county layer
+              if (e.stopPropagation) e.stopPropagation()
+              
+              // Ensure all counties stay in normal state
+              const chart = this.series.chart
+              if (chart.series[0]) {
+                chart.series[0].points.forEach(point => {
+                  point.setState('')  // Reset to normal
+                })
+              }
+              
+              return true  // Show pin tooltip
+            },
+            mouseOut: function(e) {
+              // Prevent event propagation
+              if (e.stopPropagation) e.stopPropagation()
+              return true
             }
           }
         }
