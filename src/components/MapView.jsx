@@ -375,9 +375,20 @@ const EnhancedTable = ({
   const sortedData = useMemo(() => {
     if (!sortColumn) return filteredData
 
+    // Find column config to check for sortValue function
+    const columnConfig = columns.find(col => col.key === sortColumn)
+
     return [...filteredData].sort((a, b) => {
-      const aVal = a[sortColumn]
-      const bVal = b[sortColumn]
+      let aVal, bVal
+      
+      // Use sortValue function if available, otherwise use direct property
+      if (columnConfig && columnConfig.sortValue) {
+        aVal = columnConfig.sortValue(a)
+        bVal = columnConfig.sortValue(b)
+      } else {
+        aVal = a[sortColumn]
+        bVal = b[sortColumn]
+      }
       
       // Handle numeric values
       if (typeof aVal === 'number' && typeof bVal === 'number') {
@@ -394,7 +405,7 @@ const EnhancedTable = ({
         return bStr.localeCompare(aStr)
       }
     })
-  }, [filteredData, sortColumn, sortDirection])
+  }, [filteredData, sortColumn, sortDirection, columns])
 
   // Paginate data
   const totalPages = Math.ceil(sortedData.length / pageSize)
@@ -3259,8 +3270,21 @@ const MapView = ({
                         {
                             key: 'progress',
                             label: endpoint === 'payments' ? 'Progres Fizic (%)' : 'Progres Tehnic',
-                            numeric: false,
+                            numeric: true,
                             searchable: false,
+                            sortable: true,
+                            sortValue: (item) => {
+                                // For payments: use progress value directly
+                                if (endpoint === 'payments') {
+                                    return item.progress || 0;
+                                }
+                                // For projects: use PROGRES_FIZIC if available
+                                const progresFizic = item.PROGRES_FIZIC;
+                                if (progresFizic !== null && progresFizic !== undefined && progresFizic !== '') {
+                                    return parseFloat(String(progresFizic).replace(',', '.'));
+                                }
+                                return 0; // Default for stadiu text
+                            },
                             render: (value, item) => {
                                 if (endpoint === 'payments') {
                                     const displayValue = value !== undefined && value !== null ? `${value}%` : '-'
@@ -3335,8 +3359,12 @@ const MapView = ({
                         {
                             key: 'financialProgress',
                             label: 'Progres Financiar',
-                            numeric: false,
+                            numeric: true,
                             searchable: false,
+                            sortable: true,
+                            sortValue: (item) => {
+                                return item.PROGRES_FINANCIAR ?? 0;
+                            },
                             render: (value, item) => {
                                 const progresFinanciar = item.PROGRES_FINANCIAR;
                                 
