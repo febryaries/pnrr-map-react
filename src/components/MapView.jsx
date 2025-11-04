@@ -1319,7 +1319,7 @@ const EnhancedTable = ({
 
       {/* Sticky Filters - Hidden on mobile by default, shown when button clicked */}
       {searchable && (
-        <div className="table-filters-sticky" ref={filtersRef} data-mobile-visible={isMobileFiltersOpen}>
+        <div className={`table-filters-sticky ${endpoint === 'projects' ? 'projects-layout' : ''}`} ref={filtersRef} data-mobile-visible={isMobileFiltersOpen}>
           <div className="table-filters-sticky-content">
               {/* Visualization Mode Dropdown - Only for projects endpoint */}
               {endpoint !== 'payments' && (

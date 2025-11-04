@@ -871,6 +871,35 @@ export default function SemanticSearchPage() {
           </div>
         </div>
         
+        {/* Hartă cu pin-uri */}
+        <div style={{
+          background: '#fff',
+          borderRadius: '16px',
+          padding: '16px',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+          marginBottom: '24px'
+        }}>
+          {mapOptions ? (
+            <>
+              <div style={{ height: '700px', width: '100%', minHeight: '700px' }}>
+                <HighchartsReact
+                  highcharts={Highcharts}
+                  constructorType={'mapChart'}
+                  options={mapOptions}
+                  containerProps={{ style: { height: '100%', width: '100%' } }}
+                />
+              </div>
+              <p style={{ fontSize: '13px', color: '#64748b', marginTop: '8px' }}>
+                Click pe pin → detalii localitate
+              </p>
+            </>
+          ) : (
+            <div style={{ textAlign: 'center', padding: '60px', color: '#64748b' }}>
+              {loading ? 'Se încarcă harta...' : 'Nicio locație găsită'}
+            </div>
+          )}
+        </div>
+        
         {/* Căutare nouă */}
         <div style={{
           background: '#fff',
@@ -1120,35 +1149,6 @@ export default function SemanticSearchPage() {
               >
                 ✕ Resetează filtrele
               </button>
-            </div>
-          )}
-        </div>
-        
-        {/* Hartă cu pin-uri */}
-        <div style={{
-          background: '#fff',
-          borderRadius: '16px',
-          padding: '16px',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-          marginBottom: '24px'
-        }}>
-          {mapOptions ? (
-            <>
-              <div style={{ height: '700px', width: '100%', minHeight: '700px' }}>
-                <HighchartsReact
-                  highcharts={Highcharts}
-                  constructorType={'mapChart'}
-                  options={mapOptions}
-                  containerProps={{ style: { height: '100%', width: '100%' } }}
-                />
-              </div>
-              <p style={{ fontSize: '13px', color: '#64748b', marginTop: '8px' }}>
-                Click pe pin → detalii localitate
-              </p>
-            </>
-          ) : (
-            <div style={{ textAlign: 'center', padding: '60px', color: '#64748b' }}>
-              {loading ? 'Se încarcă harta...' : 'Nicio locație găsită'}
             </div>
           )}
         </div>

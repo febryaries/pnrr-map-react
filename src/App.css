@@ -3955,7 +3955,7 @@ td.num {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-/* Desktop layout: 3 filters per row, 2 rows */
+/* Desktop layout: 3 filters per row, 2 rows (DEFAULT for payments) */
 @media (min-width: 1024px) {
   .table-filters-sticky-content {
     display: grid;
@@ -3986,6 +3986,27 @@ td.num {
     grid-row: 3;
     justify-self: end;
     width: auto;
+  }
+  
+  /* PROJECTS LAYOUT: 4 filters per row, 2 rows */
+  .table-filters-sticky.projects-layout .table-filters-sticky-content {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  /* First 4 items in row 1 for projects */
+  .table-filters-sticky.projects-layout .filter-item:nth-child(1),
+  .table-filters-sticky.projects-layout .filter-item:nth-child(2),
+  .table-filters-sticky.projects-layout .filter-item:nth-child(3),
+  .table-filters-sticky.projects-layout .filter-item:nth-child(4) {
+    grid-row: 1;
+  }
+  
+  /* Next 4 items in row 2 for projects */
+  .table-filters-sticky.projects-layout .filter-item:nth-child(5),
+  .table-filters-sticky.projects-layout .filter-item:nth-child(6),
+  .table-filters-sticky.projects-layout .filter-item:nth-child(7),
+  .table-filters-sticky.projects-layout .filter-item:nth-child(8) {
+    grid-row: 2;
   }
 }
 
