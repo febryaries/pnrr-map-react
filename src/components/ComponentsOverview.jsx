@@ -55,7 +55,8 @@ const ComponentsOverview = ({
   setFilterMasura = null,
   switchEndpoint = null,
   setViewMode = null,
-  setMetric = null
+  setMetric = null,
+  totalExecutedFromAPI = null  // Valoare executată din API (totalIndicators.platit_eur)
 }) => {
   const [expandedComponents, setExpandedComponents] = useState(new Set())
   const [isSticky, setIsSticky] = useState(false)
@@ -196,7 +197,8 @@ const ComponentsOverview = ({
   )
 
   const totalValue = processedComponents.reduce((sum, component) => sum + component.totalValue, 0)
-  const totalExecuted = processedComponents.reduce((sum, component) => sum + component.totalExecutedValue, 0)
+  // Use API value if available, otherwise fallback to JSON sum
+  const totalExecuted = totalExecutedFromAPI !== null ? totalExecutedFromAPI : processedComponents.reduce((sum, component) => sum + component.totalExecutedValue, 0)
 
   // Intersection Observer pentru sticky navigation
   useEffect(() => {

@@ -3702,6 +3702,7 @@ const MapView = ({
               switchEndpoint={switchEndpoint}
               setViewMode={setViewMode}
               setMetric={setMetric}
+              totalExecutedFromAPI={totalIndicators?.platit_eur || null}
             />
 
             {/* Show loading overlay while county details are being prepared */}
