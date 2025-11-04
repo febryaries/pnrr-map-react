@@ -1374,7 +1374,23 @@ const EnhancedTable = ({
                 </select>
               </div>
               
-              {/* Masura Filter - ALWAYS VISIBLE */}
+              {/* Component Filter - ALWAYS VISIBLE - PRIMUL PE RANDUL 2 */}
+              <div className="filter-item">
+                <label>🎯 Alege Componenta</label>
+                <select value={filterComponent} onChange={(e) => handleComponentChange(e.target.value)}>
+                  <option value="">Toate componentele</option>
+                  {uniqueComponents.map(code => {
+                    const component = COMPONENT_MAPPING[code]
+                    return (
+                      <option key={code} value={code}>
+                        {code} - {component?.label || code}
+                      </option>
+                    )
+                  })}
+                </select>
+              </div>
+              
+              {/* Masura Filter - ALWAYS VISIBLE - AL DOILEA PE RANDUL 2 */}
               <div className="filter-item">
                 <label>📋 Cod Măsură</label>
                 <select value={filterMasura} onChange={(e) => { setFilterMasura(e.target.value); closeMobileSidebar(); }}>
@@ -1398,7 +1414,7 @@ const EnhancedTable = ({
                 </div>
               )}
               
-              {/* Funding Source Filter - ALWAYS VISIBLE */}
+              {/* Funding Source Filter - ALWAYS VISIBLE - AL TREILEA PE RANDUL 2 */}
               <div className="filter-item">
                 <label>💰 Sursă Finanțare</label>
                 <select value={filterFundingSource} onChange={(e) => { setFilterFundingSource(e.target.value); closeMobileSidebar(); }}>
@@ -1406,22 +1422,6 @@ const EnhancedTable = ({
                   {uniqueFundingSources.map(value => (
                     <option key={value} value={value}>{value}</option>
                   ))}
-                </select>
-              </div>
-              
-              {/* Component Filter - ALWAYS VISIBLE */}
-              <div className="filter-item">
-                <label>🎯 Alege Componenta</label>
-                <select value={filterComponent} onChange={(e) => handleComponentChange(e.target.value)}>
-                  <option value="">Toate componentele</option>
-                  {uniqueComponents.map(code => {
-                    const component = COMPONENT_MAPPING[code]
-                    return (
-                      <option key={code} value={code}>
-                        {code} - {component?.label || code}
-                      </option>
-                    )
-                  })}
                 </select>
               </div>
               
@@ -2600,11 +2600,22 @@ const MapView = ({
         })
         
         // Filter by active program or component filter if selected
-        const filteredData = (activeProgram || filterComponent)
+        let filteredData = (activeProgram || filterComponent)
             ? allData.filter(item => item.componentCode === (activeProgram || filterComponent))
             : allData
         
-        // Don't filter out zero values to maintain correct count
+        // Filter out values that display as 0.00 or -0.00 (< 0.01 EUR in absolute value)
+        // Only for payments endpoint - keep significant negative values like -1.641,70 mil EUR
+        if (endpoint === 'payments') {
+            filteredData = filteredData.filter(item => {
+                // Use item.value which is already calculated at line 2587
+                const numValue = Number(item.value)
+                // Eliminate values < 10,000 EUR (0.01 million EUR) in absolute value
+                // This catches all values that display as "0,00 mil EUR" or "-0,00 mil EUR"
+                return !isNaN(numValue) && Math.abs(numValue) >= 10000
+            })
+        }
+        
         return filteredData
     }, [data, endpoint, viewMode, fieldMappings, activeProgram, filterComponent, getValueField])
 
