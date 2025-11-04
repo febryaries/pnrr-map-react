@@ -3079,7 +3079,7 @@ const MapView = ({
                         title="Click pentru a vedea componentele PNRR"
                     >
                         <div className="mobile-total-value">{formatMoneyWithCurrency(calculatedTotals.totalValue)}</div>
-                        <div className="mobile-total-label">{endpoint === 'payments' ?  "TOTAL PLĂTIT" : "VALOARE PNRR CONTRACTATĂ" }</div>
+                        <div className="mobile-total-label">{endpoint === 'payments' ?  "PLĂȚI TOTALE PROIECTE ACTIVE" : "VALOARE PNRR CONTRACTATĂ" }</div>
                         {activeProgram && (
                             <div className="mobile-total-sublabel">{COMPONENT_MAPPING[activeProgram]?.label}</div>
                         )}
@@ -3120,7 +3120,7 @@ const MapView = ({
                         title="Click pentru a vedea componentele PNRR"
                     >
                         <div className="map-total-value">{formatMoneyWithCurrency(calculatedTotals.totalValue)}</div>
-                        <div className="map-total-label">{endpoint === 'payments' ? "TOTAL PLĂTIT" : "VALOARE PNRR CONTRACTATĂ" }</div>
+                        <div className="map-total-label">{endpoint === 'payments' ? "PLĂȚI TOTALE PROIECTE ACTIVE" : "VALOARE PNRR CONTRACTATĂ" }</div>
                         {activeProgram && (
                             <div className="map-total-sublabel">{COMPONENT_MAPPING[activeProgram]?.label}</div>
                         )}
