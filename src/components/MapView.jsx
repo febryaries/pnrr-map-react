@@ -1374,6 +1374,41 @@ const EnhancedTable = ({
                 </select>
               </div>
               
+              {/* Masura Filter - ALWAYS VISIBLE */}
+              <div className="filter-item">
+                <label>📋 Cod Măsură</label>
+                <select value={filterMasura} onChange={(e) => { setFilterMasura(e.target.value); closeMobileSidebar(); }}>
+                  <option value="">Toate măsurile</option>
+                  {uniqueMasuraCodes.map(value => (
+                    <option key={value} value={value}>{value}</option>
+                  ))}
+                </select>
+              </div>
+              
+              {/* Progres Tehnic Filter - VISIBLE ONLY FOR PROJECTS */}
+              {endpoint === 'projects' && (
+                <div className="filter-item">
+                  <label>📊 Progres Tehnic</label>
+                  <select value={filterStadiu} onChange={(e) => { setFilterStadiu(e.target.value); closeMobileSidebar(); }}>
+                    <option value="">Toate valorile</option>
+                    {uniqueStadiu.map(value => (
+                      <option key={value} value={value}>{value}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+              
+              {/* Funding Source Filter - ALWAYS VISIBLE */}
+              <div className="filter-item">
+                <label>💰 Sursă Finanțare</label>
+                <select value={filterFundingSource} onChange={(e) => { setFilterFundingSource(e.target.value); closeMobileSidebar(); }}>
+                  <option value="">Toate sursele</option>
+                  {uniqueFundingSources.map(value => (
+                    <option key={value} value={value}>{value}</option>
+                  ))}
+                </select>
+              </div>
+              
               {/* Component Filter - ALWAYS VISIBLE */}
               <div className="filter-item">
                 <label>🎯 Alege Componenta</label>
@@ -1387,39 +1422,6 @@ const EnhancedTable = ({
                       </option>
                     )
                   })}
-                </select>
-              </div>
-              
-              {/* Masura Filter - ALWAYS VISIBLE */}
-              <div className="filter-item">
-                <label>📋 Cod Măsură</label>
-                <select value={filterMasura} onChange={(e) => { setFilterMasura(e.target.value); closeMobileSidebar(); }}>
-                  <option value="">Toate măsurile</option>
-                  {uniqueMasuraCodes.map(value => (
-                    <option key={value} value={value}>{value}</option>
-                  ))}
-                </select>
-              </div>
-              
-              {/* Progres Tehnic Filter - ALWAYS VISIBLE */}
-              <div className="filter-item">
-                <label>📊 Progres Tehnic</label>
-                <select value={filterStadiu} onChange={(e) => { setFilterStadiu(e.target.value); closeMobileSidebar(); }}>
-                  <option value="">Toate valorile</option>
-                  {uniqueStadiu.map(value => (
-                    <option key={value} value={value}>{value}</option>
-                  ))}
-                </select>
-              </div>
-              
-              {/* Funding Source Filter - ALWAYS VISIBLE */}
-              <div className="filter-item">
-                <label>💰 Sursă Finanțare</label>
-                <select value={filterFundingSource} onChange={(e) => { setFilterFundingSource(e.target.value); closeMobileSidebar(); }}>
-                  <option value="">Toate sursele</option>
-                  {uniqueFundingSources.map(value => (
-                    <option key={value} value={value}>{value}</option>
-                  ))}
                 </select>
               </div>
               
@@ -2213,7 +2215,7 @@ const MapView = ({
                 y: 28
             },
             mapNavigation: {
-                enabled: true,
+                enabled: false,  // Dezactivat zoom
                 buttonOptions: {
                     verticalAlign: 'bottom'
                 }
@@ -3355,7 +3357,7 @@ const MapView = ({
                         },
                         {
                             key: 'value',
-                            label: `Valoare (${getCurrencySymbol()})`,
+                            label: endpoint === 'payments' ? `Valoare plătită (${getCurrencySymbol()})` : `Valoare (${getCurrencySymbol()})`,
                             numeric: true,
                             searchable: false,
                             render: (value, item) => {
@@ -3465,7 +3467,8 @@ const MapView = ({
                                 }
                             }
                         },
-                        {
+                        // Progres Financiar - ONLY FOR PROJECTS
+                        ...(endpoint === 'projects' ? [{
                             key: 'financialProgress',
                             label: 'Progres Financiar',
                             numeric: true,
@@ -3497,7 +3500,7 @@ const MapView = ({
                                     fontWeight: '500'
                                 }}>{percentage}%</div>
                             }
-                        },
+                        }] : []),
                         {
                             key: 'componentCode',
                             label: 'Cod Componentă',

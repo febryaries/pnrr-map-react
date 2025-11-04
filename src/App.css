@@ -2974,7 +2974,7 @@ table th {
   font-size: 11px;
   font-weight: 600;
   padding: 8px 6px;
-  text-align: left;
+  text-align: center;
   background: #f8fafc;
   border-bottom: 2px solid #e2e8f0;
   white-space: nowrap;
@@ -3240,6 +3240,7 @@ th {
   font-size: 13px;
   color: var(--muted);
   font-weight: 700;
+  text-align: center;
 }
 
 td.num {
@@ -3954,30 +3955,28 @@ td.num {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-/* Desktop layout: 4 filters per row, 3 rows */
+/* Desktop layout: 3 filters per row, 2 rows */
 @media (min-width: 1024px) {
   .table-filters-sticky-content {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(3, auto);
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, auto);
     gap: 12px;
     align-items: end;
     max-width: 100%;
   }
   
-  /* Ensure first 4 items go to first row */
+  /* Ensure first 3 items go to first row */
   .table-filters-sticky .filter-item:nth-child(1),
   .table-filters-sticky .filter-item:nth-child(2),
-  .table-filters-sticky .filter-item:nth-child(3),
-  .table-filters-sticky .filter-item:nth-child(4) {
+  .table-filters-sticky .filter-item:nth-child(3) {
     grid-row: 1;
   }
   
-  /* Ensure next 4 items go to second row */
+  /* Ensure next 3 items go to second row */
+  .table-filters-sticky .filter-item:nth-child(4),
   .table-filters-sticky .filter-item:nth-child(5),
-  .table-filters-sticky .filter-item:nth-child(6),
-  .table-filters-sticky .filter-item:nth-child(7),
-  .table-filters-sticky .filter-item:nth-child(8) {
+  .table-filters-sticky .filter-item:nth-child(6) {
     grid-row: 2;
   }
   
