@@ -1381,7 +1381,8 @@ export default function SemanticSearchPage() {
                               color: '#0f172a',
                               fontSize: '13px',
                               fontWeight: '500',
-                              lineHeight: '1.4'
+                              lineHeight: '1.4',
+                              textTransform: 'uppercase'
                             }}>
                               {title}
                             </div>
