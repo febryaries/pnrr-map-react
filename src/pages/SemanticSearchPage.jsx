@@ -153,8 +153,18 @@ export default function SemanticSearchPage() {
   const [filteredProjects, setFilteredProjects] = useState([])
   const [mapData, setMapData] = useState(null)
   const [searchQuery, setSearchQuery] = useState(query)
-  const [selectedProjectIndex, setSelectedProjectIndex] = useState(null)
+  const [selectedProjectId, setSelectedProjectId] = useState(null)
   const [hoveredCounty, setHoveredCounty] = useState(null)
+  
+  // Sortare state
+  const [sortColumn, setSortColumn] = useState('value')
+  const [sortDirection, setSortDirection] = useState('desc')
+  
+  // Filtre state
+  const [filterCounty, setFilterCounty] = useState('')
+  const [filterLocality, setFilterLocality] = useState('')
+  const [filterComponent, setFilterComponent] = useState('')
+  const [filterStatus, setFilterStatus] = useState('')
   
   // Load data on mount
   useEffect(() => {
@@ -206,7 +216,8 @@ export default function SemanticSearchPage() {
             projects.push({
               ...row,
               countyCode: county.code || county.county?.code,
-              countyName: county.name || county.county?.name
+              countyName: county.name || county.county?.name,
+              _uniqueId: `${row.COD_SMIS || row.contractNumber || row.NR_CONTRACT || ''}_${county.code || ''}_${Math.random().toString(36).substr(2, 9)}`
             })
           })
         }
@@ -285,24 +296,166 @@ export default function SemanticSearchPage() {
   
   const exampleTerms = ['apă uzată', 'spital', 'drum', 'energie', 'școală']
   
+  // Get unique values for filters
+  const uniqueCounties = useMemo(() => {
+    const values = new Set()
+    filteredProjects.forEach(p => {
+      const county = p.countyName || p.JUDET_IMPLEMENTARE
+      if (county) values.add(county)
+    })
+    return Array.from(values).sort((a, b) => a.localeCompare(b, 'ro'))
+  }, [filteredProjects])
+  
+  const uniqueLocalities = useMemo(() => {
+    const values = new Set()
+    filteredProjects.forEach(p => {
+      // Apply county filter
+      if (filterCounty) {
+        const county = p.countyName || p.JUDET_IMPLEMENTARE
+        if (county !== filterCounty) return
+      }
+      
+      const locality = p.LOCALIZARE_LOCALITATE || p.locality
+      if (locality) values.add(locality)
+    })
+    return Array.from(values).sort((a, b) => a.localeCompare(b, 'ro'))
+  }, [filteredProjects, filterCounty])
+  
+  const uniqueComponents = useMemo(() => {
+    const values = new Set()
+    filteredProjects.forEach(p => {
+      const component = p.COD_COMPONENTA || p.component
+      if (component) values.add(component)
+    })
+    return Array.from(values).sort((a, b) => a.localeCompare(b, 'ro'))
+  }, [filteredProjects])
+  
+  const uniqueStatuses = useMemo(() => {
+    const values = new Set()
+    filteredProjects.forEach(p => {
+      const status = p.STADIU || p.status
+      if (status) values.add(status)
+    })
+    return Array.from(values).sort((a, b) => a.localeCompare(b, 'ro'))
+  }, [filteredProjects])
+  
+  // Apply dropdown filters
+  const filteredByDropdowns = useMemo(() => {
+    return filteredProjects.filter(project => {
+      // County filter
+      if (filterCounty) {
+        const county = project.countyName || project.JUDET_IMPLEMENTARE || ''
+        if (county !== filterCounty) return false
+      }
+      
+      // Locality filter
+      if (filterLocality) {
+        const locality = project.LOCALIZARE_LOCALITATE || project.locality || ''
+        if (locality !== filterLocality) return false
+      }
+      
+      // Component filter
+      if (filterComponent) {
+        const component = project.COD_COMPONENTA || project.component || ''
+        if (component !== filterComponent) return false
+      }
+      
+      // Status filter
+      if (filterStatus) {
+        const status = project.STADIU || project.status || ''
+        if (status !== filterStatus) return false
+      }
+      
+      return true
+    })
+  }, [filteredProjects, filterCounty, filterLocality, filterComponent, filterStatus])
+  
+  // Sort projects
+  const sortedProjects = useMemo(() => {
+    if (!sortColumn) return filteredByDropdowns
+    
+    return [...filteredByDropdowns].sort((a, b) => {
+      let aVal, bVal
+      
+      switch(sortColumn) {
+        case 'title':
+          aVal = a.DENUMIRE_PROIECT || a.SCOP_PROIECT || a.title || ''
+          bVal = b.DENUMIRE_PROIECT || b.SCOP_PROIECT || b.title || ''
+          break
+        case 'beneficiary':
+          aVal = a.BENEFICIAR || a.DENUMIRE_BENEFICIAR || ''
+          bVal = b.BENEFICIAR || b.DENUMIRE_BENEFICIAR || ''
+          break
+        case 'county':
+          aVal = a.countyName || a.JUDET_IMPLEMENTARE || ''
+          bVal = b.countyName || b.JUDET_IMPLEMENTARE || ''
+          break
+        case 'locality':
+          aVal = a.LOCALIZARE_LOCALITATE || a.locality || ''
+          bVal = b.LOCALIZARE_LOCALITATE || b.locality || ''
+          break
+        case 'component':
+          aVal = a.COD_COMPONENTA || a.component || ''
+          bVal = b.COD_COMPONENTA || b.component || ''
+          break
+        case 'status':
+          aVal = a.STADIU || a.status || ''
+          bVal = b.STADIU || b.status || ''
+          break
+        case 'value':
+          aVal = a.__share_value || a.valoare_fe || a.value || 0
+          bVal = b.__share_value || b.valoare_fe || b.value || 0
+          break
+        default:
+          return 0
+      }
+      
+      // Numeric comparison
+      if (typeof aVal === 'number' && typeof bVal === 'number') {
+        return sortDirection === 'asc' ? aVal - bVal : bVal - aVal
+      }
+      
+      // String comparison (case-insensitive, Romanian locale)
+      const aStr = String(aVal).toLowerCase()
+      const bStr = String(bVal).toLowerCase()
+      
+      if (sortDirection === 'asc') {
+        return aStr.localeCompare(bStr, 'ro')
+      } else {
+        return bStr.localeCompare(aStr, 'ro')
+      }
+    })
+  }, [filteredByDropdowns, sortColumn, sortDirection])
+  
   // Get projects to display in table (filtered by pin selection)
   const displayedProjects = useMemo(() => {
-    if (selectedProjectIndex !== null) {
-      // Show only selected project
-      return [filteredProjects[selectedProjectIndex]].filter(Boolean)
+    if (selectedProjectId !== null) {
+      // Găsește proiect după ID (funcționează și după sortare!)
+      const selected = sortedProjects.find(p => p._uniqueId === selectedProjectId)
+      return selected ? [selected] : []
     }
-    // Show first 50 projects
-    return filteredProjects.slice(0, 50)
-  }, [filteredProjects, selectedProjectIndex])
+    // Show first 50 from SORTED projects
+    return sortedProjects.slice(0, 50)
+  }, [sortedProjects, selectedProjectId])
+  
+  // Handle sort
+  const handleSort = (column) => {
+    if (sortColumn === column) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortColumn(column)
+      setSortDirection('asc')
+    }
+  }
   
   // Handle pin click - filter table to show only selected project
-  const handlePinClick = useCallback((projectIndex) => {
-    if (selectedProjectIndex === projectIndex) {
+  const handlePinClick = useCallback((projectId) => {
+    if (selectedProjectId === projectId) {
       // Deselect - show all projects
-      setSelectedProjectIndex(null)
+      setSelectedProjectId(null)
     } else {
       // Select - show only this project
-      setSelectedProjectIndex(projectIndex)
+      setSelectedProjectId(projectId)
       
       // Scroll to table
       setTimeout(() => {
@@ -312,14 +465,14 @@ export default function SemanticSearchPage() {
         }
       }, 100)
     }
-  }, [selectedProjectIndex])
+  }, [selectedProjectId])
   
   // Prepare map options with pins
   const mapOptions = useMemo(() => {
-    if (!mapData || filteredProjects.length === 0) return null
+    if (!mapData || sortedProjects.length === 0) return null
     
-    // Create 1 pin per project (no aggregation)
-    const projectPins = filteredProjects.map((project, index) => {
+    // Create 1 pin per project (no aggregation) - folosește sortedProjects pentru a include filtrele
+    const projectPins = sortedProjects.map((project) => {
       const locality = project.LOCALIZARE_LOCALITATE || project.locality || 'Necunoscut'
       const countyName = project.countyName || project.JUDET_IMPLEMENTARE || project.county?.name || ''
       const value = project.__share_value || project.valoare_fe || project.value || 0
@@ -334,7 +487,7 @@ export default function SemanticSearchPage() {
         smis,
         projectName,
         beneficiary,
-        index  // unique identifier
+        uniqueId: project._uniqueId  // ID unic pentru identificare
       }
     })
     
@@ -412,12 +565,12 @@ export default function SemanticSearchPage() {
         value: proj.value,
         smis: proj.smis,
         beneficiary: proj.beneficiary,
-        projectIndex: proj.index,  // Store index for click handling
+        projectId: proj.uniqueId,  // Store ID for click handling
         marker: {
-          radius: 5,  // Fixed size for all pins
-          fillColor: '#ef4444',
+          radius: selectedProjectId === proj.uniqueId ? 8 : 5,  // Pin mai mare când e selectat
+          fillColor: selectedProjectId === proj.uniqueId ? '#10b981' : '#ef4444',  // Verde când e selectat
           lineColor: '#fff',
-          lineWidth: 2
+          lineWidth: selectedProjectId === proj.uniqueId ? 3 : 2
         },
         dataLabels: {
           enabled: false
@@ -549,8 +702,8 @@ export default function SemanticSearchPage() {
           events: {
             click: function() {
               // Handle pin click - scroll to project
-              if (this.projectIndex !== undefined) {
-                handlePinClick(this.projectIndex)
+              if (this.projectId !== undefined) {
+                handlePinClick(this.projectId)
               }
             },
             mouseOver: function(e) {
@@ -577,7 +730,7 @@ export default function SemanticSearchPage() {
         }
       }]
     }
-  }, [mapData, filteredProjects, handlePinClick])
+  }, [mapData, sortedProjects, handlePinClick, selectedProjectId])
   
   return (
     <div className="semantic-search-page">
@@ -781,6 +934,166 @@ export default function SemanticSearchPage() {
           </div>
         </div>
         
+        {/* Filtre Dropdown */}
+        <div style={{
+          background: '#fff',
+          borderRadius: '16px',
+          padding: '20px',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+          marginBottom: '24px'
+        }}>
+          <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', marginBottom: '16px' }}>🔍 Filtrează rezultatele</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+            {/* Județ Filter */}
+            <div>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#64748b', marginBottom: '6px' }}>📍 Județ</label>
+              <select
+                value={filterCounty}
+                onChange={(e) => {
+                  setFilterCounty(e.target.value)
+                  setFilterLocality('')  // Reset locality when county changes
+                }}
+                style={{
+                  width: '100%',
+                  padding: '10px 12px',
+                  border: '2px solid #e5e7eb',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  background: '#fff',
+                  cursor: 'pointer',
+                  outline: 'none',
+                  transition: 'border-color 0.2s'
+                }}
+                onFocus={(e) => e.target.style.borderColor = '#0ea5e9'}
+                onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+              >
+                <option value="">Toate județele</option>
+                {uniqueCounties.map(county => (
+                  <option key={county} value={county}>{county}</option>
+                ))}
+              </select>
+            </div>
+            
+            {/* Localitate Filter */}
+            <div>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#64748b', marginBottom: '6px' }}>🏘️ Localitate</label>
+              <select
+                value={filterLocality}
+                onChange={(e) => setFilterLocality(e.target.value)}
+                disabled={!filterCounty}
+                style={{
+                  width: '100%',
+                  padding: '10px 12px',
+                  border: '2px solid #e5e7eb',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  background: filterCounty ? '#fff' : '#f8fafc',
+                  cursor: filterCounty ? 'pointer' : 'not-allowed',
+                  outline: 'none',
+                  transition: 'border-color 0.2s',
+                  opacity: filterCounty ? 1 : 0.6
+                }}
+                onFocus={(e) => filterCounty && (e.target.style.borderColor = '#0ea5e9')}
+                onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+              >
+                <option value="">{filterCounty ? `Toate localitățile din ${filterCounty}` : '⚠️ Selectează mai întâi județul'}</option>
+                {uniqueLocalities.map(locality => (
+                  <option key={locality} value={locality}>{locality}</option>
+                ))}
+              </select>
+            </div>
+            
+            {/* Componentă Filter */}
+            <div>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#64748b', marginBottom: '6px' }}>🎯 Componentă</label>
+              <select
+                value={filterComponent}
+                onChange={(e) => setFilterComponent(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '10px 12px',
+                  border: '2px solid #e5e7eb',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  background: '#fff',
+                  cursor: 'pointer',
+                  outline: 'none',
+                  transition: 'border-color 0.2s'
+                }}
+                onFocus={(e) => e.target.style.borderColor = '#0ea5e9'}
+                onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+              >
+                <option value="">Toate componentele</option>
+                {uniqueComponents.map(component => (
+                  <option key={component} value={component}>{component}</option>
+                ))}
+              </select>
+            </div>
+            
+            {/* Stadiu Filter */}
+            <div>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#64748b', marginBottom: '6px' }}>📊 Stadiu</label>
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '10px 12px',
+                  border: '2px solid #e5e7eb',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  background: '#fff',
+                  cursor: 'pointer',
+                  outline: 'none',
+                  transition: 'border-color 0.2s'
+                }}
+                onFocus={(e) => e.target.style.borderColor = '#0ea5e9'}
+                onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+              >
+                <option value="">Toate stadiile</option>
+                {uniqueStatuses.map(status => (
+                  <option key={status} value={status}>{status}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+          
+          {/* Reset Filters Button */}
+          {(filterCounty || filterLocality || filterComponent || filterStatus) && (
+            <div style={{ marginTop: '16px', textAlign: 'right' }}>
+              <button
+                onClick={() => {
+                  setFilterCounty('')
+                  setFilterLocality('')
+                  setFilterComponent('')
+                  setFilterStatus('')
+                }}
+                style={{
+                  padding: '8px 16px',
+                  background: '#f1f5f9',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '8px',
+                  fontSize: '13px',
+                  cursor: 'pointer',
+                  color: '#475569',
+                  fontWeight: '500',
+                  transition: 'all 0.2s'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = '#e2e8f0'
+                  e.target.style.borderColor = '#cbd5e1'
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = '#f1f5f9'
+                  e.target.style.borderColor = '#e2e8f0'
+                }}
+              >
+                ✕ Resetează filtrele
+              </button>
+            </div>
+          )}
+        </div>
+        
         {/* Hartă cu pin-uri */}
         <div style={{
           background: '#fff',
@@ -821,9 +1134,9 @@ export default function SemanticSearchPage() {
             <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#0f172a', margin: 0 }}>
               Proiecte – „{query}"
             </h2>
-            {selectedProjectIndex !== null && (
+            {selectedProjectId !== null && (
               <button
-                onClick={() => setSelectedProjectIndex(null)}
+                onClick={() => setSelectedProjectId(null)}
                 style={{
                   padding: '8px 16px',
                   background: '#f1f5f9',
@@ -854,7 +1167,7 @@ export default function SemanticSearchPage() {
             </div>
           ) : (
             <>
-              {/* Desktop: Tabel clasic */}
+              {/* Desktop: Tabel clasic cu 7 coloane + sortare */}
               <div className="desktop-only" style={{ overflowX: 'auto' }}>
                 <table style={{
                   width: '100%',
@@ -862,43 +1175,198 @@ export default function SemanticSearchPage() {
                   fontSize: '14px'
                 }}>
                   <thead>
-                    <tr style={{ borderBottom: '2px solid #e5e7eb' }}>
-                      <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600', color: '#64748b' }}>Proiect</th>
-                      <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600', color: '#64748b' }}>Beneficiar</th>
-                      <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600', color: '#64748b' }}>Localitate</th>
-                      <th style={{ padding: '12px', textAlign: 'right', fontWeight: '600', color: '#64748b' }}>Valoare (EUR)</th>
+                    <tr style={{ background: '#f8fafc', borderBottom: '2px solid #e5e7eb' }}>
+                      <th 
+                        onClick={() => handleSort('title')}
+                        style={{ 
+                          padding: '12px', 
+                          textAlign: 'left', 
+                          fontWeight: '600', 
+                          color: sortColumn === 'title' ? '#0ea5e9' : '#64748b',
+                          cursor: 'pointer',
+                          userSelect: 'none',
+                          transition: 'color 0.2s'
+                        }}
+                        onMouseEnter={(e) => e.target.style.color = '#0ea5e9'}
+                        onMouseLeave={(e) => e.target.style.color = sortColumn === 'title' ? '#0ea5e9' : '#64748b'}
+                      >
+                        Proiect
+                        {sortColumn === 'title' && (
+                          <span style={{ marginLeft: '6px' }}>
+                            {sortDirection === 'asc' ? '↑' : '↓'}
+                          </span>
+                        )}
+                      </th>
+                      <th 
+                        onClick={() => handleSort('beneficiary')}
+                        style={{ 
+                          padding: '12px', 
+                          textAlign: 'left', 
+                          fontWeight: '600', 
+                          color: sortColumn === 'beneficiary' ? '#0ea5e9' : '#64748b',
+                          cursor: 'pointer',
+                          userSelect: 'none',
+                          transition: 'color 0.2s'
+                        }}
+                        onMouseEnter={(e) => e.target.style.color = '#0ea5e9'}
+                        onMouseLeave={(e) => e.target.style.color = sortColumn === 'beneficiary' ? '#0ea5e9' : '#64748b'}
+                      >
+                        Beneficiar
+                        {sortColumn === 'beneficiary' && (
+                          <span style={{ marginLeft: '6px' }}>
+                            {sortDirection === 'asc' ? '↑' : '↓'}
+                          </span>
+                        )}
+                      </th>
+                      <th 
+                        onClick={() => handleSort('county')}
+                        style={{ 
+                          padding: '12px', 
+                          textAlign: 'left', 
+                          fontWeight: '600', 
+                          color: sortColumn === 'county' ? '#0ea5e9' : '#64748b',
+                          cursor: 'pointer',
+                          userSelect: 'none',
+                          transition: 'color 0.2s'
+                        }}
+                        onMouseEnter={(e) => e.target.style.color = '#0ea5e9'}
+                        onMouseLeave={(e) => e.target.style.color = sortColumn === 'county' ? '#0ea5e9' : '#64748b'}
+                      >
+                        Județ
+                        {sortColumn === 'county' && (
+                          <span style={{ marginLeft: '6px' }}>
+                            {sortDirection === 'asc' ? '↑' : '↓'}
+                          </span>
+                        )}
+                      </th>
+                      <th 
+                        onClick={() => handleSort('locality')}
+                        style={{ 
+                          padding: '12px', 
+                          textAlign: 'left', 
+                          fontWeight: '600', 
+                          color: sortColumn === 'locality' ? '#0ea5e9' : '#64748b',
+                          cursor: 'pointer',
+                          userSelect: 'none',
+                          transition: 'color 0.2s'
+                        }}
+                        onMouseEnter={(e) => e.target.style.color = '#0ea5e9'}
+                        onMouseLeave={(e) => e.target.style.color = sortColumn === 'locality' ? '#0ea5e9' : '#64748b'}
+                      >
+                        Localitate
+                        {sortColumn === 'locality' && (
+                          <span style={{ marginLeft: '6px' }}>
+                            {sortDirection === 'asc' ? '↑' : '↓'}
+                          </span>
+                        )}
+                      </th>
+                      <th 
+                        onClick={() => handleSort('component')}
+                        style={{ 
+                          padding: '12px', 
+                          textAlign: 'center', 
+                          fontWeight: '600', 
+                          color: sortColumn === 'component' ? '#0ea5e9' : '#64748b',
+                          cursor: 'pointer',
+                          userSelect: 'none',
+                          transition: 'color 0.2s'
+                        }}
+                        onMouseEnter={(e) => e.target.style.color = '#0ea5e9'}
+                        onMouseLeave={(e) => e.target.style.color = sortColumn === 'component' ? '#0ea5e9' : '#64748b'}
+                      >
+                        Componentă
+                        {sortColumn === 'component' && (
+                          <span style={{ marginLeft: '6px' }}>
+                            {sortDirection === 'asc' ? '↑' : '↓'}
+                          </span>
+                        )}
+                      </th>
+                      <th 
+                        onClick={() => handleSort('status')}
+                        style={{ 
+                          padding: '12px', 
+                          textAlign: 'center', 
+                          fontWeight: '600', 
+                          color: sortColumn === 'status' ? '#0ea5e9' : '#64748b',
+                          cursor: 'pointer',
+                          userSelect: 'none',
+                          transition: 'color 0.2s'
+                        }}
+                        onMouseEnter={(e) => e.target.style.color = '#0ea5e9'}
+                        onMouseLeave={(e) => e.target.style.color = sortColumn === 'status' ? '#0ea5e9' : '#64748b'}
+                      >
+                        Stadiu
+                        {sortColumn === 'status' && (
+                          <span style={{ marginLeft: '6px' }}>
+                            {sortDirection === 'asc' ? '↑' : '↓'}
+                          </span>
+                        )}
+                      </th>
+                      <th 
+                        onClick={() => handleSort('value')}
+                        style={{ 
+                          padding: '12px', 
+                          textAlign: 'right', 
+                          fontWeight: '600', 
+                          color: sortColumn === 'value' ? '#0ea5e9' : '#64748b',
+                          cursor: 'pointer',
+                          userSelect: 'none',
+                          transition: 'color 0.2s'
+                        }}
+                        onMouseEnter={(e) => e.target.style.color = '#0ea5e9'}
+                        onMouseLeave={(e) => e.target.style.color = sortColumn === 'value' ? '#0ea5e9' : '#64748b'}
+                      >
+                        Valoare (EUR)
+                        {sortColumn === 'value' && (
+                          <span style={{ marginLeft: '6px' }}>
+                            {sortDirection === 'asc' ? '↑' : '↓'}
+                          </span>
+                        )}
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {displayedProjects.map((project, index) => {
                       const title = project.DENUMIRE_PROIECT || project.SCOP_PROIECT || project.title || 'N/A'
                       const beneficiary = project.BENEFICIAR || project.DENUMIRE_BENEFICIAR || 'N/A'
+                      const county = project.countyName || project.JUDET_IMPLEMENTARE || 'N/A'
                       const locality = project.LOCALIZARE_LOCALITATE || project.locality || 'N/A'
+                      const component = project.COD_COMPONENTA || project.component || '-'
+                      const status = project.STADIU || project.status || '-'
                       const value = project.__share_value || project.valoare_fe || project.value || 0
                       
                       return (
                         <tr 
-                          key={index} 
-                          id={`project-${index}`}
+                          key={project._uniqueId || index} 
                           style={{ 
-                            borderBottom: '1px solid #f1f5f9'
+                            borderBottom: '1px solid #f1f5f9',
+                            background: selectedProjectId === project._uniqueId ? '#dbeafe' : '#fff',
+                            borderLeft: selectedProjectId === project._uniqueId ? '4px solid #0ea5e9' : 'none'
                           }}
                         >
-                          <td style={{ padding: '12px', maxWidth: '400px' }}>
+                          <td style={{ padding: '12px', maxWidth: '300px' }}>
                             <div style={{ 
                               overflow: 'hidden',
                               textOverflow: 'ellipsis',
                               whiteSpace: 'nowrap',
                               color: '#0f172a',
-                              textTransform: 'uppercase'
+                              fontSize: '13px',
+                              fontWeight: '500'
                             }}>
                               {title}
                             </div>
                           </td>
-                          <td style={{ padding: '12px', color: '#475569' }}>{beneficiary}</td>
-                          <td style={{ padding: '12px', color: '#475569' }}>{locality}</td>
-                          <td style={{ padding: '12px', textAlign: 'right', fontWeight: '600', color: '#0f172a' }}>
-                            {fmtMoney(value, 'EUR')}
+                          <td style={{ padding: '12px', color: '#475569', fontSize: '13px', maxWidth: '200px' }}>
+                            <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {beneficiary}
+                            </div>
+                          </td>
+                          <td style={{ padding: '12px', color: '#0f172a', fontSize: '13px' }}>{county}</td>
+                          <td style={{ padding: '12px', color: '#0f172a', fontSize: '13px' }}>{locality}</td>
+                          <td style={{ padding: '12px', textAlign: 'center', fontSize: '13px', fontWeight: '500', color: '#0f172a' }}>{component}</td>
+                          <td style={{ padding: '12px', textAlign: 'center', fontSize: '13px', color: '#0f172a' }}>{status}</td>
+                          <td style={{ padding: '12px', textAlign: 'right', fontWeight: '600', color: '#0f172a', fontSize: '14px', whiteSpace: 'nowrap' }}>
+                            {value ? `${(value / 1000000).toFixed(2)} mil EUR` : '0.00 mil EUR'}
                           </td>
                         </tr>
                       )
@@ -1032,15 +1500,15 @@ export default function SemanticSearchPage() {
               })}
               </div>
               
-              {selectedProjectIndex === null && filteredProjects.length > 50 && (
+              {selectedProjectId === null && sortedProjects.length > 50 && (
                 <div style={{ marginTop: '16px', textAlign: 'center', color: '#64748b', fontSize: '13px' }}>
-                  Afișate primele 50 din {fmtNum(filteredProjects.length)} proiecte găsite
+                  Afișate primele 50 din {fmtNum(sortedProjects.length)} proiecte găsite
                 </div>
               )}
               
-              {selectedProjectIndex !== null && (
+              {selectedProjectId !== null && (
                 <div style={{ marginTop: '16px', textAlign: 'center', color: '#64748b', fontSize: '13px' }}>
-                  Afișat 1 proiect selectat din {fmtNum(filteredProjects.length)} proiecte găsite
+                  Afișat 1 proiect selectat din {fmtNum(sortedProjects.length)} proiecte găsite
                 </div>
               )}
             </>

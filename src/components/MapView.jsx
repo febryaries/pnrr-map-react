@@ -1257,8 +1257,12 @@ const EnhancedTable = ({
               {/* Locality Filter - ALWAYS VISIBLE */}
               <div className="filter-item">
                 <label>🏘️ Alege Localitatea</label>
-                <select value={filterLocality} onChange={(e) => handleLocalityChange(e.target.value)}>
-                  <option value="">{filterCounty ? `Toate localitățile din ${filterCounty}` : 'Toate localitățile'}</option>
+                <select 
+                  value={filterLocality} 
+                  onChange={(e) => handleLocalityChange(e.target.value)}
+                  disabled={!filterCounty}
+                >
+                  <option value="">{filterCounty ? `Toate localitățile din ${filterCounty}` : '⚠️ Selectează mai întâi județul'}</option>
                   {uniqueLocalities.map(value => (
                     <option key={value} value={value}>{value}</option>
                   ))}
