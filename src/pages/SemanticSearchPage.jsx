@@ -7,7 +7,7 @@ import { createSemanticMatcher } from '../utils/semanticSearch'
 import { fmtMoney, fmtNum } from '../data/data'
 import { getPNRRDataService } from '../services/PNRRDataService'
 import { DATA_ENDPOINTS } from '../constants/PNRRConstants'
-import roLocalities from '../data/ro_localities.min.json'
+import roLocalities from '../data/ro_localities_geoapify.json'
 import '../App.css'
 
 // Initialize Highcharts Map module
@@ -21,8 +21,11 @@ if (typeof Highcharts === 'object') {
  */
 const normalizeLocalityName = (name) => {
   if (!name) return ''
-  return name
+  
+  // IMPORTANT: Curățăm spațiile la început/sfârșit IMEDIAT
+  let normalized = name
     .toString()
+    .trim()  // ← Trim ÎNAINTE de orice altceva!
     .toUpperCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
@@ -32,8 +35,19 @@ const normalizeLocalityName = (name) => {
     .replace(/Â/gi, 'A')
     .replace(/Î/gi, 'I')
     .replace(/-/g, ' ')
-    .replace(/\s+/g, ' ')
+    .replace(/\s+/g, ' ')  // Spații multiple → 1 spațiu
     .trim()
+  
+  // Eliminăm prefixe comune din datele PNRR (cu toate variantele)
+  normalized = normalized
+    .replace(/^MUNICIPIUL\s+/gi, '')
+    .replace(/^ORASUL\s+/gi, '')
+    .replace(/^ORAS\s+/gi, '')
+    .replace(/^COMUNA\s+/gi, '')
+    .replace(/^SATUL\s+/gi, '')
+    .trim()
+  
+  return normalized
 }
 
 /**
@@ -79,11 +93,19 @@ const findLocalityCoordinates = (localityName, countyName) => {
   
   // Dacă avem județ, caută cu județ + localitate (CORECT)
   if (countyName) {
-    // Normalizează județul - încearcă să găsim codul județului (AB, CJ, etc.)
-    const countyUpper = countyName.toUpperCase()
+    // Curățăm și normalizăm județul
+    let countyUpper = countyName.toUpperCase()
       .replace(/Ă/g, 'A').replace(/Â/g, 'A')
       .replace(/Î/g, 'I').replace(/Ș/g, 'S')
       .replace(/Ț/g, 'T')
+      .trim()
+    
+    // Eliminăm prefixe comune: "JUDEȚUL", "JUDETUL", "JUD.", "MUNICIPIUL"
+    countyUpper = countyUpper
+      .replace(/^JUDETUL\s+/g, '')
+      .replace(/^JUDEȚUL\s+/g, '')
+      .replace(/^JUD\.\s*/g, '')
+      .replace(/^MUNICIPIUL\s+/g, '')
       .trim()
     
     // Mapare județe la coduri (pentru matching)
@@ -101,6 +123,12 @@ const findLocalityCoordinates = (localityName, countyName) => {
       'BUCURESTI': 'B', 'MUNICIPIUL BUCURESTI': 'B'
     }
     
+    // Cazuri speciale
+    if (countyUpper === 'NATIONAL' || countyUpper === 'NAȚIONAL') {
+      // Proiecte naționale - folosim București ca fallback
+      countyUpper = 'BUCURESTI'
+    }
+    
     // Încearcă să găsești codul județului
     let countyCode = null
     
@@ -108,11 +136,16 @@ const findLocalityCoordinates = (localityName, countyName) => {
     if (countyUpper.length === 2) {
       countyCode = countyUpper
     } else {
-      // Caută în mapare
-      for (const [fullName, code] of Object.entries(countyCodeMap)) {
-        if (countyUpper.includes(fullName) || fullName.includes(countyUpper)) {
-          countyCode = code
-          break
+      // Caută match exact în mapare (mai întâi)
+      if (countyCodeMap[countyUpper]) {
+        countyCode = countyCodeMap[countyUpper]
+      } else {
+        // Dacă nu găsim match exact, căutăm cu includes (mai permisiv)
+        for (const [fullName, code] of Object.entries(countyCodeMap)) {
+          if (countyUpper === fullName || countyUpper.includes(fullName) || fullName.includes(countyUpper)) {
+            countyCode = code
+            break
+          }
         }
       }
     }
@@ -509,10 +542,10 @@ export default function SemanticSearchPage() {
       'VÂLCEA': [45.10, 24.37], 'VRANCEA': [45.70, 27.18], 'BUCUREȘTI': [44.43, 26.10]
     }
     
-    // Romania bounds (restrictive to keep all pins within country)
+    // Romania bounds (based on actual locality data + safety margin for random offset)
     const romaniaBounds = {
-      minLat: 43.8, maxLat: 48.2,  // Increased minLat to avoid Bulgaria
-      minLon: 20.3, maxLon: 28.2   // Reduced maxLon to avoid Black Sea
+      minLat: 43.70, maxLat: 48.20,  // +0.05 margin south, exact north (48.24 max in data)
+      minLon: 20.35, maxLon: 29.65   // +0.05 margin west, exact east (29.66 max in data)
     }
     
     // Create pin data points - 1 pin per project
@@ -540,9 +573,10 @@ export default function SemanticSearchPage() {
             .replace(/Î/g, 'I').replace(/Ș/g, 'S').replace(/Ț/g, 'T')
           
           if (countyUpper.includes(keyNorm) || keyNorm.includes(countyUpper) || countyUpper === keyNorm) {
-            // Add small random offset for county-level projects
-            lat = coords[0] + (Math.random() - 0.5) * 0.2
-            lon = coords[1] + (Math.random() - 0.5) * 0.2
+            // Use county center with very small offset to avoid complete overlap
+            // ±0.02 degrees = ~2 km (much better than previous ±22 km)
+            lat = coords[0] + (Math.random() - 0.5) * 0.04
+            lon = coords[1] + (Math.random() - 0.5) * 0.04
             break
           }
         }
@@ -588,11 +622,7 @@ export default function SemanticSearchPage() {
       credits: { enabled: false },
       legend: { enabled: false },
       mapNavigation: {
-        enabled: true,
-        enableDoubleClickZoomTo: true,
-        buttonOptions: {
-          verticalAlign: 'bottom'
-        }
+        enabled: false
       },
       tooltip: {
         useHTML: true,

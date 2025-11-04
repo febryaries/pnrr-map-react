@@ -21,7 +21,7 @@ import {
 
 // Import mock data and localities
 import { mockData } from './mockData.js'
-import { ro_localities } from './ro_localities.js'
+import ro_localities from './ro_localities_geoapify.json'
 
 // Export data fetchers (backward compatibility)
 export { getRealPNRRData, getRealPNRRProjectsData }
