@@ -606,7 +606,44 @@ const EnhancedTable = ({
     const exportData = sortedData.map(item => {
       const row = {}
       columns.forEach(column => {
-        const value = item[column.key]
+        let value = item[column.key]
+        
+        // Special handling for columns that need custom extraction
+        if (column.key === 'financialProgress') {
+          // Get PROGRES_FINANCIAR and convert to percentage
+          const progresFinanciar = item.PROGRES_FINANCIAR
+          if (progresFinanciar !== null && progresFinanciar !== undefined) {
+            value = Math.round(progresFinanciar * 100) + '%'
+          } else {
+            value = ''
+          }
+        } else if (column.key === 'progress') {
+          // For progress column, handle both payments and projects
+          if (endpoint === 'payments') {
+            value = item.progress !== undefined && item.progress !== null ? `${item.progress}%` : ''
+          } else {
+            // For projects: check PROGRES_FIZIC first
+            const progresFizic = item.PROGRES_FIZIC
+            if (progresFizic !== null && progresFizic !== undefined && progresFizic !== '') {
+              const progresFizicStr = String(progresFizic)
+              const percentage = Math.round(parseFloat(progresFizicStr.replace(',', '.')) * 100)
+              value = percentage + '%'
+            } else {
+              // Use stadiu text
+              value = item[column.key] || ''
+            }
+          }
+        } else if (column.key === 'value') {
+          // For value column, get the actual numeric value
+          if (endpoint === 'projects') {
+            const financialAmount = item[fieldMappings.value]
+            if (financialAmount && typeof financialAmount === 'object') {
+              value = currency === 'RON' ? financialAmount.ron : financialAmount.eur
+            }
+          }
+          // Keep numeric value for CSV
+        }
+        
         row[column.label] = value
       })
       return row
