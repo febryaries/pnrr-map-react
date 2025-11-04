@@ -407,10 +407,31 @@ const EnhancedTable = ({
     })
   }, [filteredData, sortColumn, sortDirection, columns])
 
-  // Paginate data
-  const totalPages = Math.ceil(sortedData.length / pageSize)
+  // Visual filter: Hide rows that display as "0,00 mil EUR" from table view
+  // But keep them in calculations (filteredData) for accurate totals
+  const visuallyFilteredData = useMemo(() => {
+    // Only apply visual filter for payments endpoint
+    if (endpoint !== 'payments') return sortedData
+    
+    return sortedData.filter(item => {
+      const numValue = getValueField ? getValueField(item) : item.value
+      if (isNaN(numValue)) return true // Keep invalid values for debugging
+      
+      // Replicate EXACT formatMoney logic from PNRRConstants.ts
+      const value = numValue || 0
+      const millions = value / 1e6
+      const rounded = Math.ceil(millions * 100) / 100
+      
+      // Hide if rounded value is exactly 0.00 (includes both 0,00 and -0,00)
+      // Math.ceil rounds UP, so negative small values become 0
+      return rounded !== 0
+    })
+  }, [sortedData, endpoint, getValueField])
+
+  // Paginate data (use visually filtered data for display)
+  const totalPages = Math.ceil(visuallyFilteredData.length / pageSize)
   const startIndex = (currentPage - 1) * pageSize
-  const paginatedData = sortedData.slice(startIndex, startIndex + pageSize)
+  const paginatedData = visuallyFilteredData.slice(startIndex, startIndex + pageSize)
 
   // Debug pagination
   // console.log('🔍 Pagination Debug:', {
@@ -2604,17 +2625,9 @@ const MapView = ({
             ? allData.filter(item => item.componentCode === (activeProgram || filterComponent))
             : allData
         
-        // Filter out values that display as 0.00 or -0.00 (< 0.01 EUR in absolute value)
-        // Only for payments endpoint - keep significant negative values like -1.641,70 mil EUR
-        if (endpoint === 'payments') {
-            filteredData = filteredData.filter(item => {
-                // Use item.value which is already calculated at line 2587
-                const numValue = Number(item.value)
-                // Eliminate values < 10,000 EUR (0.01 million EUR) in absolute value
-                // This catches all values that display as "0,00 mil EUR" or "-0,00 mil EUR"
-                return !isNaN(numValue) && Math.abs(numValue) >= 10000
-            })
-        }
+        // Note: We keep ALL payments in the data for calculation purposes
+        // Visual filtering of "0,00 mil EUR" rows happens in EnhancedTable render
+        // This ensures TOTAL PLĂTIT and valoare totală are synchronized
         
         return filteredData
     }, [data, endpoint, viewMode, fieldMappings, activeProgram, filterComponent, getValueField])
