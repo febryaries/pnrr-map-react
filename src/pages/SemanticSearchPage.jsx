@@ -1374,14 +1374,14 @@ export default function SemanticSearchPage() {
                             borderLeft: selectedProjectId === project._uniqueId ? '4px solid #0ea5e9' : 'none'
                           }}
                         >
-                          <td style={{ padding: '12px', maxWidth: '300px' }}>
+                          <td style={{ padding: '12px', maxWidth: '400px' }}>
                             <div style={{ 
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap',
+                              whiteSpace: 'normal',
+                              wordWrap: 'break-word',
                               color: '#0f172a',
                               fontSize: '13px',
-                              fontWeight: '500'
+                              fontWeight: '500',
+                              lineHeight: '1.4'
                             }}>
                               {title}
                             </div>
@@ -1406,7 +1406,7 @@ export default function SemanticSearchPage() {
               </div>
               
               {/* Mobile: Carduri */}
-              <div className="mobile-only" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div className="mobile-only" style={{ flexDirection: 'column', gap: '16px' }}>
                 {displayedProjects.map((project, index) => {
                 const title = project.DENUMIRE_PROIECT || project.SCOP_PROIECT || project.title || 'N/A'
                 const beneficiary = project.BENEFICIAR || project.DENUMIRE_BENEFICIAR || 'N/A'
