@@ -36,8 +36,8 @@ const isDevelopment = window.location.hostname === 'localhost' || window.locatio
 const CONTAINS_URL = isDevelopment
   ? '/api/mfe/generator/data/contains.json'
   : 'https://mfe.gov.ro/generator/data/contains.json';
-const CACHE_KEY = 'pnrr_available_dates_v2'; // v2: invalidate old cache when FALLBACK_DATA_DATE changes
-const CACHE_TIMESTAMP_KEY = 'pnrr_available_dates_timestamp_v2';
+const CACHE_KEY = 'pnrr_available_dates_v3'; // v3: force cache invalidation for 6 nov 2025
+const CACHE_TIMESTAMP_KEY = 'pnrr_available_dates_timestamp_v3';
 const CACHE_DURATION = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
 
 // Required endpoints for a complete dataset
@@ -199,7 +199,7 @@ export class DataAvailabilityService {
       availableDates.sort((a, b) => b.value.localeCompare(a.value));
 
       console.log('📅 Processed available dates:', availableDates.length, 'unique dates');
-      console.log('📅 Latest date:', availableDates[0]?.label);
+      console.log('📅 Latest date:', availableDates[0]?.label, '(' + availableDates[0]?.value + ')');
 
       // Cache the results
       this.cachedDates = availableDates;
