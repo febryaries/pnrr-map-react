@@ -1,0 +1,3423 @@
+{
+  "generated_at": "2025-11-06T19:08:42.220Z",
+  "description": "Timeline plăți PNRR 2025 - date cumulative pe luni",
+  "source": "https://mfe.gov.ro/generator/data/20251106-plati_pnrr.json.gz",
+  "year": 2025,
+  "months": 11,
+  "totalPayments": 30803,
+  "totalEUR": 2178611553.5,
+  "uniqueBeneficiaries": 3787,
+  "timeline": [
+    {
+      "date": "2025-01",
+      "dateYYYYMMDD": "202501",
+      "label": "Ianuarie 2025",
+      "totalPayments": 1047,
+      "totalEUR": 293510605.84,
+      "totalRON": 1470488134.92,
+      "uniqueBeneficiaries": 352,
+      "counties": [
+        {
+          "name": "BUCUREȘTI",
+          "totalEUR": 236962760.73,
+          "totalRON": 1187183431.21,
+          "paymentsCount": 170,
+          "beneficiariesCount": 30
+        },
+        {
+          "name": "BIHOR",
+          "totalEUR": 5214752.12,
+          "totalRON": 26125908.05,
+          "paymentsCount": 38,
+          "beneficiariesCount": 15
+        },
+        {
+          "name": "BRĂILA",
+          "totalEUR": 4413730.19,
+          "totalRON": 22112788.24,
+          "paymentsCount": 12,
+          "beneficiariesCount": 3
+        },
+        {
+          "name": "CARAŞ-SEVERIN",
+          "totalEUR": 3861270.6,
+          "totalRON": 19344965.71,
+          "paymentsCount": 32,
+          "beneficiariesCount": 9
+        },
+        {
+          "name": "IAŞI",
+          "totalEUR": 3299595.48,
+          "totalRON": 16530973.28,
+          "paymentsCount": 46,
+          "beneficiariesCount": 14
+        },
+        {
+          "name": "SUCEAVA",
+          "totalEUR": 2489947.31,
+          "totalRON": 12474635.98,
+          "paymentsCount": 23,
+          "beneficiariesCount": 10
+        },
+        {
+          "name": "TIMIŞ",
+          "totalEUR": 2414628.15,
+          "totalRON": 12097287.05,
+          "paymentsCount": 20,
+          "beneficiariesCount": 9
+        },
+        {
+          "name": "HUNEDOARA",
+          "totalEUR": 2291625.75,
+          "totalRON": 11481045.14,
+          "paymentsCount": 36,
+          "beneficiariesCount": 11
+        },
+        {
+          "name": "BOTOŞANI",
+          "totalEUR": 2289522.38,
+          "totalRON": 11470507.01,
+          "paymentsCount": 28,
+          "beneficiariesCount": 10
+        },
+        {
+          "name": "GALAŢI",
+          "totalEUR": 2269424.96,
+          "totalRON": 11369819.04,
+          "paymentsCount": 44,
+          "beneficiariesCount": 4
+        },
+        {
+          "name": "TELEORMAN",
+          "totalEUR": 1984703.03,
+          "totalRON": 9943362.19,
+          "paymentsCount": 45,
+          "beneficiariesCount": 13
+        },
+        {
+          "name": "VASLUI",
+          "totalEUR": 1967249.53,
+          "totalRON": 9855920.17,
+          "paymentsCount": 20,
+          "beneficiariesCount": 7
+        },
+        {
+          "name": "PRAHOVA",
+          "totalEUR": 1911370.23,
+          "totalRON": 9575964.89,
+          "paymentsCount": 27,
+          "beneficiariesCount": 10
+        },
+        {
+          "name": "MARAMUREŞ",
+          "totalEUR": 1561475.23,
+          "totalRON": 7822990.92,
+          "paymentsCount": 27,
+          "beneficiariesCount": 12
+        },
+        {
+          "name": "SĂLAJ",
+          "totalEUR": 1438097.07,
+          "totalRON": 7204866.29,
+          "paymentsCount": 34,
+          "beneficiariesCount": 12
+        },
+        {
+          "name": "MUREŞ",
+          "totalEUR": 1432229.7,
+          "totalRON": 7175470.78,
+          "paymentsCount": 32,
+          "beneficiariesCount": 14
+        },
+        {
+          "name": "ARGEŞ",
+          "totalEUR": 1396076.55,
+          "totalRON": 6994343.6,
+          "paymentsCount": 33,
+          "beneficiariesCount": 10
+        },
+        {
+          "name": "VRANCEA",
+          "totalEUR": 1308010.17,
+          "totalRON": 6553130.91,
+          "paymentsCount": 17,
+          "beneficiariesCount": 8
+        },
+        {
+          "name": "OLT",
+          "totalEUR": 1083392.01,
+          "totalRON": 5427793.98,
+          "paymentsCount": 25,
+          "beneficiariesCount": 8
+        },
+        {
+          "name": "MEHEDINŢI",
+          "totalEUR": 1052729.84,
+          "totalRON": 5274176.56,
+          "paymentsCount": 17,
+          "beneficiariesCount": 6
+        },
+        {
+          "name": "CĂLĂRAŞI",
+          "totalEUR": 981822.51,
+          "totalRON": 4918930.79,
+          "paymentsCount": 18,
+          "beneficiariesCount": 6
+        },
+        {
+          "name": "VÂLCEA",
+          "totalEUR": 960814.21,
+          "totalRON": 4813679.2,
+          "paymentsCount": 26,
+          "beneficiariesCount": 11
+        },
+        {
+          "name": "SATU MARE",
+          "totalEUR": 916553.69,
+          "totalRON": 4591934,
+          "paymentsCount": 29,
+          "beneficiariesCount": 8
+        },
+        {
+          "name": "CLUJ",
+          "totalEUR": 876986.46,
+          "totalRON": 4393702.15,
+          "paymentsCount": 27,
+          "beneficiariesCount": 11
+        },
+        {
+          "name": "BACĂU",
+          "totalEUR": 863684.99,
+          "totalRON": 4327061.84,
+          "paymentsCount": 18,
+          "beneficiariesCount": 8
+        },
+        {
+          "name": "SIBIU",
+          "totalEUR": 860425.54,
+          "totalRON": 4310731.94,
+          "paymentsCount": 11,
+          "beneficiariesCount": 6
+        },
+        {
+          "name": "NEAMŢ",
+          "totalEUR": 817643.22,
+          "totalRON": 4096392.54,
+          "paymentsCount": 18,
+          "beneficiariesCount": 6
+        },
+        {
+          "name": "IALOMIŢA",
+          "totalEUR": 713620.51,
+          "totalRON": 3575238.68,
+          "paymentsCount": 14,
+          "beneficiariesCount": 7
+        },
+        {
+          "name": "BUZĂU",
+          "totalEUR": 692078.4,
+          "totalRON": 3467312.73,
+          "paymentsCount": 14,
+          "beneficiariesCount": 7
+        },
+        {
+          "name": "ARAD",
+          "totalEUR": 655367.63,
+          "totalRON": 3283391.83,
+          "paymentsCount": 11,
+          "beneficiariesCount": 5
+        },
+        {
+          "name": "GORJ",
+          "totalEUR": 637951.07,
+          "totalRON": 3196134.87,
+          "paymentsCount": 13,
+          "beneficiariesCount": 5
+        },
+        {
+          "name": "ILFOV",
+          "totalEUR": 630749.4,
+          "totalRON": 3160054.48,
+          "paymentsCount": 5,
+          "beneficiariesCount": 4
+        },
+        {
+          "name": "CONSTANŢA",
+          "totalEUR": 546304.11,
+          "totalRON": 2736983.53,
+          "paymentsCount": 28,
+          "beneficiariesCount": 14
+        },
+        {
+          "name": "DÂMBOVIŢA",
+          "totalEUR": 538042.89,
+          "totalRON": 2695594.86,
+          "paymentsCount": 4,
+          "beneficiariesCount": 2
+        },
+        {
+          "name": "BISTRIŢA-NĂSĂUD",
+          "totalEUR": 478612.69,
+          "totalRON": 2397849.57,
+          "paymentsCount": 14,
+          "beneficiariesCount": 7
+        },
+        {
+          "name": "ALBA",
+          "totalEUR": 476693.76,
+          "totalRON": 2388235.71,
+          "paymentsCount": 28,
+          "beneficiariesCount": 10
+        },
+        {
+          "name": "TULCEA",
+          "totalEUR": 322150.28,
+          "totalRON": 1613972.92,
+          "paymentsCount": 4,
+          "beneficiariesCount": 2
+        },
+        {
+          "name": "BRAŞOV",
+          "totalEUR": 305191.15,
+          "totalRON": 1529007.66,
+          "paymentsCount": 7,
+          "beneficiariesCount": 4
+        },
+        {
+          "name": "HARGHITA",
+          "totalEUR": 288796.47,
+          "totalRON": 1446870.3,
+          "paymentsCount": 10,
+          "beneficiariesCount": 5
+        },
+        {
+          "name": "DOLJ",
+          "totalEUR": 148751.95,
+          "totalRON": 745247.25,
+          "paymentsCount": 9,
+          "beneficiariesCount": 5
+        },
+        {
+          "name": "COVASNA",
+          "totalEUR": 104209.5,
+          "totalRON": 522089.52,
+          "paymentsCount": 12,
+          "beneficiariesCount": 3
+        },
+        {
+          "name": "GIURGIU",
+          "totalEUR": 51564.38,
+          "totalRON": 258337.55,
+          "paymentsCount": 1,
+          "beneficiariesCount": 1
+        }
+      ]
+    },
+    {
+      "date": "2025-02",
+      "dateYYYYMMDD": "202502",
+      "label": "Februarie 2025",
+      "totalPayments": 5098,
+      "totalEUR": 956321581.01,
+      "totalRON": 4791171120.72,
+      "uniqueBeneficiaries": 1229,
+      "counties": [
+        {
+          "name": "BUCUREȘTI",
+          "totalEUR": 650337624.03,
+          "totalRON": 3258191496.92,
+          "paymentsCount": 576,
+          "beneficiariesCount": 66
+        },
+        {
+          "name": "IAŞI",
+          "totalEUR": 17826368.81,
+          "totalRON": 89310107.59,
+          "paymentsCount": 217,
+          "beneficiariesCount": 44
+        },
+        {
+          "name": "CARAŞ-SEVERIN",
+          "totalEUR": 17267250.99,
+          "totalRON": 86508927.52,
+          "paymentsCount": 140,
+          "beneficiariesCount": 17
+        },
+        {
+          "name": "TIMIŞ",
+          "totalEUR": 16584353.9,
+          "totalRON": 83087613.05,
+          "paymentsCount": 88,
+          "beneficiariesCount": 19
+        },
+        {
+          "name": "SUCEAVA",
+          "totalEUR": 16518553.21,
+          "totalRON": 82757951.47,
+          "paymentsCount": 192,
+          "beneficiariesCount": 57
+        },
+        {
+          "name": "GALAŢI",
+          "totalEUR": 16391502.52,
+          "totalRON": 82121427.65,
+          "paymentsCount": 248,
+          "beneficiariesCount": 36
+        },
+        {
+          "name": "BIHOR",
+          "totalEUR": 15359992.75,
+          "totalRON": 76953563.58,
+          "paymentsCount": 222,
+          "beneficiariesCount": 64
+        },
+        {
+          "name": "MARAMUREŞ",
+          "totalEUR": 14074631.27,
+          "totalRON": 70513902.61,
+          "paymentsCount": 153,
+          "beneficiariesCount": 40
+        },
+        {
+          "name": "ILFOV",
+          "totalEUR": 10386695.58,
+          "totalRON": 52037344.75,
+          "paymentsCount": 55,
+          "beneficiariesCount": 23
+        },
+        {
+          "name": "SĂLAJ",
+          "totalEUR": 10104493.93,
+          "totalRON": 50623514.47,
+          "paymentsCount": 138,
+          "beneficiariesCount": 32
+        },
+        {
+          "name": "TELEORMAN",
+          "totalEUR": 9836894.46,
+          "totalRON": 49282841.47,
+          "paymentsCount": 149,
+          "beneficiariesCount": 43
+        },
+        {
+          "name": "HUNEDOARA",
+          "totalEUR": 9700664.33,
+          "totalRON": 48600328.42,
+          "paymentsCount": 152,
+          "beneficiariesCount": 26
+        },
+        {
+          "name": "SATU MARE",
+          "totalEUR": 9695150.68,
+          "totalRON": 48572704.94,
+          "paymentsCount": 127,
+          "beneficiariesCount": 28
+        },
+        {
+          "name": "OLT",
+          "totalEUR": 8601158.01,
+          "totalRON": 43091801.55,
+          "paymentsCount": 148,
+          "beneficiariesCount": 38
+        },
+        {
+          "name": "CĂLĂRAŞI",
+          "totalEUR": 8148566.66,
+          "totalRON": 40824318.95,
+          "paymentsCount": 105,
+          "beneficiariesCount": 13
+        },
+        {
+          "name": "PRAHOVA",
+          "totalEUR": 7515992.74,
+          "totalRON": 37655123.61,
+          "paymentsCount": 113,
+          "beneficiariesCount": 36
+        },
+        {
+          "name": "BOTOŞANI",
+          "totalEUR": 7502642.29,
+          "totalRON": 37588237.54,
+          "paymentsCount": 139,
+          "beneficiariesCount": 36
+        },
+        {
+          "name": "ARGEŞ",
+          "totalEUR": 7455906.57,
+          "totalRON": 37354091.98,
+          "paymentsCount": 160,
+          "beneficiariesCount": 38
+        },
+        {
+          "name": "BACĂU",
+          "totalEUR": 7100430.74,
+          "totalRON": 35573158.12,
+          "paymentsCount": 134,
+          "beneficiariesCount": 41
+        },
+        {
+          "name": "CONSTANŢA",
+          "totalEUR": 6824195.62,
+          "totalRON": 34189220.01,
+          "paymentsCount": 140,
+          "beneficiariesCount": 28
+        },
+        {
+          "name": "BRĂILA",
+          "totalEUR": 6596578.28,
+          "totalRON": 33048857.14,
+          "paymentsCount": 41,
+          "beneficiariesCount": 13
+        },
+        {
+          "name": "GORJ",
+          "totalEUR": 5942729.98,
+          "totalRON": 29773077.39,
+          "paymentsCount": 111,
+          "beneficiariesCount": 26
+        },
+        {
+          "name": "MUREŞ",
+          "totalEUR": 5671515.44,
+          "totalRON": 28414292.64,
+          "paymentsCount": 128,
+          "beneficiariesCount": 45
+        },
+        {
+          "name": "NEAMŢ",
+          "totalEUR": 5588174.88,
+          "totalRON": 27996756.03,
+          "paymentsCount": 99,
+          "beneficiariesCount": 29
+        },
+        {
+          "name": "VÂLCEA",
+          "totalEUR": 5413624.47,
+          "totalRON": 27122258.63,
+          "paymentsCount": 108,
+          "beneficiariesCount": 26
+        },
+        {
+          "name": "VRANCEA",
+          "totalEUR": 5292399.06,
+          "totalRON": 26514919.46,
+          "paymentsCount": 104,
+          "beneficiariesCount": 29
+        },
+        {
+          "name": "ALBA",
+          "totalEUR": 5008117.8,
+          "totalRON": 25090670.2,
+          "paymentsCount": 161,
+          "beneficiariesCount": 27
+        },
+        {
+          "name": "CLUJ",
+          "totalEUR": 4886321.97,
+          "totalRON": 24480473.05,
+          "paymentsCount": 102,
+          "beneficiariesCount": 29
+        },
+        {
+          "name": "ARAD",
+          "totalEUR": 4568121.2,
+          "totalRON": 22886287.3,
+          "paymentsCount": 58,
+          "beneficiariesCount": 22
+        },
+        {
+          "name": "MEHEDINŢI",
+          "totalEUR": 4411435.96,
+          "totalRON": 22101294.23,
+          "paymentsCount": 75,
+          "beneficiariesCount": 24
+        },
+        {
+          "name": "DÂMBOVIŢA",
+          "totalEUR": 4153594.17,
+          "totalRON": 20809506.89,
+          "paymentsCount": 60,
+          "beneficiariesCount": 17
+        },
+        {
+          "name": "VASLUI",
+          "totalEUR": 4054648.78,
+          "totalRON": 20313790.01,
+          "paymentsCount": 97,
+          "beneficiariesCount": 33
+        },
+        {
+          "name": "SIBIU",
+          "totalEUR": 3787530.05,
+          "totalRON": 18975525.61,
+          "paymentsCount": 62,
+          "beneficiariesCount": 20
+        },
+        {
+          "name": "IALOMIŢA",
+          "totalEUR": 3717906.04,
+          "totalRON": 18626709.09,
+          "paymentsCount": 58,
+          "beneficiariesCount": 18
+        },
+        {
+          "name": "TULCEA",
+          "totalEUR": 3599325.26,
+          "totalRON": 18032619.51,
+          "paymentsCount": 49,
+          "beneficiariesCount": 14
+        },
+        {
+          "name": "BISTRIŢA-NĂSĂUD",
+          "totalEUR": 3458566.87,
+          "totalRON": 17327419.91,
+          "paymentsCount": 71,
+          "beneficiariesCount": 25
+        },
+        {
+          "name": "BUZĂU",
+          "totalEUR": 3010645.26,
+          "totalRON": 15083332.75,
+          "paymentsCount": 54,
+          "beneficiariesCount": 22
+        },
+        {
+          "name": "BRAŞOV",
+          "totalEUR": 2817235.28,
+          "totalRON": 14114348.77,
+          "paymentsCount": 73,
+          "beneficiariesCount": 18
+        },
+        {
+          "name": "DOLJ",
+          "totalEUR": 2356290.53,
+          "totalRON": 11805015.46,
+          "paymentsCount": 55,
+          "beneficiariesCount": 26
+        },
+        {
+          "name": "GIURGIU",
+          "totalEUR": 1885307.6,
+          "totalRON": 9445391.05,
+          "paymentsCount": 21,
+          "beneficiariesCount": 10
+        },
+        {
+          "name": "HARGHITA",
+          "totalEUR": 1845389.02,
+          "totalRON": 9245398.84,
+          "paymentsCount": 59,
+          "beneficiariesCount": 20
+        },
+        {
+          "name": "COVASNA",
+          "totalEUR": 1023054.02,
+          "totalRON": 5125500.56,
+          "paymentsCount": 56,
+          "beneficiariesCount": 11
+        }
+      ]
+    },
+    {
+      "date": "2025-03",
+      "dateYYYYMMDD": "202503",
+      "label": "Martie 2025",
+      "totalPayments": 8845,
+      "totalEUR": 1370293225.97,
+      "totalRON": 6865169063.22,
+      "uniqueBeneficiaries": 1902,
+      "counties": [
+        {
+          "name": "BUCUREȘTI",
+          "totalEUR": 856535898.24,
+          "totalRON": 4291244851.34,
+          "paymentsCount": 970,
+          "beneficiariesCount": 98
+        },
+        {
+          "name": "IAŞI",
+          "totalEUR": 29187921.51,
+          "totalRON": 146231486.68,
+          "paymentsCount": 387,
+          "beneficiariesCount": 78
+        },
+        {
+          "name": "SUCEAVA",
+          "totalEUR": 27666263.74,
+          "totalRON": 138607981.18,
+          "paymentsCount": 319,
+          "beneficiariesCount": 82
+        },
+        {
+          "name": "TIMIŞ",
+          "totalEUR": 23275995.88,
+          "totalRON": 116612739.32,
+          "paymentsCount": 164,
+          "beneficiariesCount": 45
+        },
+        {
+          "name": "GALAŢI",
+          "totalEUR": 22562527.76,
+          "totalRON": 113038264.38,
+          "paymentsCount": 372,
+          "beneficiariesCount": 40
+        },
+        {
+          "name": "BIHOR",
+          "totalEUR": 21588209.68,
+          "totalRON": 108156930.08,
+          "paymentsCount": 393,
+          "beneficiariesCount": 81
+        },
+        {
+          "name": "MARAMUREŞ",
+          "totalEUR": 20568065.29,
+          "totalRON": 103046007.01,
+          "paymentsCount": 277,
+          "beneficiariesCount": 64
+        },
+        {
+          "name": "CARAŞ-SEVERIN",
+          "totalEUR": 19641326.73,
+          "totalRON": 98403046.94,
+          "paymentsCount": 194,
+          "beneficiariesCount": 28
+        },
+        {
+          "name": "CLUJ",
+          "totalEUR": 18048781.19,
+          "totalRON": 90424393.66,
+          "paymentsCount": 168,
+          "beneficiariesCount": 50
+        },
+        {
+          "name": "ARGEŞ",
+          "totalEUR": 17674682.1,
+          "totalRON": 88550157.43,
+          "paymentsCount": 346,
+          "beneficiariesCount": 64
+        },
+        {
+          "name": "BOTOŞANI",
+          "totalEUR": 17434382.1,
+          "totalRON": 87346254.1,
+          "paymentsCount": 228,
+          "beneficiariesCount": 48
+        },
+        {
+          "name": "HUNEDOARA",
+          "totalEUR": 14872282.86,
+          "totalRON": 74510137.2,
+          "paymentsCount": 261,
+          "beneficiariesCount": 36
+        },
+        {
+          "name": "SIBIU",
+          "totalEUR": 14387039.18,
+          "totalRON": 72079066.33,
+          "paymentsCount": 135,
+          "beneficiariesCount": 30
+        },
+        {
+          "name": "TELEORMAN",
+          "totalEUR": 13915410.88,
+          "totalRON": 69716208.93,
+          "paymentsCount": 242,
+          "beneficiariesCount": 59
+        },
+        {
+          "name": "SĂLAJ",
+          "totalEUR": 13872557.69,
+          "totalRON": 69501513.98,
+          "paymentsCount": 219,
+          "beneficiariesCount": 46
+        },
+        {
+          "name": "CONSTANŢA",
+          "totalEUR": 13808310.04,
+          "totalRON": 69179633.38,
+          "paymentsCount": 267,
+          "beneficiariesCount": 66
+        },
+        {
+          "name": "MUREŞ",
+          "totalEUR": 13466235.97,
+          "totalRON": 67465842.64,
+          "paymentsCount": 239,
+          "beneficiariesCount": 68
+        },
+        {
+          "name": "SATU MARE",
+          "totalEUR": 13372212.48,
+          "totalRON": 66994784.69,
+          "paymentsCount": 209,
+          "beneficiariesCount": 37
+        },
+        {
+          "name": "ALBA",
+          "totalEUR": 12841831.97,
+          "totalRON": 64337578.33,
+          "paymentsCount": 305,
+          "beneficiariesCount": 48
+        },
+        {
+          "name": "OLT",
+          "totalEUR": 12419877.33,
+          "totalRON": 62223585.19,
+          "paymentsCount": 235,
+          "beneficiariesCount": 52
+        },
+        {
+          "name": "ILFOV",
+          "totalEUR": 12347983.97,
+          "totalRON": 61863399.54,
+          "paymentsCount": 86,
+          "beneficiariesCount": 25
+        },
+        {
+          "name": "PRAHOVA",
+          "totalEUR": 12069993.28,
+          "totalRON": 60470666.35,
+          "paymentsCount": 200,
+          "beneficiariesCount": 51
+        },
+        {
+          "name": "VÂLCEA",
+          "totalEUR": 11428873.05,
+          "totalRON": 57258653.93,
+          "paymentsCount": 194,
+          "beneficiariesCount": 44
+        },
+        {
+          "name": "BACĂU",
+          "totalEUR": 10118262.44,
+          "totalRON": 50692494.94,
+          "paymentsCount": 207,
+          "beneficiariesCount": 53
+        },
+        {
+          "name": "DÂMBOVIŢA",
+          "totalEUR": 10037640.91,
+          "totalRON": 50288581.04,
+          "paymentsCount": 132,
+          "beneficiariesCount": 36
+        },
+        {
+          "name": "CĂLĂRAŞI",
+          "totalEUR": 9960082.04,
+          "totalRON": 49900010.97,
+          "paymentsCount": 150,
+          "beneficiariesCount": 25
+        },
+        {
+          "name": "NEAMŢ",
+          "totalEUR": 9867670.68,
+          "totalRON": 49437030.12,
+          "paymentsCount": 175,
+          "beneficiariesCount": 47
+        },
+        {
+          "name": "ARAD",
+          "totalEUR": 9781781.86,
+          "totalRON": 49006727.27,
+          "paymentsCount": 111,
+          "beneficiariesCount": 39
+        },
+        {
+          "name": "BISTRIŢA-NĂSĂUD",
+          "totalEUR": 9198428.34,
+          "totalRON": 46084125.93,
+          "paymentsCount": 131,
+          "beneficiariesCount": 41
+        },
+        {
+          "name": "GORJ",
+          "totalEUR": 8486980.38,
+          "totalRON": 42519771.81,
+          "paymentsCount": 192,
+          "beneficiariesCount": 35
+        },
+        {
+          "name": "BRĂILA",
+          "totalEUR": 7574125.56,
+          "totalRON": 37946369,
+          "paymentsCount": 68,
+          "beneficiariesCount": 23
+        },
+        {
+          "name": "VRANCEA",
+          "totalEUR": 7561410.62,
+          "totalRON": 37882667.42,
+          "paymentsCount": 179,
+          "beneficiariesCount": 42
+        },
+        {
+          "name": "MEHEDINŢI",
+          "totalEUR": 6900695.66,
+          "totalRON": 34572485.24,
+          "paymentsCount": 118,
+          "beneficiariesCount": 35
+        },
+        {
+          "name": "BUZĂU",
+          "totalEUR": 6856213.76,
+          "totalRON": 34349630.9,
+          "paymentsCount": 96,
+          "beneficiariesCount": 44
+        },
+        {
+          "name": "COVASNA",
+          "totalEUR": 6436231.46,
+          "totalRON": 32245519.55,
+          "paymentsCount": 110,
+          "beneficiariesCount": 19
+        },
+        {
+          "name": "VASLUI",
+          "totalEUR": 6005840.79,
+          "totalRON": 30089262.08,
+          "paymentsCount": 149,
+          "beneficiariesCount": 45
+        },
+        {
+          "name": "BRAŞOV",
+          "totalEUR": 5468594.58,
+          "totalRON": 27397659.03,
+          "paymentsCount": 135,
+          "beneficiariesCount": 29
+        },
+        {
+          "name": "IALOMIŢA",
+          "totalEUR": 5393936.91,
+          "totalRON": 27023623.66,
+          "paymentsCount": 95,
+          "beneficiariesCount": 27
+        },
+        {
+          "name": "TULCEA",
+          "totalEUR": 5264174.23,
+          "totalRON": 26373512.81,
+          "paymentsCount": 94,
+          "beneficiariesCount": 24
+        },
+        {
+          "name": "DOLJ",
+          "totalEUR": 5003481.48,
+          "totalRON": 25067442.25,
+          "paymentsCount": 119,
+          "beneficiariesCount": 51
+        },
+        {
+          "name": "GIURGIU",
+          "totalEUR": 3977525.37,
+          "totalRON": 19927401.99,
+          "paymentsCount": 53,
+          "beneficiariesCount": 12
+        },
+        {
+          "name": "HARGHITA",
+          "totalEUR": 3413485.98,
+          "totalRON": 17101564.6,
+          "paymentsCount": 121,
+          "beneficiariesCount": 35
+        }
+      ]
+    },
+    {
+      "date": "2025-04",
+      "dateYYYYMMDD": "202504",
+      "label": "Aprilie 2025",
+      "totalPayments": 11887,
+      "totalEUR": 1799832155.23,
+      "totalRON": 9017159099.18,
+      "uniqueBeneficiaries": 2331,
+      "counties": [
+        {
+          "name": "BUCUREȘTI",
+          "totalEUR": 1058974086.65,
+          "totalRON": 5305460176.04,
+          "paymentsCount": 1366,
+          "beneficiariesCount": 121
+        },
+        {
+          "name": "IAŞI",
+          "totalEUR": 44543764.61,
+          "totalRON": 223164260.65,
+          "paymentsCount": 494,
+          "beneficiariesCount": 88
+        },
+        {
+          "name": "SUCEAVA",
+          "totalEUR": 41339440.32,
+          "totalRON": 207110595.73,
+          "paymentsCount": 433,
+          "beneficiariesCount": 96
+        },
+        {
+          "name": "GALAŢI",
+          "totalEUR": 39768363.08,
+          "totalRON": 199239499.32,
+          "paymentsCount": 450,
+          "beneficiariesCount": 42
+        },
+        {
+          "name": "CLUJ",
+          "totalEUR": 32496484.55,
+          "totalRON": 162807387.51,
+          "paymentsCount": 240,
+          "beneficiariesCount": 66
+        },
+        {
+          "name": "TIMIŞ",
+          "totalEUR": 31526546.51,
+          "totalRON": 157947997.97,
+          "paymentsCount": 231,
+          "beneficiariesCount": 61
+        },
+        {
+          "name": "BIHOR",
+          "totalEUR": 28661807.71,
+          "totalRON": 143595656,
+          "paymentsCount": 479,
+          "beneficiariesCount": 99
+        },
+        {
+          "name": "MARAMUREŞ",
+          "totalEUR": 26181016.54,
+          "totalRON": 131166892.96,
+          "paymentsCount": 353,
+          "beneficiariesCount": 77
+        },
+        {
+          "name": "SIBIU",
+          "totalEUR": 25631330.71,
+          "totalRON": 128412966.88,
+          "paymentsCount": 191,
+          "beneficiariesCount": 41
+        },
+        {
+          "name": "CARAŞ-SEVERIN",
+          "totalEUR": 24187274.84,
+          "totalRON": 121178246.96,
+          "paymentsCount": 242,
+          "beneficiariesCount": 33
+        },
+        {
+          "name": "HUNEDOARA",
+          "totalEUR": 23973079.83,
+          "totalRON": 120105129.94,
+          "paymentsCount": 349,
+          "beneficiariesCount": 45
+        },
+        {
+          "name": "ARGEŞ",
+          "totalEUR": 23831201.29,
+          "totalRON": 119394318.48,
+          "paymentsCount": 463,
+          "beneficiariesCount": 80
+        },
+        {
+          "name": "BOTOŞANI",
+          "totalEUR": 22313174.88,
+          "totalRON": 111789005.83,
+          "paymentsCount": 288,
+          "beneficiariesCount": 60
+        },
+        {
+          "name": "CONSTANŢA",
+          "totalEUR": 20204514.26,
+          "totalRON": 101224616.53,
+          "paymentsCount": 384,
+          "beneficiariesCount": 77
+        },
+        {
+          "name": "ARAD",
+          "totalEUR": 18858491.19,
+          "totalRON": 94481041.02,
+          "paymentsCount": 156,
+          "beneficiariesCount": 51
+        },
+        {
+          "name": "OLT",
+          "totalEUR": 18621656.21,
+          "totalRON": 93294497.22,
+          "paymentsCount": 319,
+          "beneficiariesCount": 65
+        },
+        {
+          "name": "SATU MARE",
+          "totalEUR": 18493830.47,
+          "totalRON": 92654090.84,
+          "paymentsCount": 270,
+          "beneficiariesCount": 41
+        },
+        {
+          "name": "MUREŞ",
+          "totalEUR": 18227487.72,
+          "totalRON": 91319713.72,
+          "paymentsCount": 315,
+          "beneficiariesCount": 77
+        },
+        {
+          "name": "TELEORMAN",
+          "totalEUR": 17577257.83,
+          "totalRON": 88062061.94,
+          "paymentsCount": 328,
+          "beneficiariesCount": 71
+        },
+        {
+          "name": "PRAHOVA",
+          "totalEUR": 17470984.45,
+          "totalRON": 87529632.19,
+          "paymentsCount": 248,
+          "beneficiariesCount": 57
+        },
+        {
+          "name": "ALBA",
+          "totalEUR": 17163923.73,
+          "totalRON": 85991258.12,
+          "paymentsCount": 404,
+          "beneficiariesCount": 57
+        },
+        {
+          "name": "SĂLAJ",
+          "totalEUR": 15506819.3,
+          "totalRON": 77689164.48,
+          "paymentsCount": 272,
+          "beneficiariesCount": 50
+        },
+        {
+          "name": "DÂMBOVIŢA",
+          "totalEUR": 15276156.43,
+          "totalRON": 76533543.98,
+          "paymentsCount": 175,
+          "beneficiariesCount": 42
+        },
+        {
+          "name": "BISTRIŢA-NĂSĂUD",
+          "totalEUR": 15145189.53,
+          "totalRON": 75877399.5,
+          "paymentsCount": 182,
+          "beneficiariesCount": 48
+        },
+        {
+          "name": "BACĂU",
+          "totalEUR": 15042175.54,
+          "totalRON": 75361299.58,
+          "paymentsCount": 300,
+          "beneficiariesCount": 72
+        },
+        {
+          "name": "ILFOV",
+          "totalEUR": 14400655.06,
+          "totalRON": 72147281.68,
+          "paymentsCount": 113,
+          "beneficiariesCount": 32
+        },
+        {
+          "name": "BRAŞOV",
+          "totalEUR": 14013951.06,
+          "totalRON": 70209894.98,
+          "paymentsCount": 202,
+          "beneficiariesCount": 42
+        },
+        {
+          "name": "VÂLCEA",
+          "totalEUR": 13211851.37,
+          "totalRON": 66191375.27,
+          "paymentsCount": 241,
+          "beneficiariesCount": 53
+        },
+        {
+          "name": "NEAMŢ",
+          "totalEUR": 12794176.65,
+          "totalRON": 64098825.02,
+          "paymentsCount": 229,
+          "beneficiariesCount": 56
+        },
+        {
+          "name": "GORJ",
+          "totalEUR": 11701377.02,
+          "totalRON": 58623899.09,
+          "paymentsCount": 273,
+          "beneficiariesCount": 43
+        },
+        {
+          "name": "CĂLĂRAŞI",
+          "totalEUR": 11466075.54,
+          "totalRON": 57445038.41,
+          "paymentsCount": 194,
+          "beneficiariesCount": 31
+        },
+        {
+          "name": "BRĂILA",
+          "totalEUR": 10885147.44,
+          "totalRON": 54534588.68,
+          "paymentsCount": 100,
+          "beneficiariesCount": 32
+        },
+        {
+          "name": "MEHEDINŢI",
+          "totalEUR": 10830288.21,
+          "totalRON": 54259743.71,
+          "paymentsCount": 179,
+          "beneficiariesCount": 48
+        },
+        {
+          "name": "IALOMIŢA",
+          "totalEUR": 9428211.79,
+          "totalRON": 47235341.02,
+          "paymentsCount": 162,
+          "beneficiariesCount": 41
+        },
+        {
+          "name": "VRANCEA",
+          "totalEUR": 9223329.39,
+          "totalRON": 46208880.5,
+          "paymentsCount": 218,
+          "beneficiariesCount": 50
+        },
+        {
+          "name": "BUZĂU",
+          "totalEUR": 8563038.7,
+          "totalRON": 42900823.8,
+          "paymentsCount": 142,
+          "beneficiariesCount": 48
+        },
+        {
+          "name": "DOLJ",
+          "totalEUR": 8167950.05,
+          "totalRON": 40921429.78,
+          "paymentsCount": 178,
+          "beneficiariesCount": 67
+        },
+        {
+          "name": "COVASNA",
+          "totalEUR": 8136735.19,
+          "totalRON": 40765043.27,
+          "paymentsCount": 164,
+          "beneficiariesCount": 21
+        },
+        {
+          "name": "TULCEA",
+          "totalEUR": 8000296.46,
+          "totalRON": 40081485.36,
+          "paymentsCount": 122,
+          "beneficiariesCount": 30
+        },
+        {
+          "name": "VASLUI",
+          "totalEUR": 7520619.41,
+          "totalRON": 37678303.01,
+          "paymentsCount": 219,
+          "beneficiariesCount": 57
+        },
+        {
+          "name": "HARGHITA",
+          "totalEUR": 5590167.85,
+          "totalRON": 28006740.76,
+          "paymentsCount": 149,
+          "beneficiariesCount": 46
+        },
+        {
+          "name": "GIURGIU",
+          "totalEUR": 4881069.59,
+          "totalRON": 24454158.55,
+          "paymentsCount": 69,
+          "beneficiariesCount": 16
+        },
+        {
+          "name": "NECUNOSCUT",
+          "totalEUR": 1156.27,
+          "totalRON": 5792.9,
+          "paymentsCount": 1,
+          "beneficiariesCount": 1
+        }
+      ]
+    },
+    {
+      "date": "2025-05",
+      "dateYYYYMMDD": "202505",
+      "label": "Mai 2025",
+      "totalPayments": 15218,
+      "totalEUR": 2194173023.11,
+      "totalRON": 10992806847.49,
+      "uniqueBeneficiaries": 2628,
+      "counties": [
+        {
+          "name": "BUCUREȘTI",
+          "totalEUR": 1242351711.71,
+          "totalRON": 6224182077.62,
+          "paymentsCount": 1761,
+          "beneficiariesCount": 144
+        },
+        {
+          "name": "IAŞI",
+          "totalEUR": 66122320.37,
+          "totalRON": 331272825.14,
+          "paymentsCount": 625,
+          "beneficiariesCount": 95
+        },
+        {
+          "name": "GALAŢI",
+          "totalEUR": 56568251.35,
+          "totalRON": 283406939.56,
+          "paymentsCount": 581,
+          "beneficiariesCount": 51
+        },
+        {
+          "name": "SUCEAVA",
+          "totalEUR": 47679653.65,
+          "totalRON": 238875064.4,
+          "paymentsCount": 542,
+          "beneficiariesCount": 101
+        },
+        {
+          "name": "CLUJ",
+          "totalEUR": 45371083.09,
+          "totalRON": 227309126.38,
+          "paymentsCount": 389,
+          "beneficiariesCount": 75
+        },
+        {
+          "name": "TIMIŞ",
+          "totalEUR": 43824508.34,
+          "totalRON": 219560786.81,
+          "paymentsCount": 304,
+          "beneficiariesCount": 70
+        },
+        {
+          "name": "BIHOR",
+          "totalEUR": 34988988.97,
+          "totalRON": 175294834.1,
+          "paymentsCount": 619,
+          "beneficiariesCount": 113
+        },
+        {
+          "name": "SIBIU",
+          "totalEUR": 30564228.14,
+          "totalRON": 153126783.14,
+          "paymentsCount": 261,
+          "beneficiariesCount": 51
+        },
+        {
+          "name": "CARAŞ-SEVERIN",
+          "totalEUR": 30140204.1,
+          "totalRON": 151002422.52,
+          "paymentsCount": 324,
+          "beneficiariesCount": 44
+        },
+        {
+          "name": "MARAMUREŞ",
+          "totalEUR": 29743441.38,
+          "totalRON": 149014641.46,
+          "paymentsCount": 433,
+          "beneficiariesCount": 81
+        },
+        {
+          "name": "ARGEŞ",
+          "totalEUR": 28513741.23,
+          "totalRON": 142853843.6,
+          "paymentsCount": 575,
+          "beneficiariesCount": 96
+        },
+        {
+          "name": "HUNEDOARA",
+          "totalEUR": 28028244.22,
+          "totalRON": 140421503.5,
+          "paymentsCount": 409,
+          "beneficiariesCount": 47
+        },
+        {
+          "name": "BOTOŞANI",
+          "totalEUR": 27742013.7,
+          "totalRON": 138987488.23,
+          "paymentsCount": 364,
+          "beneficiariesCount": 65
+        },
+        {
+          "name": "CONSTANŢA",
+          "totalEUR": 24685523.63,
+          "totalRON": 123674473.43,
+          "paymentsCount": 462,
+          "beneficiariesCount": 83
+        },
+        {
+          "name": "SATU MARE",
+          "totalEUR": 23754819.55,
+          "totalRON": 119011646.06,
+          "paymentsCount": 342,
+          "beneficiariesCount": 46
+        },
+        {
+          "name": "ALBA",
+          "totalEUR": 23557390.77,
+          "totalRON": 118022528.11,
+          "paymentsCount": 534,
+          "beneficiariesCount": 66
+        },
+        {
+          "name": "SĂLAJ",
+          "totalEUR": 23546432.99,
+          "totalRON": 117967628.86,
+          "paymentsCount": 331,
+          "beneficiariesCount": 57
+        },
+        {
+          "name": "ARAD",
+          "totalEUR": 22816227.89,
+          "totalRON": 114309301.78,
+          "paymentsCount": 209,
+          "beneficiariesCount": 59
+        },
+        {
+          "name": "MUREŞ",
+          "totalEUR": 22161188.61,
+          "totalRON": 111027555.11,
+          "paymentsCount": 406,
+          "beneficiariesCount": 91
+        },
+        {
+          "name": "OLT",
+          "totalEUR": 22080573.88,
+          "totalRON": 110623674.58,
+          "paymentsCount": 400,
+          "beneficiariesCount": 73
+        },
+        {
+          "name": "DÂMBOVIŢA",
+          "totalEUR": 21050978.11,
+          "totalRON": 105465400.57,
+          "paymentsCount": 215,
+          "beneficiariesCount": 46
+        },
+        {
+          "name": "BACĂU",
+          "totalEUR": 20932214.79,
+          "totalRON": 104870396.17,
+          "paymentsCount": 384,
+          "beneficiariesCount": 75
+        },
+        {
+          "name": "PRAHOVA",
+          "totalEUR": 20264966.28,
+          "totalRON": 101527481.14,
+          "paymentsCount": 322,
+          "beneficiariesCount": 62
+        },
+        {
+          "name": "TELEORMAN",
+          "totalEUR": 20213456.5,
+          "totalRON": 101269417.34,
+          "paymentsCount": 391,
+          "beneficiariesCount": 81
+        },
+        {
+          "name": "BISTRIŢA-NĂSĂUD",
+          "totalEUR": 17952009.07,
+          "totalRON": 89939565.49,
+          "paymentsCount": 232,
+          "beneficiariesCount": 51
+        },
+        {
+          "name": "BRAŞOV",
+          "totalEUR": 16462422.19,
+          "totalRON": 82476735.48,
+          "paymentsCount": 250,
+          "beneficiariesCount": 44
+        },
+        {
+          "name": "ILFOV",
+          "totalEUR": 16054163.48,
+          "totalRON": 80431358.94,
+          "paymentsCount": 140,
+          "beneficiariesCount": 36
+        },
+        {
+          "name": "VÂLCEA",
+          "totalEUR": 15750243.12,
+          "totalRON": 78908717.94,
+          "paymentsCount": 304,
+          "beneficiariesCount": 55
+        },
+        {
+          "name": "GORJ",
+          "totalEUR": 15559934.6,
+          "totalRON": 77955272.72,
+          "paymentsCount": 351,
+          "beneficiariesCount": 49
+        },
+        {
+          "name": "NEAMŢ",
+          "totalEUR": 15285598.01,
+          "totalRON": 76580846,
+          "paymentsCount": 289,
+          "beneficiariesCount": 64
+        },
+        {
+          "name": "VASLUI",
+          "totalEUR": 14347115.73,
+          "totalRON": 71879049.62,
+          "paymentsCount": 267,
+          "beneficiariesCount": 63
+        },
+        {
+          "name": "MEHEDINŢI",
+          "totalEUR": 14105185.22,
+          "totalRON": 70666977.74,
+          "paymentsCount": 222,
+          "beneficiariesCount": 53
+        },
+        {
+          "name": "VRANCEA",
+          "totalEUR": 13891722.75,
+          "totalRON": 69597531.34,
+          "paymentsCount": 312,
+          "beneficiariesCount": 56
+        },
+        {
+          "name": "CĂLĂRAŞI",
+          "totalEUR": 13469005.81,
+          "totalRON": 67479719.04,
+          "paymentsCount": 247,
+          "beneficiariesCount": 37
+        },
+        {
+          "name": "BUZĂU",
+          "totalEUR": 13176664.78,
+          "totalRON": 66015090.36,
+          "paymentsCount": 187,
+          "beneficiariesCount": 56
+        },
+        {
+          "name": "IALOMIŢA",
+          "totalEUR": 13050566.22,
+          "totalRON": 65383336.78,
+          "paymentsCount": 210,
+          "beneficiariesCount": 43
+        },
+        {
+          "name": "DOLJ",
+          "totalEUR": 11440102,
+          "totalRON": 57314911.04,
+          "paymentsCount": 217,
+          "beneficiariesCount": 73
+        },
+        {
+          "name": "BRĂILA",
+          "totalEUR": 11248657.68,
+          "totalRON": 56355775.08,
+          "paymentsCount": 111,
+          "beneficiariesCount": 35
+        },
+        {
+          "name": "COVASNA",
+          "totalEUR": 11119134.5,
+          "totalRON": 55706863.76,
+          "paymentsCount": 234,
+          "beneficiariesCount": 24
+        },
+        {
+          "name": "HARGHITA",
+          "totalEUR": 10005640.89,
+          "totalRON": 50128260.58,
+          "paymentsCount": 208,
+          "beneficiariesCount": 60
+        },
+        {
+          "name": "TULCEA",
+          "totalEUR": 8898300.09,
+          "totalRON": 44580483.53,
+          "paymentsCount": 164,
+          "beneficiariesCount": 35
+        },
+        {
+          "name": "GIURGIU",
+          "totalEUR": 5653237.45,
+          "totalRON": 28322719.54,
+          "paymentsCount": 89,
+          "beneficiariesCount": 21
+        },
+        {
+          "name": "NECUNOSCUT",
+          "totalEUR": 1156.27,
+          "totalRON": 5792.9,
+          "paymentsCount": 1,
+          "beneficiariesCount": 1
+        }
+      ]
+    },
+    {
+      "date": "2025-06",
+      "dateYYYYMMDD": "202506",
+      "label": "Iunie 2025",
+      "totalPayments": 17404,
+      "totalEUR": 2740691794.66,
+      "totalRON": 13730865891.7,
+      "uniqueBeneficiaries": 2894,
+      "counties": [
+        {
+          "name": "BUCUREȘTI",
+          "totalEUR": 1623276171.79,
+          "totalRON": 8132613622.56,
+          "paymentsCount": 2191,
+          "beneficiariesCount": 163
+        },
+        {
+          "name": "IAŞI",
+          "totalEUR": 74881014.07,
+          "totalRON": 375153880.37,
+          "paymentsCount": 688,
+          "beneficiariesCount": 103
+        },
+        {
+          "name": "GALAŢI",
+          "totalEUR": 62652439.32,
+          "totalRON": 313888721.38,
+          "paymentsCount": 671,
+          "beneficiariesCount": 62
+        },
+        {
+          "name": "SUCEAVA",
+          "totalEUR": 54364404.35,
+          "totalRON": 272365665.31,
+          "paymentsCount": 621,
+          "beneficiariesCount": 107
+        },
+        {
+          "name": "CLUJ",
+          "totalEUR": 52141186.28,
+          "totalRON": 261227343.34,
+          "paymentsCount": 443,
+          "beneficiariesCount": 82
+        },
+        {
+          "name": "TIMIŞ",
+          "totalEUR": 50814296.17,
+          "totalRON": 254579623.68,
+          "paymentsCount": 341,
+          "beneficiariesCount": 81
+        },
+        {
+          "name": "BIHOR",
+          "totalEUR": 42168066.51,
+          "totalRON": 211262012.34,
+          "paymentsCount": 691,
+          "beneficiariesCount": 118
+        },
+        {
+          "name": "MARAMUREŞ",
+          "totalEUR": 39195984.6,
+          "totalRON": 196371883.02,
+          "paymentsCount": 509,
+          "beneficiariesCount": 91
+        },
+        {
+          "name": "SIBIU",
+          "totalEUR": 36067078.52,
+          "totalRON": 180696063.49,
+          "paymentsCount": 294,
+          "beneficiariesCount": 55
+        },
+        {
+          "name": "BOTOŞANI",
+          "totalEUR": 35220563.47,
+          "totalRON": 176455022.57,
+          "paymentsCount": 420,
+          "beneficiariesCount": 69
+        },
+        {
+          "name": "HUNEDOARA",
+          "totalEUR": 33288570.05,
+          "totalRON": 166775735.91,
+          "paymentsCount": 468,
+          "beneficiariesCount": 51
+        },
+        {
+          "name": "CARAŞ-SEVERIN",
+          "totalEUR": 31775476.65,
+          "totalRON": 159195138.1,
+          "paymentsCount": 367,
+          "beneficiariesCount": 51
+        },
+        {
+          "name": "MUREŞ",
+          "totalEUR": 30572985.23,
+          "totalRON": 153170656.08,
+          "paymentsCount": 476,
+          "beneficiariesCount": 102
+        },
+        {
+          "name": "ARGEŞ",
+          "totalEUR": 29955236.95,
+          "totalRON": 150075737.15,
+          "paymentsCount": 609,
+          "beneficiariesCount": 101
+        },
+        {
+          "name": "ARAD",
+          "totalEUR": 28305813.78,
+          "totalRON": 141812127.14,
+          "paymentsCount": 234,
+          "beneficiariesCount": 62
+        },
+        {
+          "name": "SATU MARE",
+          "totalEUR": 27115859.55,
+          "totalRON": 135850456.51,
+          "paymentsCount": 379,
+          "beneficiariesCount": 52
+        },
+        {
+          "name": "CONSTANŢA",
+          "totalEUR": 27080842.19,
+          "totalRON": 135675019.15,
+          "paymentsCount": 508,
+          "beneficiariesCount": 91
+        },
+        {
+          "name": "BACĂU",
+          "totalEUR": 26857461.88,
+          "totalRON": 134555884.08,
+          "paymentsCount": 438,
+          "beneficiariesCount": 82
+        },
+        {
+          "name": "SĂLAJ",
+          "totalEUR": 26073148.21,
+          "totalRON": 130626472.09,
+          "paymentsCount": 369,
+          "beneficiariesCount": 60
+        },
+        {
+          "name": "ALBA",
+          "totalEUR": 26041461.96,
+          "totalRON": 130467724.93,
+          "paymentsCount": 585,
+          "beneficiariesCount": 70
+        },
+        {
+          "name": "DÂMBOVIŢA",
+          "totalEUR": 24945650.22,
+          "totalRON": 124977707.81,
+          "paymentsCount": 261,
+          "beneficiariesCount": 52
+        },
+        {
+          "name": "OLT",
+          "totalEUR": 24516231.78,
+          "totalRON": 122826320.57,
+          "paymentsCount": 439,
+          "beneficiariesCount": 80
+        },
+        {
+          "name": "TELEORMAN",
+          "totalEUR": 23245307.61,
+          "totalRON": 116458991.29,
+          "paymentsCount": 425,
+          "beneficiariesCount": 87
+        },
+        {
+          "name": "BRAŞOV",
+          "totalEUR": 22406729.52,
+          "totalRON": 112257715.25,
+          "paymentsCount": 294,
+          "beneficiariesCount": 50
+        },
+        {
+          "name": "PRAHOVA",
+          "totalEUR": 22210403.66,
+          "totalRON": 111274122.36,
+          "paymentsCount": 356,
+          "beneficiariesCount": 69
+        },
+        {
+          "name": "BISTRIŢA-NĂSĂUD",
+          "totalEUR": 20742410.65,
+          "totalRON": 103919477.36,
+          "paymentsCount": 267,
+          "beneficiariesCount": 60
+        },
+        {
+          "name": "NEAMŢ",
+          "totalEUR": 19165295.34,
+          "totalRON": 96018129.57,
+          "paymentsCount": 340,
+          "beneficiariesCount": 71
+        },
+        {
+          "name": "VASLUI",
+          "totalEUR": 18952392.1,
+          "totalRON": 94951484.01,
+          "paymentsCount": 316,
+          "beneficiariesCount": 75
+        },
+        {
+          "name": "GORJ",
+          "totalEUR": 18583532.33,
+          "totalRON": 93103497.36,
+          "paymentsCount": 392,
+          "beneficiariesCount": 54
+        },
+        {
+          "name": "VÂLCEA",
+          "totalEUR": 18162276.84,
+          "totalRON": 90993006.81,
+          "paymentsCount": 332,
+          "beneficiariesCount": 59
+        },
+        {
+          "name": "ILFOV",
+          "totalEUR": 17808433.01,
+          "totalRON": 89220249.25,
+          "paymentsCount": 158,
+          "beneficiariesCount": 38
+        },
+        {
+          "name": "MEHEDINŢI",
+          "totalEUR": 16022175.99,
+          "totalRON": 80271101.48,
+          "paymentsCount": 256,
+          "beneficiariesCount": 57
+        },
+        {
+          "name": "VRANCEA",
+          "totalEUR": 15929983.89,
+          "totalRON": 79809219.75,
+          "paymentsCount": 343,
+          "beneficiariesCount": 65
+        },
+        {
+          "name": "COVASNA",
+          "totalEUR": 15440497.69,
+          "totalRON": 77356893.36,
+          "paymentsCount": 269,
+          "beneficiariesCount": 26
+        },
+        {
+          "name": "CĂLĂRAŞI",
+          "totalEUR": 15110302.08,
+          "totalRON": 75702613.37,
+          "paymentsCount": 264,
+          "beneficiariesCount": 40
+        },
+        {
+          "name": "BUZĂU",
+          "totalEUR": 14894929.35,
+          "totalRON": 74623595.8,
+          "paymentsCount": 217,
+          "beneficiariesCount": 63
+        },
+        {
+          "name": "DOLJ",
+          "totalEUR": 14239598.01,
+          "totalRON": 71340386.1,
+          "paymentsCount": 270,
+          "beneficiariesCount": 81
+        },
+        {
+          "name": "IALOMIŢA",
+          "totalEUR": 14213417.58,
+          "totalRON": 71209222.02,
+          "paymentsCount": 241,
+          "beneficiariesCount": 49
+        },
+        {
+          "name": "TULCEA",
+          "totalEUR": 13984673.62,
+          "totalRON": 70063214.92,
+          "paymentsCount": 190,
+          "beneficiariesCount": 40
+        },
+        {
+          "name": "BRĂILA",
+          "totalEUR": 13947493.92,
+          "totalRON": 69876944.73,
+          "paymentsCount": 131,
+          "beneficiariesCount": 38
+        },
+        {
+          "name": "HARGHITA",
+          "totalEUR": 12225807.92,
+          "totalRON": 61251297.39,
+          "paymentsCount": 241,
+          "beneficiariesCount": 64
+        },
+        {
+          "name": "GIURGIU",
+          "totalEUR": 6095033.75,
+          "totalRON": 30536119.04,
+          "paymentsCount": 99,
+          "beneficiariesCount": 22
+        },
+        {
+          "name": "NECUNOSCUT",
+          "totalEUR": 1156.27,
+          "totalRON": 5792.9,
+          "paymentsCount": 1,
+          "beneficiariesCount": 1
+        }
+      ]
+    },
+    {
+      "date": "2025-07",
+      "dateYYYYMMDD": "202507",
+      "label": "Iulie 2025",
+      "totalPayments": 19646,
+      "totalEUR": 3295134260.2,
+      "totalRON": 16508622644.89,
+      "uniqueBeneficiaries": 3241,
+      "counties": [
+        {
+          "name": "BUCUREȘTI",
+          "totalEUR": 2002649013.75,
+          "totalRON": 10033271561.22,
+          "paymentsCount": 2572,
+          "beneficiariesCount": 185
+        },
+        {
+          "name": "IAŞI",
+          "totalEUR": 88656607.05,
+          "totalRON": 444169601.16,
+          "paymentsCount": 751,
+          "beneficiariesCount": 116
+        },
+        {
+          "name": "GALAŢI",
+          "totalEUR": 75578611.01,
+          "totalRON": 378648841.58,
+          "paymentsCount": 749,
+          "beneficiariesCount": 74
+        },
+        {
+          "name": "TIMIŞ",
+          "totalEUR": 59565242.39,
+          "totalRON": 298421864.2,
+          "paymentsCount": 385,
+          "beneficiariesCount": 92
+        },
+        {
+          "name": "SUCEAVA",
+          "totalEUR": 58183849.1,
+          "totalRON": 291501083.42,
+          "paymentsCount": 691,
+          "beneficiariesCount": 115
+        },
+        {
+          "name": "CLUJ",
+          "totalEUR": 57124979.8,
+          "totalRON": 286196149.06,
+          "paymentsCount": 512,
+          "beneficiariesCount": 94
+        },
+        {
+          "name": "MARAMUREŞ",
+          "totalEUR": 50519205.32,
+          "totalRON": 253101218.83,
+          "paymentsCount": 583,
+          "beneficiariesCount": 98
+        },
+        {
+          "name": "BIHOR",
+          "totalEUR": 47973801.52,
+          "totalRON": 240348744.46,
+          "paymentsCount": 775,
+          "beneficiariesCount": 144
+        },
+        {
+          "name": "BOTOŞANI",
+          "totalEUR": 42191498.1,
+          "totalRON": 211379405.1,
+          "paymentsCount": 480,
+          "beneficiariesCount": 83
+        },
+        {
+          "name": "SIBIU",
+          "totalEUR": 37792958.84,
+          "totalRON": 189342723.91,
+          "paymentsCount": 342,
+          "beneficiariesCount": 65
+        },
+        {
+          "name": "MUREŞ",
+          "totalEUR": 35369444.69,
+          "totalRON": 177200917.87,
+          "paymentsCount": 546,
+          "beneficiariesCount": 110
+        },
+        {
+          "name": "HUNEDOARA",
+          "totalEUR": 35198616.18,
+          "totalRON": 176345066.99,
+          "paymentsCount": 515,
+          "beneficiariesCount": 53
+        },
+        {
+          "name": "CARAŞ-SEVERIN",
+          "totalEUR": 34596883.44,
+          "totalRON": 173330386.22,
+          "paymentsCount": 413,
+          "beneficiariesCount": 57
+        },
+        {
+          "name": "ALBA",
+          "totalEUR": 33807721.47,
+          "totalRON": 169376685.12,
+          "paymentsCount": 658,
+          "beneficiariesCount": 79
+        },
+        {
+          "name": "ARGEŞ",
+          "totalEUR": 33784424.99,
+          "totalRON": 169259969.43,
+          "paymentsCount": 694,
+          "beneficiariesCount": 121
+        },
+        {
+          "name": "CONSTANŢA",
+          "totalEUR": 33419368.34,
+          "totalRON": 167431035.22,
+          "paymentsCount": 554,
+          "beneficiariesCount": 100
+        },
+        {
+          "name": "ARAD",
+          "totalEUR": 31305042,
+          "totalRON": 156838260.52,
+          "paymentsCount": 268,
+          "beneficiariesCount": 65
+        },
+        {
+          "name": "PRAHOVA",
+          "totalEUR": 30247030.27,
+          "totalRON": 151537621.69,
+          "paymentsCount": 400,
+          "beneficiariesCount": 75
+        },
+        {
+          "name": "SĂLAJ",
+          "totalEUR": 30205790.66,
+          "totalRON": 151331010.81,
+          "paymentsCount": 401,
+          "beneficiariesCount": 69
+        },
+        {
+          "name": "BISTRIŢA-NĂSĂUD",
+          "totalEUR": 29303165.06,
+          "totalRON": 146808857.07,
+          "paymentsCount": 306,
+          "beneficiariesCount": 67
+        },
+        {
+          "name": "SATU MARE",
+          "totalEUR": 29269705.5,
+          "totalRON": 146641224.67,
+          "paymentsCount": 413,
+          "beneficiariesCount": 54
+        },
+        {
+          "name": "BACĂU",
+          "totalEUR": 29021901.71,
+          "totalRON": 145399727.64,
+          "paymentsCount": 483,
+          "beneficiariesCount": 94
+        },
+        {
+          "name": "DÂMBOVIŢA",
+          "totalEUR": 28053298.59,
+          "totalRON": 140547026.19,
+          "paymentsCount": 287,
+          "beneficiariesCount": 56
+        },
+        {
+          "name": "OLT",
+          "totalEUR": 27627543.07,
+          "totalRON": 138413990.21,
+          "paymentsCount": 487,
+          "beneficiariesCount": 86
+        },
+        {
+          "name": "TELEORMAN",
+          "totalEUR": 26968361.32,
+          "totalRON": 135111490.39,
+          "paymentsCount": 463,
+          "beneficiariesCount": 90
+        },
+        {
+          "name": "VÂLCEA",
+          "totalEUR": 23982165.32,
+          "totalRON": 120150648.11,
+          "paymentsCount": 392,
+          "beneficiariesCount": 75
+        },
+        {
+          "name": "DOLJ",
+          "totalEUR": 23451283.72,
+          "totalRON": 117490931.62,
+          "paymentsCount": 332,
+          "beneficiariesCount": 90
+        },
+        {
+          "name": "BRAŞOV",
+          "totalEUR": 22766250.73,
+          "totalRON": 114058916.46,
+          "paymentsCount": 311,
+          "beneficiariesCount": 50
+        },
+        {
+          "name": "VASLUI",
+          "totalEUR": 21546243.18,
+          "totalRON": 107946677.88,
+          "paymentsCount": 377,
+          "beneficiariesCount": 81
+        },
+        {
+          "name": "NEAMŢ",
+          "totalEUR": 21093967.04,
+          "totalRON": 105680774.82,
+          "paymentsCount": 369,
+          "beneficiariesCount": 72
+        },
+        {
+          "name": "ILFOV",
+          "totalEUR": 20007508.65,
+          "totalRON": 100237618.22,
+          "paymentsCount": 188,
+          "beneficiariesCount": 47
+        },
+        {
+          "name": "GORJ",
+          "totalEUR": 19939063.75,
+          "totalRON": 99894709.73,
+          "paymentsCount": 414,
+          "beneficiariesCount": 58
+        },
+        {
+          "name": "VRANCEA",
+          "totalEUR": 17432248.81,
+          "totalRON": 87335566.93,
+          "paymentsCount": 373,
+          "beneficiariesCount": 74
+        },
+        {
+          "name": "CĂLĂRAŞI",
+          "totalEUR": 16804417.33,
+          "totalRON": 84190130.66,
+          "paymentsCount": 313,
+          "beneficiariesCount": 44
+        },
+        {
+          "name": "MEHEDINŢI",
+          "totalEUR": 16762091.34,
+          "totalRON": 83978077.35,
+          "paymentsCount": 287,
+          "beneficiariesCount": 60
+        },
+        {
+          "name": "HARGHITA",
+          "totalEUR": 16690632.11,
+          "totalRON": 83620066.53,
+          "paymentsCount": 279,
+          "beneficiariesCount": 75
+        },
+        {
+          "name": "BUZĂU",
+          "totalEUR": 16561764.07,
+          "totalRON": 82974437.75,
+          "paymentsCount": 260,
+          "beneficiariesCount": 74
+        },
+        {
+          "name": "COVASNA",
+          "totalEUR": 16410995.07,
+          "totalRON": 82219085.26,
+          "paymentsCount": 285,
+          "beneficiariesCount": 27
+        },
+        {
+          "name": "IALOMIŢA",
+          "totalEUR": 16122573.48,
+          "totalRON": 80774093.13,
+          "paymentsCount": 254,
+          "beneficiariesCount": 50
+        },
+        {
+          "name": "BRĂILA",
+          "totalEUR": 15807418.95,
+          "totalRON": 79195169.17,
+          "paymentsCount": 171,
+          "beneficiariesCount": 57
+        },
+        {
+          "name": "TULCEA",
+          "totalEUR": 14838574.51,
+          "totalRON": 74341258.52,
+          "paymentsCount": 208,
+          "beneficiariesCount": 42
+        },
+        {
+          "name": "GIURGIU",
+          "totalEUR": 6501841.7,
+          "totalRON": 32574226.87,
+          "paymentsCount": 104,
+          "beneficiariesCount": 22
+        },
+        {
+          "name": "NECUNOSCUT",
+          "totalEUR": 1156.27,
+          "totalRON": 5792.9,
+          "paymentsCount": 1,
+          "beneficiariesCount": 1
+        }
+      ]
+    },
+    {
+      "date": "2025-08",
+      "dateYYYYMMDD": "202508",
+      "label": "August 2025",
+      "totalPayments": 25935,
+      "totalEUR": 3965312447.51,
+      "totalRON": 19866215364.48,
+      "uniqueBeneficiaries": 3444,
+      "counties": [
+        {
+          "name": "BUCUREȘTI",
+          "totalEUR": 2330102425.19,
+          "totalRON": 11673813152.54,
+          "paymentsCount": 3071,
+          "beneficiariesCount": 197
+        },
+        {
+          "name": "IAŞI",
+          "totalEUR": 105945641.67,
+          "totalRON": 530787664.41,
+          "paymentsCount": 1057,
+          "beneficiariesCount": 124
+        },
+        {
+          "name": "GALAŢI",
+          "totalEUR": 87044225.88,
+          "totalRON": 436091572.11,
+          "paymentsCount": 1067,
+          "beneficiariesCount": 79
+        },
+        {
+          "name": "SUCEAVA",
+          "totalEUR": 71720450.15,
+          "totalRON": 359319454.94,
+          "paymentsCount": 872,
+          "beneficiariesCount": 120
+        },
+        {
+          "name": "TIMIŞ",
+          "totalEUR": 68004241.85,
+          "totalRON": 340701251.49,
+          "paymentsCount": 498,
+          "beneficiariesCount": 100
+        },
+        {
+          "name": "BIHOR",
+          "totalEUR": 67410327.52,
+          "totalRON": 337725740.02,
+          "paymentsCount": 1020,
+          "beneficiariesCount": 148
+        },
+        {
+          "name": "CLUJ",
+          "totalEUR": 66977624.64,
+          "totalRON": 335557899.68,
+          "paymentsCount": 651,
+          "beneficiariesCount": 107
+        },
+        {
+          "name": "MARAMUREŞ",
+          "totalEUR": 63200331.33,
+          "totalRON": 316633660.18,
+          "paymentsCount": 718,
+          "beneficiariesCount": 103
+        },
+        {
+          "name": "MUREŞ",
+          "totalEUR": 59855292.66,
+          "totalRON": 299875015.98,
+          "paymentsCount": 688,
+          "beneficiariesCount": 113
+        },
+        {
+          "name": "BOTOŞANI",
+          "totalEUR": 55015274.41,
+          "totalRON": 275626524.33,
+          "paymentsCount": 623,
+          "beneficiariesCount": 89
+        },
+        {
+          "name": "HUNEDOARA",
+          "totalEUR": 48727619.06,
+          "totalRON": 244125371.64,
+          "paymentsCount": 750,
+          "beneficiariesCount": 56
+        },
+        {
+          "name": "CARAŞ-SEVERIN",
+          "totalEUR": 47252069.06,
+          "totalRON": 236732866.24,
+          "paymentsCount": 538,
+          "beneficiariesCount": 62
+        },
+        {
+          "name": "ALBA",
+          "totalEUR": 47067014.63,
+          "totalRON": 235805743.89,
+          "paymentsCount": 909,
+          "beneficiariesCount": 89
+        },
+        {
+          "name": "SIBIU",
+          "totalEUR": 46674724.74,
+          "totalRON": 233840371.14,
+          "paymentsCount": 495,
+          "beneficiariesCount": 75
+        },
+        {
+          "name": "CONSTANŢA",
+          "totalEUR": 44043716.83,
+          "totalRON": 220659021.38,
+          "paymentsCount": 806,
+          "beneficiariesCount": 102
+        },
+        {
+          "name": "PRAHOVA",
+          "totalEUR": 42719545.23,
+          "totalRON": 214024921.55,
+          "paymentsCount": 533,
+          "beneficiariesCount": 81
+        },
+        {
+          "name": "ARGEŞ",
+          "totalEUR": 42282371.93,
+          "totalRON": 211834683.7,
+          "paymentsCount": 974,
+          "beneficiariesCount": 130
+        },
+        {
+          "name": "DOLJ",
+          "totalEUR": 40295345.56,
+          "totalRON": 201879681.52,
+          "paymentsCount": 417,
+          "beneficiariesCount": 94
+        },
+        {
+          "name": "SĂLAJ",
+          "totalEUR": 36080267.28,
+          "totalRON": 180762138.77,
+          "paymentsCount": 539,
+          "beneficiariesCount": 76
+        },
+        {
+          "name": "ARAD",
+          "totalEUR": 36024580.67,
+          "totalRON": 180483149.16,
+          "paymentsCount": 339,
+          "beneficiariesCount": 71
+        },
+        {
+          "name": "BISTRIŢA-NĂSĂUD",
+          "totalEUR": 35397454.47,
+          "totalRON": 177341247.18,
+          "paymentsCount": 375,
+          "beneficiariesCount": 69
+        },
+        {
+          "name": "SATU MARE",
+          "totalEUR": 35098930.6,
+          "totalRON": 175845642.32,
+          "paymentsCount": 589,
+          "beneficiariesCount": 55
+        },
+        {
+          "name": "OLT",
+          "totalEUR": 34681529.94,
+          "totalRON": 173754464.35,
+          "paymentsCount": 624,
+          "beneficiariesCount": 96
+        },
+        {
+          "name": "DÂMBOVIŢA",
+          "totalEUR": 34218676.99,
+          "totalRON": 171435571.96,
+          "paymentsCount": 425,
+          "beneficiariesCount": 62
+        },
+        {
+          "name": "BACĂU",
+          "totalEUR": 33980046.44,
+          "totalRON": 170240032.92,
+          "paymentsCount": 624,
+          "beneficiariesCount": 96
+        },
+        {
+          "name": "TELEORMAN",
+          "totalEUR": 32755646.18,
+          "totalRON": 164105787.55,
+          "paymentsCount": 560,
+          "beneficiariesCount": 92
+        },
+        {
+          "name": "VÂLCEA",
+          "totalEUR": 30772676.1,
+          "totalRON": 154171107.21,
+          "paymentsCount": 533,
+          "beneficiariesCount": 81
+        },
+        {
+          "name": "BRAŞOV",
+          "totalEUR": 28885401.1,
+          "totalRON": 144715859.86,
+          "paymentsCount": 408,
+          "beneficiariesCount": 53
+        },
+        {
+          "name": "GORJ",
+          "totalEUR": 27690928.87,
+          "totalRON": 138731554.26,
+          "paymentsCount": 652,
+          "beneficiariesCount": 62
+        },
+        {
+          "name": "NEAMŢ",
+          "totalEUR": 26310037.42,
+          "totalRON": 131813287.34,
+          "paymentsCount": 457,
+          "beneficiariesCount": 73
+        },
+        {
+          "name": "VASLUI",
+          "totalEUR": 24335609.93,
+          "totalRON": 121921405.13,
+          "paymentsCount": 466,
+          "beneficiariesCount": 86
+        },
+        {
+          "name": "ILFOV",
+          "totalEUR": 23366379.46,
+          "totalRON": 117065561.08,
+          "paymentsCount": 250,
+          "beneficiariesCount": 52
+        },
+        {
+          "name": "MEHEDINŢI",
+          "totalEUR": 21498935.61,
+          "totalRON": 107709667.16,
+          "paymentsCount": 366,
+          "beneficiariesCount": 61
+        },
+        {
+          "name": "HARGHITA",
+          "totalEUR": 21342110.42,
+          "totalRON": 106923972.96,
+          "paymentsCount": 383,
+          "beneficiariesCount": 81
+        },
+        {
+          "name": "VRANCEA",
+          "totalEUR": 21188270.16,
+          "totalRON": 106153234.06,
+          "paymentsCount": 514,
+          "beneficiariesCount": 75
+        },
+        {
+          "name": "COVASNA",
+          "totalEUR": 20956813.11,
+          "totalRON": 104993633.55,
+          "paymentsCount": 392,
+          "beneficiariesCount": 30
+        },
+        {
+          "name": "CĂLĂRAŞI",
+          "totalEUR": 20824492.92,
+          "totalRON": 104330709.21,
+          "paymentsCount": 489,
+          "beneficiariesCount": 45
+        },
+        {
+          "name": "IALOMIŢA",
+          "totalEUR": 20523446.7,
+          "totalRON": 102822467.94,
+          "paymentsCount": 353,
+          "beneficiariesCount": 57
+        },
+        {
+          "name": "BUZĂU",
+          "totalEUR": 20423045.6,
+          "totalRON": 102319458.28,
+          "paymentsCount": 294,
+          "beneficiariesCount": 75
+        },
+        {
+          "name": "TULCEA",
+          "totalEUR": 18428846,
+          "totalRON": 92328518.65,
+          "paymentsCount": 261,
+          "beneficiariesCount": 43
+        },
+        {
+          "name": "BRĂILA",
+          "totalEUR": 16693104.27,
+          "totalRON": 83632452.62,
+          "paymentsCount": 196,
+          "beneficiariesCount": 59
+        },
+        {
+          "name": "GIURGIU",
+          "totalEUR": 9495818.66,
+          "totalRON": 47574051.32,
+          "paymentsCount": 158,
+          "beneficiariesCount": 24
+        },
+        {
+          "name": "NECUNOSCUT",
+          "totalEUR": 1156.27,
+          "totalRON": 5792.9,
+          "paymentsCount": 1,
+          "beneficiariesCount": 1
+        }
+      ]
+    },
+    {
+      "date": "2025-09",
+      "dateYYYYMMDD": "202509",
+      "label": "Septembrie 2025",
+      "totalPayments": 27581,
+      "totalEUR": 4659217196.47,
+      "totalRON": 23342678157.63,
+      "uniqueBeneficiaries": 3615,
+      "counties": [
+        {
+          "name": "BUCUREȘTI",
+          "totalEUR": 2862688211.16,
+          "totalRON": 14342067940.34,
+          "paymentsCount": 3519,
+          "beneficiariesCount": 220
+        },
+        {
+          "name": "IAŞI",
+          "totalEUR": 110121195.29,
+          "totalRON": 551707188.02,
+          "paymentsCount": 1087,
+          "beneficiariesCount": 128
+        },
+        {
+          "name": "GALAŢI",
+          "totalEUR": 89857090.18,
+          "totalRON": 450184022.49,
+          "paymentsCount": 1115,
+          "beneficiariesCount": 81
+        },
+        {
+          "name": "BIHOR",
+          "totalEUR": 85894539.15,
+          "totalRON": 430331640.39,
+          "paymentsCount": 1098,
+          "beneficiariesCount": 153
+        },
+        {
+          "name": "CLUJ",
+          "totalEUR": 75809467.78,
+          "totalRON": 379805433.86,
+          "paymentsCount": 719,
+          "beneficiariesCount": 123
+        },
+        {
+          "name": "TIMIŞ",
+          "totalEUR": 75786590.96,
+          "totalRON": 379690820.48,
+          "paymentsCount": 530,
+          "beneficiariesCount": 104
+        },
+        {
+          "name": "SUCEAVA",
+          "totalEUR": 75126808.16,
+          "totalRON": 376385308.67,
+          "paymentsCount": 927,
+          "beneficiariesCount": 123
+        },
+        {
+          "name": "MARAMUREŞ",
+          "totalEUR": 65911317.7,
+          "totalRON": 330215701.83,
+          "paymentsCount": 756,
+          "beneficiariesCount": 106
+        },
+        {
+          "name": "MUREŞ",
+          "totalEUR": 63881814.37,
+          "totalRON": 320047889.78,
+          "paymentsCount": 718,
+          "beneficiariesCount": 115
+        },
+        {
+          "name": "CONSTANŢA",
+          "totalEUR": 61915676.52,
+          "totalRON": 310197539.43,
+          "paymentsCount": 835,
+          "beneficiariesCount": 106
+        },
+        {
+          "name": "BOTOŞANI",
+          "totalEUR": 55901209.88,
+          "totalRON": 280065060.96,
+          "paymentsCount": 643,
+          "beneficiariesCount": 91
+        },
+        {
+          "name": "SIBIU",
+          "totalEUR": 55660482.09,
+          "totalRON": 278859015.47,
+          "paymentsCount": 519,
+          "beneficiariesCount": 79
+        },
+        {
+          "name": "ALBA",
+          "totalEUR": 53549159.71,
+          "totalRON": 268281290.69,
+          "paymentsCount": 950,
+          "beneficiariesCount": 93
+        },
+        {
+          "name": "HUNEDOARA",
+          "totalEUR": 50588909.65,
+          "totalRON": 253450437.56,
+          "paymentsCount": 792,
+          "beneficiariesCount": 58
+        },
+        {
+          "name": "ARGEŞ",
+          "totalEUR": 48748162.67,
+          "totalRON": 244228295.39,
+          "paymentsCount": 1018,
+          "beneficiariesCount": 135
+        },
+        {
+          "name": "PRAHOVA",
+          "totalEUR": 47803415.09,
+          "totalRON": 239495109.49,
+          "paymentsCount": 556,
+          "beneficiariesCount": 87
+        },
+        {
+          "name": "CARAŞ-SEVERIN",
+          "totalEUR": 47779616.22,
+          "totalRON": 239375877.46,
+          "paymentsCount": 546,
+          "beneficiariesCount": 63
+        },
+        {
+          "name": "BISTRIŢA-NĂSĂUD",
+          "totalEUR": 46713794.62,
+          "totalRON": 234036111.32,
+          "paymentsCount": 390,
+          "beneficiariesCount": 69
+        },
+        {
+          "name": "DOLJ",
+          "totalEUR": 45229461.85,
+          "totalRON": 226599604.05,
+          "paymentsCount": 447,
+          "beneficiariesCount": 99
+        },
+        {
+          "name": "ARAD",
+          "totalEUR": 38454036.7,
+          "totalRON": 192654723.9,
+          "paymentsCount": 372,
+          "beneficiariesCount": 81
+        },
+        {
+          "name": "BACĂU",
+          "totalEUR": 38047407.42,
+          "totalRON": 190617511.63,
+          "paymentsCount": 689,
+          "beneficiariesCount": 103
+        },
+        {
+          "name": "SĂLAJ",
+          "totalEUR": 37489456.86,
+          "totalRON": 187822178.6,
+          "paymentsCount": 551,
+          "beneficiariesCount": 77
+        },
+        {
+          "name": "OLT",
+          "totalEUR": 36836397.04,
+          "totalRON": 184550348.6,
+          "paymentsCount": 651,
+          "beneficiariesCount": 97
+        },
+        {
+          "name": "SATU MARE",
+          "totalEUR": 36037737.54,
+          "totalRON": 180549065.04,
+          "paymentsCount": 612,
+          "beneficiariesCount": 57
+        },
+        {
+          "name": "DÂMBOVIŢA",
+          "totalEUR": 34992811.3,
+          "totalRON": 175313984.83,
+          "paymentsCount": 451,
+          "beneficiariesCount": 66
+        },
+        {
+          "name": "TELEORMAN",
+          "totalEUR": 34314206.39,
+          "totalRON": 171914174.15,
+          "paymentsCount": 593,
+          "beneficiariesCount": 94
+        },
+        {
+          "name": "VÂLCEA",
+          "totalEUR": 32819461.68,
+          "totalRON": 164425503.02,
+          "paymentsCount": 546,
+          "beneficiariesCount": 83
+        },
+        {
+          "name": "BRAŞOV",
+          "totalEUR": 31343180.03,
+          "totalRON": 157029332.45,
+          "paymentsCount": 442,
+          "beneficiariesCount": 56
+        },
+        {
+          "name": "GORJ",
+          "totalEUR": 30931548.57,
+          "totalRON": 154967058.93,
+          "paymentsCount": 672,
+          "beneficiariesCount": 67
+        },
+        {
+          "name": "VASLUI",
+          "totalEUR": 29214782.12,
+          "totalRON": 146366057.8,
+          "paymentsCount": 525,
+          "beneficiariesCount": 91
+        },
+        {
+          "name": "NEAMŢ",
+          "totalEUR": 27918185.4,
+          "totalRON": 139870108.72,
+          "paymentsCount": 468,
+          "beneficiariesCount": 73
+        },
+        {
+          "name": "ILFOV",
+          "totalEUR": 25917962.76,
+          "totalRON": 129848993.44,
+          "paymentsCount": 281,
+          "beneficiariesCount": 60
+        },
+        {
+          "name": "MEHEDINŢI",
+          "totalEUR": 24951320.18,
+          "totalRON": 125006113.92,
+          "paymentsCount": 389,
+          "beneficiariesCount": 63
+        },
+        {
+          "name": "BUZĂU",
+          "totalEUR": 24620308.87,
+          "totalRON": 123347747.43,
+          "paymentsCount": 322,
+          "beneficiariesCount": 81
+        },
+        {
+          "name": "VRANCEA",
+          "totalEUR": 22757782.49,
+          "totalRON": 114016490.82,
+          "paymentsCount": 538,
+          "beneficiariesCount": 79
+        },
+        {
+          "name": "HARGHITA",
+          "totalEUR": 22302562,
+          "totalRON": 111735835.33,
+          "paymentsCount": 395,
+          "beneficiariesCount": 81
+        },
+        {
+          "name": "COVASNA",
+          "totalEUR": 22273815.74,
+          "totalRON": 111591816.77,
+          "paymentsCount": 404,
+          "beneficiariesCount": 31
+        },
+        {
+          "name": "IALOMIŢA",
+          "totalEUR": 21134340.05,
+          "totalRON": 105883043.55,
+          "paymentsCount": 365,
+          "beneficiariesCount": 59
+        },
+        {
+          "name": "CĂLĂRAŞI",
+          "totalEUR": 21055175.28,
+          "totalRON": 105486427.88,
+          "paymentsCount": 494,
+          "beneficiariesCount": 45
+        },
+        {
+          "name": "TULCEA",
+          "totalEUR": 19339326.95,
+          "totalRON": 96890028.21,
+          "paymentsCount": 281,
+          "beneficiariesCount": 51
+        },
+        {
+          "name": "BRĂILA",
+          "totalEUR": 16893049.79,
+          "totalRON": 84634179.62,
+          "paymentsCount": 208,
+          "beneficiariesCount": 62
+        },
+        {
+          "name": "GIURGIU",
+          "totalEUR": 10604261.99,
+          "totalRON": 53127352.41,
+          "paymentsCount": 166,
+          "beneficiariesCount": 24
+        },
+        {
+          "name": "NECUNOSCUT",
+          "totalEUR": 1156.27,
+          "totalRON": 5792.9,
+          "paymentsCount": 1,
+          "beneficiariesCount": 1
+        }
+      ]
+    },
+    {
+      "date": "2025-10",
+      "dateYYYYMMDD": "202510",
+      "label": "Octombrie 2025",
+      "totalPayments": 30793,
+      "totalEUR": 2175958293.43,
+      "totalRON": 10901551053.38,
+      "uniqueBeneficiaries": 3783,
+      "counties": [
+        {
+          "name": "BUCUREȘTI",
+          "totalEUR": 158425963.63,
+          "totalRON": 793714080.48,
+          "paymentsCount": 3739,
+          "beneficiariesCount": 249
+        },
+        {
+          "name": "IAŞI",
+          "totalEUR": 117501542.45,
+          "totalRON": 588682727.34,
+          "paymentsCount": 1179,
+          "beneficiariesCount": 137
+        },
+        {
+          "name": "GALAŢI",
+          "totalEUR": 95874519.54,
+          "totalRON": 480331343.65,
+          "paymentsCount": 1271,
+          "beneficiariesCount": 83
+        },
+        {
+          "name": "CLUJ",
+          "totalEUR": 90733912.45,
+          "totalRON": 454576901.68,
+          "paymentsCount": 829,
+          "beneficiariesCount": 135
+        },
+        {
+          "name": "BIHOR",
+          "totalEUR": 89197977.84,
+          "totalRON": 446881868.17,
+          "paymentsCount": 1249,
+          "beneficiariesCount": 156
+        },
+        {
+          "name": "SUCEAVA",
+          "totalEUR": 85354033.49,
+          "totalRON": 427623707.33,
+          "paymentsCount": 1052,
+          "beneficiariesCount": 127
+        },
+        {
+          "name": "TIMIŞ",
+          "totalEUR": 81200251.06,
+          "totalRON": 406813257.57,
+          "paymentsCount": 581,
+          "beneficiariesCount": 110
+        },
+        {
+          "name": "MUREŞ",
+          "totalEUR": 75735069.76,
+          "totalRON": 379432699.41,
+          "paymentsCount": 852,
+          "beneficiariesCount": 122
+        },
+        {
+          "name": "MARAMUREŞ",
+          "totalEUR": 72116187.29,
+          "totalRON": 361302098.5,
+          "paymentsCount": 833,
+          "beneficiariesCount": 109
+        },
+        {
+          "name": "CONSTANŢA",
+          "totalEUR": 71421612.53,
+          "totalRON": 357822278.78,
+          "paymentsCount": 998,
+          "beneficiariesCount": 113
+        },
+        {
+          "name": "SIBIU",
+          "totalEUR": 63916586.69,
+          "totalRON": 320222099.41,
+          "paymentsCount": 607,
+          "beneficiariesCount": 81
+        },
+        {
+          "name": "BOTOŞANI",
+          "totalEUR": 62192171.4,
+          "totalRON": 311582778.29,
+          "paymentsCount": 755,
+          "beneficiariesCount": 92
+        },
+        {
+          "name": "ALBA",
+          "totalEUR": 59229826.43,
+          "totalRON": 296741430.84,
+          "paymentsCount": 1069,
+          "beneficiariesCount": 98
+        },
+        {
+          "name": "HUNEDOARA",
+          "totalEUR": 58709658.5,
+          "totalRON": 294135389.57,
+          "paymentsCount": 903,
+          "beneficiariesCount": 59
+        },
+        {
+          "name": "CARAŞ-SEVERIN",
+          "totalEUR": 57185338.53,
+          "totalRON": 286498546.15,
+          "paymentsCount": 635,
+          "beneficiariesCount": 67
+        },
+        {
+          "name": "BISTRIŢA-NĂSĂUD",
+          "totalEUR": 56356453.2,
+          "totalRON": 282345830.95,
+          "paymentsCount": 439,
+          "beneficiariesCount": 72
+        },
+        {
+          "name": "BACĂU",
+          "totalEUR": 55279736.57,
+          "totalRON": 276951480.67,
+          "paymentsCount": 769,
+          "beneficiariesCount": 106
+        },
+        {
+          "name": "PRAHOVA",
+          "totalEUR": 55276846.41,
+          "totalRON": 276937000.42,
+          "paymentsCount": 649,
+          "beneficiariesCount": 91
+        },
+        {
+          "name": "ARGEŞ",
+          "totalEUR": 52260409.37,
+          "totalRON": 261824651.33,
+          "paymentsCount": 1095,
+          "beneficiariesCount": 140
+        },
+        {
+          "name": "ARAD",
+          "totalEUR": 50926279.6,
+          "totalRON": 255140660.86,
+          "paymentsCount": 404,
+          "beneficiariesCount": 84
+        },
+        {
+          "name": "DOLJ",
+          "totalEUR": 50861116.34,
+          "totalRON": 254814193.05,
+          "paymentsCount": 509,
+          "beneficiariesCount": 105
+        },
+        {
+          "name": "SATU MARE",
+          "totalEUR": 41925073.75,
+          "totalRON": 210044619.3,
+          "paymentsCount": 690,
+          "beneficiariesCount": 60
+        },
+        {
+          "name": "SĂLAJ",
+          "totalEUR": 41158750.04,
+          "totalRON": 206205337.4,
+          "paymentsCount": 614,
+          "beneficiariesCount": 79
+        },
+        {
+          "name": "DÂMBOVIŢA",
+          "totalEUR": 40739924.29,
+          "totalRON": 204107020.98,
+          "paymentsCount": 525,
+          "beneficiariesCount": 71
+        },
+        {
+          "name": "OLT",
+          "totalEUR": 38795423.12,
+          "totalRON": 194365069.18,
+          "paymentsCount": 688,
+          "beneficiariesCount": 97
+        },
+        {
+          "name": "TELEORMAN",
+          "totalEUR": 35653790.23,
+          "totalRON": 178625489.27,
+          "paymentsCount": 642,
+          "beneficiariesCount": 98
+        },
+        {
+          "name": "VÂLCEA",
+          "totalEUR": 35200151.33,
+          "totalRON": 176352758.16,
+          "paymentsCount": 600,
+          "beneficiariesCount": 84
+        },
+        {
+          "name": "GORJ",
+          "totalEUR": 34093383.48,
+          "totalRON": 170807851.77,
+          "paymentsCount": 731,
+          "beneficiariesCount": 69
+        },
+        {
+          "name": "BRAŞOV",
+          "totalEUR": 33670072.34,
+          "totalRON": 168687062.9,
+          "paymentsCount": 512,
+          "beneficiariesCount": 62
+        },
+        {
+          "name": "NEAMŢ",
+          "totalEUR": 31715568.99,
+          "totalRON": 158895000.43,
+          "paymentsCount": 529,
+          "beneficiariesCount": 74
+        },
+        {
+          "name": "VASLUI",
+          "totalEUR": 31361234.12,
+          "totalRON": 157119782.33,
+          "paymentsCount": 560,
+          "beneficiariesCount": 92
+        },
+        {
+          "name": "VRANCEA",
+          "totalEUR": 26749386.49,
+          "totalRON": 134014426.97,
+          "paymentsCount": 591,
+          "beneficiariesCount": 80
+        },
+        {
+          "name": "HARGHITA",
+          "totalEUR": 26684902.44,
+          "totalRON": 133691361,
+          "paymentsCount": 462,
+          "beneficiariesCount": 84
+        },
+        {
+          "name": "MEHEDINŢI",
+          "totalEUR": 26308098.55,
+          "totalRON": 131803573.5,
+          "paymentsCount": 410,
+          "beneficiariesCount": 64
+        },
+        {
+          "name": "COVASNA",
+          "totalEUR": 25532935.67,
+          "totalRON": 127920007.49,
+          "paymentsCount": 475,
+          "beneficiariesCount": 34
+        },
+        {
+          "name": "BUZĂU",
+          "totalEUR": 25387150.26,
+          "totalRON": 127189622.72,
+          "paymentsCount": 349,
+          "beneficiariesCount": 81
+        },
+        {
+          "name": "IALOMIŢA",
+          "totalEUR": 24617715.55,
+          "totalRON": 123334754.65,
+          "paymentsCount": 431,
+          "beneficiariesCount": 62
+        },
+        {
+          "name": "CĂLĂRAŞI",
+          "totalEUR": 23192074.68,
+          "totalRON": 116192293.92,
+          "paymentsCount": 543,
+          "beneficiariesCount": 48
+        },
+        {
+          "name": "ILFOV",
+          "totalEUR": 22070469.47,
+          "totalRON": 110573052.12,
+          "paymentsCount": 307,
+          "beneficiariesCount": 65
+        },
+        {
+          "name": "TULCEA",
+          "totalEUR": 21256273.17,
+          "totalRON": 106493928.84,
+          "paymentsCount": 304,
+          "beneficiariesCount": 54
+        },
+        {
+          "name": "BRĂILA",
+          "totalEUR": 17942629.92,
+          "totalRON": 89892576.04,
+          "paymentsCount": 226,
+          "beneficiariesCount": 62
+        },
+        {
+          "name": "GIURGIU",
+          "totalEUR": 12146636.19,
+          "totalRON": 60854647.06,
+          "paymentsCount": 186,
+          "beneficiariesCount": 26
+        },
+        {
+          "name": "NECUNOSCUT",
+          "totalEUR": 1156.27,
+          "totalRON": 5792.9,
+          "paymentsCount": 1,
+          "beneficiariesCount": 1
+        }
+      ]
+    },
+    {
+      "date": "2025-11",
+      "dateYYYYMMDD": "202511",
+      "label": "Noiembrie 2025",
+      "totalPayments": 30803,
+      "totalEUR": 2178611553.5,
+      "totalRON": 10914843886.3,
+      "uniqueBeneficiaries": 3787,
+      "counties": [
+        {
+          "name": "BUCUREȘTI",
+          "totalEUR": 160258207.78,
+          "totalRON": 802893623.66,
+          "paymentsCount": 3744,
+          "beneficiariesCount": 250
+        },
+        {
+          "name": "IAŞI",
+          "totalEUR": 117501542.45,
+          "totalRON": 588682727.34,
+          "paymentsCount": 1179,
+          "beneficiariesCount": 137
+        },
+        {
+          "name": "GALAŢI",
+          "totalEUR": 95874519.54,
+          "totalRON": 480331343.65,
+          "paymentsCount": 1271,
+          "beneficiariesCount": 83
+        },
+        {
+          "name": "CLUJ",
+          "totalEUR": 90886282.78,
+          "totalRON": 455340277.02,
+          "paymentsCount": 831,
+          "beneficiariesCount": 136
+        },
+        {
+          "name": "BIHOR",
+          "totalEUR": 89197977.84,
+          "totalRON": 446881868.17,
+          "paymentsCount": 1249,
+          "beneficiariesCount": 156
+        },
+        {
+          "name": "SUCEAVA",
+          "totalEUR": 85354033.49,
+          "totalRON": 427623707.33,
+          "paymentsCount": 1052,
+          "beneficiariesCount": 127
+        },
+        {
+          "name": "TIMIŞ",
+          "totalEUR": 81200251.06,
+          "totalRON": 406813257.57,
+          "paymentsCount": 581,
+          "beneficiariesCount": 110
+        },
+        {
+          "name": "MUREŞ",
+          "totalEUR": 75735069.76,
+          "totalRON": 379432699.41,
+          "paymentsCount": 852,
+          "beneficiariesCount": 122
+        },
+        {
+          "name": "MARAMUREŞ",
+          "totalEUR": 72116187.29,
+          "totalRON": 361302098.5,
+          "paymentsCount": 833,
+          "beneficiariesCount": 109
+        },
+        {
+          "name": "CONSTANŢA",
+          "totalEUR": 71421612.53,
+          "totalRON": 357822278.78,
+          "paymentsCount": 998,
+          "beneficiariesCount": 113
+        },
+        {
+          "name": "SIBIU",
+          "totalEUR": 63916586.69,
+          "totalRON": 320222099.41,
+          "paymentsCount": 607,
+          "beneficiariesCount": 81
+        },
+        {
+          "name": "BOTOŞANI",
+          "totalEUR": 62192171.4,
+          "totalRON": 311582778.29,
+          "paymentsCount": 755,
+          "beneficiariesCount": 92
+        },
+        {
+          "name": "ALBA",
+          "totalEUR": 59229826.43,
+          "totalRON": 296741430.84,
+          "paymentsCount": 1069,
+          "beneficiariesCount": 98
+        },
+        {
+          "name": "HUNEDOARA",
+          "totalEUR": 58709658.5,
+          "totalRON": 294135389.57,
+          "paymentsCount": 903,
+          "beneficiariesCount": 59
+        },
+        {
+          "name": "CARAŞ-SEVERIN",
+          "totalEUR": 57185338.53,
+          "totalRON": 286498546.15,
+          "paymentsCount": 635,
+          "beneficiariesCount": 67
+        },
+        {
+          "name": "BISTRIŢA-NĂSĂUD",
+          "totalEUR": 56356453.2,
+          "totalRON": 282345830.95,
+          "paymentsCount": 439,
+          "beneficiariesCount": 72
+        },
+        {
+          "name": "BACĂU",
+          "totalEUR": 55279736.57,
+          "totalRON": 276951480.67,
+          "paymentsCount": 769,
+          "beneficiariesCount": 106
+        },
+        {
+          "name": "PRAHOVA",
+          "totalEUR": 55276846.41,
+          "totalRON": 276937000.42,
+          "paymentsCount": 649,
+          "beneficiariesCount": 91
+        },
+        {
+          "name": "ARGEŞ",
+          "totalEUR": 52260409.37,
+          "totalRON": 261824651.33,
+          "paymentsCount": 1095,
+          "beneficiariesCount": 140
+        },
+        {
+          "name": "ARAD",
+          "totalEUR": 51343678,
+          "totalRON": 257231826.86,
+          "paymentsCount": 405,
+          "beneficiariesCount": 84
+        },
+        {
+          "name": "DOLJ",
+          "totalEUR": 50861116.34,
+          "totalRON": 254814193.05,
+          "paymentsCount": 509,
+          "beneficiariesCount": 105
+        },
+        {
+          "name": "SATU MARE",
+          "totalEUR": 41925073.75,
+          "totalRON": 210044619.3,
+          "paymentsCount": 690,
+          "beneficiariesCount": 60
+        },
+        {
+          "name": "SĂLAJ",
+          "totalEUR": 41158750.04,
+          "totalRON": 206205337.4,
+          "paymentsCount": 614,
+          "beneficiariesCount": 79
+        },
+        {
+          "name": "DÂMBOVIŢA",
+          "totalEUR": 40739924.29,
+          "totalRON": 204107020.98,
+          "paymentsCount": 525,
+          "beneficiariesCount": 71
+        },
+        {
+          "name": "OLT",
+          "totalEUR": 38795423.12,
+          "totalRON": 194365069.18,
+          "paymentsCount": 688,
+          "beneficiariesCount": 97
+        },
+        {
+          "name": "TELEORMAN",
+          "totalEUR": 35653790.23,
+          "totalRON": 178625489.27,
+          "paymentsCount": 642,
+          "beneficiariesCount": 98
+        },
+        {
+          "name": "VÂLCEA",
+          "totalEUR": 35200151.33,
+          "totalRON": 176352758.16,
+          "paymentsCount": 600,
+          "beneficiariesCount": 84
+        },
+        {
+          "name": "GORJ",
+          "totalEUR": 34093383.48,
+          "totalRON": 170807851.77,
+          "paymentsCount": 731,
+          "beneficiariesCount": 69
+        },
+        {
+          "name": "BRAŞOV",
+          "totalEUR": 33670072.34,
+          "totalRON": 168687062.9,
+          "paymentsCount": 512,
+          "beneficiariesCount": 62
+        },
+        {
+          "name": "NEAMŢ",
+          "totalEUR": 31715568.99,
+          "totalRON": 158895000.43,
+          "paymentsCount": 529,
+          "beneficiariesCount": 74
+        },
+        {
+          "name": "VASLUI",
+          "totalEUR": 31361234.12,
+          "totalRON": 157119782.33,
+          "paymentsCount": 560,
+          "beneficiariesCount": 92
+        },
+        {
+          "name": "VRANCEA",
+          "totalEUR": 26749386.49,
+          "totalRON": 134014426.97,
+          "paymentsCount": 591,
+          "beneficiariesCount": 80
+        },
+        {
+          "name": "HARGHITA",
+          "totalEUR": 26684902.44,
+          "totalRON": 133691361,
+          "paymentsCount": 462,
+          "beneficiariesCount": 84
+        },
+        {
+          "name": "MEHEDINŢI",
+          "totalEUR": 26308098.55,
+          "totalRON": 131803573.5,
+          "paymentsCount": 410,
+          "beneficiariesCount": 64
+        },
+        {
+          "name": "BUZĂU",
+          "totalEUR": 25624290.98,
+          "totalRON": 128377697.72,
+          "paymentsCount": 350,
+          "beneficiariesCount": 82
+        },
+        {
+          "name": "COVASNA",
+          "totalEUR": 25532935.67,
+          "totalRON": 127920007.49,
+          "paymentsCount": 475,
+          "beneficiariesCount": 34
+        },
+        {
+          "name": "IALOMIŢA",
+          "totalEUR": 24617715.55,
+          "totalRON": 123334754.65,
+          "paymentsCount": 431,
+          "beneficiariesCount": 62
+        },
+        {
+          "name": "CĂLĂRAŞI",
+          "totalEUR": 23192074.68,
+          "totalRON": 116192293.92,
+          "paymentsCount": 543,
+          "beneficiariesCount": 48
+        },
+        {
+          "name": "ILFOV",
+          "totalEUR": 22070469.47,
+          "totalRON": 110573052.12,
+          "paymentsCount": 307,
+          "beneficiariesCount": 65
+        },
+        {
+          "name": "TULCEA",
+          "totalEUR": 21270379.64,
+          "totalRON": 106564602.24,
+          "paymentsCount": 305,
+          "beneficiariesCount": 55
+        },
+        {
+          "name": "BRĂILA",
+          "totalEUR": 17942629.92,
+          "totalRON": 89892576.04,
+          "paymentsCount": 226,
+          "beneficiariesCount": 62
+        },
+        {
+          "name": "GIURGIU",
+          "totalEUR": 12146636.19,
+          "totalRON": 60854647.06,
+          "paymentsCount": 186,
+          "beneficiariesCount": 26
+        },
+        {
+          "name": "NECUNOSCUT",
+          "totalEUR": 1156.27,
+          "totalRON": 5792.9,
+          "paymentsCount": 1,
+          "beneficiariesCount": 1
+        }
+      ]
+    }
+  ]
+}

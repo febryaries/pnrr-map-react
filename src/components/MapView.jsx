@@ -2782,14 +2782,14 @@ const MapView = ({
 
                     {/* Timeline button - center */}
                     <div className="header-info-center">
-                        <button
-                            className="timeline-button timeline-button-disabled"
-                            title="Funcționalitate în dezvoltare"
-                            disabled
+                        <a
+                            href="/absorbtie-in-timp"
+                            className="timeline-button"
+                            title="Vizualizează evoluția plăților PNRR în timp"
                         >
-                            <span className="timeline-button-icon">📈</span>
+                            <span className="timeline-button-icon">💰</span>
                             <span className="timeline-button-text">Absorbție în timp</span>
-                        </button>
+                        </a>
                     </div>
 
                     <div className="header-info-right">

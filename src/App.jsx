@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 import MapView from './components/MapView'
 import CountyDetails from './components/CountyDetails'
 import SemanticSearchPage from './pages/SemanticSearchPage'
+import TimelinePage from './pages/TimelinePage'
 import { mockData } from './data/data'
 import { useDataEndpoint } from './hooks/useDataEndpoint'
 import { FALLBACK_DATA_DATE } from './constants/PNRRConstants'
@@ -202,6 +203,7 @@ function App() {
           )
         } />
         <Route path="/semantic-search" element={<SemanticSearchPage />} />
+        <Route path="/absorbtie-in-timp" element={<TimelinePage />} />
       </Routes>
     </div>
   )
