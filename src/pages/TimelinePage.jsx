@@ -61,7 +61,15 @@ function TimelinePage() {
       
       if (elapsed >= playbackSpeed) {
         startTime = timestamp;
-        setCurrentIndex(prev => (prev + 1) % availableDates.length);
+        setCurrentIndex(prev => {
+          const nextIndex = prev + 1;
+          // Stop at the end instead of looping
+          if (nextIndex >= availableDates.length) {
+            setIsPlaying(false);
+            return availableDates.length - 1;
+          }
+          return nextIndex;
+        });
       }
       
       animationRef.current = requestAnimationFrame(animate);

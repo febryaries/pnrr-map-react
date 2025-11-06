@@ -115,6 +115,7 @@ const COUNTY_CODES = [
 
 function SimpleMapNew({ currentData = null, isPlaying = false }) {
   const [mapTopology, setMapTopology] = useState(null);
+  const [highlightedCounties, setHighlightedCounties] = useState(new Set());
   const navigate = useNavigate();
 
   // Load Romania map
@@ -124,6 +125,31 @@ function SimpleMapNew({ currentData = null, isPlaying = false }) {
       .then(topology => setMapTopology(topology))
       .catch(err => console.error('Error loading map:', err));
   }, []);
+
+  // Random county highlight animation when playing
+  useEffect(() => {
+    if (!isPlaying) {
+      setHighlightedCounties(new Set());
+      return;
+    }
+
+    const allHcKeys = Object.keys(HC_KEY_TO_CODE);
+    
+    const interval = setInterval(() => {
+      // Randomly select 2-3 counties to highlight
+      const numToHighlight = Math.floor(Math.random() * 2) + 2;
+      const highlighted = new Set();
+      
+      for (let i = 0; i < numToHighlight; i++) {
+        const randomKey = allHcKeys[Math.floor(Math.random() * allHcKeys.length)];
+        highlighted.add(randomKey);
+      }
+      
+      setHighlightedCounties(highlighted);
+    }, 1200); // Change every 1.2 seconds for slower, more visible effect
+
+    return () => clearInterval(interval);
+  }, [isPlaying]);
 
   // Handle county click
   const handleCountyClick = useCallback((countyCode) => {
@@ -161,6 +187,7 @@ function SimpleMapNew({ currentData = null, isPlaying = false }) {
     // Create map data for all counties
     const mapData = Object.entries(HC_KEY_TO_CODE).map(([hcKey, code]) => {
       const data = countyDataMap[hcKey] || {};
+      const isHighlighted = highlightedCounties.has(hcKey);
       
       return {
         'hc-key': hcKey,
@@ -169,7 +196,11 @@ function SimpleMapNew({ currentData = null, isPlaying = false }) {
         value: data.value || 0,
         totalEUR: data.totalEUR || 0,
         paymentsCount: data.paymentsCount || 0,
-        beneficiariesCount: data.beneficiariesCount || 0
+        beneficiariesCount: data.beneficiariesCount || 0,
+        // Override color for highlighted counties
+        color: isHighlighted ? '#3b82f6' : undefined,
+        borderColor: isHighlighted ? '#1d4ed8' : undefined,
+        borderWidth: isHighlighted ? 3 : undefined
       };
     });
 
@@ -262,7 +293,7 @@ function SimpleMapNew({ currentData = null, isPlaying = false }) {
         cursor: 'pointer'
       }]
     };
-  }, [mapTopology, currentData, handleCountyClick]);
+  }, [mapTopology, currentData, handleCountyClick, highlightedCounties]);
 
   if (!mapOptions) {
     return (
