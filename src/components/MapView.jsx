@@ -2897,7 +2897,7 @@ const MapView = ({
                         <div className="indicator-card">
                             <div className="indicator-value">{fmtNum(totalIndicators.nr_proiecte)}</div>
                             <div className="indicator-label">Număr Proiecte</div>
-                            <div className="indicator-sublabel">{fmtNum(totalIndicators.nr_beneficiari_plati)} beneficiari</div>
+                            <div className="indicator-sublabel">{fmtNum(totalIndicators.nr_beneficiari_contracte)} beneficiari</div>
                         </div>
                     </div>
                 ) : null}
