@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 import MapView from './components/MapView'
 import CountyDetails from './components/CountyDetails'
 import SemanticSearchPage from './pages/SemanticSearchPage'
+import TimelinePage from './pages/TimelinePage'
 import { mockData } from './data/data'
 import { useDataEndpoint } from './hooks/useDataEndpoint'
 import { FALLBACK_DATA_DATE } from './constants/PNRRConstants'
@@ -24,14 +25,14 @@ function App() {
   const { availableDates, isLoading: isLoadingDates, latestDate } = useAvailableDates(true)
   
   // Selected data date - use latest from contains.json or fallback
-  const [dataDate, setDataDate] = useState(latestDate || FALLBACK_DATA_DATE)
+  const [dataDate, setDataDate] = useState(FALLBACK_DATA_DATE)
 
   // Update dataDate when latestDate becomes available
   useEffect(() => {
-    if (latestDate && !dataDate) {
+    if (latestDate) {
       setDataDate(latestDate)
     }
-  }, [latestDate, dataDate])
+  }, [latestDate])
 
   // Use the data endpoint hook
   const { 
@@ -202,6 +203,7 @@ function App() {
           )
         } />
         <Route path="/semantic-search" element={<SemanticSearchPage />} />
+        <Route path="/absorbtie-in-timp" element={<TimelinePage />} />
       </Routes>
     </div>
   )
