@@ -31,11 +31,11 @@ export interface AvailableDate {
   hasAllEndpoints: boolean; // Whether all 4 required endpoints exist
 }
 
-// Use proxy in development to avoid CORS, CORS proxy in production
+// Use proxy in development to avoid CORS, direct request in production
 const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 const CONTAINS_URL = isDevelopment
   ? '/api/mfe/generator/data/contains.json'
-  : 'https://corsproxy.io/?https://mfe.gov.ro/generator/data/contains.json';
+  : 'https://mfe.gov.ro/generator/data/contains.json';
 const CACHE_KEY = 'pnrr_available_dates';
 const CACHE_TIMESTAMP_KEY = 'pnrr_available_dates_timestamp';
 const CACHE_DURATION = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
