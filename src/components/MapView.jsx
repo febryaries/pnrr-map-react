@@ -2780,6 +2780,18 @@ const MapView = ({
                         </div>
                     </div>
 
+                    {/* Timeline button - center */}
+                    <div className="header-info-center">
+                        <button
+                            className="timeline-button timeline-button-disabled"
+                            title="Funcționalitate în dezvoltare"
+                            disabled
+                        >
+                            <span className="timeline-button-icon">📈</span>
+                            <span className="timeline-button-text">Absorbție în timp</span>
+                        </button>
+                    </div>
+
                     <div className="header-info-right">
                         <div className="external-links">
                             <a
@@ -2871,6 +2883,11 @@ const MapView = ({
                         <div className="indicator-card">
                             <div className="indicator-value">{formatMoneyEUR(totalIndicators.incasat_eur)}</div>
                             <div className="indicator-label">Încasat de la U.E.</div>
+                        </div>
+                        <div className="indicator-card">
+                            <div className="indicator-value">{fmtNum(totalIndicators.nr_beneficiari_contracte)}</div>
+                            <div className="indicator-label">Număr Beneficiari PNRR</div>
+                            <div className="indicator-sublabel">Beneficiari cu contracte</div>
                         </div>
                         <div className="indicator-card">
                             <div className="indicator-value">{fmtNum(totalIndicators.nr_beneficiari_plati)}</div>

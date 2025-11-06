@@ -21,6 +21,7 @@ export interface TotalIndicatorsData {
   alocat_eur: number;           // Total allocated amount in EUR
   platit_eur: number;           // Total paid to beneficiaries in EUR
   incasat_eur: number;          // Total received from EU in EUR
+  nr_beneficiari_contracte: number; // Number of beneficiaries with contracts
   nr_beneficiari_plati: number; // Number of beneficiaries with payments
   nr_proiecte: number;          // Total number of projects
   data_actualizare?: string;    // Last update date
@@ -33,6 +34,7 @@ export interface RawTotalIndicatorsData {
   alocat_eur?: number;
   platit_eur?: number;
   incasat_eur?: number;
+  nr_beneficiari_contracte?: number;
   nr_beneficiari_plati?: number;
   nr_proiecte?: number;
   data_actualizare?: string;
@@ -120,6 +122,9 @@ export class TotalIndicatorsAggregation extends BaseDataAggregation {
     if (this.totalIndicators.incasat_eur === undefined || this.totalIndicators.incasat_eur === null) {
       errors.push('Missing received amount (incasat_eur)');
     }
+    if (this.totalIndicators.nr_beneficiari_contracte === undefined || this.totalIndicators.nr_beneficiari_contracte === null) {
+      errors.push('Missing number of beneficiaries with contracts (nr_beneficiari_contracte)');
+    }
     if (this.totalIndicators.nr_beneficiari_plati === undefined || this.totalIndicators.nr_beneficiari_plati === null) {
       errors.push('Missing number of beneficiaries (nr_beneficiari_plati)');
     }
@@ -136,6 +141,9 @@ export class TotalIndicatorsAggregation extends BaseDataAggregation {
     }
     if (this.totalIndicators.incasat_eur < 0) {
       warnings.push('Received amount is negative');
+    }
+    if (this.totalIndicators.nr_beneficiari_contracte < 0) {
+      warnings.push('Number of beneficiaries with contracts is negative');
     }
     if (this.totalIndicators.nr_beneficiari_plati < 0) {
       warnings.push('Number of beneficiaries is negative');
@@ -367,6 +375,7 @@ export class TotalIndicatorsAggregation extends BaseDataAggregation {
       alocat_eur: rawData.alocat_eur || 0,
       platit_eur: rawData.platit_eur || 0,
       incasat_eur: rawData.incasat_eur || 0,
+      nr_beneficiari_contracte: rawData.nr_beneficiari_contracte || 0,
       nr_beneficiari_plati: rawData.nr_beneficiari_plati || 0,
       nr_proiecte: rawData.nr_proiecte || 0,
       data_actualizare: rawData.data_actualizare
