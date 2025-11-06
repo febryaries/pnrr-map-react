@@ -36,8 +36,8 @@ const isDevelopment = window.location.hostname === 'localhost' || window.locatio
 const CONTAINS_URL = isDevelopment
   ? '/api/mfe/generator/data/contains.json'
   : 'https://mfe.gov.ro/generator/data/contains.json';
-const CACHE_KEY = 'pnrr_available_dates';
-const CACHE_TIMESTAMP_KEY = 'pnrr_available_dates_timestamp';
+const CACHE_KEY = 'pnrr_available_dates_v2'; // v2: invalidate old cache when FALLBACK_DATA_DATE changes
+const CACHE_TIMESTAMP_KEY = 'pnrr_available_dates_timestamp_v2';
 const CACHE_DURATION = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
 
 // Required endpoints for a complete dataset
@@ -58,7 +58,7 @@ export class DataAvailabilityService {
   private static instance: DataAvailabilityService;
   private cachedDates: AvailableDate[] | null = null;
   private lastFetchTime: number = 0;
-  private pollingInterval: number | null = null;
+  private pollingInterval: ReturnType<typeof setInterval> | null = null;
   private listeners: Set<(dates: AvailableDate[]) => void> = new Set();
 
   private constructor() {
