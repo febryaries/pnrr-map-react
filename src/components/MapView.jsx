@@ -347,9 +347,34 @@ const EnhancedTable = ({
       filtered = filtered.filter(item => item.componentCode === filterComponent)
     }
     
-    // Apply Stadiu filter
+    // Apply Stadiu filter with PROGRES_FIZIC validation
     if (filterStadiu) {
-      filtered = filtered.filter(item => item.progress === filterStadiu)
+      filtered = filtered.filter(item => {
+        // First check if progress matches
+        if (item.progress !== filterStadiu) return false
+        
+        const progresFizic = item.PROGRES_FIZIC
+        // Convert to percentage if it's a decimal (0.8 -> 80%)
+        let percentage = null
+        if (progresFizic !== null && progresFizic !== undefined && progresFizic !== '') {
+          const progresFizicStr = String(progresFizic).replace(',', '.')
+          percentage = Math.round(parseFloat(progresFizicStr) * 100)
+        }
+        
+        // Validate based on selected stadiu
+        if (filterStadiu === 'FINALIZAT') {
+          // Only show if PROGRES_FIZIC is 100% or null/undefined
+          return percentage === 100 || percentage === null
+        } else if (filterStadiu === 'ÎN IMPLEMENTARE (sub 30%)') {
+          // Only show if PROGRES_FIZIC is < 30% or null/undefined
+          return percentage < 30 || percentage === null
+        } else if (filterStadiu === 'ÎN IMPLEMENTARE') {
+          // Only show if PROGRES_FIZIC is between 30% and 99% or null/undefined
+          return (percentage >= 30 && percentage < 100) || percentage === null
+        }
+        
+        return true
+      })
     }
     
     // Apply Funding Source filter
