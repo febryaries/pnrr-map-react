@@ -121,6 +121,7 @@ function TimelinePage() {
       {/* Map */}
       <div className="timeline-map-container">
         <SimpleMapNew 
+          currentData={currentData}
           isPlaying={isPlaying}
         />
       </div>

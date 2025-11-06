@@ -92,36 +92,29 @@ async function generateTimeline() {
     const allPayments = await downloadAndDecompress(url);
     console.log(`✅ Downloaded ${allPayments.length} total payments\n`);
     
-    // 2. Filter 2025
-    console.log('🔍 Filtering payments from 2025...');
-    const plati2025 = allPayments.filter(p => 
-      p.data_plata && p.data_plata.startsWith('2025')
-    );
-    console.log(`✅ Found ${plati2025.length} payments from 2025\n`);
+    // 2. NO FILTER - we need ALL payments (2020-2025) for cumulative totals
+    console.log('📊 Processing ALL payments (cumulative)...');
+    const allPaymentsWithDate = allPayments.filter(p => p.data_plata);
+    console.log(`✅ Found ${allPaymentsWithDate.length} payments with dates\n`);
     
-    // 3. Group by month
-    console.log('📊 Grouping by month...');
-    const byMonth = {};
-    
-    plati2025.forEach(p => {
-      const month = p.data_plata.substring(0, 7); // "2025-01"
-      if (!byMonth[month]) {
-        byMonth[month] = [];
-      }
-      byMonth[month].push(p);
-    });
-    
-    const months = Object.keys(byMonth).sort();
-    console.log(`✅ Grouped into ${months.length} months: ${months.join(', ')}\n`);
+    // 3. Define target months in 2025 for timeline
+    console.log('📊 Creating cumulative timeline for 2025...');
+    const targetMonths = [
+      '2025-01', '2025-02', '2025-03', '2025-04', '2025-05', '2025-06',
+      '2025-07', '2025-08', '2025-09', '2025-10', '2025-11'
+    ];
+    console.log(`✅ Target months: ${targetMonths.join(', ')}\n`);
     
     // 4. Aggregate by county for each month (CUMULATIVE)
     console.log('🗺️  Aggregating by county (cumulative)...');
     const timeline = [];
-    let cumulativePayments = [];
     
-    months.forEach((month, index) => {
-      // Add current month payments to cumulative
-      cumulativePayments = cumulativePayments.concat(byMonth[month]);
+    targetMonths.forEach((month, index) => {
+      // Get ALL payments up to end of this month (CUMULATIVE)
+      const endOfMonth = month + '-31'; // Approximate end (works for all months)
+      const cumulativePayments = allPaymentsWithDate.filter(p => 
+        p.data_plata <= endOfMonth
+      );
       
       // Aggregate by county
       const byCounty = {};
