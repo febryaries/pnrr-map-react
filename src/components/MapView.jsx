@@ -2801,7 +2801,7 @@ const MapView = ({
                                 className="external-link"
                                 title="Ministerul Investițiilor și Proiectelor Europene, pagina dedicată Planului Național de Redresare și Reziliență al României"
                             >
-                                <span className="link-icon">🏛️</span>
+                                <img src="/sigla_guv_coroana_albastru.png" alt="Guvernul României" className="link-icon-img" />
                                 <div className="link-content">
                                     <div className="link-title">MIPE</div>
                                     <div className="link-subtitle">PNRR România</div>

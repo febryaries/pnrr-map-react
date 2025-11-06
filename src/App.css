@@ -337,8 +337,16 @@ h1, h2, h3, h4, h5, h6, p, span, div, a, button, input, textarea, select, label,
 }
 
 .link-icon {
-  font-size: 1rem;
+  font-size: 32px;
   opacity: 0.8;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.link-icon-img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
 }
 
 .link-content {
