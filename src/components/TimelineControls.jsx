@@ -47,7 +47,7 @@ function TimelineControls({
   return (
     <div className="timeline-controls">
       <div className="timeline-controls-header">
-        <h3>⏯️ Timeline Controls</h3>
+        <h3>⏯️ Controale Timeline</h3>
       </div>
 
       <div className="timeline-controls-body">
@@ -57,27 +57,27 @@ function TimelineControls({
             <button 
               className="timeline-btn timeline-btn-play"
               onClick={onPlay}
-              title="Play animation"
+              title="Pornește animația"
             >
-              ▶️ Play
+              ▶️ Pornește
             </button>
           ) : (
             <button 
               className="timeline-btn timeline-btn-pause"
               onClick={onPause}
-              title="Pause animation"
+              title="Pauză animație"
             >
-              ⏸️ Pause
+              ⏸️ Pauză
             </button>
           )}
 
           <button 
             className="timeline-btn timeline-btn-stop"
             onClick={onStop}
-            title="Stop and reset"
+            title="Oprește și resetează"
             disabled={currentIndex === 0 && !isPlaying}
           >
-            ⏹️ Stop
+            ⏹️ Oprește
           </button>
 
           {/* Speed control */}
@@ -85,9 +85,9 @@ function TimelineControls({
             <button 
               className="timeline-btn timeline-btn-speed"
               onClick={() => setShowSpeedMenu(!showSpeedMenu)}
-              title="Playback speed"
+              title="Viteza de redare"
             >
-              ⚡ Speed: {currentSpeedLabel}
+              ⚡ Viteză: {currentSpeedLabel}
             </button>
             
             {showSpeedMenu && (
@@ -137,7 +137,7 @@ function TimelineControls({
         {/* Current date display */}
         {currentDate && (
           <div className="timeline-current-date">
-            <span className="timeline-date-label">Data curentă:</span>
+            <span className="timeline-date-label">Lună:</span>
             <span className="timeline-date-value">{currentDate.label}</span>
             <span className="timeline-date-index">
               ({currentIndex + 1} / {availableDates.length})

@@ -113,7 +113,7 @@ const COUNTY_CODES = [
   'ro-vn', 'ro-if', 'ro-mm', 'ro-bh', 'ro-mh', 'ro-cj'
 ];
 
-function SimpleMapNew({ currentData = null, isPlaying = false }) {
+function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick }) {
   const [mapTopology, setMapTopology] = useState(null);
   const [highlightedCounties, setHighlightedCounties] = useState(new Set());
   const navigate = useNavigate();
@@ -151,12 +151,24 @@ function SimpleMapNew({ currentData = null, isPlaying = false }) {
     return () => clearInterval(interval);
   }, [isPlaying]);
 
-  // Handle county click
+  // Handle county click - navigate to homepage with county selection
   const handleCountyClick = useCallback((countyCode) => {
-    console.log('County clicked:', countyCode);
-    // Navigate to homepage with county selected
-    navigate(`/?county=${countyCode}`);
+    // Navigate to homepage with state to trigger county selection
+    navigate('/', { 
+      state: { 
+        openCounty: countyCode,
+        switchToPayments: true 
+      } 
+    });
   }, [navigate]);
+
+  // Expose click handler globally for Highcharts (like MapView does)
+  useEffect(() => {
+    window.handleTimelineCountyClick = handleCountyClick;
+    return () => {
+      delete window.handleTimelineCountyClick;
+    };
+  }, [handleCountyClick]);
 
   // Highcharts options
   const mapOptions = useMemo(() => {
@@ -286,7 +298,10 @@ function SimpleMapNew({ currentData = null, isPlaying = false }) {
         point: {
           events: {
             click: function() {
-              handleCountyClick(this.code);
+              // Use global handler (like MapView does)
+              if (window.handleTimelineCountyClick) {
+                window.handleTimelineCountyClick(this.code);
+              }
             }
           }
         },

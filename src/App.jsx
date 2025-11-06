@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import MapView from './components/MapView'
 import CountyDetails from './components/CountyDetails'
 import SemanticSearchPage from './pages/SemanticSearchPage'
@@ -11,6 +11,7 @@ import { useAvailableDates } from './hooks/useAvailableDates'
 import './App.css'
 
 function App() {
+  const location = useLocation()
   const [currentView, setCurrentView] = useState('map') // 'map' or 'county'
   const [selectedCounty, setSelectedCounty] = useState(null)
   const [isLoadingCounty, setIsLoadingCounty] = useState(false)
@@ -107,7 +108,11 @@ function App() {
       return
     }
     
-    const county = data.find(c => (c.county?.code || c.code) === countyCode)
+    // Convert BH → RO-BH if needed
+    const searchCode = countyCode.startsWith('RO-') ? countyCode : `RO-${countyCode}`;
+    
+    const county = data.find(c => (c.county?.code || c.code) === searchCode)
+    
     if (county) {
       setIsLoadingCounty(true)
       setSelectedCounty(county)
@@ -118,11 +123,33 @@ function App() {
   const handleBackToMap = () => {
     // Scroll to top when returning to map
     window.scrollTo(0, 0)
-    
     setCurrentView('map')
     setSelectedCounty(null)
-    setIsLoadingCounty(false)
   }
+
+  // Handle county selection from Timeline
+  useEffect(() => {
+    if (location.state?.openCounty) {
+      // Switch to payments if requested
+      if (location.state.switchToPayments && endpoint !== 'payments') {
+        switchEndpoint('payments')
+        // Wait longer for data to load after endpoint switch
+        setTimeout(() => {
+          handleCountyClick(location.state.openCounty)
+          // Clear state
+          window.history.replaceState({}, document.title)
+        }, 1500)
+      } else {
+        // Already on correct endpoint, open immediately
+        setTimeout(() => {
+          handleCountyClick(location.state.openCounty)
+          // Clear state
+          window.history.replaceState({}, document.title)
+        }, 300)
+      }
+    }
+  }, [location.state])
+
 
   // Show loading screen while initial data is being fetched
   if (isInitialLoading) {
@@ -203,7 +230,7 @@ function App() {
           )
         } />
         <Route path="/semantic-search" element={<SemanticSearchPage />} />
-        <Route path="/absorbtie-in-timp" element={<TimelinePage />} />
+        <Route path="/absorbtie-in-timp" element={<TimelinePage onCountyClick={handleCountyClick} />} />
       </Routes>
     </div>
   )

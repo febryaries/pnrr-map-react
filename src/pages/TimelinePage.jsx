@@ -11,7 +11,7 @@ import SimpleMapNew from '../components/SimpleMapNew';
 import { useTimelinePlati } from '../hooks/useTimelinePlati';
 import './TimelinePage.css';
 
-function TimelinePage() {
+function TimelinePage({ onCountyClick }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -131,6 +131,7 @@ function TimelinePage() {
         <SimpleMapNew 
           currentData={currentData}
           isPlaying={isPlaying}
+          onCountyClick={onCountyClick}
         />
       </div>
 

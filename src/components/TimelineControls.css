@@ -261,7 +261,11 @@
   }
 
   .timeline-marker-label {
-    font-size: 0.65em;
+    display: none; /* Hide date labels on mobile to prevent overlap */
+  }
+  
+  .timeline-slider-container {
+    padding: 20px 0 30px 0; /* Reduce padding on mobile */
   }
 
   .timeline-current-date {
