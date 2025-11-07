@@ -357,8 +357,14 @@ const EnhancedTable = ({
         // Convert to percentage if it's a decimal (0.8 -> 80%)
         let percentage = null
         if (progresFizic !== null && progresFizic !== undefined && progresFizic !== '') {
-          const progresFizicStr = String(progresFizic).replace(',', '.')
-          percentage = Math.round(parseFloat(progresFizicStr) * 100)
+          let progresFizicStr = String(progresFizic).trim()
+          // Fix missing leading zero: ",4848" -> "0,4848"
+          if (progresFizicStr.startsWith(',')) {
+            progresFizicStr = '0' + progresFizicStr
+          }
+          const parsed = parseFloat(progresFizicStr.replace(',', '.'))
+          // Validate parseFloat result - handle NaN for invalid formats
+          percentage = isNaN(parsed) ? null : Math.round(parsed * 100)
         }
         
         // If percentage is null/undefined, skip this item (no valid progress data)
@@ -612,9 +618,18 @@ const EnhancedTable = ({
             // For projects: check PROGRES_FIZIC first
             const progresFizic = item.PROGRES_FIZIC
             if (progresFizic !== null && progresFizic !== undefined && progresFizic !== '') {
-              const progresFizicStr = String(progresFizic)
-              const percentage = Math.round(parseFloat(progresFizicStr.replace(',', '.')) * 100)
-              value = percentage + '%'
+              let progresFizicStr = String(progresFizic).trim()
+              // Fix missing leading zero: ",4848" -> "0,4848"
+              if (progresFizicStr.startsWith(',')) {
+                progresFizicStr = '0' + progresFizicStr
+              }
+              const parsed = parseFloat(progresFizicStr.replace(',', '.'))
+              if (!isNaN(parsed)) {
+                const percentage = Math.round(parsed * 100)
+                value = percentage + '%'
+              } else {
+                value = ''
+              }
             } else {
               // Use stadiu text
               value = item[column.key] || ''
@@ -674,9 +689,18 @@ const EnhancedTable = ({
             // For projects: check PROGRES_FIZIC first
             const progresFizic = item.PROGRES_FIZIC
             if (progresFizic !== null && progresFizic !== undefined && progresFizic !== '') {
-              const progresFizicStr = String(progresFizic)
-              const percentage = Math.round(parseFloat(progresFizicStr.replace(',', '.')) * 100)
-              value = percentage + '%'
+              let progresFizicStr = String(progresFizic).trim()
+              // Fix missing leading zero: ",4848" -> "0,4848"
+              if (progresFizicStr.startsWith(',')) {
+                progresFizicStr = '0' + progresFizicStr
+              }
+              const parsed = parseFloat(progresFizicStr.replace(',', '.'))
+              if (!isNaN(parsed)) {
+                const percentage = Math.round(parsed * 100)
+                value = percentage + '%'
+              } else {
+                value = ''
+              }
             } else {
               // Use stadiu text
               value = item[column.key] || ''
@@ -742,9 +766,18 @@ const EnhancedTable = ({
             // For projects: check PROGRES_FIZIC first
             const progresFizic = item.PROGRES_FIZIC
             if (progresFizic !== null && progresFizic !== undefined && progresFizic !== '') {
-              const progresFizicStr = String(progresFizic)
-              const percentage = Math.round(parseFloat(progresFizicStr.replace(',', '.')) * 100)
-              value = percentage + '%'
+              let progresFizicStr = String(progresFizic).trim()
+              // Fix missing leading zero: ",4848" -> "0,4848"
+              if (progresFizicStr.startsWith(',')) {
+                progresFizicStr = '0' + progresFizicStr
+              }
+              const parsed = parseFloat(progresFizicStr.replace(',', '.'))
+              if (!isNaN(parsed)) {
+                const percentage = Math.round(parsed * 100)
+                value = percentage + '%'
+              } else {
+                value = ''
+              }
             } else {
               // Use stadiu text
               value = item[column.key] || ''
@@ -980,7 +1013,12 @@ const EnhancedTable = ({
                 {endpoint === 'payments' 
                   ? `${item.progress}%` 
                   : (item.PROGRES_FIZIC && item.PROGRES_FIZIC !== '' 
-                      ? `${Math.round(parseFloat(String(item.PROGRES_FIZIC).replace(',', '.')) * 100)}%` 
+                      ? (() => {
+                          let str = String(item.PROGRES_FIZIC).trim()
+                          if (str.startsWith(',')) str = '0' + str
+                          const parsed = parseFloat(str.replace(',', '.'))
+                          return !isNaN(parsed) ? `${Math.round(parsed * 100)}%` : (item.progress || '-')
+                        })()
                       : (item.progress || '-')
                     )
                 }
@@ -3463,7 +3501,10 @@ const MapView = ({
                                 const progresFinanciar = item.PROGRES_FINANCIAR;
                                 
                                 if (progresFizic !== null && progresFizic !== undefined && progresFizic !== '') {
-                                    return parseFloat(String(progresFizic).replace(',', '.'));
+                                    let str = String(progresFizic).trim();
+                                    if (str.startsWith(',')) str = '0' + str;
+                                    const parsed = parseFloat(str.replace(',', '.'));
+                                    return !isNaN(parsed) ? parsed : 0;
                                 } else if (progresFinanciar !== null && progresFinanciar !== undefined) {
                                     return progresFinanciar;
                                 }
@@ -3490,8 +3531,13 @@ const MapView = ({
                                 
                                 if (progresFizic !== null && progresFizic !== undefined && progresFizic !== '') {
                                     // Use progres_fizic (primary)
-                                    const progresFizicStr = String(progresFizic)
-                                    percentageValue = parseFloat(progresFizicStr.replace(',', '.'))
+                                    let progresFizicStr = String(progresFizic).trim()
+                                    // Fix missing leading zero: ",4848" -> "0,4848"
+                                    if (progresFizicStr.startsWith(',')) {
+                                        progresFizicStr = '0' + progresFizicStr
+                                    }
+                                    const parsed = parseFloat(progresFizicStr.replace(',', '.'))
+                                    percentageValue = !isNaN(parsed) ? parsed : 0
                                 } else if (progresFinanciar !== null && progresFinanciar !== undefined) {
                                     // Fallback to progres_financiar
                                     percentageValue = progresFinanciar
@@ -3585,14 +3631,14 @@ const MapView = ({
                                 // For Total Proiecte view, show combined National + Local totals
                                 if (endpoint === 'projects' && viewMode === 'total') {
                                     // Calculate National and Local totals separately, filtered by activeProgram if selected
-                                    const nationalData = data.filter(county => 
-                                        county.county?.name === 'Național' || county.name === 'Național' ||
-                                        county.county?.code === 'RO-MULTI' || county.code === 'RO-MULTI'
-                                    )
-                                    const localData = data.filter(county => 
-                                        county.county?.name !== 'Național' && county.name !== 'Național' && 
-                                county.county?.code !== 'RO-MULTI' && county.code !== 'RO-MULTI'
-                            )
+                                    const nationalData = data.filter(county => {
+                                        const code = county.county?.code || county.code;
+                                        return code === 'RO-MULTI';
+                                    })
+                                    const localData = data.filter(county => {
+                                        const code = county.county?.code || county.code;
+                                        return code !== 'RO-MULTI';
+                                    })
                             
                                     // Helper function to apply all filters to a row
                                     const applyAllFilters = (item) => {
@@ -3600,8 +3646,29 @@ const MapView = ({
                                         if (activeProgram && item[fieldMappings.componentCode] !== activeProgram) return false
                                         if (filterComponent && item[fieldMappings.componentCode] !== filterComponent) return false
                                         
-                                        // Progress/Stage filter
-                                        if (filterStadiu && item[fieldMappings.progress] !== filterStadiu) return false
+                                        // Progress/Stage filter - STRICT matching with PROGRES_FIZIC validation
+                                        if (filterStadiu) {
+                                            if (item[fieldMappings.progress] !== filterStadiu) return false
+                                            
+                                            const progresFizic = item.PROGRES_FIZIC
+                                            let percentage = null
+                                            if (progresFizic !== null && progresFizic !== undefined && progresFizic !== '') {
+                                                const progresFizicStr = String(progresFizic).replace(',', '.')
+                                                percentage = Math.round(parseFloat(progresFizicStr) * 100)
+                                            }
+                                            
+                                            // If percentage is null/undefined, skip this item
+                                            if (percentage === null) return false
+                                            
+                                            // Validate based on selected stadiu - STRICT matching
+                                            if (filterStadiu === 'FINALIZAT') {
+                                                if (percentage !== 100) return false
+                                            } else if (filterStadiu === 'ÎN IMPLEMENTARE (sub 30%)') {
+                                                if (percentage < 0 || percentage >= 30) return false
+                                            } else if (filterStadiu === 'ÎN IMPLEMENTARE') {
+                                                if (percentage < 30 || percentage >= 100) return false
+                                            }
+                                        }
                                         
                                         // Locality filter
                                         if (filterLocality && item[fieldMappings.locality] !== filterLocality) return false

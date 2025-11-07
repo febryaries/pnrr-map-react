@@ -47,8 +47,8 @@ export const useBucurestiProjects = () => {
           const judet = (project.judet_implementare || '').toUpperCase().trim();
           const localitate = (project.localitate_implementare || '').toUpperCase().trim();
           
-          // EXCLUDE NAȚIONAL projects
-          if (judet === 'NAȚIONAL' || localitate === 'NATIONAL') {
+          // EXCLUDE NAȚIONAL projects (both old and new diacritics)
+          if (judet === 'NAȚIONAL' || judet === 'NAŢIONAL' || localitate === 'NATIONAL' || localitate === 'NAŢIONAL') {
             return false;
           }
           

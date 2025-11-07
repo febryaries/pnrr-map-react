@@ -47,8 +47,8 @@ export const useNationalProjects = () => {
           const judet = (project.judet_implementare || '').toUpperCase().trim();
           const localitate = (project.localitate_implementare || '').toUpperCase().trim();
           
-          // Include ONLY NAȚIONAL projects
-          if (judet === 'NAȚIONAL' || localitate === 'NATIONAL') {
+          // Include ONLY NAȚIONAL projects (both old and new diacritics)
+          if (judet === 'NAȚIONAL' || judet === 'NAŢIONAL' || localitate === 'NATIONAL' || localitate === 'NAŢIONAL') {
             return true;
           }
           

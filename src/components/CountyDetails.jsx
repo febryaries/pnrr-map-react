@@ -1178,11 +1178,11 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
     ? apiProjects 
     : (countyData.extras?.rows || []);
   
-  // DEBUG: Count NATIONAL projects
+  // DEBUG: Count NATIONAL projects (both old and new diacritics)
   const nationalCount = allProjectsData.filter(p => {
     const judet = (p.judet_implementare || p[fieldMappings.locality] || '').toUpperCase();
     const locality = (p.localitate_implementare || p[fieldMappings.locality] || '').toUpperCase();
-    return judet === 'NAȚIONAL' || locality === 'NATIONAL';
+    return judet === 'NAȚIONAL' || judet === 'NAŢIONAL' || locality === 'NATIONAL' || locality === 'NAŢIONAL';
   }).length;
   console.log(`🔍 DEBUG CountyDetails v3: Total projects: ${allProjectsData.length}`);
   console.log(`🔍 DEBUG CountyDetails v3: NATIONAL projects: ${nationalCount}`);

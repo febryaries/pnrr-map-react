@@ -140,14 +140,97 @@ export class ProjectDataAggregation extends BaseDataAggregation {
       const countyCode = this.normalizeCountyName(this.convertRomanianDiacritics(item.judet_implementare || ''));
       const componentMapping = this.config.componentMapping[item.cod_componenta || ''];
       
-      // EXCLUDE NAȚIONAL projects explicitly (check both judet and localitate)
+      // Check if NAȚIONAL project (check both judet and localitate)
+      // Handle both old (Ţ) and new (Ț) diacritics
       const judet = (item.judet_implementare || '').toUpperCase().trim();
       const localitate = (item.localitate_implementare || '').toUpperCase().trim();
+      const isNational = judet === 'NAȚIONAL' || judet === 'NAŢIONAL' || 
+                         localitate === 'NATIONAL' || localitate === 'NAŢIONAL';
       
-      if (judet === 'NAȚIONAL' || localitate === 'NATIONAL') {
+      if (isNational) {
         nationalProjectCount++;
         nationalTotalValue += parseFloat(String(item.valoare_fe || 0));
-        multiCountyProjects.push(item);
+        
+        // Process national project with full data (including PROGRES_FIZIC)
+        if (!componentMapping) {
+          multiCountyProjects.push(item); // Fallback: push raw data if no component mapping
+          return;
+        }
+        
+        const programKey = componentMapping.program;
+        // Get RON amount from the data (projects endpoint returns data in RON)
+        const ronAmountFE = parseFloat(String(item.valoare_fe || 0));
+        const ronAmountTotal = parseFloat(String(item.valoare_total || 0));
+        const startDate = item.data_inceput || '';
+        
+        // Convert RON to EUR using the conversion service (same as local projects)
+        const eurAmount = convertRONToEUR(ronAmountFE, startDate);
+        
+        // Create financial amount with proper conversion
+        const financialAmount = this.createFinancialAmount(eurAmount, ronAmountFE, startDate);
+        const value = eurAmount;
+        
+        const nationalProjectRow: any = {
+          // New structure fields
+          contractNumber: item.nr_contract,
+          title: this.convertRomanianDiacritics(item.titlu_contract || ''),
+          beneficiaryName: this.convertRomanianDiacritics(item.denumire_beneficiar || ''),
+          beneficiaryCUI: item.cui,
+          beneficiaryType: this.convertRomanianDiacritics(item.tip_beneficiar || ''),
+          beneficiaryLocality: this.convertRomanianDiacritics(item.localitate_implementare || ''),
+          totalValue: financialAmount,
+          feValue: this.createFinancialAmount(eurAmount, 0, startDate),
+          fpnValue: this.createFinancialAmount(0, parseFloat(String(item.valoare_fpn || 0)), startDate),
+          tvaValue: this.createFinancialAmount(0, parseFloat(String(item.valoare_tva || 0)), startDate),
+          ineligibleValue: this.createFinancialAmount(0, parseFloat(String(item.valoare_neeligibil || 0)), startDate),
+          componentCode: item.cod_componenta || '',
+          componentLabel: this.convertRomanianDiacritics(componentMapping.label),
+          measureCode: item.cod_masura || '',
+          subMeasureCode: item.cod_submasura,
+          fundingSource: this.convertRomanianDiacritics(item.sursa_finantare || ''),
+          countyCode: 'RO-MULTI',
+          countyName: 'Național',
+          locality: this.convertRomanianDiacritics(item.localitate_implementare || ''),
+          progress: this.parseProgress(item.stadiu),
+          stage: this.convertRomanianDiacritics(item.stadiu || ''),
+          impact: this.convertRomanianDiacritics(item.impact || ''),
+          engagementDate: item.data_angajament ? new Date(item.data_angajament).toLocaleDateString('ro-RO') : '',
+          startDate: item.data_inceput ? new Date(item.data_inceput).toLocaleDateString('ro-RO') : '',
+          completionDate: item.data_finalizare ? new Date(item.data_finalizare).toLocaleDateString('ro-RO') : '',
+          cri: item.cri,
+          scope: this.convertRomanianDiacritics(`${item.titlu_contract || ''} - ${item.localitate_implementare || ''}`.trim()),
+          __programKey: programKey,
+          __shareValue: value,
+          __shareProjects: 1,
+          
+          // Old structure fields for compatibility with MapView
+          DENUMIRE_BENEFICIAR: this.convertRomanianDiacritics(item.denumire_beneficiar || ''),
+          VALOARE_FE: eurAmount,
+          VALOARE_TOTAL: ronAmountFE,
+          DATA_ANGAJAMENT: item.data_angajament || '',
+          TITLU_CONTRACT: this.convertRomanianDiacritics(item.titlu_contract || ''),
+          SURSA_FINANTARE: this.convertRomanianDiacritics(item.sursa_finantare || ''),
+          JUDET_IMPLEMENTARE: this.convertRomanianDiacritics(item.judet_implementare || ''),
+          LOCALITATE_IMPLEMENTARE: this.convertRomanianDiacritics(item.localitate_implementare || ''),
+          COD_COMPONENTA: item.cod_componenta || '',
+          COMPONENTA_LABEL: this.convertRomanianDiacritics(componentMapping.label),
+          COD_MASURA: item.cod_masura || '',
+          COD_SUBMASURA: item.cod_submasura || '',
+          STADIU: this.convertRomanianDiacritics(item.stadiu || ''),
+          PROGRES_FIZIC: item.progres_fizic || null,
+          PROGRES_FINANCIAR: item.progres_financiar ?? null,
+          IMPACT: this.convertRomanianDiacritics(item.impact || ''),
+          NR_CONTRACT: item.nr_contract || '',
+          CUI: item.cui || '',
+          TIP_BENEFICIAR: this.convertRomanianDiacritics(item.tip_beneficiar || ''),
+          CRI: item.cri || '',
+          SCOP_PROIECT: this.convertRomanianDiacritics(`${item.titlu_contract || ''} - ${item.localitate_implementare || ''}`.trim()),
+          __program_key: programKey,
+          __share_value: value,
+          __share_projects: 1
+        };
+        
+        multiCountyProjects.push(nationalProjectRow);
         return;
       }
       
@@ -620,7 +703,14 @@ export class ProjectDataAggregation extends BaseDataAggregation {
       programs,
       components: {},
       extras: {
-        rows: multiCountyProjects.map(item => {
+        rows: multiCountyProjects.map((item: any) => {
+          // Check if item is already processed (has PROGRES_FIZIC field)
+          if (item.PROGRES_FIZIC !== undefined || item.title) {
+            // Already processed, return as is
+            return item;
+          }
+          
+          // Not processed yet, process it now (fallback for old code)
           const componentMapping = this.config.componentMapping[item.cod_componenta || ''];
           const ronAmount = parseFloat(String(item.valoare_fe || 0));
           const startDate = item.data_inceput || '';
