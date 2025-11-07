@@ -2228,29 +2228,23 @@ const MapView = ({
             })
         }
 
-        // Add National entry to the result
-        if (multiData && multiData.total) {
-            let nationalValue = multiData.total.value
-            let nationalProjects = multiData.total.projects
-
-            // If a specific component is selected, filter national data by component
-            if (activeProgram && multiData.extras && multiData.extras.rows) {
-                const filteredNationalProjects = multiData.extras.rows.filter(project =>
-                    project[fieldMappings.componentCode] === activeProgram
-                )
-                nationalValue = filteredNationalProjects.reduce((sum, project) =>
-                    sum + getValueField(project), 0
-                )
-                nationalProjects = filteredNationalProjects.length
-            }
+        // Add National entry to the result as a separate ranking item
+        // Calculate from raw project data, not from pre-aggregated total
+        if (multiData && multiData.extras && multiData.extras.rows) {
+            const nationalProjects = activeProgram 
+                ? multiData.extras.rows.filter(project => project[fieldMappings.componentCode] === activeProgram)
+                : multiData.extras.rows
+            
+            const nationalValue = nationalProjects.reduce((sum, project) => sum + getValueField(project), 0)
+            const nationalCount = nationalProjects.length
 
             result.push({
                 'hc-key': 'ro-national',
                 code: 'NATIONAL',
-                name: 'National',
-                value: metric === 'value' ? nationalValue : nationalProjects,
+                name: 'Național',
+                value: metric === 'value' ? nationalValue : nationalCount,
                 money: nationalValue,
-                projects: nationalProjects
+                projects: nationalCount
             })
         }
 
@@ -2959,11 +2953,6 @@ const MapView = ({
                             <div className="indicator-value">{fmtNum(totalIndicators.nr_beneficiari_plati)}</div>
                             <div className="indicator-label">Număr Beneficiari Către care s-au făcut plăți</div>
                             <div className="indicator-sublabel">Beneficiari cu plăți</div>
-                        </div>
-                        <div className="indicator-card">
-                            <div className="indicator-value">{fmtNum(totalIndicators.nr_proiecte)}</div>
-                            <div className="indicator-label">Număr Proiecte</div>
-                            <div className="indicator-sublabel">{fmtNum(totalIndicators.nr_beneficiari_contracte)} beneficiari</div>
                         </div>
                     </div>
                 ) : null}

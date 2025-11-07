@@ -4,12 +4,9 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App.jsx'
 import './index.css'
 
-// Determine basename based on environment
-// In development or when not deployed to /pnrr-dashboard/, use empty basename
-// In production with /pnrr-dashboard/ path, use the basename
+// Use consistent basename for both development and production
+// This ensures identical behavior locally and on Vercel
 const getBasename = () => {
-  // Always use /pnrr-dashboard basename to match production
-  // This ensures consistent behavior in dev and prod
   return '/pnrr-dashboard'
 }
 
