@@ -3441,6 +3441,12 @@ const MapView = ({
                             searchable: true,
                             render: (value) => <div style={{ maxWidth: '250px', wordWrap: 'break-word', fontSize: '12px', lineHeight: '1.3' }}>{value}</div>
                         },
+                        {
+                            key: 'cri',
+                            label: 'CRI',
+                            searchable: true,
+                            render: (value) => <div style={{ fontSize: '12px', minWidth: '80px', textAlign: 'center', fontWeight: '500' }}>{value || '-'}</div>
+                        },
                         ...(endpoint === 'payments' ? [{
                             key: 'cui',
                             label: 'CUI',
