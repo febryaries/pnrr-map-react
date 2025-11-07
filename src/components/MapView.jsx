@@ -364,7 +364,7 @@ const EnhancedTable = ({
           }
           const parsed = parseFloat(progresFizicStr.replace(',', '.'))
           // Validate parseFloat result - handle NaN for invalid formats
-          percentage = isNaN(parsed) ? null : Math.round(parsed * 100)
+          percentage = isNaN(parsed) ? null : Math.floor(parsed * 100)
         }
         
         // If percentage is null/undefined, skip this item (no valid progress data)
@@ -606,7 +606,7 @@ const EnhancedTable = ({
           // Get PROGRES_FINANCIAR and convert to percentage
           const progresFinanciar = item.PROGRES_FINANCIAR
           if (progresFinanciar !== null && progresFinanciar !== undefined) {
-            value = Math.round(progresFinanciar * 100) + '%'
+            value = Math.floor(progresFinanciar * 100) + '%'
           } else {
             value = ''
           }
@@ -625,7 +625,7 @@ const EnhancedTable = ({
               }
               const parsed = parseFloat(progresFizicStr.replace(',', '.'))
               if (!isNaN(parsed)) {
-                const percentage = Math.round(parsed * 100)
+                const percentage = Math.floor(parsed * 100)
                 value = percentage + '%'
               } else {
                 value = ''
@@ -677,7 +677,7 @@ const EnhancedTable = ({
           // Get PROGRES_FINANCIAR and convert to percentage
           const progresFinanciar = item.PROGRES_FINANCIAR
           if (progresFinanciar !== null && progresFinanciar !== undefined) {
-            value = Math.round(progresFinanciar * 100) + '%'
+            value = Math.floor(progresFinanciar * 100) + '%'
           } else {
             value = ''
           }
@@ -696,7 +696,7 @@ const EnhancedTable = ({
               }
               const parsed = parseFloat(progresFizicStr.replace(',', '.'))
               if (!isNaN(parsed)) {
-                const percentage = Math.round(parsed * 100)
+                const percentage = Math.floor(parsed * 100)
                 value = percentage + '%'
               } else {
                 value = ''
@@ -754,7 +754,7 @@ const EnhancedTable = ({
           // Get PROGRES_FINANCIAR and convert to percentage
           const progresFinanciar = item.PROGRES_FINANCIAR
           if (progresFinanciar !== null && progresFinanciar !== undefined) {
-            value = Math.round(progresFinanciar * 100) + '%'
+            value = Math.floor(progresFinanciar * 100) + '%'
           } else {
             value = ''
           }
@@ -773,7 +773,7 @@ const EnhancedTable = ({
               }
               const parsed = parseFloat(progresFizicStr.replace(',', '.'))
               if (!isNaN(parsed)) {
-                const percentage = Math.round(parsed * 100)
+                const percentage = Math.floor(parsed * 100)
                 value = percentage + '%'
               } else {
                 value = ''
@@ -1017,7 +1017,7 @@ const EnhancedTable = ({
                           let str = String(item.PROGRES_FIZIC).trim()
                           if (str.startsWith(',')) str = '0' + str
                           const parsed = parseFloat(str.replace(',', '.'))
-                          return !isNaN(parsed) ? `${Math.round(parsed * 100)}%` : (item.progress || '-')
+                          return !isNaN(parsed) ? `${Math.floor(parsed * 100)}%` : (item.progress || '-')
                         })()
                       : (item.progress || '-')
                     )
@@ -1032,7 +1032,7 @@ const EnhancedTable = ({
                 fontWeight: item.PROGRES_FINANCIAR !== null && item.PROGRES_FINANCIAR !== undefined ? '500' : 'normal'
               }}>
                 {item.PROGRES_FINANCIAR !== null && item.PROGRES_FINANCIAR !== undefined 
-                  ? `${Math.round(item.PROGRES_FINANCIAR * 100)}%` 
+                  ? `${Math.floor(item.PROGRES_FINANCIAR * 100)}%` 
                   : '-'}
               </div>
             </div>
@@ -3585,7 +3585,7 @@ const MapView = ({
                                 }
                                 
                                 // Convert 0.58 -> 58%
-                                const percentage = Math.round(progresFinanciar * 100);
+                                const percentage = Math.floor(progresFinanciar * 100);
                                 
                                 return <div style={{ 
                                     fontSize: '12px', 
@@ -3654,7 +3654,7 @@ const MapView = ({
                                             let percentage = null
                                             if (progresFizic !== null && progresFizic !== undefined && progresFizic !== '') {
                                                 const progresFizicStr = String(progresFizic).replace(',', '.')
-                                                percentage = Math.round(parseFloat(progresFizicStr) * 100)
+                                                percentage = Math.floor(parseFloat(progresFizicStr) * 100)
                                             }
                                             
                                             // If percentage is null/undefined, skip this item
