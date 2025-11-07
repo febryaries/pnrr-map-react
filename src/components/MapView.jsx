@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import HighchartsMap from 'highcharts/modules/map'
@@ -2807,14 +2807,14 @@ const MapView = ({
 
                     {/* Timeline button - center */}
                     <div className="header-info-center">
-                        <a
-                            href="/absorbtie-in-timp"
+                        <Link
+                            to="/absorbtie-in-timp"
                             className="timeline-button"
                             title="Vizualizează evoluția plăților PNRR în timp"
                         >
                             <span className="timeline-button-icon">💰</span>
                             <span className="timeline-button-text">Absorbție în timp</span>
-                        </a>
+                        </Link>
                     </div>
 
                     <div className="header-info-right">
@@ -2826,7 +2826,7 @@ const MapView = ({
                                 className="external-link"
                                 title="Ministerul Investițiilor și Proiectelor Europene, pagina dedicată Planului Național de Redresare și Reziliență al României"
                             >
-                                <img src="/sigla_guv_coroana_albastru.png" alt="Guvernul României" className="link-icon-img" />
+                                <img src="sigla_guv_coroana_albastru.png" alt="Guvernul României" className="link-icon-img" />
                                 <div className="link-content">
                                     <div className="link-title">MIPE</div>
                                     <div className="link-subtitle">PNRR România</div>
@@ -3455,12 +3455,16 @@ const MapView = ({
                                 if (endpoint === 'payments') {
                                     return item.progress || 0;
                                 }
-                                // For projects: use PROGRES_FIZIC if available
+                                // For projects: use PROGRES_FIZIC (primary), fallback to PROGRES_FINANCIAR, then 0
                                 const progresFizic = item.PROGRES_FIZIC;
+                                const progresFinanciar = item.PROGRES_FINANCIAR;
+                                
                                 if (progresFizic !== null && progresFizic !== undefined && progresFizic !== '') {
                                     return parseFloat(String(progresFizic).replace(',', '.'));
+                                } else if (progresFinanciar !== null && progresFinanciar !== undefined) {
+                                    return progresFinanciar;
                                 }
-                                return 0; // Default for stadiu text
+                                return 0;
                             },
                             render: (value, item) => {
                                 if (endpoint === 'payments') {
@@ -3475,62 +3479,36 @@ const MapView = ({
                                     }}>{displayValue}</div>
                                 }
                                 
-                                // For projects: if progres_fizic exists, show percentage, otherwise show stadiu text
+                                // For projects: use progres_fizic (primary), fallback to progres_financiar, then 0
                                 const progresFizic = item.PROGRES_FIZIC
+                                const progresFinanciar = item.PROGRES_FINANCIAR
+                                
+                                let percentageValue = null
                                 
                                 if (progresFizic !== null && progresFizic !== undefined && progresFizic !== '') {
-                                    // Convert to string first, then convert Romanian decimal format (0,3 -> 30%)
+                                    // Use progres_fizic (primary)
                                     const progresFizicStr = String(progresFizic)
-                                    const percentage = Math.round(parseFloat(progresFizicStr.replace(',', '.')) * 100)
-                                    return <div style={{ 
-                                        fontSize: '12px', 
-                                        minWidth: '100px', 
-                                        textAlign: 'center',
-                                        fontWeight: '700',
-                                        whiteSpace: 'nowrap',
-                                        padding: '2px 4px',
-                                        color: '#059669'
-                                    }}>{percentage}%</div>
-                                }
-                                
-                                // No progres_fizic - show stadiu text
-                                const displayValue = value || '-'
-                                const parts = displayValue.match(/^(.*?)(\s*\([^)]+\))$/)
-                                
-                                if (parts) {
-                                    // Has parentheses - split into two lines
-                                    return <div style={{ 
-                                        fontSize: '10px',
-                                        minWidth: '100px', 
-                                        textAlign: 'center',
-                                        fontWeight: '600',
-                                        lineHeight: '1.4',
-                                        padding: '2px 4px',
-                                        color: '#000'
-                                    }}>
-                                        <div style={{ 
-                                            whiteSpace: 'nowrap',
-                                            textTransform: 'uppercase'
-                                        }}>{parts[1].trim()}</div>
-                                        <div style={{ 
-                                            fontSize: '9px',
-                                            opacity: 0.7,
-                                            textTransform: 'lowercase'
-                                        }}>{parts[2].trim()}</div>
-                                    </div>
+                                    percentageValue = parseFloat(progresFizicStr.replace(',', '.'))
+                                } else if (progresFinanciar !== null && progresFinanciar !== undefined) {
+                                    // Fallback to progres_financiar
+                                    percentageValue = progresFinanciar
                                 } else {
-                                    // No parentheses - single line
-                                    return <div style={{ 
-                                        fontSize: '10px', 
-                                        minWidth: '100px', 
-                                        textAlign: 'center',
-                                        textTransform: 'uppercase',
-                                        fontWeight: '600',
-                                        whiteSpace: 'nowrap',
-                                        padding: '2px 4px',
-                                        color: '#000'
-                                    }}>{displayValue}</div>
+                                    // Both null → 0
+                                    percentageValue = 0
                                 }
+                                
+                                // Round up to 2 decimals: 0.5554582 → 55.55%
+                                const percentage = Math.ceil(percentageValue * 10000) / 100
+                                
+                                return <div style={{ 
+                                    fontSize: '12px', 
+                                    minWidth: '100px', 
+                                    textAlign: 'center',
+                                    fontWeight: '700',
+                                    whiteSpace: 'nowrap',
+                                    padding: '2px 4px',
+                                    color: '#059669'
+                                }}>{percentage.toFixed(2)}%</div>
                             }
                         },
                         // Progres Financiar - ONLY FOR PROJECTS

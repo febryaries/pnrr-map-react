@@ -45,9 +45,9 @@ export function useTimelinePlati() {
         }));
         setAvailableDates(dates);
         
-        // Set first frame as current
+        // Set LAST frame as current (most recent data)
         if (data.timeline.length > 0) {
-          setCurrentData(data.timeline[0]);
+          setCurrentData(data.timeline[data.timeline.length - 1]);
         }
         
         setIsLoading(false);

@@ -5,6 +5,7 @@
  */
 
 import { useState, useEffect, useRef, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import TimelineControls from '../components/TimelineControls';
 import TimelineStats from '../components/TimelineStats';
 import SimpleMapNew from '../components/SimpleMapNew';
@@ -24,11 +25,23 @@ function TimelinePage({ onCountyClick }) {
   // Dates are already formatted in the hook
   const formattedDates = availableDates;
 
+  // Set currentIndex to last frame when data loads
+  useEffect(() => {
+    if (availableDates.length > 0 && currentIndex === 0) {
+      setCurrentIndex(availableDates.length - 1);
+    }
+  }, [availableDates]);
+
   const handleIndexChange = (newIndex) => {
     setCurrentIndex(Math.floor(newIndex));
   };
 
-  const play = () => setIsPlaying(true);
+  const play = () => {
+    // Reset to beginning when playing
+    setCurrentIndex(0);
+    setProgress(0);
+    setIsPlaying(true);
+  };
   const pause = () => {
     setIsPlaying(false);
     if (animationRef.current) {
@@ -93,9 +106,9 @@ function TimelinePage({ onCountyClick }) {
           <p>Evoluția plăților PNRR 2025 pe județe</p>
         </div>
         
-        <a href="/" className="timeline-back-link">
+        <Link to="/" className="timeline-back-link">
           ← Înapoi la hartă
-        </a>
+        </Link>
       </div>
 
       {/* Stats */}
