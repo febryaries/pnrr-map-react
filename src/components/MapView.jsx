@@ -361,16 +361,19 @@ const EnhancedTable = ({
           percentage = Math.round(parseFloat(progresFizicStr) * 100)
         }
         
-        // Validate based on selected stadiu
+        // If percentage is null/undefined, skip this item (no valid progress data)
+        if (percentage === null) return false
+        
+        // Validate based on selected stadiu - STRICT matching
         if (filterStadiu === 'FINALIZAT') {
-          // Only show if PROGRES_FIZIC is 100% or null/undefined
-          return percentage === 100 || percentage === null
+          // Only show if PROGRES_FIZIC is exactly 100%
+          return percentage === 100
         } else if (filterStadiu === 'ÎN IMPLEMENTARE (sub 30%)') {
-          // Only show if PROGRES_FIZIC is < 30% or null/undefined
-          return percentage < 30 || percentage === null
+          // Only show if PROGRES_FIZIC is 0-29%
+          return percentage >= 0 && percentage < 30
         } else if (filterStadiu === 'ÎN IMPLEMENTARE') {
-          // Only show if PROGRES_FIZIC is between 30% and 99% or null/undefined
-          return (percentage >= 30 && percentage < 100) || percentage === null
+          // Only show if PROGRES_FIZIC is between 30% and 99%
+          return percentage >= 30 && percentage < 100
         }
         
         return true
