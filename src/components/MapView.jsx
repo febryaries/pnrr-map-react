@@ -3497,8 +3497,9 @@ const MapView = ({
                                     percentageValue = 0
                                 }
                                 
-                                // Round up to 2 decimals: 0.5554582 → 55.55%
-                                const percentage = Math.ceil(percentageValue * 10000) / 100
+                                // Round: 0 decimals if not 100%, keep 100 as is
+                                const percentageRaw = percentageValue * 100
+                                const percentage = percentageRaw === 100 ? 100 : Math.floor(percentageRaw)
                                 
                                 return <div style={{ 
                                     fontSize: '12px', 
@@ -3508,7 +3509,7 @@ const MapView = ({
                                     whiteSpace: 'nowrap',
                                     padding: '2px 4px',
                                     color: '#059669'
-                                }}>{percentage.toFixed(2)}%</div>
+                                }}>{percentage}%</div>
                             }
                         },
                         // Progres Financiar - ONLY FOR PROJECTS
