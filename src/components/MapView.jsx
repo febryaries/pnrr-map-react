@@ -3518,9 +3518,13 @@ const MapView = ({
                                     }}>{displayValue}</div>
                                 }
                                 
-                                // For projects: use progres_fizic (primary), fallback to progres_financiar, then 0
+                                // For projects: use progres_fizic (primary)
                                 const progresFizic = item.PROGRES_FIZIC
                                 const progresFinanciar = item.PROGRES_FINANCIAR
+                                const codMasura = item[fieldMappings.measureCode] || ''
+                                
+                                // Check if it's a reform measure (R1-R9)
+                                const isReform = /^R[1-9]$/.test(codMasura)
                                 
                                 let percentageValue = null
                                 
@@ -3533,11 +3537,11 @@ const MapView = ({
                                     }
                                     const parsed = parseFloat(progresFizicStr.replace(',', '.'))
                                     percentageValue = !isNaN(parsed) ? parsed : 0
-                                } else if (progresFinanciar !== null && progresFinanciar !== undefined) {
-                                    // Fallback to progres_financiar
+                                } else if (isReform && progresFinanciar !== null && progresFinanciar !== undefined) {
+                                    // For reforms ONLY: fallback to progres_financiar when progres_fizic is null
                                     percentageValue = progresFinanciar
                                 } else {
-                                    // Both null → 0
+                                    // For normal measures or when both null → 0
                                     percentageValue = 0
                                 }
                                 
@@ -3569,18 +3573,13 @@ const MapView = ({
                             render: (value, item) => {
                                 const progresFinanciar = item.PROGRES_FINANCIAR;
                                 
-                                if (progresFinanciar === null || progresFinanciar === undefined) {
-                                    return <div style={{ 
-                                        fontSize: '12px', 
-                                        minWidth: '100px', 
-                                        textAlign: 'center',
-                                        color: '#94a3b8',
-                                        fontStyle: 'italic'
-                                    }}>-</div>
-                                }
+                                // If null/undefined, show 0% (not "-")
+                                const valueToDisplay = progresFinanciar !== null && progresFinanciar !== undefined 
+                                    ? progresFinanciar 
+                                    : 0;
                                 
                                 // Convert 0.58 -> 58%
-                                const percentage = Math.floor(progresFinanciar * 100);
+                                const percentage = Math.floor(valueToDisplay * 100);
                                 
                                 return <div style={{ 
                                     fontSize: '12px', 
