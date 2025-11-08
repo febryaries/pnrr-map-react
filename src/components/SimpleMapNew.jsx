@@ -53,7 +53,8 @@ const COUNTY_TO_HC_KEY = {
   'BISTRIȚA-NĂSĂUD': 'ro-bn',
   'MUREȘ': 'ro-ms',
   'BOTOȘANI': 'ro-bt',
-  'ARGEȘ': 'ro-ag'
+  'ARGEȘ': 'ro-ag',
+  'TULCEA': 'ro-tl'
 };
 
 // hc-key to county code mapping
@@ -101,7 +102,8 @@ const HC_KEY_TO_CODE = {
   'ro-bn': 'BN',
   'ro-ms': 'MS',
   'ro-bt': 'BT',
-  'ro-ag': 'AG'
+  'ro-ag': 'AG',
+  'ro-tl': 'TL'
 };
 import './SimpleMapNew.css';
 

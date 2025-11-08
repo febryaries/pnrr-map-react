@@ -3466,12 +3466,6 @@ const MapView = ({
                             searchable: true,
                             render: (value) => <div style={{ fontSize: '12px', minWidth: '100px', fontFamily: 'monospace', textAlign: 'center' }}>{value || '-'}</div>
                         },
-                        ...(endpoint === 'payments' ? [{
-                            key: 'cui',
-                            label: 'CUI',
-                            searchable: true,
-                            render: (value) => <div style={{ fontSize: '12px', minWidth: '100px', fontFamily: 'monospace' }}>{value}</div>
-                        }] : []),
                         {
                             key: 'county',
                             label: 'Județ',
@@ -3497,7 +3491,7 @@ const MapView = ({
                                     // For projects, use the FinancialAmount object directly
                                     const financialAmount = item[fieldMappings.value]
                                     if (financialAmount && typeof financialAmount === 'object') {
-                                        return <div style={{ fontSize: '12px', minWidth: '120px', textAlign: 'left' }}>
+                                        return <div style={{ fontSize: '12px', minWidth: '120px', textAlign: 'center' }}>
                                             {currency === 'RON' 
                                                 ? formatMoneyWithCurrency(financialAmount.ron, financialAmount.ron, item.startDate)
                                                 : formatMoneyWithCurrency(financialAmount.eur, financialAmount.ron, item.startDate)
@@ -3505,7 +3499,7 @@ const MapView = ({
                                         </div>
                                     }
                                 }
-                                return <div style={{ fontSize: '12px', minWidth: '120px', textAlign: 'left' }}>
+                                return <div style={{ fontSize: '12px', minWidth: '120px', textAlign: 'center' }}>
                                     {formatMoneyWithCurrency(value, item.value_ron, item.startDate)}
                                 </div>
                             }
