@@ -3743,9 +3743,9 @@ const MapView = ({
                                     }, 0)
                                     
                                     const totalCount = nationalCount + localCount
-                                    return `${nationalCount} Naționale + ${localCount} Locale = ${totalCount} proiecte${(activeProgram || filterComponent) ? ` (${COMPONENT_MAPPING[activeProgram || filterComponent]?.label})` : ''} • ${formatMoneyWithCurrency(nationalValue)} + ${formatMoneyWithCurrency(localValue)} = ${formatMoneyWithCurrency(filteredTotals.totalValue)} valoare totală`
+                                    return `${fmtNum(nationalCount)} Naționale + ${fmtNum(localCount)} Locale = ${fmtNum(totalCount)} proiecte${(activeProgram || filterComponent) ? ` (${COMPONENT_MAPPING[activeProgram || filterComponent]?.label})` : ''} • ${formatMoneyWithCurrency(nationalValue)} + ${formatMoneyWithCurrency(localValue)} = ${formatMoneyWithCurrency(filteredTotals.totalValue)} valoare totală`
                                 } else {
-                                    return `${filteredTotals.count} ${endpoint === 'payments' ? 'plăți' : 'proiecte'} găsite${(activeProgram || filterComponent) ? ` (${COMPONENT_MAPPING[activeProgram || filterComponent]?.label})` : ''} • ${formatMoneyWithCurrency(filteredTotals.totalValue)} valoare totală`
+                                    return `${fmtNum(filteredTotals.count)} ${endpoint === 'payments' ? 'plăți' : 'proiecte'} găsite${(activeProgram || filterComponent) ? ` (${COMPONENT_MAPPING[activeProgram || filterComponent]?.label})` : ''} • ${formatMoneyWithCurrency(filteredTotals.totalValue)} valoare totală`
                                 }
                             }
                             
@@ -3776,7 +3776,7 @@ const MapView = ({
                                 return sum
                             }, 0)
                             
-                            return `${filteredData} ${endpoint === 'payments' ? 'plăți' : 'proiecte'} găsite${(activeProgram || filterComponent) ? ` (${COMPONENT_MAPPING[activeProgram || filterComponent]?.label})` : ''} • ${formatMoneyWithCurrency(totalValue)} valoare totală`
+                            return `${fmtNum(filteredData)} ${endpoint === 'payments' ? 'plăți' : 'proiecte'} găsite${(activeProgram || filterComponent) ? ` (${COMPONENT_MAPPING[activeProgram || filterComponent]?.label})` : ''} • ${formatMoneyWithCurrency(totalValue)} valoare totală`
                         })()
                     }
                     itemsPerPage={10}
