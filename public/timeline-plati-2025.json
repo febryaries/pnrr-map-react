@@ -1,12 +1,12 @@
 {
-  "generated_at": "2025-11-08T07:36:24.110Z",
-  "description": "Timeline plăți PNRR 2020-2025 - date cumulative pe luni",
-  "source": "https://mfe.gov.ro/generator/data/20251106-plati_pnrr.json.gz",
+  "generated_at": "2025-11-08T16:39:34.939Z",
+  "description": "Timeline plăți PNRR 2020-2025 - date cumulative pe luni (fără MULTI-JUDEȚ)",
+  "source": "https://mfe.gov.ro/generator/data/20251108-plati_pnrr.json.gz",
   "startYear": 2020,
   "endYear": 2025,
   "months": 60,
-  "totalPayments": 47554,
-  "totalEUR": 8247175926.58,
+  "totalPayments": 47561,
+  "totalEUR": 8247804255.74,
   "uniqueBeneficiaries": 4905,
   "timeline": [
     {
@@ -1552,7 +1552,7 @@
       "date": "2023-02",
       "dateYYYYMMDD": "202302",
       "label": "Februarie 2023",
-      "totalPayments": 757,
+      "totalPayments": 759,
       "totalEUR": 797910401.67,
       "totalRON": 3981939491,
       "uniqueBeneficiaries": 185,
@@ -1666,7 +1666,7 @@
           "name": "PRAHOVA",
           "totalEUR": 131710.92,
           "totalRON": 658512,
-          "paymentsCount": 10,
+          "paymentsCount": 12,
           "beneficiariesCount": 4
         },
         {
@@ -1843,7 +1843,7 @@
       "date": "2023-03",
       "dateYYYYMMDD": "202303",
       "label": "Martie 2023",
-      "totalPayments": 977,
+      "totalPayments": 979,
       "totalEUR": 964198341.38,
       "totalRON": 4814143953.65,
       "uniqueBeneficiaries": 231,
@@ -1985,7 +1985,7 @@
           "name": "PRAHOVA",
           "totalEUR": 131710.92,
           "totalRON": 658512,
-          "paymentsCount": 10,
+          "paymentsCount": 12,
           "beneficiariesCount": 4
         },
         {
@@ -2148,7 +2148,7 @@
       "date": "2023-04",
       "dateYYYYMMDD": "202304",
       "label": "Aprilie 2023",
-      "totalPayments": 1384,
+      "totalPayments": 1386,
       "totalEUR": 989699243.92,
       "totalRON": 4941684221.35,
       "uniqueBeneficiaries": 336,
@@ -2311,7 +2311,7 @@
           "name": "PRAHOVA",
           "totalEUR": 171798.92,
           "totalRON": 858952,
-          "paymentsCount": 13,
+          "paymentsCount": 15,
           "beneficiariesCount": 7
         },
         {
@@ -2453,7 +2453,7 @@
       "date": "2023-05",
       "dateYYYYMMDD": "202305",
       "label": "Mai 2023",
-      "totalPayments": 1727,
+      "totalPayments": 1729,
       "totalEUR": 1026903480.93,
       "totalRON": 5127819044.11,
       "uniqueBeneficiaries": 408,
@@ -2637,7 +2637,7 @@
           "name": "PRAHOVA",
           "totalEUR": 280532.85,
           "totalRON": 1402621.63,
-          "paymentsCount": 19,
+          "paymentsCount": 21,
           "beneficiariesCount": 12
         },
         {
@@ -2758,7 +2758,7 @@
       "date": "2023-06",
       "dateYYYYMMDD": "202306",
       "label": "Iunie 2023",
-      "totalPayments": 2319,
+      "totalPayments": 2321,
       "totalEUR": 1122465623.89,
       "totalRON": 5606060760.66,
       "uniqueBeneficiaries": 602,
@@ -2977,7 +2977,7 @@
           "name": "PRAHOVA",
           "totalEUR": 338820.48,
           "totalRON": 1694059.76,
-          "paymentsCount": 24,
+          "paymentsCount": 26,
           "beneficiariesCount": 17
         },
         {
@@ -3063,7 +3063,7 @@
       "date": "2023-07",
       "dateYYYYMMDD": "202307",
       "label": "Iulie 2023",
-      "totalPayments": 3328,
+      "totalPayments": 3330,
       "totalEUR": 1184538634.52,
       "totalRON": 5916548288.96,
       "uniqueBeneficiaries": 855,
@@ -3156,7 +3156,7 @@
           "name": "PRAHOVA",
           "totalEUR": 1117172.84,
           "totalRON": 5585821.55,
-          "paymentsCount": 80,
+          "paymentsCount": 82,
           "beneficiariesCount": 40
         },
         {
@@ -3368,7 +3368,7 @@
       "date": "2023-08",
       "dateYYYYMMDD": "202308",
       "label": "August 2023",
-      "totalPayments": 4097,
+      "totalPayments": 4099,
       "totalEUR": 1268211277.6,
       "totalRON": 6335238129.15,
       "uniqueBeneficiaries": 986,
@@ -3454,7 +3454,7 @@
           "name": "PRAHOVA",
           "totalEUR": 1769061.7,
           "totalRON": 8845265.84,
-          "paymentsCount": 102,
+          "paymentsCount": 104,
           "beneficiariesCount": 42
         },
         {
@@ -3673,7 +3673,7 @@
       "date": "2023-09",
       "dateYYYYMMDD": "202309",
       "label": "Septembrie 2023",
-      "totalPayments": 4928,
+      "totalPayments": 4930,
       "totalEUR": 1336890210.01,
       "totalRON": 6678887705.91,
       "uniqueBeneficiaries": 1176,
@@ -3752,7 +3752,7 @@
           "name": "PRAHOVA",
           "totalEUR": 2330403.75,
           "totalRON": 11651976.08,
-          "paymentsCount": 125,
+          "paymentsCount": 127,
           "beneficiariesCount": 45
         },
         {
@@ -3978,7 +3978,7 @@
       "date": "2023-10",
       "dateYYYYMMDD": "202310",
       "label": "Octombrie 2023",
-      "totalPayments": 5745,
+      "totalPayments": 5747,
       "totalEUR": 1413053958.58,
       "totalRON": 7059907792.49,
       "uniqueBeneficiaries": 1345,
@@ -4057,7 +4057,7 @@
           "name": "PRAHOVA",
           "totalEUR": 2804576.83,
           "totalRON": 14022841.48,
-          "paymentsCount": 143,
+          "paymentsCount": 145,
           "beneficiariesCount": 50
         },
         {
@@ -4283,7 +4283,7 @@
       "date": "2023-11",
       "dateYYYYMMDD": "202311",
       "label": "Noiembrie 2023",
-      "totalPayments": 7122,
+      "totalPayments": 7124,
       "totalEUR": 1543236815.85,
       "totalRON": 7711133655.28,
       "uniqueBeneficiaries": 1524,
@@ -4362,7 +4362,7 @@
           "name": "PRAHOVA",
           "totalEUR": 3902118.89,
           "totalRON": 19510551.88,
-          "paymentsCount": 184,
+          "paymentsCount": 186,
           "beneficiariesCount": 54
         },
         {
@@ -4588,7 +4588,7 @@
       "date": "2023-12",
       "dateYYYYMMDD": "202312",
       "label": "Decembrie 2023",
-      "totalPayments": 8459,
+      "totalPayments": 8461,
       "totalEUR": 1988907267.32,
       "totalRON": 9941164838.4,
       "uniqueBeneficiaries": 1685,
@@ -4653,7 +4653,7 @@
           "name": "PRAHOVA",
           "totalEUR": 5761054.38,
           "totalRON": 28805229.43,
-          "paymentsCount": 218,
+          "paymentsCount": 220,
           "beneficiariesCount": 60
         },
         {
@@ -4893,7 +4893,7 @@
       "date": "2024-01",
       "dateYYYYMMDD": "202401",
       "label": "Ianuarie 2024",
-      "totalPayments": 9245,
+      "totalPayments": 9247,
       "totalEUR": 2107382977.92,
       "totalRON": 10533691133.9,
       "uniqueBeneficiaries": 1748,
@@ -4965,7 +4965,7 @@
           "name": "PRAHOVA",
           "totalEUR": 6287727.75,
           "totalRON": 31438596.27,
-          "paymentsCount": 242,
+          "paymentsCount": 244,
           "beneficiariesCount": 61
         },
         {
@@ -5198,7 +5198,7 @@
       "date": "2024-02",
       "dateYYYYMMDD": "202402",
       "label": "Februarie 2024",
-      "totalPayments": 10361,
+      "totalPayments": 10363,
       "totalEUR": 2271044638.17,
       "totalRON": 11352619757.08,
       "uniqueBeneficiaries": 1886,
@@ -5263,7 +5263,7 @@
           "name": "PRAHOVA",
           "totalEUR": 6865109.62,
           "totalRON": 34325505.57,
-          "paymentsCount": 268,
+          "paymentsCount": 270,
           "beneficiariesCount": 63
         },
         {
@@ -5503,7 +5503,7 @@
       "date": "2024-03",
       "dateYYYYMMDD": "202403",
       "label": "Martie 2024",
-      "totalPayments": 11079,
+      "totalPayments": 11081,
       "totalEUR": 2483239362.93,
       "totalRON": 12414325933.67,
       "uniqueBeneficiaries": 1996,
@@ -5568,7 +5568,7 @@
           "name": "PRAHOVA",
           "totalEUR": 7218905.03,
           "totalRON": 36094482.62,
-          "paymentsCount": 281,
+          "paymentsCount": 283,
           "beneficiariesCount": 64
         },
         {
@@ -5808,7 +5808,7 @@
       "date": "2024-04",
       "dateYYYYMMDD": "202404",
       "label": "Aprilie 2024",
-      "totalPayments": 12602,
+      "totalPayments": 12604,
       "totalEUR": 2836311981.49,
       "totalRON": 14181102425.99,
       "uniqueBeneficiaries": 2123,
@@ -5887,7 +5887,7 @@
           "name": "PRAHOVA",
           "totalEUR": 8568003.04,
           "totalRON": 42839972.65,
-          "paymentsCount": 310,
+          "paymentsCount": 312,
           "beneficiariesCount": 64
         },
         {
@@ -6113,7 +6113,7 @@
       "date": "2024-05",
       "dateYYYYMMDD": "202405",
       "label": "Mai 2024",
-      "totalPayments": 14141,
+      "totalPayments": 14143,
       "totalEUR": 3067381352.64,
       "totalRON": 15336946052.18,
       "uniqueBeneficiaries": 2336,
@@ -6213,7 +6213,7 @@
           "name": "PRAHOVA",
           "totalEUR": 9538036.49,
           "totalRON": 47690139.95,
-          "paymentsCount": 338,
+          "paymentsCount": 340,
           "beneficiariesCount": 67
         },
         {
@@ -6418,7 +6418,7 @@
       "date": "2024-06",
       "dateYYYYMMDD": "202406",
       "label": "Iunie 2024",
-      "totalPayments": 15120,
+      "totalPayments": 15122,
       "totalEUR": 3325731138.11,
       "totalRON": 16629532690.07,
       "uniqueBeneficiaries": 2480,
@@ -6560,7 +6560,7 @@
           "name": "PRAHOVA",
           "totalEUR": 9933970.19,
           "totalRON": 49669808.4,
-          "paymentsCount": 351,
+          "paymentsCount": 353,
           "beneficiariesCount": 71
         },
         {
@@ -6723,7 +6723,7 @@
       "date": "2024-07",
       "dateYYYYMMDD": "202407",
       "label": "Iulie 2024",
-      "totalPayments": 16940,
+      "totalPayments": 16942,
       "totalEUR": 3741454418.95,
       "totalRON": 18709191759.4,
       "uniqueBeneficiaries": 2627,
@@ -6893,7 +6893,7 @@
           "name": "PRAHOVA",
           "totalEUR": 11389777.18,
           "totalRON": 56948843.38,
-          "paymentsCount": 386,
+          "paymentsCount": 388,
           "beneficiariesCount": 74
         },
         {
@@ -7028,7 +7028,7 @@
       "date": "2024-08",
       "dateYYYYMMDD": "202408",
       "label": "August 2024",
-      "totalPayments": 18252,
+      "totalPayments": 18254,
       "totalEUR": 4023846636.42,
       "totalRON": 20121861789,
       "uniqueBeneficiaries": 2830,
@@ -7212,7 +7212,7 @@
           "name": "PRAHOVA",
           "totalEUR": 13201199.72,
           "totalRON": 66005956.05,
-          "paymentsCount": 408,
+          "paymentsCount": 410,
           "beneficiariesCount": 78
         },
         {
@@ -7333,7 +7333,7 @@
       "date": "2024-09",
       "dateYYYYMMDD": "202409",
       "label": "Septembrie 2024",
-      "totalPayments": 19600,
+      "totalPayments": 19602,
       "totalEUR": 4342538030.46,
       "totalRON": 21716339556.59,
       "uniqueBeneficiaries": 2972,
@@ -7433,7 +7433,7 @@
           "name": "PRAHOVA",
           "totalEUR": 18770381.97,
           "totalRON": 93851867.32,
-          "paymentsCount": 443,
+          "paymentsCount": 445,
           "beneficiariesCount": 79
         },
         {
@@ -7638,7 +7638,7 @@
       "date": "2024-10",
       "dateYYYYMMDD": "202410",
       "label": "Octombrie 2024",
-      "totalPayments": 22017,
+      "totalPayments": 22019,
       "totalEUR": 4807179033.79,
       "totalRON": 24040602022.47,
       "uniqueBeneficiaries": 3196,
@@ -7724,7 +7724,7 @@
           "name": "PRAHOVA",
           "totalEUR": 27894381.27,
           "totalRON": 139471863.84,
-          "paymentsCount": 499,
+          "paymentsCount": 501,
           "beneficiariesCount": 84
         },
         {
@@ -7943,7 +7943,7 @@
       "date": "2024-11",
       "dateYYYYMMDD": "202411",
       "label": "Noiembrie 2024",
-      "totalPayments": 23438,
+      "totalPayments": 23440,
       "totalEUR": 5161291772.24,
       "totalRON": 25812269137.92,
       "uniqueBeneficiaries": 3403,
@@ -8029,7 +8029,7 @@
           "name": "PRAHOVA",
           "totalEUR": 32026375.31,
           "totalRON": 160131834.08,
-          "paymentsCount": 536,
+          "paymentsCount": 538,
           "beneficiariesCount": 90
         },
         {
@@ -8248,7 +8248,7 @@
       "date": "2024-12",
       "dateYYYYMMDD": "202412",
       "label": "Decembrie 2024",
-      "totalPayments": 26578,
+      "totalPayments": 26580,
       "totalEUR": 6068564373.08,
       "totalRON": 30351078851.98,
       "uniqueBeneficiaries": 3647,
@@ -8348,7 +8348,7 @@
           "name": "PRAHOVA",
           "totalEUR": 35747102.33,
           "totalRON": 178736761.35,
-          "paymentsCount": 610,
+          "paymentsCount": 612,
           "beneficiariesCount": 103
         },
         {
@@ -8553,7 +8553,7 @@
       "date": "2025-01",
       "dateYYYYMMDD": "202501",
       "label": "Ianuarie 2025",
-      "totalPayments": 27205,
+      "totalPayments": 27207,
       "totalEUR": 6362074978.92,
       "totalRON": 31821566986.9,
       "uniqueBeneficiaries": 3662,
@@ -8653,7 +8653,7 @@
           "name": "PRAHOVA",
           "totalEUR": 37658472.56,
           "totalRON": 188312726.24,
-          "paymentsCount": 625,
+          "paymentsCount": 627,
           "beneficiariesCount": 103
         },
         {
@@ -8858,7 +8858,7 @@
       "date": "2025-02",
       "dateYYYYMMDD": "202502",
       "label": "Februarie 2025",
-      "totalPayments": 29814,
+      "totalPayments": 29816,
       "totalEUR": 7024885954.09,
       "totalRON": 35142249972.7,
       "uniqueBeneficiaries": 3753,
@@ -8972,7 +8972,7 @@
           "name": "PRAHOVA",
           "totalEUR": 43263095.07,
           "totalRON": 216391884.96,
-          "paymentsCount": 673,
+          "paymentsCount": 675,
           "beneficiariesCount": 104
         },
         {
@@ -9163,7 +9163,7 @@
       "date": "2025-03",
       "dateYYYYMMDD": "202503",
       "label": "Martie 2025",
-      "totalPayments": 32448,
+      "totalPayments": 32450,
       "totalEUR": 7436692083.28,
       "totalRON": 37205398680.95,
       "uniqueBeneficiaries": 3951,
@@ -9284,7 +9284,7 @@
           "name": "PRAHOVA",
           "totalEUR": 47817095.61,
           "totalRON": 239207427.7,
-          "paymentsCount": 725,
+          "paymentsCount": 727,
           "beneficiariesCount": 106
         },
         {
@@ -9468,7 +9468,7 @@
       "date": "2025-04",
       "dateYYYYMMDD": "202504",
       "label": "Aprilie 2025",
-      "totalPayments": 34731,
+      "totalPayments": 34733,
       "totalEUR": 7868396528.31,
       "totalRON": 39368237951.16,
       "uniqueBeneficiaries": 4071,
@@ -9603,7 +9603,7 @@
           "name": "PRAHOVA",
           "totalEUR": 53218086.78,
           "totalRON": 266266393.54,
-          "paymentsCount": 757,
+          "paymentsCount": 759,
           "beneficiariesCount": 108
         },
         {
@@ -9780,7 +9780,7 @@
       "date": "2025-05",
       "dateYYYYMMDD": "202505",
       "label": "Mai 2025",
-      "totalPayments": 36995,
+      "totalPayments": 36997,
       "totalEUR": 8262737396.19,
       "totalRON": 41343885699.47,
       "uniqueBeneficiaries": 4197,
@@ -9915,7 +9915,7 @@
           "name": "PRAHOVA",
           "totalEUR": 56012068.61,
           "totalRON": 280264242.49,
-          "paymentsCount": 799,
+          "paymentsCount": 801,
           "beneficiariesCount": 109
         },
         {
@@ -10092,7 +10092,7 @@
       "date": "2025-06",
       "dateYYYYMMDD": "202506",
       "label": "Iunie 2025",
-      "totalPayments": 38770,
+      "totalPayments": 38772,
       "totalEUR": 8809256167.74,
       "totalRON": 44081944743.68,
       "uniqueBeneficiaries": 4326,
@@ -10234,7 +10234,7 @@
           "name": "PRAHOVA",
           "totalEUR": 57957505.99,
           "totalRON": 290010883.71,
-          "paymentsCount": 824,
+          "paymentsCount": 826,
           "beneficiariesCount": 112
         },
         {
@@ -10404,7 +10404,7 @@
       "date": "2025-07",
       "dateYYYYMMDD": "202507",
       "label": "Iulie 2025",
-      "totalPayments": 40735,
+      "totalPayments": 40737,
       "totalEUR": 9362021605.26,
       "totalRON": 46851299586.49,
       "uniqueBeneficiaries": 4525,
@@ -10532,7 +10532,7 @@
           "name": "PRAHOVA",
           "totalEUR": 65994132.6,
           "totalRON": 330274383.04,
-          "paymentsCount": 856,
+          "paymentsCount": 858,
           "beneficiariesCount": 113
         },
         {
@@ -10716,7 +10716,7 @@
       "date": "2025-08",
       "dateYYYYMMDD": "202508",
       "label": "August 2025",
-      "totalPayments": 44300,
+      "totalPayments": 44302,
       "totalEUR": 10019950896.33,
       "totalRON": 50147525335.84,
       "uniqueBeneficiaries": 4647,
@@ -10837,7 +10837,7 @@
           "name": "PRAHOVA",
           "totalEUR": 78466647.56,
           "totalRON": 392761682.9,
-          "paymentsCount": 928,
+          "paymentsCount": 930,
           "beneficiariesCount": 116
         },
         {
@@ -11028,7 +11028,7 @@
       "date": "2025-09",
       "dateYYYYMMDD": "202509",
       "label": "Septembrie 2025",
-      "totalPayments": 45723,
+      "totalPayments": 45725,
       "totalEUR": 10727781569.55,
       "totalRON": 53693757009.61,
       "uniqueBeneficiaries": 4764,
@@ -11163,7 +11163,7 @@
           "name": "PRAHOVA",
           "totalEUR": 83550517.42,
           "totalRON": 418231870.84,
-          "paymentsCount": 946,
+          "paymentsCount": 948,
           "beneficiariesCount": 121
         },
         {
@@ -11340,7 +11340,7 @@
       "date": "2025-10",
       "dateYYYYMMDD": "202510",
       "label": "Octombrie 2025",
-      "totalPayments": 47544,
+      "totalPayments": 47546,
       "totalEUR": 8244522666.51,
       "totalRON": 41252629905.36,
       "uniqueBeneficiaries": 4901,
@@ -11461,7 +11461,7 @@
           "name": "PRAHOVA",
           "totalEUR": 91023948.74,
           "totalRON": 455673761.77,
-          "paymentsCount": 998,
+          "paymentsCount": 1000,
           "beneficiariesCount": 124
         },
         {
@@ -11652,9 +11652,9 @@
       "date": "2025-11",
       "dateYYYYMMDD": "202511",
       "label": "Noiembrie 2025",
-      "totalPayments": 47554,
-      "totalEUR": 8247175926.58,
-      "totalRON": 41265922738.28,
+      "totalPayments": 47561,
+      "totalEUR": 8247804255.74,
+      "totalRON": 41269070667.39,
       "uniqueBeneficiaries": 4905,
       "counties": [
         {
@@ -11680,16 +11680,16 @@
         },
         {
           "name": "CLUJ",
-          "totalEUR": 167904164.71,
-          "totalRON": 840435607.14,
-          "paymentsCount": 1262,
+          "totalEUR": 168033471.74,
+          "totalRON": 841083435.34,
+          "paymentsCount": 1263,
           "beneficiariesCount": 161
         },
         {
           "name": "BIHOR",
-          "totalEUR": 140572457.74,
-          "totalRON": 703752955.23,
-          "paymentsCount": 1881,
+          "totalEUR": 140606629.31,
+          "totalRON": 703924154.82,
+          "paymentsCount": 1882,
           "beneficiariesCount": 175
         },
         {
@@ -11715,9 +11715,9 @@
         },
         {
           "name": "MUREŞ",
-          "totalEUR": 105849706.96,
-          "totalRON": 530008470.59,
-          "paymentsCount": 1325,
+          "totalEUR": 105898295.16,
+          "totalRON": 530251897.46,
+          "paymentsCount": 1326,
           "beneficiariesCount": 147
         },
         {
@@ -11736,9 +11736,9 @@
         },
         {
           "name": "BISTRIŢA-NĂSĂUD",
-          "totalEUR": 104356768.26,
-          "totalRON": 522349351.16,
-          "paymentsCount": 694,
+          "totalEUR": 104413507.32,
+          "totalRON": 522633613.87,
+          "paymentsCount": 695,
           "beneficiariesCount": 103
         },
         {
@@ -11773,7 +11773,7 @@
           "name": "PRAHOVA",
           "totalEUR": 91023948.74,
           "totalRON": 455673761.77,
-          "paymentsCount": 998,
+          "paymentsCount": 1000,
           "beneficiariesCount": 124
         },
         {
@@ -11841,9 +11841,9 @@
         },
         {
           "name": "SĂLAJ",
-          "totalEUR": 60238262.88,
-          "totalRON": 301607843.11,
-          "paymentsCount": 730,
+          "totalEUR": 60597786.18,
+          "totalRON": 303409054.85,
+          "paymentsCount": 731,
           "beneficiariesCount": 92
         },
         {

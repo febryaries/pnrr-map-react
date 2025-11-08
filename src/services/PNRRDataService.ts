@@ -16,14 +16,41 @@ export class PNRRDataService {
   private projectAggregation: ProjectDataAggregation;
   private dataCache: Map<DataEndpointType, CountyAggregation[]> = new Map();
   private loadingStates: Map<DataEndpointType, boolean> = new Map();
+  private currentDataDate: string;
 
-  constructor() {
-    this.paymentAggregation = new PaymentDataAggregation();
-    this.projectAggregation = new ProjectDataAggregation();
+  constructor(dataDate?: string) {
+    this.currentDataDate = dataDate || '';
+    this.paymentAggregation = new PaymentDataAggregation(dataDate);
+    this.projectAggregation = new ProjectDataAggregation(dataDate);
     
     // Initialize loading states
     this.loadingStates.set(DATA_ENDPOINTS.PAYMENTS, false);
     this.loadingStates.set(DATA_ENDPOINTS.PROJECTS, false);
+  }
+
+  /**
+   * Update data date and invalidate cache
+   */
+  setDataDate(dataDate: string): void {
+    if (this.currentDataDate !== dataDate) {
+      console.log(`📅 PNRRDataService: Updating data date from ${this.currentDataDate} to ${dataDate}`);
+      this.currentDataDate = dataDate;
+      
+      // Recreate aggregation instances with new date
+      this.paymentAggregation = new PaymentDataAggregation(dataDate);
+      this.projectAggregation = new ProjectDataAggregation(dataDate);
+      
+      // Clear cache to force reload with new date
+      this.dataCache.clear();
+      console.log(`🗑️  Cache cleared for new data date: ${dataDate}`);
+    }
+  }
+
+  /**
+   * Get current data date
+   */
+  getDataDate(): string {
+    return this.currentDataDate;
   }
 
   /**

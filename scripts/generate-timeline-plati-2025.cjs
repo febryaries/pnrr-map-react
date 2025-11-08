@@ -82,22 +82,74 @@ async function downloadAndDecompress(url) {
   });
 }
 
+async function getLatestDataDate() {
+  return new Promise((resolve, reject) => {
+    console.log('📅 Fetching latest data date from contains.json...');
+    
+    https.get('https://mfe.gov.ro/generator/data/contains.json', (res) => {
+      if (res.statusCode !== 200) {
+        reject(new Error(`HTTP ${res.statusCode}: ${res.statusMessage}`));
+        return;
+      }
+      
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        try {
+          const json = JSON.parse(data);
+          // Find latest plati_pnrr file
+          const platiFiles = json.files.filter(f => f.endpoint === 'plati_pnrr');
+          if (platiFiles.length === 0) {
+            reject(new Error('No plati_pnrr files found'));
+            return;
+          }
+          
+          // First file is the latest (sorted by date desc)
+          const latestDate = platiFiles[0].date_yyyymmdd;
+          console.log(`✅ Latest data date: ${latestDate} (${platiFiles[0].dataset_date})\n`);
+          resolve(latestDate);
+        } catch (err) {
+          reject(err);
+        }
+      });
+    }).on('error', reject);
+  });
+}
+
 async function generateTimeline() {
   console.log('🚀 Starting timeline generation for Plăți PNRR 2025\n');
   const startTime = Date.now();
   
   try {
-    // 1. Download data
-    const url = 'https://mfe.gov.ro/generator/data/20251106-plati_pnrr.json.gz';
+    // 1. Get latest data date automatically (with fallback)
+    let latestDate;
+    try {
+      latestDate = await getLatestDataDate();
+    } catch (error) {
+      console.log(`⚠️  Could not fetch latest date: ${error.message}`);
+      console.log(`📅 Using fallback date: 20251108\n`);
+      latestDate = '20251108';
+    }
+    
+    // 2. Download data
+    const url = `https://mfe.gov.ro/generator/data/${latestDate}-plati_pnrr.json.gz`;
     const allPayments = await downloadAndDecompress(url);
     console.log(`✅ Downloaded ${allPayments.length} total payments\n`);
     
-    // 2. NO FILTER - we need ALL payments (2020-2025) for cumulative totals
-    console.log('📊 Processing ALL payments (cumulative)...');
-    const allPaymentsWithDate = allPayments.filter(p => p.data_plata);
-    console.log(`✅ Found ${allPaymentsWithDate.length} payments with dates\n`);
+    // 3. Filter payments: exclude MULTI-JUDEȚ (to match Homepage behavior)
+    console.log('📊 Processing payments (excluding MULTI-JUDEȚ)...');
+    const allPaymentsWithDate = allPayments.filter(p => {
+      if (!p.data_plata) return false;
+      
+      // Exclude MULTI-JUDEȚ payments (like Homepage does)
+      const county = p.judet_beneficiar || '';
+      if (county.toUpperCase().includes('MULTI')) return false;
+      
+      return true;
+    });
+    console.log(`✅ Found ${allPaymentsWithDate.length} payments with dates (excluding MULTI-JUDEȚ)\n`);
     
-    // 3. Define target months for FULL timeline (2020-2025)
+    // 4. Define target months for FULL timeline (2020-2025)
     console.log('📊 Creating cumulative timeline for 2020-2025...');
     const targetMonths = [];
     
@@ -119,7 +171,7 @@ async function generateTimeline() {
     
     console.log(`✅ Target months: ${targetMonths.length} months (${targetMonths[0]} to ${targetMonths[targetMonths.length - 1]})\n`);
     
-    // 4. Aggregate by county for each month (CUMULATIVE)
+    // 5. Aggregate by county for each month (CUMULATIVE)
     console.log('🗺️  Aggregating by county (cumulative)...');
     const timeline = [];
     
@@ -137,6 +189,9 @@ async function generateTimeline() {
       cumulativePayments.forEach(p => {
         const countyRaw = p.judet_beneficiar || 'NECUNOSCUT';
         const county = normalizeCountyName(countyRaw);
+        
+        // Skip MULTI-JUDEȚ (should already be filtered, but double-check)
+        if (county.includes('MULTI')) return;
         
         if (!byCounty[county]) {
           byCounty[county] = {
@@ -195,8 +250,8 @@ async function generateTimeline() {
     // 5. Save to file
     const output = {
       generated_at: new Date().toISOString(),
-      description: 'Timeline plăți PNRR 2020-2025 - date cumulative pe luni',
-      source: 'https://mfe.gov.ro/generator/data/20251106-plati_pnrr.json.gz',
+      description: 'Timeline plăți PNRR 2020-2025 - date cumulative pe luni (fără MULTI-JUDEȚ)',
+      source: url,
       startYear: 2020,
       endYear: 2025,
       months: timeline.length,

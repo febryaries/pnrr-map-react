@@ -2,124 +2,99 @@
 
 /**
  * PNRR Data Downloader Script
- * Downloads all payment data from the PNRR API and saves it to a JSON file
+ * Downloads payment and project data from MFE.gov.ro and saves to JSON files
  * 
  * Usage: node download-pnrr-data.js
  */
 
-const fs = require('fs').promises;
-const path = require('path');
+import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import pako from 'pako';
 
-// API configuration
-const API_BASE_URL = 'https://pnrr.fonduri-ue.ro/ords/pnrr/mfe/plati_pnrr';
-const BATCH_SIZE = 5000; // Same as your updated limit
-const DELAY_BETWEEN_REQUESTS = 100; // ms
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// MFE API configuration
+const MFE_BASE_URL = 'https://mfe.gov.ro/generator/data';
+const DATA_DATE = '20251106'; // Latest available date
 const MAX_RETRIES = 3;
-const OUTPUT_FILE = 'pnrr-data-complete.json';
+const OUTPUT_DIR = 'src/data';
 
-// Fetch data from PNRR API with retry logic
-async function fetchPNRRBatch(offset, limit, retryCount = 0) {
-  const url = `${API_BASE_URL}?offset=${offset}&limit=${limit}`;
+const ENDPOINTS = {
+  payments: `${DATA_DATE}-plati_pnrr.json.gz`,
+  projects: `${DATA_DATE}-progres_tehnic_proiecte.json.gz`,
+  indicators: `${DATA_DATE}-indicatori_total.json.gz`,
+  beneficiaries: `${DATA_DATE}-top_beneficiari.json.gz`
+};
+
+// Fetch and decompress gzipped data from MFE
+async function fetchMFEData(endpoint, retryCount = 0) {
+  const url = `${MFE_BASE_URL}/${endpoint}`;
   
   try {
-    console.log(`Fetching: ${url}`);
-    
-    // Use dynamic import for fetch in Node.js
-    const { default: fetch } = await import('node-fetch');
+    console.log(`📥 Fetching: ${url}`);
     
     const response = await fetch(url, {
       headers: {
         'User-Agent': 'PNRR-Data-Downloader/1.0',
-        'Accept': 'application/json',
+        'Accept': 'application/json, application/gzip',
         'Cache-Control': 'no-cache'
-      },
-      timeout: 30000 // 30 second timeout
+      }
     });
 
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
 
-    const data = await response.json();
-    return data.items || [];
+    // Get compressed data as buffer
+    const buffer = await response.arrayBuffer();
+    const uint8Array = new Uint8Array(buffer);
+    
+    // Decompress with pako
+    const decompressed = pako.inflate(uint8Array, { to: 'string' });
+    const data = JSON.parse(decompressed);
+    
+    console.log(`   ✓ Downloaded and decompressed ${data.length.toLocaleString()} records`);
+    return data;
     
   } catch (error) {
-    console.error(`Error fetching batch at offset ${offset}:`, error.message);
+    console.error(`❌ Error fetching ${endpoint}:`, error.message);
     
     if (retryCount < MAX_RETRIES) {
-      console.log(`Retrying... (attempt ${retryCount + 1}/${MAX_RETRIES})`);
-      await new Promise(resolve => setTimeout(resolve, 1000 * (retryCount + 1))); // Exponential backoff
-      return fetchPNRRBatch(offset, limit, retryCount + 1);
+      console.log(`   🔄 Retrying... (attempt ${retryCount + 1}/${MAX_RETRIES})`);
+      await new Promise(resolve => setTimeout(resolve, 2000 * (retryCount + 1)));
+      return fetchMFEData(endpoint, retryCount + 1);
     } else {
       throw error;
     }
   }
 }
 
-// Download all PNRR data with pagination
-async function downloadAllPNRRData() {
-  const allData = [];
-  let offset = 0;
-  let hasMoreData = true;
-  let batchNumber = 1;
-  
-  console.log('🚀 Starting PNRR data download...');
-  console.log(`📊 Batch size: ${BATCH_SIZE} records`);
-  console.log(`⏱️  Delay between requests: ${DELAY_BETWEEN_REQUESTS}ms`);
+// Download all MFE datasets
+async function downloadAllMFEData() {
+  console.log('🚀 Starting MFE data download...');
+  console.log(`📅 Data date: ${DATA_DATE}`);
   console.log('');
   
   const startTime = Date.now();
+  const results = {};
   
-  while (hasMoreData) {
-    try {
-      console.log(`📦 Batch ${batchNumber}: Fetching records ${offset + 1}-${offset + BATCH_SIZE}...`);
-      
-      const batchData = await fetchPNRRBatch(offset, BATCH_SIZE);
-      
-      if (batchData.length === 0) {
-        console.log('✅ No more data available');
-        hasMoreData = false;
-      } else {
-        allData.push(...batchData);
-        console.log(`   ✓ Fetched ${batchData.length} records. Total: ${allData.length}`);
-        
-        // Check if we've reached the end
-        if (batchData.length < BATCH_SIZE) {
-          console.log('✅ Reached end of data (partial batch)');
-          hasMoreData = false;
-        } else {
-          // Move to next batch
-          offset += BATCH_SIZE;
-          batchNumber++;
-          
-          // Add delay between requests
-          if (hasMoreData) {
-            console.log(`   ⏳ Waiting ${DELAY_BETWEEN_REQUESTS}ms...`);
-            await new Promise(resolve => setTimeout(resolve, DELAY_BETWEEN_REQUESTS));
-          }
-        }
-      }
-      
-    } catch (error) {
-      console.error(`❌ Error in batch ${batchNumber}:`, error.message);
-      
-      // Check if it's a "no more data" type error
-      if (error.message.includes('404') || error.message.includes('400')) {
-        console.log('✅ Reached end of available data');
-        hasMoreData = false;
-      } else {
-        // For other errors, try to continue with next batch
-        console.log('⚠️  Continuing with next batch...');
-        offset += BATCH_SIZE;
-        batchNumber++;
-        
-        // Safety check to prevent infinite loops
-        if (offset > 100000) {
-          console.log('⚠️  Reached safety limit (100,000 records), stopping');
-          hasMoreData = false;
-        }
-      }
-    }
+  // Download payments
+  try {
+    console.log('💰 Downloading payments data...');
+    results.payments = await fetchMFEData(ENDPOINTS.payments);
+  } catch (error) {
+    console.error('⚠️  Failed to download payments:', error.message);
+  }
+  
+  // Download projects
+  try {
+    console.log('');
+    console.log('📊 Downloading projects data...');
+    results.projects = await fetchMFEData(ENDPOINTS.projects);
+  } catch (error) {
+    console.error('⚠️  Failed to download projects:', error.message);
   }
   
   const endTime = Date.now();
@@ -127,43 +102,42 @@ async function downloadAllPNRRData() {
   
   console.log('');
   console.log('📈 Download Summary:');
-  console.log(`   Total records: ${allData.length.toLocaleString()}`);
-  console.log(`   Total batches: ${batchNumber}`);
   console.log(`   Duration: ${duration} seconds`);
-  console.log(`   Average: ${(allData.length / parseFloat(duration)).toFixed(0)} records/second`);
+  if (results.payments) console.log(`   Payments: ${results.payments.length.toLocaleString()} records`);
+  if (results.projects) console.log(`   Projects: ${results.projects.length.toLocaleString()} records`);
   
-  return allData;
+  return results;
 }
 
-// Save data to JSON file with pretty formatting
+// Save data to JSON file
 async function saveDataToFile(data, filename) {
   try {
     console.log('');
-    console.log(`💾 Saving data to ${filename}...`);
+    console.log(`💾 Saving to ${filename}...`);
     
-    const jsonData = JSON.stringify(data, null, 2);
-    const filePath = path.join(process.cwd(), filename);
+    // Ensure output directory exists
+    await fs.mkdir(OUTPUT_DIR, { recursive: true });
+    
+    const jsonData = JSON.stringify(data);
+    const filePath = path.join(OUTPUT_DIR, filename);
     
     await fs.writeFile(filePath, jsonData, 'utf8');
     
     const stats = await fs.stat(filePath);
     const fileSizeMB = (stats.size / (1024 * 1024)).toFixed(2);
     
-    console.log(`✅ Data saved successfully!`);
-    console.log(`   File: ${filePath}`);
-    console.log(`   Size: ${fileSizeMB} MB`);
-    console.log(`   Records: ${data.length.toLocaleString()}`);
+    console.log(`   ✅ Saved: ${fileSizeMB} MB, ${data.length.toLocaleString()} records`);
     
   } catch (error) {
-    console.error('❌ Error saving file:', error.message);
+    console.error(`   ❌ Error saving ${filename}:`, error.message);
     throw error;
   }
 }
 
 // Generate summary statistics
-function generateSummary(data) {
+function generateSummary(data, dataType) {
   console.log('');
-  console.log('📊 Data Summary:');
+  console.log(`📊 ${dataType} Summary:`);
   
   // Count by component
   const componentCounts = {};
@@ -212,38 +186,33 @@ function generateSummary(data) {
 // Main execution
 async function main() {
   try {
-    console.log('🇷🇴 PNRR Data Downloader');
-    console.log('========================');
+    console.log('🇷🇴 PNRR Data Downloader (MFE)');
+    console.log('===============================');
     console.log('');
     
-    // Check if node-fetch is available
-    try {
-      await import('node-fetch');
-    } catch (error) {
-      console.log('📦 Installing node-fetch...');
-      const { execSync } = require('child_process');
-      execSync('npm install node-fetch@3', { stdio: 'inherit' });
-      console.log('✅ node-fetch installed');
-      console.log('');
-    }
+    // Download all datasets
+    const results = await downloadAllMFEData();
     
-    // Download all data
-    const allData = await downloadAllPNRRData();
-    
-    if (allData.length === 0) {
-      console.log('⚠️  No data was downloaded. Please check the API endpoint.');
+    if (!results.payments && !results.projects) {
+      console.log('⚠️  No data was downloaded. Please check the MFE endpoint.');
       return;
     }
     
-    // Save to file
-    await saveDataToFile(allData, OUTPUT_FILE);
+    // Save payments
+    if (results.payments) {
+      await saveDataToFile(results.payments, 'plati_pnrr.json');
+      generateSummary(results.payments, 'Payments');
+    }
     
-    // Generate summary
-    generateSummary(allData);
+    // Save projects
+    if (results.projects) {
+      await saveDataToFile(results.projects, 'progres_tehnic_proiecte.json');
+      generateSummary(results.projects, 'Projects');
+    }
     
     console.log('');
     console.log('🎉 Download completed successfully!');
-    console.log(`📁 Check the file: ${OUTPUT_FILE}`);
+    console.log(`📁 Files saved to: ${OUTPUT_DIR}/`);
     
   } catch (error) {
     console.error('');
@@ -269,12 +238,4 @@ process.on('SIGTERM', () => {
 });
 
 // Run the script
-if (require.main === module) {
-  main();
-}
-
-module.exports = {
-  downloadAllPNRRData,
-  fetchPNRRBatch,
-  saveDataToFile
-};
+main();

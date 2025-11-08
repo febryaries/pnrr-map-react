@@ -13,7 +13,7 @@ import {
 export type DataEndpoint = DataEndpointType
 
 // Hook to manage data endpoint switching with new aggregation classes
-export const useDataEndpoint = () => {
+export const useDataEndpoint = (dataDate?: string) => {
   const [endpoint, setEndpoint] = useState<DataEndpoint>(DATA_ENDPOINTS.PROJECTS)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -21,7 +21,15 @@ export const useDataEndpoint = () => {
   const [isInitialLoading, setIsInitialLoading] = useState(true)
   const [initialLoadError, setInitialLoadError] = useState<string | null>(null)
 
-  // Load only the active endpoint on mount and when endpoint changes (lazy loading for better performance)
+  // Update data service when dataDate changes
+  useEffect(() => {
+    if (dataDate) {
+      const dataService = getPNRRDataService()
+      dataService.setDataDate(dataDate)
+    }
+  }, [dataDate])
+
+  // Load only the active endpoint on mount and when endpoint or dataDate changes (lazy loading for better performance)
   useEffect(() => {
     const loadInitialData = async () => {
       setIsInitialLoading(true)
@@ -29,6 +37,10 @@ export const useDataEndpoint = () => {
       
       try {
         const dataService = getPNRRDataService()
+        // Update data date if provided
+        if (dataDate) {
+          dataService.setDataDate(dataDate)
+        }
         // Only load the current endpoint instead of all data sources
         // Cache check is inside loadData, so this won't duplicate loads
         await dataService.loadData(endpoint)
@@ -41,7 +53,7 @@ export const useDataEndpoint = () => {
     }
     
     loadInitialData()
-  }, [endpoint]) // Add endpoint as dependency to reload when it changes
+  }, [endpoint, dataDate]) // Add dataDate as dependency to reload when it changes
 
   // Get data from current endpoint
   const fetchData = useCallback(async (): Promise<CountyAggregation[]> => {

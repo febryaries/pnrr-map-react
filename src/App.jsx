@@ -35,7 +35,7 @@ function App() {
     }
   }, [latestDate])
 
-  // Use the data endpoint hook
+  // Use the data endpoint hook with dataDate
   const { 
     endpoint, 
     isLoading: isLoadingRealData, 
@@ -45,7 +45,7 @@ function App() {
     endpointInfo,
     isInitialLoading,
     initialLoadError
-  } = useDataEndpoint()
+  } = useDataEndpoint(dataDate)
 
   // Load real data when endpoint changes (initial load is handled by useDataEndpoint)
   useEffect(() => {
