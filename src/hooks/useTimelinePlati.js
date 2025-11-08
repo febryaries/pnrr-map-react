@@ -21,10 +21,11 @@ export function useTimelinePlati() {
         setIsLoading(true);
         setError(null);
         
-        console.log('📥 Loading timeline plăți 2025...');
+        console.log('📥 Loading timeline plăți 2023-2025...');
         const startTime = Date.now();
         
-        const response = await fetch('/timeline-plati-2025.json');
+        // Add timestamp to prevent caching
+        const response = await fetch(`/timeline-plati-2025.json?t=${Date.now()}`);
         
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -36,18 +37,29 @@ export function useTimelinePlati() {
         console.log(`✅ Loaded timeline in ${loadTime}ms`);
         console.log(`📊 ${data.months} months, ${data.totalPayments} payments, ${(data.totalEUR / 1000000).toFixed(2)} mil EUR`);
         
-        setTimelineData(data);
+        // Filter timeline to start from Ianuarie 2023
+        const filteredTimeline = data.timeline.filter(frame => frame.date >= '2023-01');
         
-        // Extract available dates
-        const dates = data.timeline.map(frame => ({
+        console.log(`🔍 Filtered timeline: ${filteredTimeline.length} months (from ${filteredTimeline[0]?.date} to ${filteredTimeline[filteredTimeline.length - 1]?.date})`);
+        
+        const filteredData = {
+          ...data,
+          timeline: filteredTimeline,
+          months: filteredTimeline.length
+        };
+        
+        setTimelineData(filteredData);
+        
+        // Extract available dates (only from 2023+)
+        const dates = filteredTimeline.map(frame => ({
           date: frame.date,
           label: frame.label
         }));
         setAvailableDates(dates);
         
         // Set LAST frame as current (most recent data)
-        if (data.timeline.length > 0) {
-          setCurrentData(data.timeline[data.timeline.length - 1]);
+        if (filteredTimeline.length > 0) {
+          setCurrentData(filteredTimeline[filteredTimeline.length - 1]);
         }
         
         setIsLoading(false);

@@ -6,6 +6,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
   margin-bottom: 20px;
+  overflow: visible;
 }
 
 .timeline-controls-header {
@@ -25,6 +26,42 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+/* Row with button and markers side by side */
+.timeline-row {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  align-items: center; /* Already centered, but markers container might need adjustment */
+}
+
+/* Ensure button doesn't shrink */
+.timeline-row .timeline-btn {
+  flex-shrink: 0;
+}
+
+/* Loading indicator - positioned above entire timeline section */
+.timeline-loading-indicator {
+  text-align: center;
+  color: #0ea5e9;
+  font-size: 0.9em;
+  font-weight: 600;
+  padding: 8px 16px;
+  margin-bottom: 10px;
+  background: #f0f9ff;
+  border-radius: 8px;
+  border: 1px solid #bae6fd;
+  animation: fade-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes fade-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 /* Buttons */
@@ -185,7 +222,7 @@
 .timeline-markers {
   position: relative;
   width: 100%;
-  height: 50px;
+  min-height: 50px;
   display: flex;
   flex-direction: row;
   gap: 20px;
@@ -193,29 +230,13 @@
   overflow-y: visible;
   white-space: nowrap;
   padding: 10px;
-  margin-bottom: 15px;
   background: #f8fafc;
   border-radius: 8px;
-  scrollbar-width: thin;
-  scrollbar-color: #0ea5e9 #e2e8f0;
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
 }
 
 .timeline-markers::-webkit-scrollbar {
-  height: 6px;
-}
-
-.timeline-markers::-webkit-scrollbar-track {
-  background: #e2e8f0;
-  border-radius: 3px;
-}
-
-.timeline-markers::-webkit-scrollbar-thumb {
-  background: #0ea5e9;
-  border-radius: 3px;
-}
-
-.timeline-markers::-webkit-scrollbar-thumb:hover {
-  background: #0284c7;
+  display: none; /* Hide scrollbar for Chrome/Safari/Edge */
 }
 
 .timeline-marker {

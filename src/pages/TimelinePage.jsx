@@ -10,32 +10,43 @@ import TimelineControls from '../components/TimelineControls';
 import TimelineStats from '../components/TimelineStats';
 import SimpleMapNew from '../components/SimpleMapNew';
 import { useTimelinePlati } from '../hooks/useTimelinePlati';
+import { useTotalIndicators } from '../hooks/useTotalIndicators';
 import './TimelinePage.css';
 
 function TimelinePage({ onCountyClick }) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(59); // Start from Noiembrie 2025 (last month - index 59)
   const [progress, setProgress] = useState(0);
   const [playbackSpeed, setPlaybackSpeed] = useState(1666); // ~1.67s per frame (3x speed - default)
-  const [isJanuaryAnimating, setIsJanuaryAnimating] = useState(false);
   const animationRef = useRef(null);
   
-  // Load pre-generated timeline data (Plăți 2025)
+  // Load pre-generated timeline data (Plăți 2023-2025)
   const { availableDates, currentData, isLoading, getDataForIndex } = useTimelinePlati();
+  
+  // Load total indicators from official API for correct beneficiaries count
+  const { totalIndicators } = useTotalIndicators();
+  
+  // Start from last month (Noiembrie 2025) - will be set when data loads
+  const [currentIndex, setCurrentIndex] = useState(0);
+  
+  // Set to last month when data loads
+  useEffect(() => {
+    if (availableDates.length > 0 && currentIndex === 0) {
+      setCurrentIndex(availableDates.length - 1);
+    }
+  }, [availableDates.length]);
   
   // Dates are already formatted in the hook
   const formattedDates = availableDates;
-
-  // Timeline starts from first month (Decembrie 2020 - index 0)
-  // No need to set to last frame
 
   const handleIndexChange = (newIndex) => {
     setCurrentIndex(Math.floor(newIndex));
   };
 
   const play = () => {
-    // Reset to Ianuarie 2022 when playing
-    setCurrentIndex(13);
+    // If at the end (last month), restart from beginning
+    if (currentIndex >= availableDates.length - 1) {
+      setCurrentIndex(0);
+    }
     setProgress(0);
     setIsPlaying(true);
   };
@@ -64,12 +75,14 @@ function TimelinePage({ onCountyClick }) {
     
     const animate = (timestamp) => {
       if (!startTime) startTime = timestamp;
+      
       const elapsed = timestamp - startTime;
       
       const progressValue = (elapsed % playbackSpeed) / playbackSpeed;
       setProgress(progressValue);
       
-      if (elapsed >= playbackSpeed && !isJanuaryAnimating) {
+      // Advance to next month when enough time has passed
+      if (elapsed >= playbackSpeed) {
         startTime = timestamp;
         setCurrentIndex(prev => {
           const nextIndex = prev + 1;
@@ -92,7 +105,7 @@ function TimelinePage({ onCountyClick }) {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [isPlaying, playbackSpeed, availableDates.length, isJanuaryAnimating]);
+  }, [isPlaying, playbackSpeed, availableDates.length]);
 
   return (
     <div className="timeline-page">
@@ -100,7 +113,7 @@ function TimelinePage({ onCountyClick }) {
       <div className="timeline-page-header">
         <div className="timeline-page-title">
           <h1>💰 Absorbție în Timp - Plăți PNRR</h1>
-          <p>Evoluția plăților PNRR 2025 pe județe</p>
+          <p>Evoluția plăților PNRR 2023 - 2025</p>
         </div>
         
         <Link to="/" className="timeline-back-link">
@@ -120,6 +133,7 @@ function TimelinePage({ onCountyClick }) {
         currentDate={formattedDates[currentIndex]}
         isLoading={isLoading}
         isPlaying={isPlaying}
+        totalIndicators={totalIndicators}
       />
 
       {/* Controls */}
@@ -133,7 +147,6 @@ function TimelinePage({ onCountyClick }) {
         onPause={pause}
         onStop={stop}
         onIndexChange={handleIndexChange}
-        onSpeedChange={setPlaybackSpeed}
       />
 
       {/* Map */}
@@ -142,7 +155,6 @@ function TimelinePage({ onCountyClick }) {
           currentData={currentData}
           isPlaying={isPlaying}
           onCountyClick={onCountyClick}
-          onAnimationStateChange={setIsJanuaryAnimating}
         />
       </div>
 

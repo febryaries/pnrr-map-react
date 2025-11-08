@@ -118,13 +118,9 @@ function normalizeDiacritics(str) {
     .replace(/ţ/g, 'ț');
 }
 
-function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick, onAnimationStateChange }) {
+function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick }) {
   const [mapTopology, setMapTopology] = useState(null);
   const [highlightedCounties, setHighlightedCounties] = useState(new Set());
-  const [januaryAnimation, setJanuaryAnimation] = useState(false);
-  const [newPaymentCounties, setNewPaymentCounties] = useState(new Set());
-  const [februaryReady, setFebruaryReady] = useState(false);
-  const animationInProgress = useRef(false);
   const lastProcessedDate = useRef(null);
   const previousHighlightedRef = useRef(new Set());
   const chartRef = useRef(null);
@@ -158,7 +154,6 @@ function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick, on
     if (!currentData?.counties) {
       console.log('⚠️ No counties data, clearing highlights');
       setHighlightedCounties(new Set());
-      setNewPaymentCounties(new Set());
       previousHighlightedRef.current = new Set();
       lastProcessedDate.current = null;
       return;
@@ -173,135 +168,24 @@ function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick, on
     // Mark this date as processed
     lastProcessedDate.current = currentData.date;
 
-    // Check if current month is Ianuarie (month 01)
-    const currentMonth = currentData.date?.substring(5, 7); // Extract month from "2023-01"
-    const isJanuary = currentMonth === '01';
+    // Normal month - keep previous highlights and add new counties
+    const previouslyHighlighted = previousHighlightedRef.current;
+    const newHighlights = new Set();
     
-    if (isJanuary) {
-      // Skip if animation already in progress
-      if (animationInProgress.current) {
-        return;
-      }
-      
-      // Ianuarie - animație fade-in random pentru județe
-      const currentYear = currentData.date?.substring(0, 4);
-      console.log(`🎊 Ianuarie ${currentYear} - Starting fade-in animation!`);
-      animationInProgress.current = true;
-      setJanuaryAnimation(true);
-      setHighlightedCounties(new Set()); // Start with empty map
-      previousHighlightedRef.current = new Set(); // Reset previous highlights for new year
-      
-      // Notify parent that animation started
-      if (onAnimationStateChange) {
-        onAnimationStateChange(true);
-      }
-      
-      // Create shuffled array of counties
-      const shuffled = [...currentData.counties].sort(() => Math.random() - 0.5);
-      
-      // Animate counties appearing one by one
-      shuffled.forEach((county, index) => {
-        setTimeout(() => {
-          const normalizedName = normalizeDiacritics(county.name.toUpperCase());
-          const hcKey = COUNTY_TO_HC_KEY[normalizedName];
-          if (hcKey) {
-            setHighlightedCounties(prev => new Set([...prev, hcKey]));
-          }
-        }, index * 300); // 300ms delay between each county
-      });
-      
-      console.log(`✨ Animating ${shuffled.length} counties with fade-in effect`);
-      
-      // After animation completes, turn off animation mode and UPDATE previousHighlightedRef
-      setTimeout(() => {
-        setJanuaryAnimation(false);
-        animationInProgress.current = false;
-        
-        // NOW update previousHighlightedRef with all counties that have payments
-        const januaryHighlights = new Set();
-        currentData.counties.forEach(county => {
-          const normalizedName = normalizeDiacritics(county.name.toUpperCase());
-          const hcKey = COUNTY_TO_HC_KEY[normalizedName];
-          if (hcKey) {
-            januaryHighlights.add(hcKey);
-          }
-        });
-        previousHighlightedRef.current = januaryHighlights;
-        console.log(`✅ Ianuarie finished! Updated previousHighlightedRef with ${januaryHighlights.size} counties`);
-        
-        setFebruaryReady(true); // Signal that February can now proceed
-        
-        // Notify parent that animation finished
-        if (onAnimationStateChange) {
-          onAnimationStateChange(false);
-        }
-      }, shuffled.length * 300);
-      
-      // IMPORTANT: NICIODATĂ pulse în Ianuarie
-      setNewPaymentCounties(new Set());
-      console.log(`📍 Ianuarie - no pulse effect for any counties`);
-    } else {
-      // Check if this is February after January (need to wait for January animation)
-      const currentMonth = currentData.date?.substring(5, 7);
-      const isFebruary = currentMonth === '02';
-      
-      // If February and previousHighlightedRef is empty (January hasn't finished), BLOCK processing
-      if (isFebruary && previousHighlightedRef.current.size === 0) {
-        console.log(`⏳ Februarie - BLOCKED! Waiting for Ianuarie to populate previousHighlightedRef...`);
-        console.log(`   Current previousHighlightedRef size: ${previousHighlightedRef.current.size}`);
-        // DO NOT process - wait for January to finish and update previousHighlightedRef
-        return;
-      }
-      
-      // Normal month - keep previous highlights and add new counties
-      const previouslyHighlighted = previousHighlightedRef.current;
-      const newHighlights = new Set();
-      const countiesWithPulse = new Set();
-      
-      currentData.counties.forEach(county => {
-        const normalizedName = normalizeDiacritics(county.name.toUpperCase());
-        const hcKey = COUNTY_TO_HC_KEY[normalizedName];
-        if (hcKey) {
-          newHighlights.add(hcKey);
-          
-          // Pulse for ALL counties with payments in current month
-          if (county.paymentsCount > 0) {
-            countiesWithPulse.add(hcKey);
-          }
-        }
-      });
-      
-      setHighlightedCounties(newHighlights);
-      setNewPaymentCounties(countiesWithPulse);
-      previousHighlightedRef.current = newHighlights; // Update ref for next iteration
-      
-      console.log(`✨ Highlighting ${newHighlights.size} counties with payments:`, Array.from(newHighlights));
-      console.log(`💳 Counties with pulse effect (${countiesWithPulse.size}):`, Array.from(countiesWithPulse));
-      console.log(`   - Previously highlighted: ${previouslyHighlighted.size}`);
-    }
-  }, [currentData, februaryReady]);
-
-  // Apply pulse effect CSS class to counties with new payments
-  useEffect(() => {
-    if (!chartRef.current || !chartRef.current.chart) return;
-    
-    const chart = chartRef.current.chart;
-    const series = chart.series[0];
-    
-    if (!series || !series.points) return;
-    
-    // Apply or remove pulse class based on newPaymentCounties
-    series.points.forEach(point => {
-      if (point.graphic && point.graphic.element) {
-        const hcKey = point['hc-key'];
-        if (newPaymentCounties.has(hcKey)) {
-          point.graphic.element.classList.add('county-pulse-effect');
-        } else {
-          point.graphic.element.classList.remove('county-pulse-effect');
-        }
+    currentData.counties.forEach(county => {
+      const normalizedName = normalizeDiacritics(county.name.toUpperCase());
+      const hcKey = COUNTY_TO_HC_KEY[normalizedName];
+      if (hcKey) {
+        newHighlights.add(hcKey);
       }
     });
-  }, [newPaymentCounties, mapTopology, currentData]);
+    
+    setHighlightedCounties(newHighlights);
+    previousHighlightedRef.current = newHighlights; // Update ref for next iteration
+    
+    console.log(`✨ Highlighting ${newHighlights.size} counties with payments:`, Array.from(newHighlights));
+    console.log(`   - Previously highlighted: ${previouslyHighlighted.size}`);
+  }, [currentData]);
 
   // Handle county click - navigate to homepage with county selection
   const handleCountyClick = useCallback((countyCode) => {
@@ -324,7 +208,7 @@ function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick, on
 
   // Highcharts options
   const mapOptions = useMemo(() => {
-    if (!mapTopology) return null;
+    if (!mapTopology || !currentData?.counties) return null;
 
     // Build a map of county data by hc-key for quick lookup
     const countyDataMap = {};
@@ -347,30 +231,42 @@ function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick, on
     
     // Create map data for ALL counties (like MFE does)
     // Counties without payments get value: 0 (NOT null) so they appear light blue
+    // In Ianuarie animation, only show values for counties that have appeared (in highlightedCounties)
     const mapData = Object.entries(HC_KEY_TO_CODE).map(([hcKey, code]) => {
       const data = countyDataMap[hcKey];
-      const hasNewPayments = newPaymentCounties.has(hcKey);
+      const isHighlighted = highlightedCounties.has(hcKey);
       
       return {
         'hc-key': hcKey,
         code: code,
         name: data?.name || code,
-        value: data?.value || 0, // 0 = light blue, NOT grey!
+        value: data?.value || 0,
         totalEUR: data?.totalEUR || 0,
         paymentsCount: data?.paymentsCount || 0,
-        beneficiariesCount: data?.beneficiariesCount || 0,
-        hasNewPayments: hasNewPayments
+        beneficiariesCount: data?.beneficiariesCount || 0
       };
     });
     
-    // Calculate P90 (percentila 90) for max value (like MFE does)
-    // This makes the gradient more visible by capping at 90th percentile
+    // Calculate gradient max value
+    // For few counties (< 10): use SECOND highest value to make smallest visible
+    // For many counties (>= 10): use P90 (percentila 90)
     const values = mapData
       .filter(d => d.value > 0)
       .map(d => d.value)
       .sort((a, b) => a - b);
-    const p90Index = Math.floor(values.length * 0.9);
-    const p90Value = values.length > 0 ? (values[p90Index] || values[values.length - 1]) : 1;
+    
+    let p90Value;
+    if (values.length < 10 && values.length >= 2) {
+      // Use second highest value to make smallest counties visible
+      p90Value = values[values.length - 2];
+    } else if (values.length >= 10) {
+      // Use P90 for many counties
+      const p90Index = Math.floor(values.length * 0.9);
+      p90Value = values[p90Index] || values[values.length - 1];
+    } else {
+      // Fallback for 0 or 1 county
+      p90Value = values.length > 0 ? values[values.length - 1] : 1;
+    }
 
     console.log(`📊 Creating mapOptions for ${currentData?.label}:`, {
       totalCounties: mapData.length,
@@ -383,7 +279,8 @@ function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick, on
       chart: {
         map: mapTopology,
         height: 600,
-        backgroundColor: '#ffffff' // Fundal alb pentru contrast
+        backgroundColor: '#ffffff', // Fundal alb pentru contrast
+        animation: false // Dezactivăm animația Highcharts (fade-in din colț)
       },
       title: { text: null },
       credits: { enabled: false },
@@ -393,13 +290,15 @@ function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick, on
       },
       colorAxis: {
         min: 0,
-        max: p90Value, // P90 (percentila 90) ca MFE
+        max: p90Value, // P90 (percentila 90) to make smaller values visible
         stops: [
-          [0, '#f0f9ff'],      // Very light blue
-          [0.3, '#bae6fd'],    // Light blue
-          [0.6, '#38bdf8'],    // Medium blue
-          [1, '#0284c7']       // Dark blue
-        ]
+          [0, '#e0f2fe'],      // Lightest blue for 0
+          [0.5, '#4299e1'],    // Medium blue
+          [1, '#0056b3']       // Darkest blue for max
+        ],
+        labels: {
+          enabled: false
+        }
       },
       tooltip: {
         useHTML: true,
@@ -441,6 +340,7 @@ function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick, on
         data: mapData, // TOATE județele (inclusiv cu value: 0)
         name: 'România',
         joinBy: ['hc-key', 'hc-key'],
+        animation: false, // Dezactivăm animația și pentru series
         states: {
           hover: {
             color: '#38bdf8',
@@ -474,7 +374,7 @@ function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick, on
     
     console.log(`✅ Returning mapOptions with ${options.series[0].data.length} total counties`);
     return options;
-  }, [mapTopology, currentData, handleCountyClick]); // NU includem highlightedCounties sau newPaymentCounties pentru a evita re-render
+  }, [mapTopology, currentData, handleCountyClick, highlightedCounties]);
 
   if (!mapOptions) {
     return (

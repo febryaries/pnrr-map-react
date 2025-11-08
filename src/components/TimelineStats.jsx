@@ -12,27 +12,20 @@ function TimelineStats({
   currentData,
   currentDate,
   isLoading = false,
-  isPlaying = false
+  isPlaying = false,
+  totalIndicators = null
 }) {
   const [currency, setCurrency] = useState('EUR');
   const [animatedValue, setAnimatedValue] = useState(0);
   const [animatedProjects, setAnimatedProjects] = useState(0);
-  const wasPlayingRef = useRef(false);
 
   const totalEUR = currentData?.totalEUR || 0;
   const totalRON = currentData?.totalRON || 0;
   const totalPayments = currentData?.totalPayments || 0;
-  const uniqueBeneficiaries = currentData?.uniqueBeneficiaries || 0;
   
-  // Reset la 0 când se începe Play
-  useEffect(() => {
-    if (isPlaying && !wasPlayingRef.current) {
-      // Tocmai a început Play
-      setAnimatedValue(0);
-      setAnimatedProjects(0);
-    }
-    wasPlayingRef.current = isPlaying;
-  }, [isPlaying]);
+  // Use uniqueBeneficiaries from timeline data (plati_pnrr - only active CID 2025 measures)
+  // This is consistent with the timeline data source and represents beneficiaries with payments for active measures
+  const uniqueBeneficiaries = currentData?.uniqueBeneficiaries || 0;
 
   // Animate value changes - smooth transition între valori (arată evoluția reală)
   useEffect(() => {
@@ -119,11 +112,11 @@ function TimelineStats({
               </div>
             </div>
 
-            {/* Unique beneficiaries */}
+            {/* Unique beneficiaries with payments */}
             <div className="timeline-stat-card timeline-stat-beneficiaries">
               <div className="timeline-stat-icon">👥</div>
               <div className="timeline-stat-content">
-                <div className="timeline-stat-label">Beneficiari unici</div>
+                <div className="timeline-stat-label">Beneficiari cu plăți</div>
                 <div className="timeline-stat-number">
                   {formatNumber(uniqueBeneficiaries)}
                 </div>
