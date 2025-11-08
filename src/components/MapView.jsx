@@ -1702,7 +1702,8 @@ const MapView = ({
                 title: 'TITLU_PROIECT',
                 contractNumber: 'NR_CONTRACT',
                 fundingSource: 'SURSA_FINANTARE',
-                cri: 'cri' // CRI identifier
+                cri: 'cri', // CRI identifier
+                cui: 'CUI_BENEFICIAR_FINAL' // CUI beneficiar (uppercase după agregare)
             }
         }
     }, [endpoint])
@@ -2692,7 +2693,6 @@ const MapView = ({
                         // Then override with display values
                         title: fullTitle,
                         beneficiary: item[fieldMappings.beneficiary],
-                        cui: endpoint === 'payments' ? item.CUI_BENEFICIAR_FINAL : undefined,
                         fundingSource: item[fieldMappings.fundingSource],
                         value: getValueField(item),
                         value_ron: valueRON,
