@@ -97,13 +97,27 @@ async function generateTimeline() {
     const allPaymentsWithDate = allPayments.filter(p => p.data_plata);
     console.log(`✅ Found ${allPaymentsWithDate.length} payments with dates\n`);
     
-    // 3. Define target months in 2025 for timeline
-    console.log('📊 Creating cumulative timeline for 2025...');
-    const targetMonths = [
-      '2025-01', '2025-02', '2025-03', '2025-04', '2025-05', '2025-06',
-      '2025-07', '2025-08', '2025-09', '2025-10', '2025-11'
-    ];
-    console.log(`✅ Target months: ${targetMonths.join(', ')}\n`);
+    // 3. Define target months for FULL timeline (2020-2025)
+    console.log('📊 Creating cumulative timeline for 2020-2025...');
+    const targetMonths = [];
+    
+    // Generate all months from Dec 2020 to Nov 2025
+    const startYear = 2020;
+    const startMonth = 12; // December
+    const endYear = 2025;
+    const endMonth = 11; // November
+    
+    for (let year = startYear; year <= endYear; year++) {
+      const firstMonth = (year === startYear) ? startMonth : 1;
+      const lastMonth = (year === endYear) ? endMonth : 12;
+      
+      for (let month = firstMonth; month <= lastMonth; month++) {
+        const monthStr = String(month).padStart(2, '0');
+        targetMonths.push(`${year}-${monthStr}`);
+      }
+    }
+    
+    console.log(`✅ Target months: ${targetMonths.length} months (${targetMonths[0]} to ${targetMonths[targetMonths.length - 1]})\n`);
     
     // 4. Aggregate by county for each month (CUMULATIVE)
     console.log('🗺️  Aggregating by county (cumulative)...');
@@ -181,9 +195,10 @@ async function generateTimeline() {
     // 5. Save to file
     const output = {
       generated_at: new Date().toISOString(),
-      description: 'Timeline plăți PNRR 2025 - date cumulative pe luni',
+      description: 'Timeline plăți PNRR 2020-2025 - date cumulative pe luni',
       source: 'https://mfe.gov.ro/generator/data/20251106-plati_pnrr.json.gz',
-      year: 2025,
+      startYear: 2020,
+      endYear: 2025,
       months: timeline.length,
       totalPayments: timeline[timeline.length - 1].totalPayments,
       totalEUR: timeline[timeline.length - 1].totalEUR,

@@ -4,7 +4,7 @@
  * Play/Pause controls, slider, and date selector for timeline animation
  */
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './TimelineControls.css';
 
 function TimelineControls({
@@ -22,17 +22,38 @@ function TimelineControls({
   // Calculează poziția smooth a slider-ului: index + progress
   const smoothPosition = currentIndex + progress;
   const [showSpeedMenu, setShowSpeedMenu] = useState(false);
+  const markersContainerRef = useRef(null);
+  const activeMarkerRef = useRef(null);
 
   const currentDate = availableDates[currentIndex];
   
+  // Show only months from Ianuarie 2022 onwards (index 13+)
+  const allMonths = availableDates.slice(13);
+  
+  // Auto-scroll synchronized with slider - keep active month centered
+  useEffect(() => {
+    if (!activeMarkerRef.current || !markersContainerRef.current) {
+      return;
+    }
+    
+    // Scroll active month into view, centered
+    activeMarkerRef.current.scrollIntoView({
+      behavior: isPlaying ? 'auto' : 'smooth',
+      block: 'nearest',
+      inline: 'center'
+    });
+  }, [currentIndex, currentDate, isPlaying]);
+  
+  
   const speedOptions = [
-    { label: '0.5x', value: 4000 },
-    { label: '1x', value: 2000 },
-    { label: '2x', value: 1000 },
-    { label: '4x', value: 500 }
+    { label: '0.5x', value: 10000 },
+    { label: '1x', value: 5000 },
+    { label: '2x', value: 2500 },
+    { label: '3x', value: 1666 },
+    { label: '4x', value: 1250 }
   ];
 
-  const currentSpeedLabel = speedOptions.find(opt => opt.value === playbackSpeed)?.label || '1x';
+  const currentSpeedLabel = speedOptions.find(opt => opt.value === playbackSpeed)?.label || '3x';
 
   const handleSliderChange = (e) => {
     const newIndex = parseInt(e.target.value, 10);
@@ -51,6 +72,29 @@ function TimelineControls({
       </div>
 
       <div className="timeline-controls-body">
+        {/* Date markers - ALL months (60 months: 2020-2025) - DEASUPRA butoanelor */}
+        <div className="timeline-markers" ref={markersContainerRef}>
+          {allMonths.map((date) => {
+            const isActive = date.date === currentDate?.date;
+            
+            return (
+              <div
+                key={date.date}
+                ref={isActive ? activeMarkerRef : null}
+                className={`timeline-marker ${isActive ? 'active' : ''}`}
+                title={date.label}
+                onClick={() => {
+                  const index = availableDates.findIndex(d => d.date === date.date);
+                  if (index !== -1) onIndexChange(index);
+                }}
+                style={{ cursor: 'pointer' }}
+              >
+                <span className="timeline-marker-label">{date.label}</span>
+              </div>
+            );
+          })}
+        </div>
+
         {/* Play/Pause/Stop buttons */}
         <div className="timeline-buttons">
           {!isPlaying ? (
@@ -103,34 +147,6 @@ function TimelineControls({
                 ))}
               </div>
             )}
-          </div>
-        </div>
-
-        {/* Slider */}
-        <div className="timeline-slider-container">
-          <input
-            type="range"
-            min="0"
-            max={Math.max(0, availableDates.length - 1)}
-            value={smoothPosition}
-            onChange={handleSliderChange}
-            className="timeline-slider"
-            disabled={availableDates.length === 0}
-            step="0.01"
-          />
-          
-          {/* Date markers */}
-          <div className="timeline-markers">
-            {availableDates.map((date, index) => (
-              <div
-                key={date.date}
-                className={`timeline-marker ${index === currentIndex ? 'active' : ''}`}
-                style={{ left: `${(index / (availableDates.length - 1)) * 100}%` }}
-                title={date.label}
-              >
-                <span className="timeline-marker-label">{date.label}</span>
-              </div>
-            ))}
           </div>
         </div>
 

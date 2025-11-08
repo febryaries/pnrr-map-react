@@ -126,7 +126,9 @@
 /* Slider */
 .timeline-slider-container {
   position: relative;
-  padding: 30px 0 40px 0;
+  padding-top: 40px;
+  padding-bottom: 15px;
+  overflow: visible;
 }
 
 .timeline-slider {
@@ -181,39 +183,73 @@
 
 /* Date markers */
 .timeline-markers {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 20px;
+  position: relative;
+  width: 100%;
+  height: 50px;
   display: flex;
-  justify-content: space-between;
-  overflow: hidden;
+  flex-direction: row;
+  gap: 20px;
+  overflow-x: auto;
+  overflow-y: visible;
+  white-space: nowrap;
+  padding: 10px;
+  margin-bottom: 15px;
+  background: #f8fafc;
+  border-radius: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: #0ea5e9 #e2e8f0;
+}
+
+.timeline-markers::-webkit-scrollbar {
+  height: 6px;
+}
+
+.timeline-markers::-webkit-scrollbar-track {
+  background: #e2e8f0;
+  border-radius: 3px;
+}
+
+.timeline-markers::-webkit-scrollbar-thumb {
+  background: #0ea5e9;
+  border-radius: 3px;
+}
+
+.timeline-markers::-webkit-scrollbar-thumb:hover {
+  background: #0284c7;
 }
 
 .timeline-marker {
-  position: absolute;
-  transform: translateX(-50%);
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 80px;
+  flex-shrink: 0;
+  min-width: fit-content;
 }
 
 .timeline-marker-label {
-  font-size: 0.7em;
+  font-size: 0.85em;
   color: #64748b;
   white-space: nowrap;
   font-weight: 500;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
+  overflow: visible;
+  text-overflow: clip;
+  padding: 4px 16px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  max-width: none;
 }
 
 .timeline-marker.active .timeline-marker-label {
-  color: #0ea5e9;
+  color: white;
   font-weight: 700;
-  font-size: 0.75em;
+  font-size: 0.9em;
+  background: #0ea5e9;
+  border: none;
+  padding: 6px 20px;
+  min-width: fit-content;
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.4);
 }
 
 /* Current date display */

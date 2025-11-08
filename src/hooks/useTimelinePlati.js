@@ -74,6 +74,13 @@ export function useTimelinePlati() {
       return null;
     }
     
+    console.log(`📅 getDataForIndex(${index}):`, {
+      date: frame.date,
+      label: frame.label,
+      countiesCount: frame.counties?.length,
+      counties: frame.counties?.map(c => c.name)
+    });
+    
     setCurrentData(frame);
     return frame;
   }, [timelineData]);

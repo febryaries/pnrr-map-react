@@ -14,9 +14,10 @@ import './TimelinePage.css';
 
 function TimelinePage({ onCountyClick }) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(59); // Start from Noiembrie 2025 (last month - index 59)
   const [progress, setProgress] = useState(0);
-  const [playbackSpeed, setPlaybackSpeed] = useState(2000);
+  const [playbackSpeed, setPlaybackSpeed] = useState(1666); // ~1.67s per frame (3x speed - default)
+  const [isJanuaryAnimating, setIsJanuaryAnimating] = useState(false);
   const animationRef = useRef(null);
   
   // Load pre-generated timeline data (Plăți 2025)
@@ -25,20 +26,16 @@ function TimelinePage({ onCountyClick }) {
   // Dates are already formatted in the hook
   const formattedDates = availableDates;
 
-  // Set currentIndex to last frame when data loads
-  useEffect(() => {
-    if (availableDates.length > 0 && currentIndex === 0) {
-      setCurrentIndex(availableDates.length - 1);
-    }
-  }, [availableDates]);
+  // Timeline starts from first month (Decembrie 2020 - index 0)
+  // No need to set to last frame
 
   const handleIndexChange = (newIndex) => {
     setCurrentIndex(Math.floor(newIndex));
   };
 
   const play = () => {
-    // Reset to beginning when playing
-    setCurrentIndex(0);
+    // Reset to Ianuarie 2022 when playing
+    setCurrentIndex(13);
     setProgress(0);
     setIsPlaying(true);
   };
@@ -72,7 +69,7 @@ function TimelinePage({ onCountyClick }) {
       const progressValue = (elapsed % playbackSpeed) / playbackSpeed;
       setProgress(progressValue);
       
-      if (elapsed >= playbackSpeed) {
+      if (elapsed >= playbackSpeed && !isJanuaryAnimating) {
         startTime = timestamp;
         setCurrentIndex(prev => {
           const nextIndex = prev + 1;
@@ -95,7 +92,7 @@ function TimelinePage({ onCountyClick }) {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [isPlaying, playbackSpeed, availableDates.length]);
+  }, [isPlaying, playbackSpeed, availableDates.length, isJanuaryAnimating]);
 
   return (
     <div className="timeline-page">
@@ -145,6 +142,7 @@ function TimelinePage({ onCountyClick }) {
           currentData={currentData}
           isPlaying={isPlaying}
           onCountyClick={onCountyClick}
+          onAnimationStateChange={setIsJanuaryAnimating}
         />
       </div>
 

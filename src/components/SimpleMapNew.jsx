@@ -3,14 +3,14 @@
  * Cu date reale, click handler și abrevieri județe
  */
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import HighchartsMap from 'highcharts/modules/map';
 // County name to hc-key mapping
 const COUNTY_TO_HC_KEY = {
-  'BUCUREȘTI': 'ro-b',
+  'BUCUREȘTI': 'ro-bi',
   'CLUJ': 'ro-cj',
   'TIMIȘ': 'ro-tm',
   'CONSTANȚA': 'ro-ct',
@@ -50,12 +50,15 @@ const COUNTY_TO_HC_KEY = {
   'ILFOV': 'ro-if',
   'MARAMUREȘ': 'ro-mm',
   'BIHOR': 'ro-bh',
-  'BISTRIȚA-NĂSĂUD': 'ro-bn'
+  'BISTRIȚA-NĂSĂUD': 'ro-bn',
+  'MUREȘ': 'ro-ms',
+  'BOTOȘANI': 'ro-bt',
+  'ARGEȘ': 'ro-ag'
 };
 
 // hc-key to county code mapping
 const HC_KEY_TO_CODE = {
-  'ro-b': 'B',
+  'ro-bi': 'B',
   'ro-cj': 'CJ',
   'ro-tm': 'TM',
   'ro-ct': 'CT',
@@ -95,27 +98,36 @@ const HC_KEY_TO_CODE = {
   'ro-if': 'IF',
   'ro-mm': 'MM',
   'ro-bh': 'BH',
-  'ro-bn': 'BN'
+  'ro-bn': 'BN',
+  'ro-ms': 'MS',
+  'ro-bt': 'BT',
+  'ro-ag': 'AG'
 };
 import './SimpleMapNew.css';
 
 // Initialize Highcharts Map
 HighchartsMap(Highcharts);
 
-// Coduri județe România pentru animație
-const COUNTY_CODES = [
-  'ro-b', 'ro-cj', 'ro-tm', 'ro-ct', 'ro-is', 'ro-bv', 
-  'ro-sb', 'ro-gj', 'ro-dj', 'ro-ph', 'ro-bc', 'ro-gl',
-  'ro-vs', 'ro-bt', 'ro-sv', 'ro-ab', 'ro-ar', 'ro-ag',
-  'ro-br', 'ro-bz', 'ro-cs', 'ro-cl', 'ro-cv', 'ro-db',
-  'ro-gr', 'ro-hd', 'ro-hr', 'ro-il', 'ro-mh', 'ro-ms',
-  'ro-nt', 'ro-ot', 'ro-sj', 'ro-sm', 'ro-tr', 'ro-vl',
-  'ro-vn', 'ro-if', 'ro-mm', 'ro-bh', 'ro-mh', 'ro-cj'
-];
+// Normalize diacritics: Ş→Ș, Ţ→Ț (cedilă → virgulă jos)
+function normalizeDiacritics(str) {
+  if (!str) return str;
+  return str
+    .replace(/Ş/g, 'Ș')
+    .replace(/ş/g, 'ș')
+    .replace(/Ţ/g, 'Ț')
+    .replace(/ţ/g, 'ț');
+}
 
-function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick }) {
+function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick, onAnimationStateChange }) {
   const [mapTopology, setMapTopology] = useState(null);
   const [highlightedCounties, setHighlightedCounties] = useState(new Set());
+  const [januaryAnimation, setJanuaryAnimation] = useState(false);
+  const [newPaymentCounties, setNewPaymentCounties] = useState(new Set());
+  const [februaryReady, setFebruaryReady] = useState(false);
+  const animationInProgress = useRef(false);
+  const lastProcessedDate = useRef(null);
+  const previousHighlightedRef = useRef(new Set());
+  const chartRef = useRef(null);
   const navigate = useNavigate();
 
   // Load Romania map
@@ -126,30 +138,170 @@ function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick }) 
       .catch(err => console.error('Error loading map:', err));
   }, []);
 
-  // Random county highlight animation when playing
+  // Expose county click handler globally for tooltip button
   useEffect(() => {
-    if (!isPlaying) {
+    window.handleCountyClick = onCountyClick;
+    return () => {
+      delete window.handleCountyClick;
+    };
+  }, [onCountyClick]);
+
+  // Highlight counties with payments and apply pulse to counties that were already highlighted
+  useEffect(() => {
+    console.log('🗺️ SimpleMapNew: currentData changed', {
+      hasData: !!currentData,
+      countiesCount: currentData?.counties?.length,
+      label: currentData?.label,
+      totalEUR: currentData?.totalEUR
+    });
+    
+    if (!currentData?.counties) {
+      console.log('⚠️ No counties data, clearing highlights');
       setHighlightedCounties(new Set());
+      setNewPaymentCounties(new Set());
+      previousHighlightedRef.current = new Set();
+      lastProcessedDate.current = null;
       return;
     }
 
-    const allHcKeys = Object.keys(HC_KEY_TO_CODE);
+    // Skip if we already processed this date
+    if (lastProcessedDate.current === currentData.date) {
+      console.log('⏭️ Skipping - already processed:', currentData.date);
+      return;
+    }
     
-    const interval = setInterval(() => {
-      // Randomly select 2-3 counties to highlight
-      const numToHighlight = Math.floor(Math.random() * 2) + 2;
-      const highlighted = new Set();
-      
-      for (let i = 0; i < numToHighlight; i++) {
-        const randomKey = allHcKeys[Math.floor(Math.random() * allHcKeys.length)];
-        highlighted.add(randomKey);
+    // Mark this date as processed
+    lastProcessedDate.current = currentData.date;
+
+    // Check if current month is Ianuarie (month 01)
+    const currentMonth = currentData.date?.substring(5, 7); // Extract month from "2023-01"
+    const isJanuary = currentMonth === '01';
+    
+    if (isJanuary) {
+      // Skip if animation already in progress
+      if (animationInProgress.current) {
+        return;
       }
       
-      setHighlightedCounties(highlighted);
-    }, 1200); // Change every 1.2 seconds for slower, more visible effect
+      // Ianuarie - animație fade-in random pentru județe
+      const currentYear = currentData.date?.substring(0, 4);
+      console.log(`🎊 Ianuarie ${currentYear} - Starting fade-in animation!`);
+      animationInProgress.current = true;
+      setJanuaryAnimation(true);
+      setHighlightedCounties(new Set()); // Start with empty map
+      previousHighlightedRef.current = new Set(); // Reset previous highlights for new year
+      
+      // Notify parent that animation started
+      if (onAnimationStateChange) {
+        onAnimationStateChange(true);
+      }
+      
+      // Create shuffled array of counties
+      const shuffled = [...currentData.counties].sort(() => Math.random() - 0.5);
+      
+      // Animate counties appearing one by one
+      shuffled.forEach((county, index) => {
+        setTimeout(() => {
+          const normalizedName = normalizeDiacritics(county.name.toUpperCase());
+          const hcKey = COUNTY_TO_HC_KEY[normalizedName];
+          if (hcKey) {
+            setHighlightedCounties(prev => new Set([...prev, hcKey]));
+          }
+        }, index * 300); // 300ms delay between each county
+      });
+      
+      console.log(`✨ Animating ${shuffled.length} counties with fade-in effect`);
+      
+      // After animation completes, turn off animation mode and UPDATE previousHighlightedRef
+      setTimeout(() => {
+        setJanuaryAnimation(false);
+        animationInProgress.current = false;
+        
+        // NOW update previousHighlightedRef with all counties that have payments
+        const januaryHighlights = new Set();
+        currentData.counties.forEach(county => {
+          const normalizedName = normalizeDiacritics(county.name.toUpperCase());
+          const hcKey = COUNTY_TO_HC_KEY[normalizedName];
+          if (hcKey) {
+            januaryHighlights.add(hcKey);
+          }
+        });
+        previousHighlightedRef.current = januaryHighlights;
+        console.log(`✅ Ianuarie finished! Updated previousHighlightedRef with ${januaryHighlights.size} counties`);
+        
+        setFebruaryReady(true); // Signal that February can now proceed
+        
+        // Notify parent that animation finished
+        if (onAnimationStateChange) {
+          onAnimationStateChange(false);
+        }
+      }, shuffled.length * 300);
+      
+      // IMPORTANT: NICIODATĂ pulse în Ianuarie
+      setNewPaymentCounties(new Set());
+      console.log(`📍 Ianuarie - no pulse effect for any counties`);
+    } else {
+      // Check if this is February after January (need to wait for January animation)
+      const currentMonth = currentData.date?.substring(5, 7);
+      const isFebruary = currentMonth === '02';
+      
+      // If February and previousHighlightedRef is empty (January hasn't finished), BLOCK processing
+      if (isFebruary && previousHighlightedRef.current.size === 0) {
+        console.log(`⏳ Februarie - BLOCKED! Waiting for Ianuarie to populate previousHighlightedRef...`);
+        console.log(`   Current previousHighlightedRef size: ${previousHighlightedRef.current.size}`);
+        // DO NOT process - wait for January to finish and update previousHighlightedRef
+        return;
+      }
+      
+      // Normal month - keep previous highlights and add new counties
+      const previouslyHighlighted = previousHighlightedRef.current;
+      const newHighlights = new Set();
+      const countiesWithPulse = new Set();
+      
+      currentData.counties.forEach(county => {
+        const normalizedName = normalizeDiacritics(county.name.toUpperCase());
+        const hcKey = COUNTY_TO_HC_KEY[normalizedName];
+        if (hcKey) {
+          newHighlights.add(hcKey);
+          
+          // Pulse for ALL counties with payments in current month
+          if (county.paymentsCount > 0) {
+            countiesWithPulse.add(hcKey);
+          }
+        }
+      });
+      
+      setHighlightedCounties(newHighlights);
+      setNewPaymentCounties(countiesWithPulse);
+      previousHighlightedRef.current = newHighlights; // Update ref for next iteration
+      
+      console.log(`✨ Highlighting ${newHighlights.size} counties with payments:`, Array.from(newHighlights));
+      console.log(`💳 Counties with pulse effect (${countiesWithPulse.size}):`, Array.from(countiesWithPulse));
+      console.log(`   - Previously highlighted: ${previouslyHighlighted.size}`);
+    }
+  }, [currentData, februaryReady]);
 
-    return () => clearInterval(interval);
-  }, [isPlaying]);
+  // Apply pulse effect CSS class to counties with new payments
+  useEffect(() => {
+    if (!chartRef.current || !chartRef.current.chart) return;
+    
+    const chart = chartRef.current.chart;
+    const series = chart.series[0];
+    
+    if (!series || !series.points) return;
+    
+    // Apply or remove pulse class based on newPaymentCounties
+    series.points.forEach(point => {
+      if (point.graphic && point.graphic.element) {
+        const hcKey = point['hc-key'];
+        if (newPaymentCounties.has(hcKey)) {
+          point.graphic.element.classList.add('county-pulse-effect');
+        } else {
+          point.graphic.element.classList.remove('county-pulse-effect');
+        }
+      }
+    });
+  }, [newPaymentCounties, mapTopology, currentData]);
 
   // Handle county click - navigate to homepage with county selection
   const handleCountyClick = useCallback((countyCode) => {
@@ -174,49 +326,60 @@ function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick }) 
   const mapOptions = useMemo(() => {
     if (!mapTopology) return null;
 
-    // Process real data from Timeline
-    const counties = currentData?.counties || [];
-    const maxValue = Math.max(...counties.map(c => c.totalEUR), 1);
-    
-    // Map county data to hc-keys
+    // Build a map of county data by hc-key for quick lookup
     const countyDataMap = {};
-    counties.forEach(county => {
-      if (!county || !county.name) return;
-      
-      const hcKey = COUNTY_TO_HC_KEY[county.name.toUpperCase()];
+
+    currentData.counties.forEach(county => {
+      const normalizedName = normalizeDiacritics(county.name.toUpperCase());
+      const hcKey = COUNTY_TO_HC_KEY[normalizedName];
       if (hcKey) {
         countyDataMap[hcKey] = {
-          value: county.totalEUR || 0,
           name: county.name,
-          code: HC_KEY_TO_CODE[hcKey],
+          value: county.totalEUR || 0,
           totalEUR: county.totalEUR || 0,
           paymentsCount: county.paymentsCount || 0,
           beneficiariesCount: county.beneficiariesCount || 0
         };
+      } else {
+        console.warn('⚠️ No hc-key found for county:', county.name, 'normalized:', normalizedName);
       }
     });
-
-    // Create map data for all counties
+    
+    // Create map data for ALL counties (like MFE does)
+    // Counties without payments get value: 0 (NOT null) so they appear light blue
     const mapData = Object.entries(HC_KEY_TO_CODE).map(([hcKey, code]) => {
-      const data = countyDataMap[hcKey] || {};
-      const isHighlighted = highlightedCounties.has(hcKey);
+      const data = countyDataMap[hcKey];
+      const hasNewPayments = newPaymentCounties.has(hcKey);
       
       return {
         'hc-key': hcKey,
         code: code,
-        name: data.name || code,
-        value: data.value || 0,
-        totalEUR: data.totalEUR || 0,
-        paymentsCount: data.paymentsCount || 0,
-        beneficiariesCount: data.beneficiariesCount || 0,
-        // Override color for highlighted counties
-        color: isHighlighted ? '#3b82f6' : undefined,
-        borderColor: isHighlighted ? '#1d4ed8' : undefined,
-        borderWidth: isHighlighted ? 3 : undefined
+        name: data?.name || code,
+        value: data?.value || 0, // 0 = light blue, NOT grey!
+        totalEUR: data?.totalEUR || 0,
+        paymentsCount: data?.paymentsCount || 0,
+        beneficiariesCount: data?.beneficiariesCount || 0,
+        hasNewPayments: hasNewPayments
       };
     });
+    
+    // Calculate P90 (percentila 90) for max value (like MFE does)
+    // This makes the gradient more visible by capping at 90th percentile
+    const values = mapData
+      .filter(d => d.value > 0)
+      .map(d => d.value)
+      .sort((a, b) => a - b);
+    const p90Index = Math.floor(values.length * 0.9);
+    const p90Value = values.length > 0 ? (values[p90Index] || values[values.length - 1]) : 1;
 
-    return {
+    console.log(`📊 Creating mapOptions for ${currentData?.label}:`, {
+      totalCounties: mapData.length,
+      countiesWithPayments: values.length,
+      p90Value: p90Value.toFixed(2),
+      maxValue: values.length > 0 ? values[values.length - 1].toFixed(2) : 0
+    });
+
+    const options = {
       chart: {
         map: mapTopology,
         height: 600,
@@ -230,38 +393,38 @@ function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick }) 
       },
       colorAxis: {
         min: 0,
-        max: maxValue,
-        minColor: '#e0f2fe',
-        maxColor: '#0ea5e9',
+        max: p90Value, // P90 (percentila 90) ca MFE
         stops: [
-          [0, '#f0f9ff'],
-          [0.3, '#bae6fd'],
-          [0.6, '#38bdf8'],
-          [1, '#0284c7']
+          [0, '#f0f9ff'],      // Very light blue
+          [0.3, '#bae6fd'],    // Light blue
+          [0.6, '#38bdf8'],    // Medium blue
+          [1, '#0284c7']       // Dark blue
         ]
       },
       tooltip: {
-        enabled: true,
         useHTML: true,
+        outside: true,
+        followPointer: true,
+        stickOnContact: true,
+        hideDelay: 2000,
         formatter: function() {
-          const millions = (this.point.totalEUR / 1000000).toFixed(2);
-          const payments = this.point.paymentsCount || 0;
-          const beneficiaries = this.point.beneficiariesCount || 0;
+          const point = this.point;
+          const millions = (point.totalEUR / 1000000).toFixed(2);
+          const payments = point.paymentsCount || 0;
+          const beneficiaries = point.beneficiariesCount || 0;
           
-          console.log('Tooltip data:', {
-            name: this.point.name,
-            totalEUR: this.point.totalEUR,
-            paymentsCount: payments,
-            beneficiariesCount: beneficiaries
-          });
+          // Format numbers with Romanian locale
+          const fmtNum = (num) => num.toLocaleString('ro-RO');
           
           return `
-            <div style="padding: 8px; min-width: 200px;">
-              <strong style="font-size: 14px;">${this.point.name}</strong><br/>
-              <span style="color: #0ea5e9;">💰 ${millions} mil EUR</span><br/>
-              <span style="color: #64748b;">💳 ${payments.toLocaleString('ro-RO')} plăți</span><br/>
-              <span style="color: #64748b;">👥 ${beneficiaries.toLocaleString('ro-RO')} beneficiari</span><br/>
-              <em style="font-size: 11px; color: #94a3b8;">Click pentru detalii</em>
+            <strong>${point.name}</strong><br/>
+            Valoare: <strong>${millions} mil EUR</strong><br/>
+            Proiecte: ${fmtNum(payments)}<br/>
+            <div style="margin-top: 8px;">
+              <button onclick="window.handleCountyClick('${point.code}', '${point.name}')" 
+                      style="padding: 6px 10px; background: #0ea5e9; color: #fff; border: 0; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                Click pe județ pentru detalii
+              </button>
             </div>
           `;
         }
@@ -269,15 +432,15 @@ function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick }) 
       plotOptions: {
         map: {
           allAreas: true,
-          joinBy: ['hc-key'],
           borderColor: '#64748b',
           borderWidth: 2,
           nullColor: '#f1f5f9' // Culoare pentru județe fără date
         }
       },
       series: [{
-        data: mapData,
+        data: mapData, // TOATE județele (inclusiv cu value: 0)
         name: 'România',
+        joinBy: ['hc-key', 'hc-key'],
         states: {
           hover: {
             color: '#38bdf8',
@@ -308,7 +471,10 @@ function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick }) 
         cursor: 'pointer'
       }]
     };
-  }, [mapTopology, currentData, handleCountyClick, highlightedCounties]);
+    
+    console.log(`✅ Returning mapOptions with ${options.series[0].data.length} total counties`);
+    return options;
+  }, [mapTopology, currentData, handleCountyClick]); // NU includem highlightedCounties sau newPaymentCounties pentru a evita re-render
 
   if (!mapOptions) {
     return (
@@ -319,12 +485,16 @@ function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick }) 
   }
 
   return (
-    <div className="simple-map-container">
-      <HighchartsReact
-        highcharts={Highcharts}
-        constructorType={'mapChart'}
-        options={mapOptions}
-      />
+    <div style={{ width: '100%', height: '600px' }}>
+      {mapOptions && (
+        <HighchartsReact
+          highcharts={Highcharts}
+          constructorType={'mapChart'}
+          options={mapOptions}
+          ref={chartRef}
+          key={currentData?.date || 'map'} // Force re-create when date changes
+        />
+      )}
     </div>
   );
 }

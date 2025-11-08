@@ -90,6 +90,20 @@
   line-height: 1;
 }
 
+/* Pulse effect for NEW counties with payments (opacity only) */
+.county-pulse-effect {
+  animation: countyPulseOpacity 2s ease-in-out infinite;
+}
+
+@keyframes countyPulseOpacity {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .simple-map-container {

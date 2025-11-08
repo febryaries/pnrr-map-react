@@ -648,6 +648,12 @@ const EnhancedTable = ({
         
         row[column.label] = value
       })
+      
+      // Add CRI column manually for projects (not visible in table but needed in export)
+      if (endpoint === 'projects' && item.cri !== undefined) {
+        row['CRI'] = item.cri || ''
+      }
+      
       return row
     })
 
@@ -719,6 +725,12 @@ const EnhancedTable = ({
         
         row[column.label] = value
       })
+      
+      // Add CRI column manually for projects (not visible in table but needed in export)
+      if (endpoint === 'projects' && item.cri !== undefined) {
+        row['CRI'] = item.cri || ''
+      }
+      
       return row
     })
 
@@ -796,15 +808,23 @@ const EnhancedTable = ({
         
         row[column.label] = value
       })
+      
+      // Add CRI column manually for projects (not visible in table but needed in export)
+      if (endpoint === 'projects' && item.cri !== undefined) {
+        row['CRI'] = item.cri || ''
+      }
+      
       return row
     })
 
-    // Create CSV header
-    const headers = columns.map(col => col.label).join(',')
+    // Create CSV header (add CRI for projects)
+    const headers = endpoint === 'projects' 
+      ? columns.map(col => col.label).join(',') + ',CRI'
+      : columns.map(col => col.label).join(',')
 
     // Create CSV rows
     const rows = exportData.map(item => {
-      return columns.map(col => {
+      const rowValues = columns.map(col => {
         const value = item[col.label]
         // Escape values that contain commas, quotes, or newlines
         if (value === null || value === undefined) return ''
@@ -813,7 +833,15 @@ const EnhancedTable = ({
           return `"${stringValue.replace(/"/g, '""')}"`
         }
         return stringValue
-      }).join(',')
+      })
+      
+      // Add CRI value for projects
+      if (endpoint === 'projects') {
+        const criValue = item['CRI'] || ''
+        rowValues.push(criValue)
+      }
+      
+      return rowValues.join(',')
     }).join('\n')
 
     // Combine header and rows
@@ -1658,6 +1686,7 @@ const MapView = ({
                 contractNumber: 'contractNumber', // From aggregated data
                 fundingSource: 'fundingSource', // From aggregated data
                 cri: 'cri', // CRI identifier
+                cui: 'CUI', // CUI beneficiar
                 startDate: 'data_inceput' // Original field for currency conversion
             }
         } else {
@@ -2673,6 +2702,7 @@ const MapView = ({
                         componentLabel: item[fieldMappings.componentLabel] || '',
                         locality: item[fieldMappings.locality] || '',
                         cri: item[fieldMappings.cri] || '',
+                        cui: item[fieldMappings.cui] || '',
                         county: county.county?.name || county.name || 'N/A',
                         startDate: item[fieldMappings.startDate] || ''
                     })
@@ -3428,13 +3458,13 @@ const MapView = ({
                             key: 'beneficiary',
                             label: 'Nume Beneficiar',
                             searchable: true,
-                            render: (value) => <div style={{ maxWidth: '250px', wordWrap: 'break-word', fontSize: '12px', lineHeight: '1.3' }}>{value}</div>
+                            render: (value) => <div style={{ maxWidth: '250px', wordWrap: 'break-word', fontSize: '12px', lineHeight: '1.3', textAlign: 'center' }}>{value}</div>
                         },
                         {
-                            key: 'cri',
-                            label: 'CRI',
+                            key: 'cui',
+                            label: 'CUI',
                             searchable: true,
-                            render: (value) => <div style={{ fontSize: '12px', minWidth: '80px', textAlign: 'center', fontWeight: '500' }}>{value || '-'}</div>
+                            render: (value) => <div style={{ fontSize: '12px', minWidth: '100px', fontFamily: 'monospace', textAlign: 'center' }}>{value || '-'}</div>
                         },
                         ...(endpoint === 'payments' ? [{
                             key: 'cui',
@@ -3446,7 +3476,7 @@ const MapView = ({
                             key: 'county',
                             label: 'Județ',
                             searchable: true,
-                            render: (value) => <div style={{ fontSize: '12px', minWidth: '70px' }}>{value}</div>
+                            render: (value) => <div style={{ fontSize: '12px', minWidth: '70px', textAlign: 'center' }}>{value}</div>
                         },
                         {
                             key: 'fundingSource',
@@ -3454,7 +3484,7 @@ const MapView = ({
                             searchable: true,
                             render: (value) => {
                                 // Capitalize first letter for all values
-                                return <div style={{ fontSize: '12px', minWidth: '120px' }}>{value ? value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() : '-'}</div>
+                                return <div style={{ fontSize: '12px', minWidth: '120px', textAlign: 'center' }}>{value ? value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() : '-'}</div>
                             }
                         },
                         {
@@ -3467,7 +3497,7 @@ const MapView = ({
                                     // For projects, use the FinancialAmount object directly
                                     const financialAmount = item[fieldMappings.value]
                                     if (financialAmount && typeof financialAmount === 'object') {
-                                        return <div style={{ fontSize: '12px', minWidth: '120px', textAlign: 'center' }}>
+                                        return <div style={{ fontSize: '12px', minWidth: '120px', textAlign: 'left' }}>
                                             {currency === 'RON' 
                                                 ? formatMoneyWithCurrency(financialAmount.ron, financialAmount.ron, item.startDate)
                                                 : formatMoneyWithCurrency(financialAmount.eur, financialAmount.ron, item.startDate)
@@ -3475,7 +3505,7 @@ const MapView = ({
                                         </div>
                                     }
                                 }
-                                return <div style={{ fontSize: '12px', minWidth: '120px', textAlign: 'center' }}>
+                                return <div style={{ fontSize: '12px', minWidth: '120px', textAlign: 'left' }}>
                                     {formatMoneyWithCurrency(value, item.value_ron, item.startDate)}
                                 </div>
                             }
@@ -3605,7 +3635,7 @@ const MapView = ({
                             key: 'locality',
                             label: 'Localitate',
                             searchable: true,
-                            render: (value) => value ? <div style={{ maxWidth: '100px', wordWrap: 'break-word', fontSize: '12px', lineHeight: '1.3' }}>{value}</div> : <div style={{ fontSize: '12px' }}>-</div>
+                            render: (value) => value ? <div style={{ maxWidth: '100px', wordWrap: 'break-word', fontSize: '12px', lineHeight: '1.3', textAlign: 'center' }}>{value}</div> : <div style={{ fontSize: '12px', textAlign: 'center' }}>-</div>
                         }
                     ].filter(col => {
                         // Ascundem coloanele 'title' și 'progress' doar pentru tabelul de plăți

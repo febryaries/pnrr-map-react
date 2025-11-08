@@ -3097,7 +3097,7 @@ table td {
 
 .projects-payments-section table th:nth-child(1),
 .projects-payments-section table td:nth-child(1) {
-  width: 18%; /* Title column */
+  width: 15%; /* Title column */
   min-width: 200px;
 }
 
@@ -3154,7 +3154,7 @@ table td {
   font-size: 10px;
   font-weight: 600;
   padding: 8px 4px;
-  text-align: left;
+  text-align: center;
   background: #f8fafc;
   border-bottom: 2px solid #e2e8f0;
   white-space: nowrap;
