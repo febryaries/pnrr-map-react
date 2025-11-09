@@ -1653,6 +1653,7 @@ const MapView = ({
     const [loadingBeneficiaries, setLoadingBeneficiaries] = useState(false)
     const [showAllBeneficiaries, setShowAllBeneficiaries] = useState(false)
     const [searchTerm, setSearchTerm] = useState('')
+    const [beneficiariesPage, setBeneficiariesPage] = useState(0)
     
     // CRI data hook
     const { criData, loading: criLoading, error: criError } = useCRIData()
@@ -3254,118 +3255,167 @@ const MapView = ({
                             <>
                                 {/* Desktop - Pie Chart */}
                                 <div className="beneficiaries-chart-desktop">
-                                <ReactECharts
-                                    option={{
-                                        tooltip: {
-                                            trigger: 'item',
-                                            formatter: function(params) {
-                                                return params.name + '<br/>' + params.value.toFixed(2) + ' mil ' + getCurrencySymbol() + ' (' + params.percent + '%)';
-                                            }
-                                        },
-                                        legend: {
-                                            type: 'scroll',
-                                            orient: 'vertical',
-                                            left: '65%',
-                                            top: 20,
-                                            bottom: 20,
-                                            width: '33%',
-                                            selectedMode: false,
-                                            textStyle: {
-                                                fontSize: 9
-                                            },
-                                            data: topBeneficiaries.items.slice(0, 20).map((b, index) => ({
-                                                name: `${index + 1}. ${b['beneficiar'] || 'N/A'}`,
-                                                textStyle: {
-                                                    fontWeight: index < 10 ? 'bold' : 'normal'
-                                                }
-                                            }))
-                                        },
-                                        series: [
-                                            {
-                                                name: 'Valoare PNRR',
-                                                type: 'pie',
-                                                radius: '55%',
-                                                center: ['35%', '50%'],
-                                                label: {
-                                                    show: true,
-                                                    formatter: function(params) {
-                                                        const name = params.name;
-                                                        const maxLength = 25;
-                                                        if (name.length <= maxLength) {
-                                                            return name;
+                                {(() => {
+                                    const itemsPerPage = 20;
+                                    const startIndex = beneficiariesPage * itemsPerPage;
+                                    const endIndex = startIndex + itemsPerPage;
+                                    const currentPageItems = topBeneficiaries.items.slice(startIndex, endIndex);
+                                    const totalPages = Math.ceil(topBeneficiaries.items.length / itemsPerPage);
+                                    
+                                    return (
+                                        <>
+                                            <ReactECharts
+                                                option={{
+                                                    tooltip: {
+                                                        trigger: 'item',
+                                                        formatter: function(params) {
+                                                            return params.name + '<br/>' + params.value.toFixed(2) + ' mil ' + getCurrencySymbol() + ' (' + params.percent + '%)';
                                                         }
-                                                        const words = name.split(' ');
-                                                        let lines = [];
-                                                        let currentLine = '';
-                                                        
-                                                        words.forEach(word => {
-                                                            if ((currentLine + ' ' + word).trim().length <= maxLength) {
-                                                                currentLine = (currentLine + ' ' + word).trim();
-                                                            } else {
-                                                                if (currentLine) lines.push(currentLine);
-                                                                currentLine = word;
-                                                            }
-                                                        });
-                                                        if (currentLine) lines.push(currentLine);
-                                                        
-                                                        return lines.join('\n');
                                                     },
-                                                    fontSize: 11
-                                                },
-                                                data: topBeneficiaries.items.map((beneficiary, index) => {
-                                                    const amountRON = beneficiary['total'] || 0;
-                                                    const amountEUR = beneficiary['total_euro'] || 0;
-                                                    const displayAmount = currency === 'RON' ? amountRON : amountEUR;
-                                                    const millions = displayAmount / 1e6;
-                                                    
-                                                    return {
-                                                        name: `${index + 1}. ${beneficiary['beneficiar'] || 'N/A'}`,
-                                                        value: millions,
-                                                        beneficiary: beneficiary
-                                                    };
-                                                }),
-                                                emphasis: {
-                                                    itemStyle: {
-                                                        shadowBlur: 10,
-                                                        shadowOffsetX: 0,
-                                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                                    legend: {
+                                                        type: 'scroll',
+                                                        orient: 'vertical',
+                                                        left: '65%',
+                                                        top: 20,
+                                                        bottom: 60,
+                                                        width: '33%',
+                                                        selectedMode: false,
+                                                        textStyle: {
+                                                            fontSize: 9
+                                                        },
+                                                        data: currentPageItems.map((b, index) => ({
+                                                            name: `${startIndex + index + 1}. ${b['beneficiar'] || 'N/A'}`,
+                                                            textStyle: {
+                                                                fontWeight: (startIndex + index) < 10 ? 'bold' : 'normal'
+                                                            }
+                                                        }))
+                                                    },
+                                                    series: [
+                                                        {
+                                                            name: 'Valoare PNRR',
+                                                            type: 'pie',
+                                                            radius: '55%',
+                                                            center: ['35%', '50%'],
+                                                            label: {
+                                                                show: true,
+                                                                formatter: function(params) {
+                                                                    const name = params.name;
+                                                                    const maxLength = 25;
+                                                                    if (name.length <= maxLength) {
+                                                                        return name;
+                                                                    }
+                                                                    const words = name.split(' ');
+                                                                    let lines = [];
+                                                                    let currentLine = '';
+                                                                    
+                                                                    words.forEach(word => {
+                                                                        if ((currentLine + ' ' + word).trim().length <= maxLength) {
+                                                                            currentLine = (currentLine + ' ' + word).trim();
+                                                                        } else {
+                                                                            if (currentLine) lines.push(currentLine);
+                                                                            currentLine = word;
+                                                                        }
+                                                                    });
+                                                                    if (currentLine) lines.push(currentLine);
+                                                                    
+                                                                    return lines.join('\n');
+                                                                },
+                                                                fontSize: 11
+                                                            },
+                                                            data: currentPageItems.map((beneficiary, index) => {
+                                                                const amountRON = beneficiary['total'] || 0;
+                                                                const amountEUR = beneficiary['total_euro'] || 0;
+                                                                const displayAmount = currency === 'RON' ? amountRON : amountEUR;
+                                                                const millions = displayAmount / 1e6;
+                                                                
+                                                                return {
+                                                                    name: `${startIndex + index + 1}. ${beneficiary['beneficiar'] || 'N/A'}`,
+                                                                    value: millions,
+                                                                    beneficiary: beneficiary
+                                                                };
+                                                            }),
+                                                            emphasis: {
+                                                                itemStyle: {
+                                                                    shadowBlur: 10,
+                                                                    shadowOffsetX: 0,
+                                                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }}
+                                                style={{ height: '500px', width: '100%' }}
+                                                onEvents={{
+                                                    click: function(params) {
+                                                        const beneficiary = params.data.beneficiary;
+                                                        const taxId = beneficiary['cui'] ? String(beneficiary['cui']) : '';
+                                                        
+                                                        console.log('Beneficiary clicked:', beneficiary);
+                                                        console.log('Tax ID:', taxId);
+                                                        
+                                                        if (switchEndpoint) {
+                                                            switchEndpoint('payments');
+                                                            console.log('Switched to payments endpoint');
+                                                        }
+                                                        
+                                                        if (taxId) {
+                                                            setSearchTerm(taxId);
+                                                            console.log('Set search term to:', taxId);
+                                                        }
+                                                        
+                                                        setTimeout(() => {
+                                                            const element = document.getElementById('projects-table');
+                                                            if (element) {
+                                                                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                                                console.log('Scrolled to table');
+                                                            }
+                                                        }, 500);
                                                     }
-                                                }
-                                            }
-                                        ]
-                                    }}
-                                    style={{ height: '500px', width: '100%' }}
-                                    onEvents={{
-                                        click: function(params) {
-                                            const beneficiary = params.data.beneficiary;
-                                            const taxId = beneficiary['cui'] ? String(beneficiary['cui']) : '';
-                                            
-                                            console.log('Beneficiary clicked:', beneficiary);
-                                            console.log('Tax ID:', taxId);
-                                            
-                                            if (switchEndpoint) {
-                                                switchEndpoint('payments');
-                                                console.log('Switched to payments endpoint');
-                                            }
-                                            
-                                            if (taxId) {
-                                                setSearchTerm(taxId);
-                                                console.log('Set search term to:', taxId);
-                                            }
-                                            
-                                            setTimeout(() => {
-                                                const element = document.getElementById('projects-table');
-                                                if (element) {
-                                                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                                    console.log('Scrolled to table');
-                                                }
-                                            }, 500);
-                                        }
-                                    }}
-                                />
-                                <div className="rank-note" style={{ textAlign: 'center', marginTop: '20px' }}>
-                                    Click pe un slice pentru a vedea plățile beneficiarului.
-                                </div>
+                                                }}
+                                            />
+                                            <div style={{ textAlign: 'center', marginTop: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
+                                                <button 
+                                                    onClick={() => setBeneficiariesPage(Math.max(0, beneficiariesPage - 1))}
+                                                    disabled={beneficiariesPage === 0}
+                                                    style={{
+                                                        padding: '8px 16px',
+                                                        backgroundColor: beneficiariesPage === 0 ? '#e2e8f0' : '#0ea5e9',
+                                                        color: beneficiariesPage === 0 ? '#94a3b8' : '#fff',
+                                                        border: 'none',
+                                                        borderRadius: '6px',
+                                                        cursor: beneficiariesPage === 0 ? 'not-allowed' : 'pointer',
+                                                        fontSize: '14px',
+                                                        fontWeight: '500'
+                                                    }}
+                                                >
+                                                    ← Anteriori
+                                                </button>
+                                                <span style={{ fontSize: '14px', color: '#64748b', fontWeight: '500' }}>
+                                                    Pagina {beneficiariesPage + 1} din {totalPages} ({startIndex + 1}-{Math.min(endIndex, topBeneficiaries.items.length)} din {topBeneficiaries.items.length})
+                                                </span>
+                                                <button 
+                                                    onClick={() => setBeneficiariesPage(Math.min(totalPages - 1, beneficiariesPage + 1))}
+                                                    disabled={beneficiariesPage >= totalPages - 1}
+                                                    style={{
+                                                        padding: '8px 16px',
+                                                        backgroundColor: beneficiariesPage >= totalPages - 1 ? '#e2e8f0' : '#0ea5e9',
+                                                        color: beneficiariesPage >= totalPages - 1 ? '#94a3b8' : '#fff',
+                                                        border: 'none',
+                                                        borderRadius: '6px',
+                                                        cursor: beneficiariesPage >= totalPages - 1 ? 'not-allowed' : 'pointer',
+                                                        fontSize: '14px',
+                                                        fontWeight: '500'
+                                                    }}
+                                                >
+                                                    Următorii →
+                                                </button>
+                                            </div>
+                                            <div className="rank-note" style={{ textAlign: 'center', marginTop: '10px' }}>
+                                                Click pe un slice pentru a vedea plățile beneficiarului.
+                                            </div>
+                                        </>
+                                    );
+                                })()}
                                 </div>
 
                                 {/* Mobile - Bar Chart simplu */}
