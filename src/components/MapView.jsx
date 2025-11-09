@@ -3256,14 +3256,18 @@ const MapView = ({
                                 {/* Desktop - Pie Chart */}
                                 <div className="beneficiaries-chart-desktop">
                                 {(() => {
-                                    const itemsPerPage = 20;
+                                    const itemsPerPage = 10;
                                     const startIndex = beneficiariesPage * itemsPerPage;
                                     const endIndex = startIndex + itemsPerPage;
                                     const currentPageItems = topBeneficiaries.items.slice(startIndex, endIndex);
                                     const totalPages = Math.ceil(topBeneficiaries.items.length / itemsPerPage);
                                     
+                                    // Debug: Log the order of beneficiaries
+                                    console.log('🔍 Current page items order:', currentPageItems.map((b, i) => `${startIndex + i + 1}. ${b.beneficiar} (${b.total_euro} EUR)`));
+                                    
                                     return (
                                         <>
+                                            <div style={{ position: 'relative' }}>
                                             <ReactECharts
                                                 option={{
                                                     tooltip: {
@@ -3296,6 +3300,7 @@ const MapView = ({
                                                             type: 'pie',
                                                             radius: '55%',
                                                             center: ['35%', '50%'],
+                                                            startAngle: 90,
                                                             label: {
                                                                 show: true,
                                                                 formatter: function(params) {
@@ -3328,8 +3333,14 @@ const MapView = ({
                                                                 const displayAmount = currency === 'RON' ? amountRON : amountEUR;
                                                                 const millions = displayAmount / 1e6;
                                                                 
+                                                                // Scurtare nume pentru beneficiarul #7
+                                                                let displayName = beneficiary['beneficiar'] || 'N/A';
+                                                                if (displayName.includes('SOCIETATEA NATIONALA DE TRANSPORT FEROVIAR DE CALATORI')) {
+                                                                    displayName = 'SOCIETATE NATIONALA DE TRANSPORT FEROVIAR';
+                                                                }
+                                                                
                                                                 return {
-                                                                    name: `${startIndex + index + 1}. ${beneficiary['beneficiar'] || 'N/A'}`,
+                                                                    name: `${startIndex + index + 1}. ${displayName}`,
                                                                     value: millions,
                                                                     beneficiary: beneficiary
                                                                 };
@@ -3344,7 +3355,7 @@ const MapView = ({
                                                         }
                                                     ]
                                                 }}
-                                                style={{ height: '500px', width: '100%' }}
+                                                style={{ height: '500px', width: '100%', position: 'relative' }}
                                                 onEvents={{
                                                     click: function(params) {
                                                         const beneficiary = params.data.beneficiary;
@@ -3373,45 +3384,49 @@ const MapView = ({
                                                     }
                                                 }}
                                             />
-                                            <div style={{ textAlign: 'center', marginTop: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
-                                                <button 
-                                                    onClick={() => setBeneficiariesPage(Math.max(0, beneficiariesPage - 1))}
-                                                    disabled={beneficiariesPage === 0}
-                                                    style={{
-                                                        padding: '8px 16px',
-                                                        backgroundColor: beneficiariesPage === 0 ? '#e2e8f0' : '#0ea5e9',
-                                                        color: beneficiariesPage === 0 ? '#94a3b8' : '#fff',
-                                                        border: 'none',
-                                                        borderRadius: '6px',
-                                                        cursor: beneficiariesPage === 0 ? 'not-allowed' : 'pointer',
-                                                        fontSize: '14px',
-                                                        fontWeight: '500'
-                                                    }}
-                                                >
-                                                    ← Anteriori
-                                                </button>
-                                                <span style={{ fontSize: '14px', color: '#64748b', fontWeight: '500' }}>
-                                                    Pagina {beneficiariesPage + 1} din {totalPages} ({startIndex + 1}-{Math.min(endIndex, topBeneficiaries.items.length)} din {topBeneficiaries.items.length})
-                                                </span>
-                                                <button 
-                                                    onClick={() => setBeneficiariesPage(Math.min(totalPages - 1, beneficiariesPage + 1))}
-                                                    disabled={beneficiariesPage >= totalPages - 1}
-                                                    style={{
-                                                        padding: '8px 16px',
-                                                        backgroundColor: beneficiariesPage >= totalPages - 1 ? '#e2e8f0' : '#0ea5e9',
-                                                        color: beneficiariesPage >= totalPages - 1 ? '#94a3b8' : '#fff',
-                                                        border: 'none',
-                                                        borderRadius: '6px',
-                                                        cursor: beneficiariesPage >= totalPages - 1 ? 'not-allowed' : 'pointer',
-                                                        fontSize: '14px',
-                                                        fontWeight: '500'
-                                                    }}
-                                                >
-                                                    Următorii →
-                                                </button>
+                                            {/* Paginare sub legendă */}
+                                            <div style={{ position: 'absolute', right: '32px', bottom: '10px', display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center', width: '30%' }}>
+                                                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
+                                                    <button 
+                                                        onClick={() => setBeneficiariesPage(Math.max(0, beneficiariesPage - 1))}
+                                                        disabled={beneficiariesPage === 0}
+                                                        style={{
+                                                            padding: '6px 12px',
+                                                            backgroundColor: beneficiariesPage === 0 ? '#e2e8f0' : '#0ea5e9',
+                                                            color: beneficiariesPage === 0 ? '#94a3b8' : '#fff',
+                                                            border: 'none',
+                                                            borderRadius: '6px',
+                                                            cursor: beneficiariesPage === 0 ? 'not-allowed' : 'pointer',
+                                                            fontSize: '12px',
+                                                            fontWeight: '500'
+                                                        }}
+                                                    >
+                                                        ←
+                                                    </button>
+                                                    <span style={{ fontSize: '12px', color: '#64748b', fontWeight: '500' }}>
+                                                        {beneficiariesPage + 1}/{totalPages}
+                                                    </span>
+                                                    <button 
+                                                        onClick={() => setBeneficiariesPage(Math.min(totalPages - 1, beneficiariesPage + 1))}
+                                                        disabled={beneficiariesPage >= totalPages - 1}
+                                                        style={{
+                                                            padding: '6px 12px',
+                                                            backgroundColor: beneficiariesPage >= totalPages - 1 ? '#e2e8f0' : '#0ea5e9',
+                                                            color: beneficiariesPage >= totalPages - 1 ? '#94a3b8' : '#fff',
+                                                            border: 'none',
+                                                            borderRadius: '6px',
+                                                            cursor: beneficiariesPage >= totalPages - 1 ? 'not-allowed' : 'pointer',
+                                                            fontSize: '12px',
+                                                            fontWeight: '500'
+                                                        }}
+                                                    >
+                                                        →
+                                                    </button>
+                                                </div>
+                                                <div style={{ fontSize: '10px', color: '#94a3b8', textAlign: 'center' }}>
+                                                    Click pe slice pentru detalii
+                                                </div>
                                             </div>
-                                            <div className="rank-note" style={{ textAlign: 'center', marginTop: '10px' }}>
-                                                Click pe un slice pentru a vedea plățile beneficiarului.
                                             </div>
                                         </>
                                     );
