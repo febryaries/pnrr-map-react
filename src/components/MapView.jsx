@@ -3273,7 +3273,7 @@ const MapView = ({
                                             textStyle: {
                                                 fontSize: 9
                                             },
-                                            data: topBeneficiaries.items.map((b, index) => ({
+                                            data: topBeneficiaries.items.slice(0, 20).map((b, index) => ({
                                                 name: `${index + 1}. ${b['beneficiar'] || 'N/A'}`,
                                                 textStyle: {
                                                     fontWeight: index < 10 ? 'bold' : 'normal'
@@ -3312,7 +3312,7 @@ const MapView = ({
                                                     },
                                                     fontSize: 11
                                                 },
-                                                data: topBeneficiaries.items.map((beneficiary, index) => {
+                                                data: topBeneficiaries.items.slice(0, 20).map((beneficiary, index) => {
                                                     const amountRON = beneficiary['total'] || 0;
                                                     const amountEUR = beneficiary['total_euro'] || 0;
                                                     const displayAmount = currency === 'RON' ? amountRON : amountEUR;
