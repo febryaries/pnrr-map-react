@@ -130,7 +130,7 @@ function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick }) 
 
   // Load Romania map
   useEffect(() => {
-    fetch('https://code.highcharts.com/mapdata/countries/ro/ro-all.topo.json')
+    fetch('/ro-all.topo.json')
       .then(res => res.json())
       .then(topology => setMapTopology(topology))
       .catch(err => console.error('Error loading map:', err));

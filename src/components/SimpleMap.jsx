@@ -21,7 +21,7 @@ function SimpleMap({ data = [], isLoading = false, isPlaying = false }) {
   useEffect(() => {
     const loadMapData = async () => {
       try {
-        const response = await fetch('https://code.highcharts.com/mapdata/countries/ro/ro-all.topo.json');
+        const response = await fetch('/ro-all.topo.json');
         if (!response.ok) {
           console.warn('Could not load Romania map data:', response.statusText);
           return;

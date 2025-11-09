@@ -1776,7 +1776,7 @@ const MapView = ({
     useEffect(() => {
         const loadMapData = async () => {
             try {
-                const response = await fetch('https://code.highcharts.com/mapdata/countries/ro/ro-all.topo.json')
+                const response = await fetch('/ro-all.topo.json')
                 if (!response.ok) {
                     console.warn('Could not load Romania map data:', response.statusText)
                     return
@@ -2743,11 +2743,12 @@ const MapView = ({
         return filteredData
     }, [data, endpoint, viewMode, fieldMappings, activeProgram, filterComponent, getValueField])
 
-    // Pie chart configuration - 3D Donut version
+    // Pie chart configuration - 3D Donut version with responsive labels
+    const isMobile = window.innerWidth < 768
     const pieOptions = {
         chart: {
             type: 'pie',
-            height: 400,
+            height: isMobile ? 350 : 400,
             backgroundColor: 'transparent',
             options3d: {
                 enabled: true,
@@ -2756,12 +2757,16 @@ const MapView = ({
             }
         },
         title: {
-            text: `Distribuție pe componente – Valoare (EUR)`
+            text: `Distribuție pe componente – Valoare (EUR)`,
+            style: {
+                fontSize: isMobile ? '14px' : '16px'
+            }
         },
         tooltip: {
             pointFormatter: function () {
                 const val = fmtMoney(this.y)
-                return `${this.name}: <b>${val}</b>`
+                const pct = Highcharts.numberFormat(this.percentage, 1)
+                return `${this.name}: <b>${val}</b> (${pct}%)`
             }
         },
         plotOptions: {
@@ -2773,14 +2778,19 @@ const MapView = ({
                 dataLabels: {
                     enabled: true,
                     formatter: function () {
+                        // Pe mobil: afișează doar label-uri pentru slice-uri > 5%
+                        if (isMobile && this.percentage < 5) {
+                            return null
+                        }
                         return this.percentage ? Highcharts.numberFormat(this.percentage, 1) + '%' : null
                     },
                     style: {
-                        fontSize: '12px',
-                        fontWeight: '500'
+                        fontSize: isMobile ? '11px' : '12px',
+                        fontWeight: '600',
+                        textOutline: '2px white'
                     },
-                    distance: 15,
-                    connectorWidth: 1,
+                    distance: isMobile ? -30 : 15,
+                    connectorWidth: isMobile ? 0 : 1,
                     connectorColor: '#666'
                 },
                 states: {

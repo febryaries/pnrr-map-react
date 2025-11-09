@@ -220,7 +220,7 @@ export default function SemanticSearchPage() {
   useEffect(() => {
     const loadMap = async () => {
       try {
-        const response = await fetch('https://code.highcharts.com/mapdata/countries/ro/ro-all.topo.json')
+        const response = await fetch('/ro-all.topo.json')
         const topology = await response.json()
         setMapData(topology)
       } catch (error) {
