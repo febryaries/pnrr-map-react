@@ -2754,8 +2754,8 @@ const MapView = ({
             pie: {
                 innerSize: '55%',
                 depth: 45,
-                allowPointSelect: true,
-                cursor: 'pointer',
+                allowPointSelect: false,
+                cursor: 'default',
                 dataLabels: {
                     enabled: true,
                     formatter: function () {
@@ -2768,14 +2768,6 @@ const MapView = ({
                     distance: 15,
                     connectorWidth: 1,
                     connectorColor: '#666'
-                },
-                point: {
-                    events: {
-                        click: function () {
-                            setViewMode('program')
-                            setActiveProgram(this.options.key)
-                        }
-                    }
                 },
                 states: {
                     hover: {
@@ -3277,6 +3269,7 @@ const MapView = ({
                                             top: 20,
                                             bottom: 20,
                                             width: '33%',
+                                            selectedMode: false,
                                             textStyle: {
                                                 fontSize: 9
                                             },
@@ -3516,7 +3509,7 @@ const MapView = ({
                                     },
                                     plotOptions: {
                                         bar: {
-                                            cursor: 'pointer',
+                                            cursor: 'default',
                                             dataLabels: {
                                                 enabled: true,
                                                 align: 'left',
@@ -3534,16 +3527,6 @@ const MapView = ({
                                                     color: '#64748b',
                                                     fontWeight: 'normal',
                                                     textOutline: 'none'
-                                                }
-                                            },
-                                            point: {
-                                                events: {
-                                                    click: function () {
-                                                        const county = rankingData[this.index]
-                                                        if (county) {
-                                                            onCountyClick(county.code, county.name)
-                                                        }
-                                                    }
                                                 }
                                             }
                                         }
