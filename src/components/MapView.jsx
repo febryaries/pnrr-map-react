@@ -1681,8 +1681,21 @@ const MapView = ({
     const [filterCRI, setFilterCRI] = useState('')
     const [filteredTotals, setFilteredTotals] = useState({ count: 0, totalValue: 0 })
     
+    // Mobile detection state
+    const [isMobileView, setIsMobileView] = useState(window.innerWidth < 768)
+    
     // Ref for sticky filters to scroll to
     const filtersRef = useRef(null)
+    
+    // Update mobile view on resize
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobileView(window.innerWidth < 768)
+        }
+        
+        window.addEventListener('resize', handleResize)
+        return () => window.removeEventListener('resize', handleResize)
+    }, [])
 
     // Get the correct component mapping based on endpoint
     // Memoized to prevent recreation on every render
@@ -2744,22 +2757,28 @@ const MapView = ({
     }, [data, endpoint, viewMode, fieldMappings, activeProgram, filterComponent, getValueField])
 
     // Pie chart configuration - 3D Donut version with responsive labels
-    const isMobile = window.innerWidth < 768
-    const pieOptions = {
+    const pieOptions = useMemo(() => ({
         chart: {
             type: 'pie',
-            height: isMobile ? 350 : 400,
+            height: isMobileView ? 550 : 400,
             backgroundColor: 'transparent',
             options3d: {
                 enabled: true,
                 alpha: 45,
                 beta: 0
-            }
+            },
+            ...(isMobileView && {
+                marginBottom: 200,
+                marginLeft: 0,
+                marginRight: 0,
+                spacingLeft: 0,
+                spacingRight: 0
+            })
         },
         title: {
             text: `Distribuție pe componente – Valoare (EUR)`,
             style: {
-                fontSize: isMobile ? '14px' : '16px'
+                fontSize: isMobileView ? '14px' : '16px'
             }
         },
         tooltip: {
@@ -2769,28 +2788,55 @@ const MapView = ({
                 return `${this.name}: <b>${val}</b> (${pct}%)`
             }
         },
+        ...(isMobileView && {
+            legend: {
+                enabled: true,
+                layout: 'vertical',
+                align: 'center',
+                verticalAlign: 'bottom',
+                itemMarginTop: 3,
+                itemMarginBottom: 3,
+                itemStyle: {
+                    fontSize: '11px',
+                    fontWeight: '400'
+                },
+                navigation: {
+                    enabled: true,
+                    arrowSize: 12
+                },
+                maxHeight: 150,
+                itemsPerPage: 6,
+                labelFormatter: function () {
+                    const pct = Highcharts.numberFormat(this.percentage, 1)
+                    return `${this.name} (${pct}%)`
+                }
+            }
+        }),
         plotOptions: {
             pie: {
+                center: ['50%', '45%'],
+                size: isMobileView ? '85%' : null,
                 innerSize: '55%',
                 depth: 45,
                 allowPointSelect: false,
                 cursor: 'default',
+                showInLegend: isMobileView,
                 dataLabels: {
                     enabled: true,
                     formatter: function () {
                         // Pe mobil: afișează doar label-uri pentru slice-uri > 5%
-                        if (isMobile && this.percentage < 5) {
+                        if (isMobileView && this.percentage < 5) {
                             return null
                         }
                         return this.percentage ? Highcharts.numberFormat(this.percentage, 1) + '%' : null
                     },
                     style: {
-                        fontSize: isMobile ? '11px' : '12px',
+                        fontSize: isMobileView ? '13px' : '12px',
                         fontWeight: '600',
-                        textOutline: '2px white'
+                        textOutline: isMobileView ? '1px white' : '2px white'
                     },
-                    distance: isMobile ? -30 : 15,
-                    connectorWidth: isMobile ? 0 : 1,
+                    distance: isMobileView ? -30 : 15,
+                    connectorWidth: isMobileView ? 0 : 1,
                     connectorColor: '#666'
                 },
                 states: {
@@ -2811,7 +2857,7 @@ const MapView = ({
         credits: {
             enabled: false
         }
-    }
+    }), [isMobileView, componentTotals])
 
     // Include "Național" in ranking chart
     const rankingData = processedData.slice(0, showAllRanking ? processedData.length : 10)

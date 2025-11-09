@@ -2914,8 +2914,8 @@ h1 {
   
   /* Pie chart needs more height on mobile */
   .pie-chart-section .chart-container {
-    height: 450px !important;
-    min-height: 450px;
+    height: 550px !important;
+    min-height: 550px;
   }
 }
 
@@ -2926,8 +2926,8 @@ h1 {
   
   /* Pie chart needs more height on small mobile */
   .pie-chart-section .chart-container {
-    height: 400px !important;
-    min-height: 400px;
+    height: 550px !important;
+    min-height: 550px;
   }
 }
 
