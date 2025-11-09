@@ -3398,9 +3398,9 @@ const MapView = ({
                                                             <span className="beneficiary-name">
                                                                 {(() => {
                                                                     let name = beneficiary['beneficiar'] || 'N/A';
-                                                                    // Scurtare doar pe mobile
-                                                                    if (window.innerWidth < 768 && name.includes('SOCIETATEA NATIONALA DE TRANSPORT FEROVIAR DE CALATORI')) {
-                                                                        name = 'SOCIETATEA NATIONALA DE TRANSPORT FEROVIAR DE CALATORI S.A';
+                                                                    // Scurtare pe desktop și mobile
+                                                                    if (name.includes('SOCIETATEA NATIONALA DE TRANSPORT FEROVIAR DE CALATORI')) {
+                                                                        name = 'SOCIETATEA NATIONALA DE TRANSPORT FEROVIAR DE CALATORI SA';
                                                                     }
                                                                     return name;
                                                                 })()}
