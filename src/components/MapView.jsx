@@ -3541,44 +3541,85 @@ const MapView = ({
                                 })()}
                                 </div>
 
-                                {/* Mobile - Bar Chart simplu */}
+                                {/* Mobile - Bar Chart simplu cu paginare */}
                                 <div className="beneficiaries-chart-mobile">
-                                    <ol className="rank-list">
-                                        {topBeneficiaries.items.slice(0, 20).map((beneficiary, index) => {
-                                            const amountRON = beneficiary['total'] || 0
-                                            const amountEUR = beneficiary['total_euro'] || 0
-                                            const displayAmount = currency === 'RON' ? amountRON : amountEUR
-                                            const millions = displayAmount / 1e6
-                                            const formattedAmount = `${millions.toLocaleString('ro-RO', {
-                                                minimumFractionDigits: 2,
-                                                maximumFractionDigits: 2
-                                            })} mil ${getCurrencySymbol()}`
-                                            
-                                            const firstItem = topBeneficiaries.items[0]
-                                            const maxAmount = firstItem 
-                                                ? (currency === 'EUR' ? (firstItem['total_euro'] || 0) : (firstItem['total'] || 0))
-                                                : 1
-                                            const percentage = maxAmount ? Math.max(2, (displayAmount / maxAmount) * 100) : 0
+                                {(() => {
+                                    const itemsPerPage = 10;
+                                    const startIndex = beneficiariesPage * itemsPerPage;
+                                    const endIndex = startIndex + itemsPerPage;
+                                    const currentPageItems = topBeneficiaries.items.slice(startIndex, endIndex);
+                                    const totalPages = Math.ceil(topBeneficiaries.items.length / itemsPerPage);
+                                    
+                                    // Găsește valoarea maximă pentru bara de progres (din toți beneficiarii, nu doar pagina curentă)
+                                    const firstItem = topBeneficiaries.items[0];
+                                    const maxAmount = firstItem 
+                                        ? (currency === 'EUR' ? (firstItem['total_euro'] || 0) : (firstItem['total'] || 0))
+                                        : 1;
+                                    
+                                    return (
+                                        <>
+                                            <ol className="rank-list" start={startIndex + 1}>
+                                                {currentPageItems.map((beneficiary, index) => {
+                                                    const amountRON = beneficiary['total'] || 0;
+                                                    const amountEUR = beneficiary['total_euro'] || 0;
+                                                    const displayAmount = currency === 'RON' ? amountRON : amountEUR;
+                                                    const millions = displayAmount / 1e6;
+                                                    const formattedAmount = `${millions.toLocaleString('ro-RO', {
+                                                        minimumFractionDigits: 2,
+                                                        maximumFractionDigits: 2
+                                                    })} mil ${getCurrencySymbol()}`;
+                                                    
+                                                    const percentage = maxAmount ? Math.max(2, (displayAmount / maxAmount) * 100) : 0;
+                                                    const globalIndex = startIndex + index;
 
-                                            return (
-                                                <li key={index} className="rank-item">
-                                                    <div className="rank-pos">{index + 1}</div>
-                                                    <div className="rank-name" style={{ fontWeight: index < 10 ? 'bold' : 'normal' }}>
-                                                        {beneficiary['beneficiar'] || 'N/A'}
-                                                    </div>
-                                                    <div className="rank-bar-wrap">
-                                                        <div className="rank-bar" style={{ width: `${percentage}%`, borderRadius: 0 }}></div>
-                                                    </div>
-                                                    <div className="rank-value" style={{ fontWeight: index < 10 ? 'bold' : 'normal' }}>
-                                                        {formattedAmount}
-                                                    </div>
-                                                </li>
-                                            )
-                                        })}
-                                    </ol>
-                                    <div className="rank-note">
-                                        Top 20 beneficiari PNRR
-                                    </div>
+                                                    return (
+                                                        <li key={globalIndex} className="rank-item">
+                                                            <div style={{ width: '100%' }}>
+                                                                <div style={{ marginBottom: '4px' }}>
+                                                                    <span className="rank-pos">{globalIndex + 1}</span>
+                                                                    <span className="rank-name" style={{ fontWeight: globalIndex < 10 ? 'bold' : 'normal' }}>
+                                                                        {beneficiary['beneficiar'] || 'N/A'}
+                                                                    </span>
+                                                                </div>
+                                                                <div className="rank-bar-wrap">
+                                                                    <div className="rank-bar" style={{ width: `${percentage}%`, borderRadius: 0 }}></div>
+                                                                </div>
+                                                                <div className="rank-value" style={{ fontWeight: globalIndex < 10 ? 'bold' : 'normal', marginTop: '2px' }}>
+                                                                    {formattedAmount}
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    );
+                                                })}
+                                            </ol>
+                                            
+                                            {/* Paginare pentru mobil */}
+                                            <div className="beneficiaries-pagination-mobile">
+                                                <button 
+                                                    onClick={() => setBeneficiariesPage(Math.max(0, beneficiariesPage - 1))}
+                                                    disabled={beneficiariesPage === 0}
+                                                    className="pagination-btn"
+                                                >
+                                                    ← Anteriorii
+                                                </button>
+                                                <span className="pagination-info">
+                                                    Pagina {beneficiariesPage + 1} din {totalPages}
+                                                </span>
+                                                <button 
+                                                    onClick={() => setBeneficiariesPage(Math.min(totalPages - 1, beneficiariesPage + 1))}
+                                                    disabled={beneficiariesPage >= totalPages - 1}
+                                                    className="pagination-btn"
+                                                >
+                                                    Următorii →
+                                                </button>
+                                            </div>
+                                            
+                                            <div className="rank-note">
+                                                Top 100 beneficiari PNRR
+                                            </div>
+                                        </>
+                                    );
+                                })()}
                                 </div>
                             </>
                         ) : (

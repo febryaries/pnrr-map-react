@@ -3048,6 +3048,78 @@ h1 {
   margin-top: 6px;
 }
 
+/* Beneficiari mobil - fără scroll */
+.beneficiaries-chart-mobile .rank-list {
+  max-height: none !important;
+  overflow-y: visible !important;
+}
+
+/* Beneficiari mobil - layout compact */
+.beneficiaries-chart-mobile .rank-item {
+  padding: 6px 0 !important;
+  gap: 4px !important;
+}
+
+/* Beneficiari mobil - număr + nume pe același rând */
+.beneficiaries-chart-mobile .rank-pos {
+  display: inline !important;
+  margin-right: 6px !important;
+}
+
+.beneficiaries-chart-mobile .rank-name {
+  display: inline !important;
+  width: auto !important;
+}
+
+/* Paginare beneficiari mobil */
+.beneficiaries-pagination-mobile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+.beneficiaries-pagination-mobile .pagination-btn {
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.beneficiaries-pagination-mobile .pagination-btn:disabled {
+  background: #e2e8f0;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.beneficiaries-pagination-mobile .pagination-btn:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+.beneficiaries-pagination-mobile .pagination-btn:not(:disabled):active {
+  transform: translateY(0);
+}
+
+.beneficiaries-pagination-mobile .pagination-info {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+  text-align: center;
+  flex-grow: 1;
+}
+
 /* Responsive ranking */
 @media (max-width: 1024px) {
   .rank-name {
