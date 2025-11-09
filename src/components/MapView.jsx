@@ -3513,7 +3513,7 @@ const MapView = ({
                                                 }}
                                             />
                                             {/* Paginare sub legendă */}
-                                            <div style={{ position: 'absolute', left: '65%', top: '65%', display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center', width: '33%' }}>
+                                            <div style={{ position: 'absolute', left: '65%', top: '65%', display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center', width: '33%', paddingTop: '55px', paddingRight: '80px' }}>
                                                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center', justifyContent: 'center' }}>
                                                     <button 
                                                         onClick={() => setBeneficiariesPage(Math.max(0, beneficiariesPage - 1))}
