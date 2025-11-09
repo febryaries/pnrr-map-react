@@ -4,10 +4,17 @@ import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import HighchartsMap from 'highcharts/modules/map'
 import HighchartsAccessibility from 'highcharts/modules/accessibility'
+import Highcharts3D from 'highcharts/highcharts-3d'
+import HighchartsMore from 'highcharts/highcharts-more'
+import HighchartsCylinder from 'highcharts/modules/cylinder'
+import ReactECharts from 'echarts-for-react';
 
 // Initialize Highcharts modules
 HighchartsMap(Highcharts)
 HighchartsAccessibility(Highcharts)
+Highcharts3D(Highcharts)
+HighchartsMore(Highcharts)
+HighchartsCylinder(Highcharts)
 
 // Suppress Highcharts warning #33 for onclick in tooltip HTML (valid use case)
 Highcharts.setOptions({
@@ -2722,15 +2729,17 @@ const MapView = ({
         return filteredData
     }, [data, endpoint, viewMode, fieldMappings, activeProgram, filterComponent, getValueField])
 
-    // Pie chart configuration - Stable version
+    // Pie chart configuration - 3D Donut version
     const pieOptions = {
         chart: {
             type: 'pie',
             height: 400,
             backgroundColor: 'transparent',
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false
+            options3d: {
+                enabled: true,
+                alpha: 45,
+                beta: 0
+            }
         },
         title: {
             text: `Distribuție pe componente – Valoare (EUR)`
@@ -2744,6 +2753,7 @@ const MapView = ({
         plotOptions: {
             pie: {
                 innerSize: '55%',
+                depth: 45,
                 allowPointSelect: true,
                 cursor: 'pointer',
                 dataLabels: {
@@ -2787,8 +2797,9 @@ const MapView = ({
         }
     }
 
+    // Include "Național" in ranking chart
     const rankingData = processedData.slice(0, showAllRanking ? processedData.length : 10)
-    const maxValue = processedData.length > 0 ? processedData[0].value : 1
+    const maxValue = rankingData.length > 0 ? rankingData[0].value : 1
 
     const pageTitle = 'Tablou de bord PNRR'
 
@@ -3237,12 +3248,10 @@ const MapView = ({
                 </div>
             </section>
 
-
-
             {/* Top Beneficiaries Section - Only show when no component is selected */}
             {!activeProgram && (
-                <section className="ranking-section">
-                    <div className="card rank-card">
+                <section className="ranking-section beneficiaries-section">
+                    <div className="card beneficiaries-card">
                         <h3>Topul beneficiarilor PNRR raportat la plăți (Top 100)</h3>
                     {loadingBeneficiaries ? (
                         <div className="beneficiaries-loading">
@@ -3251,197 +3260,335 @@ const MapView = ({
                         </div>
                     ) : topBeneficiaries && topBeneficiaries.items && topBeneficiaries.items.length > 0 ? (
                             <>
-                                <ol className="rank-list">
-                                        {topBeneficiaries.items
-                                            .slice(0, showAllBeneficiaries ? 100 : 5)
-                                            .map((beneficiary, index) => {
-                                                // Use actual API field names: beneficiar, cui, total_euro, total
-                                                // total = RON amount, total_euro = EUR amount (from API)
-                                                const amountRON = beneficiary['total'] || 0
-                                                const amountEUR = beneficiary['total_euro'] || 0 // Use total_euro directly from API
-                                                
-                                                const beneficiaryName = beneficiary['beneficiar'] || 'N/A'
-                                                
-                                                const taxId = beneficiary['cui'] ? String(beneficiary['cui']) : ''
-                                                
-                                                // Use correct currency amount based on selection
-                                                const displayAmount = currency === 'RON' ? amountRON : amountEUR
-                                                const isTopFive = index < 5
-                                                
-                                                // Format as millions with currency symbol
-                                                const millions = displayAmount / 1e6
-                                                const formattedAmount = `${millions.toLocaleString('ro-RO', {
-                                                    minimumFractionDigits: 2,
-                                                    maximumFractionDigits: 2
-                                                })} mil ${getCurrencySymbol()}`
-
-                                                // Calculate percentage for bar (similar to county ranking)
-                                                // Use total_euro for EUR comparison when currency is EUR, total for RON
-                                                const firstItem = topBeneficiaries.items[0]
-                                                const maxAmount = firstItem 
-                                                    ? (currency === 'EUR' ? (firstItem['total_euro'] || 0) : (firstItem['total'] || 0))
-                                                    : 1
-                                                const percentage = maxAmount ? Math.max(2, (displayAmount / maxAmount) * 100) : 0
-
-                                                return (
-                                                <li
-                                                    key={index}
-                                                    className="rank-item"
-                                                    onClick={() => {
-                                                        console.log('Beneficiary clicked:', beneficiary);
-                                                        console.log('Tax ID:', taxId);
-                                                        
-                                                        // Switch to payments endpoint
-                                                        if (switchEndpoint) {
-                                                            switchEndpoint('payments');
-                                                            console.log('Switched to payments endpoint');
+                                {/* Desktop - Pie Chart */}
+                                <div className="beneficiaries-chart-desktop">
+                                <ReactECharts
+                                    option={{
+                                        tooltip: {
+                                            trigger: 'item',
+                                            formatter: function(params) {
+                                                return params.name + '<br/>' + params.value.toFixed(2) + ' mil ' + getCurrencySymbol() + ' (' + params.percent + '%)';
+                                            }
+                                        },
+                                        legend: {
+                                            type: 'scroll',
+                                            orient: 'vertical',
+                                            left: '65%',
+                                            top: 20,
+                                            bottom: 20,
+                                            width: '33%',
+                                            textStyle: {
+                                                fontSize: 9
+                                            },
+                                            data: topBeneficiaries.items.map((b, index) => ({
+                                                name: `${index + 1}. ${b['beneficiar'] || 'N/A'}`,
+                                                textStyle: {
+                                                    fontWeight: index < 10 ? 'bold' : 'normal'
+                                                }
+                                            }))
+                                        },
+                                        series: [
+                                            {
+                                                name: 'Valoare PNRR',
+                                                type: 'pie',
+                                                radius: '55%',
+                                                center: ['35%', '50%'],
+                                                label: {
+                                                    show: true,
+                                                    formatter: function(params) {
+                                                        const name = params.name;
+                                                        const maxLength = 25;
+                                                        if (name.length <= maxLength) {
+                                                            return name;
                                                         }
+                                                        const words = name.split(' ');
+                                                        let lines = [];
+                                                        let currentLine = '';
                                                         
-                                                        // Set search term to the CUI/tax ID
-                                                        if (taxId) {
-                                                            setSearchTerm(taxId);
-                                                            console.log('Set search term to:', taxId);
-                                                        }
-                                                        
-                                                        // Scroll to the table
-                                                        setTimeout(() => {
-                                                            const element = document.getElementById('projects-table');
-                                                            if (element) {
-                                                                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                                                console.log('Scrolled to table');
+                                                        words.forEach(word => {
+                                                            if ((currentLine + ' ' + word).trim().length <= maxLength) {
+                                                                currentLine = (currentLine + ' ' + word).trim();
+                                                            } else {
+                                                                if (currentLine) lines.push(currentLine);
+                                                                currentLine = word;
                                                             }
-                                                        }, 500);
-                                                    }}
-                                                >
+                                                        });
+                                                        if (currentLine) lines.push(currentLine);
+                                                        
+                                                        return lines.join('\n');
+                                                    },
+                                                    fontSize: 11
+                                                },
+                                                data: topBeneficiaries.items.map((beneficiary, index) => {
+                                                    const amountRON = beneficiary['total'] || 0;
+                                                    const amountEUR = beneficiary['total_euro'] || 0;
+                                                    const displayAmount = currency === 'RON' ? amountRON : amountEUR;
+                                                    const millions = displayAmount / 1e6;
+                                                    
+                                                    return {
+                                                        name: `${index + 1}. ${beneficiary['beneficiar'] || 'N/A'}`,
+                                                        value: millions,
+                                                        beneficiary: beneficiary
+                                                    };
+                                                }),
+                                                emphasis: {
+                                                    itemStyle: {
+                                                        shadowBlur: 10,
+                                                        shadowOffsetX: 0,
+                                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }}
+                                    style={{ height: '500px', width: '100%' }}
+                                    onEvents={{
+                                        click: function(params) {
+                                            const beneficiary = params.data.beneficiary;
+                                            const taxId = beneficiary['cui'] ? String(beneficiary['cui']) : '';
+                                            
+                                            console.log('Beneficiary clicked:', beneficiary);
+                                            console.log('Tax ID:', taxId);
+                                            
+                                            if (switchEndpoint) {
+                                                switchEndpoint('payments');
+                                                console.log('Switched to payments endpoint');
+                                            }
+                                            
+                                            if (taxId) {
+                                                setSearchTerm(taxId);
+                                                console.log('Set search term to:', taxId);
+                                            }
+                                            
+                                            setTimeout(() => {
+                                                const element = document.getElementById('projects-table');
+                                                if (element) {
+                                                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                                    console.log('Scrolled to table');
+                                                }
+                                            }, 500);
+                                        }
+                                    }}
+                                />
+                                <div className="rank-note" style={{ textAlign: 'center', marginTop: '20px' }}>
+                                    Click pe un slice pentru a vedea plățile beneficiarului.
+                                </div>
+                                </div>
+
+                                {/* Mobile - Bar Chart simplu */}
+                                <div className="beneficiaries-chart-mobile">
+                                    <ol className="rank-list">
+                                        {topBeneficiaries.items.slice(0, 20).map((beneficiary, index) => {
+                                            const amountRON = beneficiary['total'] || 0
+                                            const amountEUR = beneficiary['total_euro'] || 0
+                                            const displayAmount = currency === 'RON' ? amountRON : amountEUR
+                                            const millions = displayAmount / 1e6
+                                            const formattedAmount = `${millions.toLocaleString('ro-RO', {
+                                                minimumFractionDigits: 2,
+                                                maximumFractionDigits: 2
+                                            })} mil ${getCurrencySymbol()}`
+                                            
+                                            const firstItem = topBeneficiaries.items[0]
+                                            const maxAmount = firstItem 
+                                                ? (currency === 'EUR' ? (firstItem['total_euro'] || 0) : (firstItem['total'] || 0))
+                                                : 1
+                                            const percentage = maxAmount ? Math.max(2, (displayAmount / maxAmount) * 100) : 0
+
+                                            return (
+                                                <li key={index} className="rank-item">
                                                     <div className="rank-pos">{index + 1}</div>
-                                                    <div className="rank-name" style={{ fontWeight: isTopFive ? 'bold' : 'normal' }}>
-                                                        {beneficiaryName}
+                                                    <div className="rank-name" style={{ fontWeight: index < 10 ? 'bold' : 'normal' }}>
+                                                        {beneficiary['beneficiar'] || 'N/A'}
                                                     </div>
                                                     <div className="rank-bar-wrap">
-                                                        <div className="rank-bar" style={{ width: `${percentage}%` }}></div>
+                                                        <div className="rank-bar" style={{ width: `${percentage}%`, borderRadius: 0 }}></div>
                                                     </div>
-                                                    <div className="rank-value" style={{ fontWeight: isTopFive ? 'bold' : 'normal' }}>
-                                                            {formattedAmount}
+                                                    <div className="rank-value" style={{ fontWeight: index < 10 ? 'bold' : 'normal' }}>
+                                                        {formattedAmount}
                                                     </div>
                                                 </li>
                                             )
                                         })}
-                                </ol>
-                                <div className="rank-actions">
-                                <button
-                                        className="btn ghost"
-                                    onClick={() => setShowAllBeneficiaries(!showAllBeneficiaries)}
-                                    >
-                                        {showAllBeneficiaries ? 'Restrânge' : 'Afișează tot'}
-                                </button>
-                            </div>
-                                <div className="rank-note">
-                                    Click pe un beneficiar pentru a vedea plățile lui. (Ctrl/⌘-clic pentru un nou tab.)
+                                    </ol>
+                                    <div className="rank-note">
+                                        Top 20 beneficiari PNRR
+                                    </div>
                                 </div>
                             </>
-                    ) : (
-                        <div className="beneficiaries-empty">
-                            <p>Nu s-au găsit date despre beneficiari sau datele nu sunt încă disponibile.</p>
-                            {topBeneficiaries && console.log('Top beneficiaries state:', topBeneficiaries)}
-                        </div>
-                    )}
+                        ) : (
+                            <div className="beneficiaries-empty">
+                                <p>Nu s-au găsit date despre beneficiari sau datele nu sunt încă disponibile.</p>
+                            </div>
+                        )}
                     </div>
                 </section>
             )}
 
-            {/* Pie Chart - Full Row (always show) */}
-            <section className="pie-chart-section">
-                <div className="card pie-card">
-                    {isLoadingRealData ? (
-                        <div className="chart-container" style={{ 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            justifyContent: 'center', 
-                            height: '400px',
-                            color: '#64748b',
-                            fontSize: '16px'
-                        }}>
-                            <div style={{ textAlign: 'center' }}>
-                                <div className="loading-spinner-small" style={{ margin: '0 auto 16px auto' }}></div>
-                                <div>Se încarcă datele pentru distribuția pe componente...</div>
+            {/* Charts Container - Side by Side */}
+            <div className="charts-container">
+                {/* Pie Chart */}
+                <section className="pie-chart-section">
+                    <div className="card pie-card">
+                        {isLoadingRealData ? (
+                            <div className="chart-container" style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                justifyContent: 'center', 
+                                height: '400px',
+                                color: '#64748b',
+                                fontSize: '16px'
+                            }}>
+                                <div style={{ textAlign: 'center' }}>
+                                    <div className="loading-spinner-small" style={{ margin: '0 auto 16px auto' }}></div>
+                                    <div>Se încarcă datele pentru distribuția pe componente...</div>
+                                </div>
                             </div>
-                        </div>
-                    ) : componentTotals && componentTotals.length > 0 ? (
+                        ) : componentTotals && componentTotals.length > 0 ? (
+                            <div className="chart-container">
+                                <HighchartsReact
+                                    highcharts={Highcharts}
+                                    options={pieOptions}
+                                />
+                            </div>
+                        ) : (
+                            <div className="chart-container" style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                justifyContent: 'center', 
+                                height: '400px',
+                                color: '#64748b',
+                                fontSize: '16px'
+                            }}>
+                                <div style={{ textAlign: 'center' }}>
+                                    <div style={{ fontSize: '48px', marginBottom: '16px' }}>📊</div>
+                                    <div>Nu există date pentru distribuția pe componente</div>
+                                    <div style={{ fontSize: '14px', marginTop: '8px' }}>
+                                        Verifică filtrele sau încarcă datele
+                                    </div>
+                                    <div style={{ fontSize: '12px', marginTop: '8px', color: '#94a3b8' }}>
+                                        Debug: Data length: {data?.length || 0} | Endpoint: {endpoint}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </section>
+
+                {/* County Ranking - Hide when viewing National Projects */}
+                {viewMode !== 'national' && (
+                <section className="ranking-section">
+                    <div className="card rank-card">
+                        <h3>Clasament județe – {getSelectionLabel()}</h3>
                         <div className="chart-container">
                             <HighchartsReact
                                 highcharts={Highcharts}
-                                options={pieOptions}
+                                options={{
+                                    chart: {
+                                        type: 'bar',
+                                        height: 400,
+                                        backgroundColor: 'transparent'
+                                    },
+                                    title: {
+                                        text: null
+                                    },
+                                    xAxis: {
+                                        categories: rankingData.map(county => county.name),
+                                        title: {
+                                            text: null
+                                        }
+                                    },
+                                    yAxis: {
+                                        min: 0,
+                                        title: {
+                                            text: null
+                                        },
+                                        labels: {
+                                            enabled: false
+                                        },
+                                        gridLineWidth: 0
+                                    },
+                                    tooltip: {
+                                        formatter: function () {
+                                            const realValue = this.point.realValue
+                                            const valueToDisplay = currency === 'RON' ? realValue * 5 : realValue
+                                            return `<b>${this.x}</b><br/>${fmtMoney(valueToDisplay, getCurrencySymbol())}`
+                                        }
+                                    },
+                                    plotOptions: {
+                                        bar: {
+                                            cursor: 'pointer',
+                                            dataLabels: {
+                                                enabled: true,
+                                                align: 'left',
+                                                inside: false,
+                                                x: 5,
+                                                overflow: 'allow',
+                                                crop: false,
+                                                formatter: function () {
+                                                    const realValue = this.point.realValue
+                                                    const valueToDisplay = currency === 'RON' ? realValue * 5 : realValue
+                                                    return fmtMoney(valueToDisplay, getCurrencySymbol())
+                                                },
+                                                style: {
+                                                    fontSize: '11px',
+                                                    color: '#64748b',
+                                                    fontWeight: 'normal',
+                                                    textOutline: 'none'
+                                                }
+                                            },
+                                            point: {
+                                                events: {
+                                                    click: function () {
+                                                        const county = rankingData[this.index]
+                                                        if (county) {
+                                                            onCountyClick(county.code, county.name)
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    series: [{
+                                        name: 'Valoare PNRR',
+                                        color: '#0ea5e9',
+                                        data: rankingData.map(county => {
+                                            const valueToDisplay = currency === 'RON' ? county.money * 5 : county.money
+                                            
+                                            // Apply logarithmic scale to make county bars more visible
+                                            // Keep "Național" at its actual value, scale others logarithmically
+                                            let barValue
+                                            if (county.code === 'NATIONAL') {
+                                                barValue = valueToDisplay
+                                            } else {
+                                                // Use log scale: log(value + 1) to avoid log(0)
+                                                // Multiply by a factor to make bars more visible
+                                                const logValue = Math.log10(valueToDisplay + 1)
+                                                const maxLog = Math.log10(rankingData[0].money + 1)
+                                                // Scale to make counties more visible (40-50% of National)
+                                                barValue = (logValue / maxLog) * rankingData[0].money * 0.45
+                                            }
+                                            
+                                            // Return object with both visual bar value and real value for labels
+                                            return {
+                                                y: barValue,
+                                                realValue: valueToDisplay
+                                            }
+                                        })
+                                    }],
+                                    credits: {
+                                        enabled: false
+                                    },
+                                    legend: {
+                                        enabled: false
+                                    }
+                                }}
+                                key={`bar-chart-${rankingData.length}`}
                             />
                         </div>
-                    ) : (
-                        <div className="chart-container" style={{ 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            justifyContent: 'center', 
-                            height: '400px',
-                            color: '#64748b',
-                            fontSize: '16px'
-                        }}>
-                            <div style={{ textAlign: 'center' }}>
-                                <div style={{ fontSize: '48px', marginBottom: '16px' }}>📊</div>
-                                <div>Nu există date pentru distribuția pe componente</div>
-                                <div style={{ fontSize: '14px', marginTop: '8px' }}>
-                                    Verifică filtrele sau încarcă datele
-                                </div>
-                                <div style={{ fontSize: '12px', marginTop: '8px', color: '#94a3b8' }}>
-                                    Debug: Data length: {data?.length || 0} | Endpoint: {endpoint}
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </section>
-
-            {/* County Ranking - Full Row - Hide when viewing National Projects */}
-            {viewMode !== 'national' && (
-            <section className="ranking-section">
-                <div className="card rank-card">
-                    <h3>Clasament județe – {getSelectionLabel()}</h3>
-                    <ol className="rank-list">
-                        {rankingData.map((county, index) => {
-                            const percentage = maxValue ? Math.max(2, (county.value / maxValue) * 100) : 0
-                            // Convert to RON if needed (county.money is in EUR)
-                            const valueToDisplay = currency === 'RON' ? county.money * 5 : county.money
-                            const displayValue = fmtMoney(valueToDisplay, getCurrencySymbol())
-                            // Simple display name - no special case for București
-                            const displayName = county.name
-
-                            return (
-                                <li
-                                    key={county.code}
-                                    className="rank-item"
-                                    onClick={() => onCountyClick(county.code, county.name)}
-                                >
-                                    <div className="rank-pos">{index + 1}</div>
-                                    <div className="rank-name">{displayName}</div>
-                                    <div className="rank-bar-wrap">
-                                        <div className="rank-bar" style={{ width: `${percentage}%` }}></div>
-                                    </div>
-                                    <div className="rank-value">{displayValue}</div>
-                                </li>
-                            )
-                        })}
-                    </ol>
-                    <div className="rank-actions">
-                        <button
-                            className="btn ghost"
-                            onClick={() => setShowAllRanking(!showAllRanking)}
-                        >
-                            {showAllRanking ? 'Restrânge' : 'Afișează tot'}
-                        </button>
                     </div>
-                    <div className="rank-note">
-                        Click pe un județ pentru a deschide pagina lui. (Ctrl/⌘-clic pentru un nou tab.)
-                    </div>
-                </div>
-            </section>
-            )}
-
+                </section>
+                )}
+            </div>
 
             {/* Projects/Payments Table */}
             <section id="projects-table" className="projects-payments-section">

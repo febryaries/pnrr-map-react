@@ -2421,22 +2421,46 @@ h1 {
   filter: brightness(0.95);
 }
 
-/* Pie Chart Section - Full Row */
-.pie-chart-section {
-  max-width: 1320px;
-  margin: 8px auto 16px;
-  padding: 0 32px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* County Ranking Section - Full Row */
-.ranking-section {
+/* Charts Container - Side by Side */
+.charts-container {
   max-width: 1320px;
   margin: 8px auto 24px;
   padding: 0 32px;
   width: 100%;
   box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: stretch;
+}
+
+/* Pie Chart Section - Inside Container */
+.pie-chart-section {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* County Ranking Section - Inside Container */
+.ranking-section {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Beneficiaries Section - Full Row (after charts) */
+.beneficiaries-section {
+  max-width: 1320px;
+  margin: 8px auto 24px;
+  padding: 0 32px;
 }
 
 /* Projects/Payments Table Section - Full Row */
@@ -2454,18 +2478,24 @@ h1 {
 }
 
 @media (max-width: 1200px) {
-  .pie-chart-section,
-  .ranking-section,
+  .charts-container,
+  .beneficiaries-section,
   .projects-payments-section {
     padding: 0 24px;
   }
 }
 
 @media (max-width: 960px) {
-  .pie-chart-section,
-  .ranking-section,
+  .charts-container,
+  .beneficiaries-section,
   .projects-payments-section {
     padding: 0 20px;
+  }
+  
+  /* Stack charts vertically on tablets */
+  .charts-container {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 }
 
@@ -2476,10 +2506,15 @@ h1 {
 }
 
 @media (max-width: 768px) {
-  .pie-chart-section,
-  .ranking-section,
+  .charts-container,
+  .beneficiaries-section,
   .projects-payments-section {
     padding: 0 16px;
+  }
+  
+  /* Already stacked from 960px breakpoint */
+  .charts-container {
+    gap: 12px;
   }
   
   /* Hide table on mobile and show compact cards */
@@ -2761,6 +2796,18 @@ h1 {
   padding: 18px 20px 24px;
   overflow: hidden;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card.pie-card .chart-container,
+.card.rank-card .chart-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
 }
 
 /* KPIs */
@@ -2897,13 +2944,12 @@ h1 {
 .rank-item {
   display: flex;
   align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid #e2e8f0;
+  padding: 8px 12px;
   cursor: pointer;
   transition: background-color 0.2s;
   width: 100%;
   box-sizing: border-box;
-  min-height: 40px;
+  min-height: 60px;
   gap: 8px;
 }
 
@@ -2936,9 +2982,10 @@ h1 {
 
 .rank-bar-wrap {
   flex: 1;
-  height: 8px;
+  min-width: 0;
+  height: 20px;
   background: #e5e7eb;
-  border-radius: 4px;
+  border-radius: 0;
   overflow: hidden;
   margin: 0 12px;
   position: relative;
@@ -2947,7 +2994,7 @@ h1 {
 .rank-bar {
   height: 100%;
   background: linear-gradient(90deg, #0ea5e9, #0284c7);
-  border-radius: 4px;
+  border-radius: 0;
   animation: rankBarGrow 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   transform-origin: left;
 }
@@ -2959,6 +3006,25 @@ h1 {
   }
   to {
     opacity: 1;
+  }
+}
+
+/* Responsive - Desktop vs Mobile Charts */
+.beneficiaries-chart-desktop {
+  display: block;
+}
+
+.beneficiaries-chart-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .beneficiaries-chart-desktop {
+    display: none;
+  }
+  
+  .beneficiaries-chart-mobile {
+    display: block;
   }
 }
 
