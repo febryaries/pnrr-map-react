@@ -2822,22 +2822,7 @@ const MapView = ({
                 cursor: 'default',
                 showInLegend: isMobileView,
                 dataLabels: {
-                    enabled: true,
-                    formatter: function () {
-                        // Pe mobil: afișează doar label-uri pentru slice-uri > 5%
-                        if (isMobileView && this.percentage < 5) {
-                            return null
-                        }
-                        return this.percentage ? Highcharts.numberFormat(this.percentage, 1) + '%' : null
-                    },
-                    style: {
-                        fontSize: isMobileView ? '13px' : '12px',
-                        fontWeight: '600',
-                        textOutline: isMobileView ? '1px white' : '2px white'
-                    },
-                    distance: isMobileView ? -30 : 15,
-                    connectorWidth: isMobileView ? 0 : 1,
-                    connectorColor: '#666'
+                    enabled: false
                 },
                 states: {
                     hover: {
@@ -3344,232 +3329,17 @@ const MapView = ({
                         </div>
                     ) : topBeneficiaries && topBeneficiaries.items && topBeneficiaries.items.length > 0 ? (
                             <>
-                                {/* Desktop - Pie Chart */}
-                                <div className="beneficiaries-chart-desktop">
+                                {/* Bar Chart simplu cu paginare - unified pentru desktop și mobile */}
+                                <div className="beneficiaries-chart-unified">
                                 {(() => {
                                     const itemsPerPage = 10;
                                     const startIndex = beneficiariesPage * itemsPerPage;
                                     const endIndex = startIndex + itemsPerPage;
-                                    const currentPageItems = topBeneficiaries.items.slice(startIndex, endIndex);
-                                    const totalPages = Math.ceil(topBeneficiaries.items.length / itemsPerPage);
                                     
-                                    // Debug: Log the order of beneficiaries
-                                    console.log('🔍 Current page items order:', currentPageItems.map((b, i) => `${startIndex + i + 1}. ${b.beneficiar} (${b.total_euro} EUR)`));
-                                    
-                                    return (
-                                        <>
-                                            <div style={{ position: 'relative' }}>
-                                            <ReactECharts
-                                                option={{
-                                                    color: [
-                                                        '#1e40af', '#0891b2', '#059669', '#65a30d', '#ca8a04', '#dc2626', 
-                                                        '#9333ea', '#db2777', '#0284c7', '#0d9488', '#16a34a', '#84cc16',
-                                                        '#eab308', '#f97316', '#ef4444', '#a855f7', '#ec4899', '#06b6d4',
-                                                        '#14b8a6', '#22c55e', '#1e3a8a', '#155e75', '#065f46', '#3f6212',
-                                                        '#92400e', '#991b1b', '#581c87', '#831843', '#075985', '#115e59',
-                                                        '#166534', '#4d7c0f', '#854d0e', '#c2410c', '#b91c1c', '#7e22ce',
-                                                        '#be185d', '#0369a1', '#0f766e', '#15803d', '#65a30d', '#a16207',
-                                                        '#ea580c', '#dc2626', '#9333ea', '#db2777', '#0284c7', '#0d9488',
-                                                        '#16a34a', '#84cc16', '#1e40af', '#0891b2', '#059669', '#65a30d',
-                                                        '#ca8a04', '#dc2626', '#9333ea', '#db2777', '#0284c7', '#0d9488',
-                                                        '#1e3a8a', '#155e75', '#065f46', '#3f6212', '#92400e', '#991b1b',
-                                                        '#581c87', '#831843', '#075985', '#115e59', '#166534', '#4d7c0f',
-                                                        '#854d0e', '#c2410c', '#b91c1c', '#7e22ce', '#be185d', '#0369a1',
-                                                        '#0f766e', '#15803d', '#16a34a', '#84cc16', '#eab308', '#f97316',
-                                                        '#ef4444', '#a855f7', '#ec4899', '#06b6d4', '#14b8a6', '#22c55e',
-                                                        '#1e40af', '#0891b2', '#059669', '#65a30d', '#ca8a04', '#dc2626'
-                                                    ].map((color, i) => {
-                                                        const globalIndex = startIndex;
-                                                        return [
-                                                            '#1e40af', '#0891b2', '#059669', '#65a30d', '#ca8a04', '#dc2626', 
-                                                            '#9333ea', '#db2777', '#0284c7', '#0d9488', '#16a34a', '#84cc16',
-                                                            '#eab308', '#f97316', '#ef4444', '#a855f7', '#ec4899', '#06b6d4',
-                                                            '#14b8a6', '#22c55e', '#1e3a8a', '#155e75', '#065f46', '#3f6212',
-                                                            '#92400e', '#991b1b', '#581c87', '#831843', '#075985', '#115e59',
-                                                            '#166534', '#4d7c0f', '#854d0e', '#c2410c', '#b91c1c', '#7e22ce',
-                                                            '#be185d', '#0369a1', '#0f766e', '#15803d', '#65a30d', '#a16207',
-                                                            '#ea580c', '#dc2626', '#9333ea', '#db2777', '#0284c7', '#0d9488',
-                                                            '#16a34a', '#84cc16', '#1e40af', '#0891b2', '#059669', '#65a30d',
-                                                            '#ca8a04', '#dc2626', '#9333ea', '#db2777', '#0284c7', '#0d9488',
-                                                            '#1e3a8a', '#155e75', '#065f46', '#3f6212', '#92400e', '#991b1b',
-                                                            '#581c87', '#831843', '#075985', '#115e59', '#166534', '#4d7c0f',
-                                                            '#854d0e', '#c2410c', '#b91c1c', '#7e22ce', '#be185d', '#0369a1',
-                                                            '#0f766e', '#15803d', '#16a34a', '#84cc16', '#eab308', '#f97316',
-                                                            '#ef4444', '#a855f7', '#ec4899', '#06b6d4', '#14b8a6', '#22c55e',
-                                                            '#1e40af', '#0891b2', '#059669', '#65a30d', '#ca8a04', '#dc2626'
-                                                        ][(globalIndex + i) % 100];
-                                                    }),
-                                                    tooltip: {
-                                                        trigger: 'item',
-                                                        formatter: function(params) {
-                                                            return params.name + '<br/>' + params.value.toFixed(2) + ' mil ' + getCurrencySymbol() + ' (' + params.percent + '%)';
-                                                        }
-                                                    },
-                                                    legend: {
-                                                        type: 'scroll',
-                                                        orient: 'vertical',
-                                                        left: '65%',
-                                                        top: '15%',
-                                                        width: '33%',
-                                                        selectedMode: false,
-                                                        textStyle: {
-                                                            fontSize: 9
-                                                        },
-                                                        data: currentPageItems.map((b, index) => ({
-                                                            name: `${startIndex + index + 1}. ${b['beneficiar'] || 'N/A'}`,
-                                                            textStyle: {
-                                                                fontWeight: (startIndex + index) < 10 ? 'bold' : 'normal'
-                                                            }
-                                                        }))
-                                                    },
-                                                    series: [
-                                                        {
-                                                            name: 'Valoare PNRR',
-                                                            type: 'pie',
-                                                            radius: '55%',
-                                                            center: ['32%', '50%'],
-                                                            startAngle: 90,
-                                                            label: {
-                                                                show: true,
-                                                                formatter: function(params) {
-                                                                    const name = params.name;
-                                                                    const maxLength = 25;
-                                                                    if (name.length <= maxLength) {
-                                                                        return name;
-                                                                    }
-                                                                    const words = name.split(' ');
-                                                                    let lines = [];
-                                                                    let currentLine = '';
-                                                                    
-                                                                    words.forEach(word => {
-                                                                        if ((currentLine + ' ' + word).trim().length <= maxLength) {
-                                                                            currentLine = (currentLine + ' ' + word).trim();
-                                                                        } else {
-                                                                            if (currentLine) lines.push(currentLine);
-                                                                            currentLine = word;
-                                                                        }
-                                                                    });
-                                                                    if (currentLine) lines.push(currentLine);
-                                                                    
-                                                                    return lines.join('\n');
-                                                                },
-                                                                fontSize: 11
-                                                            },
-                                                            data: currentPageItems.map((beneficiary, index) => {
-                                                                const amountRON = beneficiary['total'] || 0;
-                                                                const amountEUR = beneficiary['total_euro'] || 0;
-                                                                const displayAmount = currency === 'RON' ? amountRON : amountEUR;
-                                                                const millions = displayAmount / 1e6;
-                                                                
-                                                                // Scurtare nume pentru beneficiarul #7
-                                                                let displayName = beneficiary['beneficiar'] || 'N/A';
-                                                                if (displayName.includes('SOCIETATEA NATIONALA DE TRANSPORT FEROVIAR DE CALATORI')) {
-                                                                    displayName = 'SOCIETATE NATIONALA DE TRANSPORT FEROVIAR';
-                                                                }
-                                                                
-                                                                return {
-                                                                    name: `${startIndex + index + 1}. ${displayName}`,
-                                                                    value: millions,
-                                                                    beneficiary: beneficiary
-                                                                };
-                                                            }),
-                                                            emphasis: {
-                                                                itemStyle: {
-                                                                    shadowBlur: 10,
-                                                                    shadowOffsetX: 0,
-                                                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                                                                }
-                                                            }
-                                                        }
-                                                    ]
-                                                }}
-                                                style={{ height: '500px', width: '100%', position: 'relative' }}
-                                                onEvents={{
-                                                    click: function(params) {
-                                                        const beneficiary = params.data.beneficiary;
-                                                        const taxId = beneficiary['cui'] ? String(beneficiary['cui']) : '';
-                                                        
-                                                        console.log('Beneficiary clicked:', beneficiary);
-                                                        console.log('Tax ID:', taxId);
-                                                        
-                                                        if (switchEndpoint) {
-                                                            switchEndpoint('payments');
-                                                            console.log('Switched to payments endpoint');
-                                                        }
-                                                        
-                                                        if (taxId) {
-                                                            setSearchTerm(taxId);
-                                                            console.log('Set search term to:', taxId);
-                                                        }
-                                                        
-                                                        setTimeout(() => {
-                                                            const element = document.getElementById('projects-table');
-                                                            if (element) {
-                                                                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                                                console.log('Scrolled to table');
-                                                            }
-                                                        }, 500);
-                                                    }
-                                                }}
-                                            />
-                                            {/* Paginare sub legendă */}
-                                            <div style={{ position: 'absolute', left: '65%', top: '65%', display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center', width: '33%', paddingTop: '55px', paddingRight: '80px' }}>
-                                                <div style={{ display: 'flex', gap: '10px', alignItems: 'center', justifyContent: 'center' }}>
-                                                    <button 
-                                                        onClick={() => setBeneficiariesPage(Math.max(0, beneficiariesPage - 1))}
-                                                        disabled={beneficiariesPage === 0}
-                                                        style={{
-                                                            padding: '8px 12px',
-                                                            backgroundColor: beneficiariesPage === 0 ? '#e2e8f0' : '#0ea5e9',
-                                                            color: beneficiariesPage === 0 ? '#94a3b8' : '#fff',
-                                                            border: 'none',
-                                                            borderRadius: '6px',
-                                                            cursor: beneficiariesPage === 0 ? 'not-allowed' : 'pointer',
-                                                            fontSize: '14px',
-                                                            fontWeight: '500',
-                                                            whiteSpace: 'nowrap'
-                                                        }}
-                                                    >
-                                                        Anteriorii ←
-                                                    </button>
-                                                    <span style={{ fontSize: '14px', color: '#64748b', fontWeight: '500' }}>
-                                                        Pagina {beneficiariesPage + 1} din {totalPages}
-                                                    </span>
-                                                    <button 
-                                                        onClick={() => setBeneficiariesPage(Math.min(totalPages - 1, beneficiariesPage + 1))}
-                                                        disabled={beneficiariesPage >= totalPages - 1}
-                                                        style={{
-                                                            padding: '8px 12px',
-                                                            backgroundColor: beneficiariesPage >= totalPages - 1 ? '#e2e8f0' : '#0ea5e9',
-                                                            color: beneficiariesPage >= totalPages - 1 ? '#94a3b8' : '#fff',
-                                                            border: 'none',
-                                                            borderRadius: '6px',
-                                                            cursor: beneficiariesPage >= totalPages - 1 ? 'not-allowed' : 'pointer',
-                                                            fontSize: '14px',
-                                                            fontWeight: '500',
-                                                            whiteSpace: 'nowrap'
-                                                        }}
-                                                    >
-                                                        Următorii →
-                                                    </button>
-                                                </div>
-                                                <div style={{ fontSize: '11px', color: '#94a3b8', textAlign: 'center' }}>
-                                                    Click pe un slice pentru a vedea plățile beneficiarului.
-                                                </div>
-                                            </div>
-                                            </div>
-                                        </>
-                                    );
-                                })()}
-                                </div>
-
-                                {/* Mobile - Bar Chart simplu cu paginare */}
-                                <div className="beneficiaries-chart-mobile">
-                                {(() => {
-                                    const itemsPerPage = 10;
-                                    const startIndex = beneficiariesPage * itemsPerPage;
-                                    const endIndex = startIndex + itemsPerPage;
-                                    const currentPageItems = topBeneficiaries.items.slice(startIndex, endIndex);
+                                    // Afișează fie 10 beneficiari, fie toți 100 în funcție de showAllBeneficiaries
+                                    const currentPageItems = showAllBeneficiaries 
+                                        ? topBeneficiaries.items 
+                                        : topBeneficiaries.items.slice(startIndex, endIndex);
                                     const totalPages = Math.ceil(topBeneficiaries.items.length / itemsPerPage);
                                     
                                     // Găsește valoarea maximă pentru bara de progres (din toți beneficiarii, nu doar pagina curentă)
@@ -3580,7 +3350,7 @@ const MapView = ({
                                     
                                     return (
                                         <>
-                                            <ol className="rank-list" start={startIndex + 1}>
+                                            <ol className="rank-list" start={showAllBeneficiaries ? 1 : startIndex + 1}>
                                                 {currentPageItems.map((beneficiary, index) => {
                                                     const amountRON = beneficiary['total'] || 0;
                                                     const amountEUR = beneficiary['total_euro'] || 0;
@@ -3592,30 +3362,124 @@ const MapView = ({
                                                     })} mil ${getCurrencySymbol()}`;
                                                     
                                                     const percentage = maxAmount ? Math.max(2, (displayAmount / maxAmount) * 100) : 0;
-                                                    const globalIndex = startIndex + index;
+                                                    const globalIndex = showAllBeneficiaries ? index : startIndex + index;
 
                                                     return (
-                                                        <li key={globalIndex} className="rank-item">
-                                                            <div style={{ width: '100%' }}>
-                                                                <div style={{ marginBottom: '4px' }}>
-                                                                    <span className="rank-pos">{globalIndex + 1}</span>
-                                                                    <span className="rank-name" style={{ fontWeight: globalIndex < 10 ? 'bold' : 'normal' }}>
-                                                                        {beneficiary['beneficiar'] || 'N/A'}
-                                                                    </span>
-                                                                </div>
-                                                                <div className="rank-bar-wrap">
-                                                                    <div className="rank-bar" style={{ width: `${percentage}%`, borderRadius: 0 }}></div>
-                                                                </div>
-                                                                <div className="rank-value" style={{ fontWeight: globalIndex < 10 ? 'bold' : 'normal', marginTop: '2px' }}>
-                                                                    {formattedAmount}
-                                                                </div>
+                                                        <li 
+                                                            key={globalIndex} 
+                                                            className="rank-item"
+                                                            onClick={() => {
+                                                                const taxId = beneficiary['cui'] ? String(beneficiary['cui']) : '';
+                                                                console.log('Beneficiary clicked:', beneficiary);
+                                                                console.log('Tax ID:', taxId);
+                                                                
+                                                                if (switchEndpoint) {
+                                                                    switchEndpoint('payments');
+                                                                    console.log('Switched to payments endpoint');
+                                                                }
+                                                                
+                                                                if (taxId) {
+                                                                    setSearchTerm(taxId);
+                                                                    console.log('Set search term to:', taxId);
+                                                                }
+                                                                
+                                                                setTimeout(() => {
+                                                                    const element = document.getElementById('projects-table');
+                                                                    if (element) {
+                                                                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                                                        console.log('Scrolled to table');
+                                                                    }
+                                                                }, 500);
+                                                            }}
+                                                            style={{ 
+                                                                cursor: 'pointer',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                gap: '12px',
+                                                                padding: '4px 0'
+                                                            }}
+                                                        >
+                                                            <span style={{ 
+                                                                color: '#0ea5e9', 
+                                                                fontWeight: '600', 
+                                                                fontSize: '14px',
+                                                                minWidth: '25px',
+                                                                flexShrink: 0
+                                                            }}>
+                                                                {globalIndex + 1}
+                                                            </span>
+                                                            <span style={{ 
+                                                                fontSize: '13px',
+                                                                color: '#1e293b',
+                                                                minWidth: '280px',
+                                                                maxWidth: '280px',
+                                                                whiteSpace: 'nowrap',
+                                                                overflow: 'hidden',
+                                                                textOverflow: 'ellipsis',
+                                                                textTransform: 'uppercase',
+                                                                flexShrink: 0
+                                                            }}>
+                                                                {beneficiary['beneficiar'] || 'N/A'}
+                                                            </span>
+                                                            <div style={{ 
+                                                                flex: 1,
+                                                                height: '24px',
+                                                                background: '#e2e8f0',
+                                                                borderRadius: '4px',
+                                                                overflow: 'hidden',
+                                                                position: 'relative'
+                                                            }}>
+                                                                <div style={{ 
+                                                                    width: `${percentage}%`, 
+                                                                    height: '100%',
+                                                                    background: '#0ea5e9',
+                                                                    transition: 'width 0.3s ease'
+                                                                }}></div>
                                                             </div>
+                                                            <span style={{ 
+                                                                fontWeight: '600',
+                                                                color: '#1e293b',
+                                                                fontSize: '13px',
+                                                                minWidth: '120px',
+                                                                textAlign: 'right',
+                                                                flexShrink: 0
+                                                            }}>
+                                                                {formattedAmount}
+                                                            </span>
                                                         </li>
                                                     );
                                                 })}
                                             </ol>
                                             
-                                            {/* Paginare pentru mobil */}
+                                            {/* Buton Afișează tot / Restrânge - Desktop */}
+                                            <div className="beneficiaries-show-all-desktop" style={{ textAlign: 'center', marginTop: '16px' }}>
+                                                <button 
+                                                    onClick={() => setShowAllBeneficiaries(!showAllBeneficiaries)}
+                                                    style={{
+                                                        padding: '10px 24px',
+                                                        background: '#f1f5f9',
+                                                        color: '#475569',
+                                                        border: '1px solid #cbd5e1',
+                                                        borderRadius: '8px',
+                                                        fontSize: '14px',
+                                                        fontWeight: '500',
+                                                        cursor: 'pointer',
+                                                        transition: 'all 0.2s ease'
+                                                    }}
+                                                    onMouseEnter={(e) => {
+                                                        e.target.style.background = '#e2e8f0'
+                                                        e.target.style.borderColor = '#94a3b8'
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.target.style.background = '#f1f5f9'
+                                                        e.target.style.borderColor = '#cbd5e1'
+                                                    }}
+                                                >
+                                                    {showAllBeneficiaries ? 'Restrânge' : 'Afișează tot'}
+                                                </button>
+                                            </div>
+                                            
+                                            {/* Paginare - Mobile only */}
                                             <div className="beneficiaries-pagination-mobile">
                                                 <button 
                                                     onClick={() => setBeneficiariesPage(Math.max(0, beneficiariesPage - 1))}
@@ -3636,8 +3500,8 @@ const MapView = ({
                                                 </button>
                                             </div>
                                             
-                                            <div className="rank-note">
-                                                Top 100 beneficiari PNRR
+                                            <div className="rank-note" style={{ textAlign: 'center', marginTop: '12px' }}>
+                                                Click pe un beneficiar pentru a vedea plățile lui. (Ctrl+#-clic pentru un nou tab.)
                                             </div>
                                         </>
                                     );

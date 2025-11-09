@@ -2996,22 +2996,21 @@ h1 {
 }
 
 .rank-list {
-  max-height: 400px;
-  overflow-y: auto;
+  max-height: none;
+  overflow-y: visible;
   width: 100%;
-  max-width: 100%;
   box-sizing: border-box;
 }
 
 .rank-item {
   display: flex;
   align-items: center;
-  padding: 8px 12px;
+  padding: 4px 12px;
   cursor: pointer;
   transition: background-color 0.2s;
   width: 100%;
   box-sizing: border-box;
-  min-height: 60px;
+  min-height: 36px;
   gap: 8px;
 }
 
@@ -3071,23 +3070,10 @@ h1 {
   }
 }
 
-/* Responsive - Desktop vs Mobile Charts */
-.beneficiaries-chart-desktop {
+/* Unified Bar Chart for Beneficiaries */
+.beneficiaries-chart-unified {
   display: block;
-}
-
-.beneficiaries-chart-mobile {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .beneficiaries-chart-desktop {
-    display: none;
-  }
-  
-  .beneficiaries-chart-mobile {
-    display: block;
-  }
+  width: 100%;
 }
 
 .rank-value {
@@ -3106,32 +3092,14 @@ h1 {
   margin-top: 6px;
 }
 
-/* Beneficiari mobil - fără scroll */
-.beneficiaries-chart-mobile .rank-list {
-  max-height: none !important;
-  overflow-y: visible !important;
+/* Buton Afișează tot - Desktop only */
+.beneficiaries-show-all-desktop {
+  display: block;
 }
 
-/* Beneficiari mobil - layout compact */
-.beneficiaries-chart-mobile .rank-item {
-  padding: 6px 0 !important;
-  gap: 4px !important;
-}
-
-/* Beneficiari mobil - număr + nume pe același rând */
-.beneficiaries-chart-mobile .rank-pos {
-  display: inline !important;
-  margin-right: 6px !important;
-}
-
-.beneficiaries-chart-mobile .rank-name {
-  display: inline !important;
-  width: auto !important;
-}
-
-/* Paginare beneficiari mobil */
+/* Paginare beneficiari - Mobile only */
 .beneficiaries-pagination-mobile {
-  display: flex;
+  display: none;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
@@ -3139,6 +3107,21 @@ h1 {
   padding: 12px;
   background: #f8fafc;
   border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .beneficiaries-show-all-desktop {
+    display: none;
+  }
+  
+  .beneficiaries-pagination-mobile {
+    display: flex;
+  }
+  
+  .rank-list {
+    max-height: 400px;
+    overflow-y: auto;
+  }
 }
 
 .beneficiaries-pagination-mobile .pagination-btn {
@@ -3286,6 +3269,15 @@ table td {
   padding: 6px;
   border-bottom: 1px solid #e2e8f0;
   vertical-align: top;
+}
+
+/* Alternating row background colors for better readability */
+table tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+table tbody tr:nth-child(even) {
+  background-color: #f8fafc;
 }
 
 /* Compact table layout for projects/payments table */
