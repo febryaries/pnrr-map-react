@@ -2463,6 +2463,10 @@ h1 {
   padding: 0 32px;
 }
 
+.beneficiaries-card h3 {
+  text-align: center;
+}
+
 /* Projects/Payments Table Section - Full Row */
 .projects-payments-section {
   max-width: 1320px;
