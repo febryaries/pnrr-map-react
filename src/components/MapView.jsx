@@ -3280,8 +3280,7 @@ const MapView = ({
                                                         type: 'scroll',
                                                         orient: 'vertical',
                                                         left: '65%',
-                                                        top: 20,
-                                                        bottom: 60,
+                                                        top: '15%',
                                                         width: '33%',
                                                         selectedMode: false,
                                                         textStyle: {
@@ -3299,7 +3298,7 @@ const MapView = ({
                                                             name: 'Valoare PNRR',
                                                             type: 'pie',
                                                             radius: '55%',
-                                                            center: ['35%', '50%'],
+                                                            center: ['32%', '50%'],
                                                             startAngle: 90,
                                                             label: {
                                                                 show: true,
@@ -3385,46 +3384,48 @@ const MapView = ({
                                                 }}
                                             />
                                             {/* Paginare sub legendă */}
-                                            <div style={{ position: 'absolute', right: '32px', bottom: '10px', display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center', width: '30%' }}>
-                                                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
+                                            <div style={{ position: 'absolute', left: '65%', top: '65%', display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center', width: '33%' }}>
+                                                <div style={{ display: 'flex', gap: '10px', alignItems: 'center', justifyContent: 'center' }}>
                                                     <button 
                                                         onClick={() => setBeneficiariesPage(Math.max(0, beneficiariesPage - 1))}
                                                         disabled={beneficiariesPage === 0}
                                                         style={{
-                                                            padding: '6px 12px',
+                                                            padding: '8px 12px',
                                                             backgroundColor: beneficiariesPage === 0 ? '#e2e8f0' : '#0ea5e9',
                                                             color: beneficiariesPage === 0 ? '#94a3b8' : '#fff',
                                                             border: 'none',
                                                             borderRadius: '6px',
                                                             cursor: beneficiariesPage === 0 ? 'not-allowed' : 'pointer',
-                                                            fontSize: '12px',
-                                                            fontWeight: '500'
+                                                            fontSize: '14px',
+                                                            fontWeight: '500',
+                                                            whiteSpace: 'nowrap'
                                                         }}
                                                     >
-                                                        ←
+                                                        Anteriorii ←
                                                     </button>
-                                                    <span style={{ fontSize: '12px', color: '#64748b', fontWeight: '500' }}>
-                                                        {beneficiariesPage + 1}/{totalPages}
+                                                    <span style={{ fontSize: '14px', color: '#64748b', fontWeight: '500' }}>
+                                                        Pagina {beneficiariesPage + 1} din {totalPages} ({startIndex + 1}-{Math.min(endIndex, topBeneficiaries.items.length)} din {topBeneficiaries.items.length})
                                                     </span>
                                                     <button 
                                                         onClick={() => setBeneficiariesPage(Math.min(totalPages - 1, beneficiariesPage + 1))}
                                                         disabled={beneficiariesPage >= totalPages - 1}
                                                         style={{
-                                                            padding: '6px 12px',
+                                                            padding: '8px 12px',
                                                             backgroundColor: beneficiariesPage >= totalPages - 1 ? '#e2e8f0' : '#0ea5e9',
                                                             color: beneficiariesPage >= totalPages - 1 ? '#94a3b8' : '#fff',
                                                             border: 'none',
                                                             borderRadius: '6px',
                                                             cursor: beneficiariesPage >= totalPages - 1 ? 'not-allowed' : 'pointer',
-                                                            fontSize: '12px',
-                                                            fontWeight: '500'
+                                                            fontSize: '14px',
+                                                            fontWeight: '500',
+                                                            whiteSpace: 'nowrap'
                                                         }}
                                                     >
-                                                        →
+                                                        Următorii →
                                                     </button>
                                                 </div>
-                                                <div style={{ fontSize: '10px', color: '#94a3b8', textAlign: 'center' }}>
-                                                    Click pe slice pentru detalii
+                                                <div style={{ fontSize: '11px', color: '#94a3b8', textAlign: 'center' }}>
+                                                    Click pe un slice pentru a vedea plățile beneficiarului.
                                                 </div>
                                             </div>
                                             </div>
