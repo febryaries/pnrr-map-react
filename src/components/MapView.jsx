@@ -3312,7 +3312,7 @@ const MapView = ({
                                                     },
                                                     fontSize: 11
                                                 },
-                                                data: topBeneficiaries.items.slice(0, 20).map((beneficiary, index) => {
+                                                data: topBeneficiaries.items.map((beneficiary, index) => {
                                                     const amountRON = beneficiary['total'] || 0;
                                                     const amountEUR = beneficiary['total_euro'] || 0;
                                                     const displayAmount = currency === 'RON' ? amountRON : amountEUR;
