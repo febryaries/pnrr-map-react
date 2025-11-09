@@ -2877,7 +2877,18 @@ const MapView = ({
                 </div>
                 
                 <header className="page-header">
-                    <h1>{pageTitle}</h1>
+                    {/* Logo și titlu centrat */}
+                    <div className="header-title-section">
+                        <div className="header-title-row">
+                            <img 
+                                src="/sigla_guv_coroana_albastru.png" 
+                                alt="Guvernul României" 
+                                className="header-logo"
+                            />
+                            <h1>{pageTitle}</h1>
+                        </div>
+                        <p className="header-ministry">Ministerul Investițiilor și Proiectelor Europene</p>
+                    </div>
                 </header>
                 <div className="map-container map-container--loading">
                     <div className="loading-indicator">
@@ -2911,7 +2922,18 @@ const MapView = ({
             </div>
             
             <header className="page-header">
-                <h1>{pageTitle}</h1>
+                {/* Logo și titlu centrat */}
+                <div className="header-title-section">
+                    <div className="header-title-row">
+                        <img 
+                            src="/sigla_guv_coroana_albastru.png" 
+                            alt="Guvernul României" 
+                            className="header-logo"
+                        />
+                        <h1>{pageTitle}</h1>
+                    </div>
+                    <p className="header-ministry">Ministerul Investițiilor și Proiectelor Europene</p>
+                </div>
 
                 {/* Header Info Section */}
                 <div className="header-info">
