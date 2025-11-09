@@ -3749,16 +3749,19 @@ const MapView = ({
                                 if (endpoint === 'payments') {
                                     return item.progress || 0;
                                 }
-                                // For projects: use PROGRES_FIZIC (primary), fallback to PROGRES_FINANCIAR, then 0
+                                // For projects: use PROGRES_FIZIC (primary), fallback to PROGRES_FINANCIAR for reforms only
                                 const progresFizic = item.PROGRES_FIZIC;
                                 const progresFinanciar = item.PROGRES_FINANCIAR;
+                                const codMasura = item[fieldMappings.measureCode] || '';
+                                const isReform = /^R[1-9]$/.test(codMasura);
                                 
                                 if (progresFizic !== null && progresFizic !== undefined && progresFizic !== '') {
                                     let str = String(progresFizic).trim();
                                     if (str.startsWith(',')) str = '0' + str;
                                     const parsed = parseFloat(str.replace(',', '.'));
                                     return !isNaN(parsed) ? parsed : 0;
-                                } else if (progresFinanciar !== null && progresFinanciar !== undefined) {
+                                } else if (isReform && progresFinanciar !== null && progresFinanciar !== undefined) {
+                                    // For reforms ONLY: fallback to progres_financiar when progres_fizic is null
                                     return progresFinanciar;
                                 }
                                 return 0;
@@ -3803,9 +3806,9 @@ const MapView = ({
                                     percentageValue = 0
                                 }
                                 
-                                // Round: 0 decimals if not 100%, keep 100 as is
+                                // Format with 2 decimals, except for 100%
                                 const percentageRaw = percentageValue * 100
-                                const percentage = percentageRaw === 100 ? 100 : Math.floor(percentageRaw)
+                                const percentage = percentageRaw === 100 ? '100' : percentageRaw.toFixed(2)
                                 
                                 return <div style={{ 
                                     fontSize: '12px', 
@@ -3836,8 +3839,9 @@ const MapView = ({
                                     ? progresFinanciar 
                                     : 0;
                                 
-                                // Convert 0.58 -> 58%
-                                const percentage = Math.floor(valueToDisplay * 100);
+                                // Convert 0.58 -> 58.00% (2 decimals, except for 100%)
+                                const percentageRaw = valueToDisplay * 100;
+                                const percentage = percentageRaw === 100 ? '100' : percentageRaw.toFixed(2);
                                 
                                 return <div style={{ 
                                     fontSize: '12px', 
