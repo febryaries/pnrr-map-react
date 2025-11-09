@@ -3367,7 +3367,7 @@ const MapView = ({
                                                     return (
                                                         <li 
                                                             key={globalIndex} 
-                                                            className="rank-item"
+                                                            className="rank-item beneficiary-item"
                                                             onClick={() => {
                                                                 const taxId = beneficiary['cui'] ? String(beneficiary['cui']) : '';
                                                                 console.log('Beneficiary clicked:', beneficiary);
@@ -3391,59 +3391,24 @@ const MapView = ({
                                                                     }
                                                                 }, 500);
                                                             }}
-                                                            style={{ 
-                                                                cursor: 'pointer',
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                gap: '12px',
-                                                                padding: '4px 0'
-                                                            }}
                                                         >
-                                                            <span style={{ 
-                                                                color: '#0ea5e9', 
-                                                                fontWeight: '600', 
-                                                                fontSize: '14px',
-                                                                minWidth: '25px',
-                                                                flexShrink: 0
-                                                            }}>
+                                                            <span className="beneficiary-number">
                                                                 {globalIndex + 1}
                                                             </span>
-                                                            <span style={{ 
-                                                                fontSize: '13px',
-                                                                color: '#1e293b',
-                                                                minWidth: '280px',
-                                                                maxWidth: '280px',
-                                                                whiteSpace: 'nowrap',
-                                                                overflow: 'hidden',
-                                                                textOverflow: 'ellipsis',
-                                                                textTransform: 'uppercase',
-                                                                flexShrink: 0
-                                                            }}>
-                                                                {beneficiary['beneficiar'] || 'N/A'}
+                                                            <span className="beneficiary-name">
+                                                                {(() => {
+                                                                    let name = beneficiary['beneficiar'] || 'N/A';
+                                                                    // Scurtare doar pe mobile
+                                                                    if (window.innerWidth < 768 && name.includes('SOCIETATEA NATIONALA DE TRANSPORT FEROVIAR DE CALATORI')) {
+                                                                        name = 'SOCIETATEA NATIONALA DE TRANSPORT FEROVIAR DE CALATORI S.A';
+                                                                    }
+                                                                    return name;
+                                                                })()}
                                                             </span>
-                                                            <div style={{ 
-                                                                flex: 1,
-                                                                height: '24px',
-                                                                background: '#e2e8f0',
-                                                                borderRadius: '4px',
-                                                                overflow: 'hidden',
-                                                                position: 'relative'
-                                                            }}>
-                                                                <div style={{ 
-                                                                    width: `${percentage}%`, 
-                                                                    height: '100%',
-                                                                    background: '#0ea5e9',
-                                                                    transition: 'width 0.3s ease'
-                                                                }}></div>
+                                                            <div className="beneficiary-bar-wrap">
+                                                                <div className="beneficiary-bar" style={{ width: `${percentage}%` }}></div>
                                                             </div>
-                                                            <span style={{ 
-                                                                fontWeight: '600',
-                                                                color: '#1e293b',
-                                                                fontSize: '13px',
-                                                                minWidth: '120px',
-                                                                textAlign: 'right',
-                                                                flexShrink: 0
-                                                            }}>
+                                                            <span className="beneficiary-value">
                                                                 {formattedAmount}
                                                             </span>
                                                         </li>
