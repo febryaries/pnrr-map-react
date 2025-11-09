@@ -613,18 +613,25 @@ const EnhancedTable = ({
           // Get PROGRES_FINANCIAR and convert to percentage
           const progresFinanciar = item.PROGRES_FINANCIAR
           if (progresFinanciar !== null && progresFinanciar !== undefined) {
-            value = Math.floor(progresFinanciar * 100) + '%'
+            const percentageRaw = progresFinanciar * 100
+            const percentage = percentageRaw === 100 ? '100' : percentageRaw.toFixed(2)
+            value = percentage + '%'
           } else {
-            value = ''
+            value = '0.00%'
           }
         } else if (column.key === 'progress') {
           // For progress column, handle both payments and projects
           if (endpoint === 'payments') {
             value = item.progress !== undefined && item.progress !== null ? `${item.progress}%` : ''
           } else {
-            // For projects: check PROGRES_FIZIC first
+            // For projects: use PROGRES_FIZIC (primary), fallback to PROGRES_FINANCIAR for reforms only
             const progresFizic = item.PROGRES_FIZIC
+            const progresFinanciar = item.PROGRES_FINANCIAR
+            const codMasura = item[fieldMappings.measureCode] || ''
+            const isReform = /^R[1-9]$/.test(codMasura)
+            
             if (progresFizic !== null && progresFizic !== undefined && progresFizic !== '') {
+              // Use PROGRES_FIZIC
               let progresFizicStr = String(progresFizic).trim()
               // Fix missing leading zero: ",4848" -> "0,4848"
               if (progresFizicStr.startsWith(',')) {
@@ -632,14 +639,20 @@ const EnhancedTable = ({
               }
               const parsed = parseFloat(progresFizicStr.replace(',', '.'))
               if (!isNaN(parsed)) {
-                const percentage = Math.floor(parsed * 100)
+                const percentageRaw = parsed * 100
+                const percentage = percentageRaw === 100 ? '100' : percentageRaw.toFixed(2)
                 value = percentage + '%'
               } else {
-                value = ''
+                value = '0.00%'
               }
+            } else if (isReform && progresFinanciar !== null && progresFinanciar !== undefined) {
+              // For reforms ONLY: fallback to PROGRES_FINANCIAR when PROGRES_FIZIC is null
+              const percentageRaw = progresFinanciar * 100
+              const percentage = percentageRaw === 100 ? '100' : percentageRaw.toFixed(2)
+              value = percentage + '%'
             } else {
-              // Use stadiu text
-              value = item[column.key] || ''
+              // For investment measures (I) or when both null → 0.00%
+              value = '0.00%'
             }
           }
         } else if (column.key === 'value') {
