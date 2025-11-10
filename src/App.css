@@ -4931,6 +4931,11 @@ td.num {
     display: block !important;
   }
   
+  /* Close filters button - visible on mobile */
+  .close-filters-btn {
+    display: block !important;
+  }
+  
   /* Hide filters on mobile by default */
   .table-filters-sticky {
     display: none !important;

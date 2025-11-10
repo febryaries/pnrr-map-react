@@ -1580,6 +1580,27 @@ const EnhancedTable = ({
                   ✕ Resetează
                 </button>
               )}
+              
+              {/* Close Filters Button - VISIBLE ONLY ON MOBILE */}
+              <button
+                onClick={() => setIsMobileFiltersOpen(false)}
+                className="close-filters-btn"
+                style={{
+                  display: 'none', // Hidden by default, shown via CSS media query on mobile
+                  width: '100%',
+                  padding: '12px 20px',
+                  background: '#64748b',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  marginTop: '12px'
+                }}
+              >
+                Închide
+              </button>
           </div>
         </div>
       )}
