@@ -4931,9 +4931,15 @@ td.num {
     display: block !important;
   }
   
+  /* Mobile close button - visible on mobile */
+  .mobile-filters-close {
+    display: block !important;
+  }
+  
   /* Hide filters on mobile by default */
   .table-filters-sticky {
     display: none !important;
+    position: relative;
   }
   
   /* Show filters when button is clicked */

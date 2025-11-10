@@ -1389,7 +1389,7 @@ const EnhancedTable = ({
       )}
 
       {/* Mobile Hamburger Button - Only visible on mobile when in table area */}
-      {searchable && renderMobileButton && (
+      {searchable && renderMobileButton && !isMobileFiltersOpen && (
         <button
           className="mobile-filters-toggle"
           onClick={() => setIsMobileFiltersOpen(!isMobileFiltersOpen)}
@@ -1433,6 +1433,30 @@ const EnhancedTable = ({
       {/* Sticky Filters - Hidden on mobile by default, shown when button clicked */}
       {searchable && (
         <div className={`table-filters-sticky ${endpoint === 'projects' ? 'projects-layout' : ''}`} ref={filtersRef} data-mobile-visible={isMobileFiltersOpen}>
+          {/* Mobile Close Button - Only visible on mobile */}
+          {isMobileFiltersOpen && (
+            <button
+              onClick={() => setIsMobileFiltersOpen(false)}
+              style={{
+                position: 'absolute',
+                top: '16px',
+                right: '16px',
+                background: 'transparent',
+                border: 'none',
+                fontSize: '24px',
+                color: '#64748b',
+                cursor: 'pointer',
+                padding: '4px',
+                lineHeight: '1',
+                zIndex: 1000,
+                display: 'none' // Hidden by default, shown via CSS media query
+              }}
+              className="mobile-filters-close"
+              aria-label="Închide filtre"
+            >
+              ✕
+            </button>
+          )}
           <div className="table-filters-sticky-content">
               {/* Visualization Mode Dropdown - Only for projects endpoint */}
               {endpoint !== 'payments' && (
