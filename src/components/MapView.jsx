@@ -1053,38 +1053,37 @@ const EnhancedTable = ({
             </div>
           </div>
           
-          {/* Row 2: Progres Tehnic/Progres Fizic & Progres Financiar */}
-          <div className="mobile-table-card-row">
-            <div className="mobile-table-card-detail">
-              <div className="mobile-table-card-detail-label">{endpoint === 'payments' ? 'Progres Fizic (%)' : 'Progres Tehnic'}</div>
-              <div className="mobile-table-card-detail-value" style={endpoint === 'projects' ? { color: '#059669', fontWeight: '500', fontSize: '10px' } : {}}>
-                {endpoint === 'payments' 
-                  ? `${item.progress}%` 
-                  : (item.PROGRES_FIZIC && item.PROGRES_FIZIC !== '' 
-                      ? (() => {
-                          let str = String(item.PROGRES_FIZIC).trim()
-                          if (str.startsWith(',')) str = '0' + str
-                          const parsed = parseFloat(str.replace(',', '.'))
-                          return !isNaN(parsed) ? `${Math.floor(parsed * 100)}%` : (item.progress || '-')
-                        })()
-                      : (item.progress || '-')
-                    )
-                }
+          {/* Row 2: Progres - ONLY FOR PROJECTS */}
+          {endpoint === 'projects' && (
+            <div className="mobile-table-card-row">
+              <div className="mobile-table-card-detail">
+                <div className="mobile-table-card-detail-label">Progres Tehnic</div>
+                <div className="mobile-table-card-detail-value" style={{ color: '#059669', fontWeight: '500', fontSize: '10px' }}>
+                  {item.PROGRES_FIZIC && item.PROGRES_FIZIC !== '' 
+                    ? (() => {
+                        let str = String(item.PROGRES_FIZIC).trim()
+                        if (str.startsWith(',')) str = '0' + str
+                        const parsed = parseFloat(str.replace(',', '.'))
+                        return !isNaN(parsed) ? `${Math.floor(parsed * 100)}%` : (item.progress || '-')
+                      })()
+                    : (item.progress || '-')
+                  }
+                </div>
+              </div>
+              <div className="mobile-table-card-detail">
+                <div className="mobile-table-card-detail-label">Progres Financiar</div>
+                <div className="mobile-table-card-detail-value" style={{ 
+                  color: item.PROGRES_FINANCIAR !== null && item.PROGRES_FINANCIAR !== undefined ? '#000' : '#94a3b8', 
+                  fontStyle: item.PROGRES_FINANCIAR !== null && item.PROGRES_FINANCIAR !== undefined ? 'normal' : 'italic',
+                  fontWeight: item.PROGRES_FINANCIAR !== null && item.PROGRES_FINANCIAR !== undefined ? '500' : 'normal'
+                }}>
+                  {item.PROGRES_FINANCIAR !== null && item.PROGRES_FINANCIAR !== undefined 
+                    ? `${Math.floor(item.PROGRES_FINANCIAR * 100)}%` 
+                    : '-'}
+                </div>
               </div>
             </div>
-            <div className="mobile-table-card-detail">
-              <div className="mobile-table-card-detail-label">Progres Financiar</div>
-              <div className="mobile-table-card-detail-value" style={{ 
-                color: item.PROGRES_FINANCIAR !== null && item.PROGRES_FINANCIAR !== undefined ? '#000' : '#94a3b8', 
-                fontStyle: item.PROGRES_FINANCIAR !== null && item.PROGRES_FINANCIAR !== undefined ? 'normal' : 'italic',
-                fontWeight: item.PROGRES_FINANCIAR !== null && item.PROGRES_FINANCIAR !== undefined ? '500' : 'normal'
-              }}>
-                {item.PROGRES_FINANCIAR !== null && item.PROGRES_FINANCIAR !== undefined 
-                  ? `${Math.floor(item.PROGRES_FINANCIAR * 100)}%` 
-                  : '-'}
-              </div>
-            </div>
-          </div>
+          )}
           
           {/* Row 3: Localitate & Cod Componentă */}
           <div className="mobile-table-card-row">
