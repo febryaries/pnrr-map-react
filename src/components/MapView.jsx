@@ -595,7 +595,6 @@ const EnhancedTable = ({
     //     setActiveProgram(newValue)
     //   }
     // }
-    // Close mobile sidebar after selection
     closeMobileSidebar()
     // No scroll - user is already at the filters
   }
@@ -1396,9 +1395,9 @@ const EnhancedTable = ({
           style={{
             display: 'none', // Hidden by default, shown via CSS media query
             position: 'fixed',
-            top: '50%',
-            left: '20px',
-            transform: 'translateY(-50%)',
+            top: '2px',
+            left: '50%',
+            transform: 'translateX(-50%)',
             zIndex: 999,
             padding: '12px 20px',
             background: '#0ea5e9',
@@ -1433,30 +1432,6 @@ const EnhancedTable = ({
       {/* Sticky Filters - Hidden on mobile by default, shown when button clicked */}
       {searchable && (
         <div className={`table-filters-sticky ${endpoint === 'projects' ? 'projects-layout' : ''}`} ref={filtersRef} data-mobile-visible={isMobileFiltersOpen}>
-          {/* Mobile Close Button - Only visible on mobile */}
-          {isMobileFiltersOpen && (
-            <button
-              onClick={() => setIsMobileFiltersOpen(false)}
-              style={{
-                position: 'absolute',
-                top: '16px',
-                right: '16px',
-                background: 'transparent',
-                border: 'none',
-                fontSize: '24px',
-                color: '#64748b',
-                cursor: 'pointer',
-                padding: '4px',
-                lineHeight: '1',
-                zIndex: 1000,
-                display: 'none' // Hidden by default, shown via CSS media query
-              }}
-              className="mobile-filters-close"
-              aria-label="Închide filtre"
-            >
-              ✕
-            </button>
-          )}
           <div className="table-filters-sticky-content">
               {/* Visualization Mode Dropdown - Only for projects endpoint */}
               {endpoint !== 'payments' && (
