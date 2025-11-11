@@ -193,11 +193,15 @@ export default function SemanticSearchPage() {
   const [sortColumn, setSortColumn] = useState('value')
   const [sortDirection, setSortDirection] = useState('desc')
   
-  // Filtre state
+  // Filtre state - SINCRONIZATE CU MAPVIEW
+  const [viewMode, setViewMode] = useState('total') // total, national, local
+  const [filterCRI, setFilterCRI] = useState('')
   const [filterCounty, setFilterCounty] = useState('')
   const [filterLocality, setFilterLocality] = useState('')
   const [filterComponent, setFilterComponent] = useState('')
-  const [filterStatus, setFilterStatus] = useState('')
+  const [filterMasura, setFilterMasura] = useState('')
+  const [filterStadiu, setFilterStadiu] = useState('')
+  const [filterFundingSource, setFilterFundingSource] = useState('')
   
   // Load data on mount
   useEffect(() => {
@@ -329,7 +333,16 @@ export default function SemanticSearchPage() {
   
   const exampleTerms = ['apă uzată', 'spital', 'drum', 'energie', 'școală']
   
-  // Get unique values for filters
+  // Get unique values for filters - SINCRONIZATE CU MAPVIEW (cu filtrare cascadă)
+  const uniqueCRIValues = useMemo(() => {
+    const values = new Set()
+    filteredProjects.forEach(p => {
+      const cri = p.CRI || p.cri
+      if (cri) values.add(cri)
+    })
+    return Array.from(values).sort((a, b) => a.localeCompare(b, 'ro'))
+  }, [filteredProjects])
+  
   const uniqueCounties = useMemo(() => {
     const values = new Set()
     filteredProjects.forEach(p => {
@@ -357,24 +370,134 @@ export default function SemanticSearchPage() {
   const uniqueComponents = useMemo(() => {
     const values = new Set()
     filteredProjects.forEach(p => {
-      const component = p.COD_COMPONENTA || p.component
-      if (component) values.add(component)
+      let shouldInclude = true
+      
+      // Apply county filter
+      if (filterCounty) {
+        const county = p.countyName || p.JUDET_IMPLEMENTARE
+        if (county !== filterCounty) shouldInclude = false
+      }
+      
+      // Apply locality filter
+      if (filterLocality) {
+        const locality = p.LOCALIZARE_LOCALITATE || p.locality
+        if (locality !== filterLocality) shouldInclude = false
+      }
+      
+      if (shouldInclude) {
+        const component = p.COD_COMPONENTA || p.component
+        if (component) values.add(component)
+      }
     })
     return Array.from(values).sort((a, b) => a.localeCompare(b, 'ro'))
-  }, [filteredProjects])
+  }, [filteredProjects, filterCounty, filterLocality])
   
-  const uniqueStatuses = useMemo(() => {
+  const uniqueMasuraCodes = useMemo(() => {
     const values = new Set()
     filteredProjects.forEach(p => {
-      const status = p.STADIU || p.status
-      if (status) values.add(status)
+      let shouldInclude = true
+      
+      if (filterCounty) {
+        const county = p.countyName || p.JUDET_IMPLEMENTARE
+        if (county !== filterCounty) shouldInclude = false
+      }
+      
+      if (filterLocality) {
+        const locality = p.LOCALIZARE_LOCALITATE || p.locality
+        if (locality !== filterLocality) shouldInclude = false
+      }
+      
+      if (filterComponent) {
+        const component = p.COD_COMPONENTA || p.component
+        if (component !== filterComponent) shouldInclude = false
+      }
+      
+      if (shouldInclude) {
+        const masura = p.COD_MASURA || p.measureCode
+        if (masura) values.add(masura)
+      }
     })
     return Array.from(values).sort((a, b) => a.localeCompare(b, 'ro'))
-  }, [filteredProjects])
+  }, [filteredProjects, filterCounty, filterLocality, filterComponent])
   
-  // Apply dropdown filters
+  const uniqueStadiu = useMemo(() => {
+    const values = new Set()
+    filteredProjects.forEach(p => {
+      let shouldInclude = true
+      
+      if (filterCounty) {
+        const county = p.countyName || p.JUDET_IMPLEMENTARE
+        if (county !== filterCounty) shouldInclude = false
+      }
+      
+      if (filterLocality) {
+        const locality = p.LOCALIZARE_LOCALITATE || p.locality
+        if (locality !== filterLocality) shouldInclude = false
+      }
+      
+      if (filterComponent) {
+        const component = p.COD_COMPONENTA || p.component
+        if (component !== filterComponent) shouldInclude = false
+      }
+      
+      if (shouldInclude) {
+        const stadiu = p.STADIU || p.status
+        if (stadiu) values.add(stadiu)
+      }
+    })
+    return Array.from(values).sort((a, b) => a.localeCompare(b, 'ro'))
+  }, [filteredProjects, filterCounty, filterLocality, filterComponent])
+  
+  const uniqueFundingSources = useMemo(() => {
+    const values = new Set()
+    filteredProjects.forEach(p => {
+      let shouldInclude = true
+      
+      if (filterCounty) {
+        const county = p.countyName || p.JUDET_IMPLEMENTARE
+        if (county !== filterCounty) shouldInclude = false
+      }
+      
+      if (filterLocality) {
+        const locality = p.LOCALIZARE_LOCALITATE || p.locality
+        if (locality !== filterLocality) shouldInclude = false
+      }
+      
+      if (filterComponent) {
+        const component = p.COD_COMPONENTA || p.component
+        if (component !== filterComponent) shouldInclude = false
+      }
+      
+      if (shouldInclude) {
+        const funding = p.SURSA_FINANTARE || p.fundingSource || p.sursa_finantare
+        if (funding) values.add(funding)
+      }
+    })
+    return Array.from(values).sort((a, b) => a.localeCompare(b, 'ro'))
+  }, [filteredProjects, filterCounty, filterLocality, filterComponent])
+  
+  // Apply dropdown filters - TOATE FILTRELE SINCRONIZATE CU MAPVIEW
   const filteredByDropdowns = useMemo(() => {
     return filteredProjects.filter(project => {
+      // ViewMode filter (doar pentru proiecte)
+      if (endpoint === 'projects' && viewMode !== 'total') {
+        const county = (project.countyName || project.JUDET_IMPLEMENTARE || '').toUpperCase()
+        const locality = (project.LOCALIZARE_LOCALITATE || project.locality || '').toUpperCase()
+        
+        // Un proiect este NAȚIONAL dacă județul sau localitatea conține "NAȚIONAL" sau "NATIONAL"
+        const isNational = county.includes('NAȚIONAL') || county.includes('NATIONAL') || 
+                          locality.includes('NAȚIONAL') || locality.includes('NATIONAL')
+        
+        if (viewMode === 'national' && !isNational) return false
+        if (viewMode === 'local' && isNational) return false
+      }
+      
+      // CRI filter
+      if (filterCRI) {
+        const cri = project.CRI || project.cri || ''
+        if (cri !== filterCRI) return false
+      }
+      
       // County filter
       if (filterCounty) {
         const county = project.countyName || project.JUDET_IMPLEMENTARE || ''
@@ -393,15 +516,27 @@ export default function SemanticSearchPage() {
         if (component !== filterComponent) return false
       }
       
-      // Status filter
-      if (filterStatus) {
-        const status = project.STADIU || project.status || ''
-        if (status !== filterStatus) return false
+      // Masura filter
+      if (filterMasura) {
+        const masura = project.COD_MASURA || project.measureCode || ''
+        if (masura !== filterMasura) return false
+      }
+      
+      // Stadiu filter (Progres Tehnic)
+      if (filterStadiu) {
+        const stadiu = project.STADIU || project.status || ''
+        if (stadiu !== filterStadiu) return false
+      }
+      
+      // Funding Source filter
+      if (filterFundingSource) {
+        const funding = project.SURSA_FINANTARE || project.fundingSource || project.sursa_finantare || ''
+        if (funding !== filterFundingSource) return false
       }
       
       return true
     })
-  }, [filteredProjects, filterCounty, filterLocality, filterComponent, filterStatus])
+  }, [filteredProjects, viewMode, endpoint, filterCRI, filterCounty, filterLocality, filterComponent, filterMasura, filterStadiu, filterFundingSource])
   
   // Sort projects
   const sortedProjects = useMemo(() => {
@@ -993,7 +1128,7 @@ export default function SemanticSearchPage() {
           </div>
         </div>
         
-        {/* Filtre Dropdown */}
+        {/* Filtre Dropdown - SINCRONIZATE CU MAPVIEW */}
         <div style={{
           background: '#fff',
           borderRadius: '16px',
@@ -1002,10 +1137,65 @@ export default function SemanticSearchPage() {
           marginBottom: '24px'
         }}>
           <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', marginBottom: '16px' }}>🔍 Filtrează rezultatele</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
+            {/* VIZUALIZARE Filter - DOAR PENTRU PROIECTE */}
+            {endpoint === 'projects' && (
+              <div>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#64748b', marginBottom: '6px' }}>📊 VIZUALIZARE</label>
+                <select
+                  value={viewMode}
+                  onChange={(e) => setViewMode(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    border: '2px solid #e5e7eb',
+                    borderRadius: '8px',
+                    fontSize: '14px',
+                    background: '#fff',
+                    cursor: 'pointer',
+                    outline: 'none',
+                    transition: 'border-color 0.2s'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = '#0ea5e9'}
+                  onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+                >
+                  <option value="total">Toate Proiectele</option>
+                  <option value="national">Proiecte Naționale</option>
+                  <option value="local">Proiecte Locale</option>
+                </select>
+              </div>
+            )}
+            
+            {/* CRI Filter */}
+            <div>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#64748b', marginBottom: '6px' }}>🔬 CRI</label>
+              <select
+                value={filterCRI}
+                onChange={(e) => setFilterCRI(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '10px 12px',
+                  border: '2px solid #e5e7eb',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  background: '#fff',
+                  cursor: 'pointer',
+                  outline: 'none',
+                  transition: 'border-color 0.2s'
+                }}
+                onFocus={(e) => e.target.style.borderColor = '#0ea5e9'}
+                onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+              >
+                <option value="">Toate CRI-urile</option>
+                {uniqueCRIValues.map(cri => (
+                  <option key={cri} value={cri}>{cri}</option>
+                ))}
+              </select>
+            </div>
+            
             {/* Județ Filter */}
             <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#64748b', marginBottom: '6px' }}>📍 Județ</label>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#64748b', marginBottom: '6px' }}>📍 Alege Județul</label>
               <select
                 value={filterCounty}
                 onChange={(e) => {
@@ -1035,7 +1225,7 @@ export default function SemanticSearchPage() {
             
             {/* Localitate Filter */}
             <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#64748b', marginBottom: '6px' }}>🏘️ Localitate</label>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#64748b', marginBottom: '6px' }}>🏘️ Alege Localitatea</label>
               <select
                 value={filterLocality}
                 onChange={(e) => setFilterLocality(e.target.value)}
@@ -1064,7 +1254,7 @@ export default function SemanticSearchPage() {
             
             {/* Componentă Filter */}
             <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#64748b', marginBottom: '6px' }}>🎯 Componentă</label>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#64748b', marginBottom: '6px' }}>🎯 Alege Componenta</label>
               <select
                 value={filterComponent}
                 onChange={(e) => setFilterComponent(e.target.value)}
@@ -1089,12 +1279,12 @@ export default function SemanticSearchPage() {
               </select>
             </div>
             
-            {/* Stadiu Filter */}
+            {/* Măsură Filter */}
             <div>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#64748b', marginBottom: '6px' }}>📊 Stadiu</label>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#64748b', marginBottom: '6px' }}>📋 Cod Măsură</label>
               <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
+                value={filterMasura}
+                onChange={(e) => setFilterMasura(e.target.value)}
                 style={{
                   width: '100%',
                   padding: '10px 12px',
@@ -1109,23 +1299,83 @@ export default function SemanticSearchPage() {
                 onFocus={(e) => e.target.style.borderColor = '#0ea5e9'}
                 onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
               >
-                <option value="">Toate stadiile</option>
-                {uniqueStatuses.map(status => (
-                  <option key={status} value={status}>{status}</option>
+                <option value="">Toate măsurile</option>
+                {uniqueMasuraCodes.map(masura => (
+                  <option key={masura} value={masura}>{masura}</option>
+                ))}
+              </select>
+            </div>
+            
+            {/* Progres Tehnic Filter - DOAR PENTRU PROIECTE */}
+            {endpoint === 'projects' && (
+              <div>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#64748b', marginBottom: '6px' }}>📊 Progres Tehnic</label>
+                <select
+                  value={filterStadiu}
+                  onChange={(e) => setFilterStadiu(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    border: '2px solid #e5e7eb',
+                    borderRadius: '8px',
+                    fontSize: '14px',
+                    background: '#fff',
+                    cursor: 'pointer',
+                    outline: 'none',
+                    transition: 'border-color 0.2s'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = '#0ea5e9'}
+                  onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+                >
+                  <option value="">Toate valorile</option>
+                  {uniqueStadiu.map(stadiu => (
+                    <option key={stadiu} value={stadiu}>{stadiu}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+            
+            {/* Sursă Finanțare Filter */}
+            <div>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#64748b', marginBottom: '6px' }}>💰 Sursă Finanțare</label>
+              <select
+                value={filterFundingSource}
+                onChange={(e) => setFilterFundingSource(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '10px 12px',
+                  border: '2px solid #e5e7eb',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  background: '#fff',
+                  cursor: 'pointer',
+                  outline: 'none',
+                  transition: 'border-color 0.2s'
+                }}
+                onFocus={(e) => e.target.style.borderColor = '#0ea5e9'}
+                onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+              >
+                <option value="">Toate sursele</option>
+                {uniqueFundingSources.map(funding => (
+                  <option key={funding} value={funding}>{funding.charAt(0).toUpperCase() + funding.slice(1).toLowerCase()}</option>
                 ))}
               </select>
             </div>
           </div>
           
           {/* Reset Filters Button */}
-          {(filterCounty || filterLocality || filterComponent || filterStatus) && (
+          {(viewMode !== 'total' || filterCRI || filterCounty || filterLocality || filterComponent || filterMasura || filterStadiu || filterFundingSource) && (
             <div style={{ marginTop: '16px', textAlign: 'right' }}>
               <button
                 onClick={() => {
+                  setViewMode('total')
+                  setFilterCRI('')
                   setFilterCounty('')
                   setFilterLocality('')
                   setFilterComponent('')
-                  setFilterStatus('')
+                  setFilterMasura('')
+                  setFilterStadiu('')
+                  setFilterFundingSource('')
                 }}
                 style={{
                   padding: '8px 16px',

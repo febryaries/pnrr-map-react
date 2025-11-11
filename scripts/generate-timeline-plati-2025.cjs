@@ -127,8 +127,8 @@ async function generateTimeline() {
       latestDate = await getLatestDataDate();
     } catch (error) {
       console.log(`⚠️  Could not fetch latest date: ${error.message}`);
-      console.log(`📅 Using fallback date: 20251108\n`);
-      latestDate = '20251108';
+      console.log(`📅 Using fallback date: 20251110\n`);
+      latestDate = '20251110';
     }
     
     // 2. Download data
@@ -202,6 +202,7 @@ async function generateTimeline() {
           };
         }
         
+        // Include ALL payments (positive and negative) for accurate cumulative totals
         byCounty[county].totalEUR += p.valoare_plata_fe_euro || 0;
         byCounty[county].totalRON += p.valoare_plata_fe || 0;
         byCounty[county].paymentsCount++;
@@ -220,7 +221,7 @@ async function generateTimeline() {
         }))
         .sort((a, b) => b.totalEUR - a.totalEUR); // Sort by value DESC
       
-      // Calculate totals
+      // Calculate totals (include ALL payments - positive and negative)
       const totalEUR = cumulativePayments.reduce((sum, p) => 
         sum + (p.valoare_plata_fe_euro || 0), 0
       );
