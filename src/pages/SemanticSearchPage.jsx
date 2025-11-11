@@ -8,7 +8,9 @@ import { fmtMoney, fmtNum } from '../data/data'
 import { getPNRRDataService } from '../services/PNRRDataService'
 import { DATA_ENDPOINTS } from '../constants/PNRRConstants'
 import roLocalities from '../data/ro_localities_geoapify.json'
+import { EnhancedTable } from '../components/MapView'
 import '../App.css'
+import './SemanticSearchPage.css'
 
 // Initialize Highcharts Map module
 if (typeof Highcharts === 'object') {
@@ -287,39 +289,6 @@ export default function SemanticSearchPage() {
     setFilteredProjects(filtered)
   }
   
-  // Calculate KPIs
-  const kpis = useMemo(() => {
-    const totalValue = filteredProjects.reduce((sum, p) => {
-      // Try different value fields
-      const value = p.__share_value || p.valoare_fe || p.value || 0
-      return sum + Number(value)
-    }, 0)
-    const totalCount = filteredProjects.length
-    
-    // Calculate top program
-    const programCounts = {}
-    filteredProjects.forEach(p => {
-      const program = p.__program_key || p.PROGRAMUL || 'OTHER'
-      programCounts[program] = (programCounts[program] || 0) + 1
-    })
-    
-    let topProgram = null
-    let maxCount = 0
-    Object.entries(programCounts).forEach(([program, count]) => {
-      if (count > maxCount) {
-        topProgram = program
-        maxCount = count
-      }
-    })
-    
-    return {
-      totalValue,
-      totalCount,
-      topProgram,
-      topProgramCount: maxCount
-    }
-  }, [filteredProjects])
-  
   const handleBackToMap = () => {
     navigate('/')
   }
@@ -538,6 +507,39 @@ export default function SemanticSearchPage() {
     })
   }, [filteredProjects, viewMode, endpoint, filterCRI, filterCounty, filterLocality, filterComponent, filterMasura, filterStadiu, filterFundingSource])
   
+  // Calculate KPIs - folosește filteredByDropdowns (căutare semantică + filtre dropdown)
+  const kpis = useMemo(() => {
+    const totalValue = filteredByDropdowns.reduce((sum, p) => {
+      // Try different value fields
+      const value = p.__share_value || p.valoare_fe || p.value || 0
+      return sum + Number(value)
+    }, 0)
+    const totalCount = filteredByDropdowns.length
+    
+    // Calculate top program
+    const programCounts = {}
+    filteredByDropdowns.forEach(p => {
+      const program = p.__program_key || p.PROGRAMUL || 'OTHER'
+      programCounts[program] = (programCounts[program] || 0) + 1
+    })
+    
+    let topProgram = null
+    let maxCount = 0
+    Object.entries(programCounts).forEach(([program, count]) => {
+      if (count > maxCount) {
+        topProgram = program
+        maxCount = count
+      }
+    })
+    
+    return {
+      totalValue,
+      totalCount,
+      topProgram,
+      topProgramCount: maxCount
+    }
+  }, [filteredByDropdowns])
+  
   // Sort projects
   const sortedProjects = useMemo(() => {
     if (!sortColumn) return filteredByDropdowns
@@ -554,25 +556,54 @@ export default function SemanticSearchPage() {
           aVal = a.BENEFICIAR || a.DENUMIRE_BENEFICIAR || ''
           bVal = b.BENEFICIAR || b.DENUMIRE_BENEFICIAR || ''
           break
+        case 'cui':
+          aVal = a.CUI || a.CUI_BENEFICIAR_FINAL || a.beneficiaryCUI || ''
+          bVal = b.CUI || b.CUI_BENEFICIAR_FINAL || b.beneficiaryCUI || ''
+          break
         case 'county':
           aVal = a.countyName || a.JUDET_IMPLEMENTARE || ''
           bVal = b.countyName || b.JUDET_IMPLEMENTARE || ''
           break
-        case 'locality':
-          aVal = a.LOCALIZARE_LOCALITATE || a.locality || ''
-          bVal = b.LOCALIZARE_LOCALITATE || b.locality || ''
+        case 'fundingSource':
+          aVal = a.SURSA_FINANTARE || a.fundingSource || ''
+          bVal = b.SURSA_FINANTARE || b.fundingSource || ''
+          break
+        case 'value':
+          aVal = a.__share_value || a.valoare_fe || a.value || 0
+          bVal = b.__share_value || b.valoare_fe || b.value || 0
+          break
+        case 'progress':
+          // Calculate progress percentage for sorting
+          aVal = 0
+          if (a.PROGRES_FIZIC !== null && a.PROGRES_FIZIC !== undefined && a.PROGRES_FIZIC !== '') {
+            let str = String(a.PROGRES_FIZIC).trim()
+            if (str.startsWith(',')) str = '0' + str
+            const parsed = parseFloat(str.replace(',', '.'))
+            aVal = !isNaN(parsed) ? parsed : 0
+          }
+          bVal = 0
+          if (b.PROGRES_FIZIC !== null && b.PROGRES_FIZIC !== undefined && b.PROGRES_FIZIC !== '') {
+            let str = String(b.PROGRES_FIZIC).trim()
+            if (str.startsWith(',')) str = '0' + str
+            const parsed = parseFloat(str.replace(',', '.'))
+            bVal = !isNaN(parsed) ? parsed : 0
+          }
+          break
+        case 'financialProgress':
+          aVal = a.PROGRES_FINANCIAR || 0
+          bVal = b.PROGRES_FINANCIAR || 0
           break
         case 'component':
           aVal = a.COD_COMPONENTA || a.component || ''
           bVal = b.COD_COMPONENTA || b.component || ''
           break
-        case 'status':
-          aVal = a.STADIU || a.status || ''
-          bVal = b.STADIU || b.status || ''
+        case 'measure':
+          aVal = a.COD_MASURA || a.measureCode || ''
+          bVal = b.COD_MASURA || b.measureCode || ''
           break
-        case 'value':
-          aVal = a.__share_value || a.valoare_fe || a.value || 0
-          bVal = b.__share_value || b.valoare_fe || b.value || 0
+        case 'locality':
+          aVal = a.LOCALIZARE_LOCALITATE || a.locality || ''
+          bVal = b.LOCALIZARE_LOCALITATE || b.locality || ''
           break
         default:
           return 0
@@ -595,16 +626,23 @@ export default function SemanticSearchPage() {
     })
   }, [filteredByDropdowns, sortColumn, sortDirection])
   
-  // Get projects to display in table (filtered by pin selection)
-  const displayedProjects = useMemo(() => {
-    if (selectedProjectId !== null) {
-      // Găsește proiect după ID (funcționează și după sortare!)
-      const selected = sortedProjects.find(p => p._uniqueId === selectedProjectId)
-      return selected ? [selected] : []
-    }
-    // Show first 50 from SORTED projects
-    return sortedProjects.slice(0, 50)
-  }, [sortedProjects, selectedProjectId])
+  // Prepare data for EnhancedTable - map to expected format
+  const tableData = useMemo(() => {
+    return filteredByDropdowns.map(project => ({
+      // Original data
+      ...project,
+      // Mapped fields for EnhancedTable
+      title: project.DENUMIRE_PROIECT || project.SCOP_PROIECT || project.title || '',
+      beneficiary: project.BENEFICIAR || project.DENUMIRE_BENEFICIAR || '',
+      cui: project.CUI || project.CUI_BENEFICIAR_FINAL || project.beneficiaryCUI || '-',
+      county: project.countyName || project.JUDET_IMPLEMENTARE || '',
+      fundingSource: project.SURSA_FINANTARE || project.fundingSource || 'Grant',
+      value: project.__share_value || project.valoare_fe || project.value || 0,
+      componentCode: project.COD_COMPONENTA || project.component || '',
+      measureCode: project.COD_MASURA || project.measureCode || '',
+      locality: project.LOCALIZARE_LOCALITATE || project.locality || ''
+    }))
+  }, [filteredByDropdowns])
   
   // Handle sort
   const handleSort = (column) => {
@@ -1404,397 +1442,157 @@ export default function SemanticSearchPage() {
         </div>
         
         {/* Tabel rezultate */}
-        <div className="projects-table-container" style={{
-          background: '#fff',
-          borderRadius: '16px',
-          padding: '24px',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
-        }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-            <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#0f172a', margin: 0 }}>
-              Proiecte – „{query}"
-            </h2>
-            {selectedProjectId !== null && (
-              <button
-                onClick={() => setSelectedProjectId(null)}
-                style={{
-                  padding: '8px 16px',
-                  background: '#f1f5f9',
-                  border: '1px solid #e2e8f0',
-                  borderRadius: '8px',
-                  fontSize: '13px',
-                  cursor: 'pointer',
-                  color: '#475569',
-                  fontWeight: '500'
-                }}
-              >
-                ✕ Arată toate
-              </button>
-            )}
-          </div>
-          
+        <section id="semantic-search-table-section" className="projects-payments-section">
           {loading ? (
-            <div style={{ textAlign: 'center', padding: '40px' }}>
+            <div style={{ textAlign: 'center', padding: '40px', background: '#fff', borderRadius: '16px' }}>
               <div className="loading-spinner" style={{ margin: '0 auto 16px' }}></div>
               <p style={{ color: '#64748b' }}>Se încarcă datele...</p>
             </div>
           ) : filteredProjects.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '40px' }}>
+            <div style={{ textAlign: 'center', padding: '40px', background: '#fff', borderRadius: '16px' }}>
               <p style={{ fontSize: '16px', color: '#64748b' }}>Niciun proiect găsit pentru „{query}"</p>
               <p style={{ fontSize: '14px', color: '#94a3b8', marginTop: '8px' }}>
                 Încercați un alt termen de căutare sau verificați ortografia.
               </p>
             </div>
           ) : (
-            <>
-              {/* Desktop: Tabel clasic cu 7 coloane + sortare */}
-              <div className="desktop-only" style={{ overflowX: 'auto' }}>
-                <table style={{
-                  width: '100%',
-                  borderCollapse: 'collapse',
-                  fontSize: '14px'
-                }}>
-                  <thead>
-                    <tr style={{ background: '#f8fafc', borderBottom: '2px solid #e5e7eb' }}>
-                      <th 
-                        onClick={() => handleSort('title')}
-                        style={{ 
-                          padding: '12px', 
-                          textAlign: 'left', 
-                          fontWeight: '600', 
-                          color: sortColumn === 'title' ? '#0ea5e9' : '#64748b',
-                          cursor: 'pointer',
-                          userSelect: 'none',
-                          transition: 'color 0.2s'
-                        }}
-                        onMouseEnter={(e) => e.target.style.color = '#0ea5e9'}
-                        onMouseLeave={(e) => e.target.style.color = sortColumn === 'title' ? '#0ea5e9' : '#64748b'}
-                      >
-                        Proiect
-                        {sortColumn === 'title' && (
-                          <span style={{ marginLeft: '6px' }}>
-                            {sortDirection === 'asc' ? '↑' : '↓'}
-                          </span>
-                        )}
-                      </th>
-                      <th 
-                        onClick={() => handleSort('beneficiary')}
-                        style={{ 
-                          padding: '12px', 
-                          textAlign: 'left', 
-                          fontWeight: '600', 
-                          color: sortColumn === 'beneficiary' ? '#0ea5e9' : '#64748b',
-                          cursor: 'pointer',
-                          userSelect: 'none',
-                          transition: 'color 0.2s'
-                        }}
-                        onMouseEnter={(e) => e.target.style.color = '#0ea5e9'}
-                        onMouseLeave={(e) => e.target.style.color = sortColumn === 'beneficiary' ? '#0ea5e9' : '#64748b'}
-                      >
-                        Beneficiar
-                        {sortColumn === 'beneficiary' && (
-                          <span style={{ marginLeft: '6px' }}>
-                            {sortDirection === 'asc' ? '↑' : '↓'}
-                          </span>
-                        )}
-                      </th>
-                      <th 
-                        onClick={() => handleSort('county')}
-                        style={{ 
-                          padding: '12px', 
-                          textAlign: 'left', 
-                          fontWeight: '600', 
-                          color: sortColumn === 'county' ? '#0ea5e9' : '#64748b',
-                          cursor: 'pointer',
-                          userSelect: 'none',
-                          transition: 'color 0.2s'
-                        }}
-                        onMouseEnter={(e) => e.target.style.color = '#0ea5e9'}
-                        onMouseLeave={(e) => e.target.style.color = sortColumn === 'county' ? '#0ea5e9' : '#64748b'}
-                      >
-                        Județ
-                        {sortColumn === 'county' && (
-                          <span style={{ marginLeft: '6px' }}>
-                            {sortDirection === 'asc' ? '↑' : '↓'}
-                          </span>
-                        )}
-                      </th>
-                      <th 
-                        onClick={() => handleSort('locality')}
-                        style={{ 
-                          padding: '12px', 
-                          textAlign: 'left', 
-                          fontWeight: '600', 
-                          color: sortColumn === 'locality' ? '#0ea5e9' : '#64748b',
-                          cursor: 'pointer',
-                          userSelect: 'none',
-                          transition: 'color 0.2s'
-                        }}
-                        onMouseEnter={(e) => e.target.style.color = '#0ea5e9'}
-                        onMouseLeave={(e) => e.target.style.color = sortColumn === 'locality' ? '#0ea5e9' : '#64748b'}
-                      >
-                        Localitate
-                        {sortColumn === 'locality' && (
-                          <span style={{ marginLeft: '6px' }}>
-                            {sortDirection === 'asc' ? '↑' : '↓'}
-                          </span>
-                        )}
-                      </th>
-                      <th 
-                        onClick={() => handleSort('component')}
-                        style={{ 
-                          padding: '12px', 
-                          textAlign: 'center', 
-                          fontWeight: '600', 
-                          color: sortColumn === 'component' ? '#0ea5e9' : '#64748b',
-                          cursor: 'pointer',
-                          userSelect: 'none',
-                          transition: 'color 0.2s'
-                        }}
-                        onMouseEnter={(e) => e.target.style.color = '#0ea5e9'}
-                        onMouseLeave={(e) => e.target.style.color = sortColumn === 'component' ? '#0ea5e9' : '#64748b'}
-                      >
-                        Componentă
-                        {sortColumn === 'component' && (
-                          <span style={{ marginLeft: '6px' }}>
-                            {sortDirection === 'asc' ? '↑' : '↓'}
-                          </span>
-                        )}
-                      </th>
-                      <th 
-                        onClick={() => handleSort('status')}
-                        style={{ 
-                          padding: '12px', 
-                          textAlign: 'center', 
-                          fontWeight: '600', 
-                          color: sortColumn === 'status' ? '#0ea5e9' : '#64748b',
-                          cursor: 'pointer',
-                          userSelect: 'none',
-                          transition: 'color 0.2s'
-                        }}
-                        onMouseEnter={(e) => e.target.style.color = '#0ea5e9'}
-                        onMouseLeave={(e) => e.target.style.color = sortColumn === 'status' ? '#0ea5e9' : '#64748b'}
-                      >
-                        Stadiu
-                        {sortColumn === 'status' && (
-                          <span style={{ marginLeft: '6px' }}>
-                            {sortDirection === 'asc' ? '↑' : '↓'}
-                          </span>
-                        )}
-                      </th>
-                      <th 
-                        onClick={() => handleSort('value')}
-                        style={{ 
-                          padding: '12px', 
-                          textAlign: 'right', 
-                          fontWeight: '600', 
-                          color: sortColumn === 'value' ? '#0ea5e9' : '#64748b',
-                          cursor: 'pointer',
-                          userSelect: 'none',
-                          transition: 'color 0.2s'
-                        }}
-                        onMouseEnter={(e) => e.target.style.color = '#0ea5e9'}
-                        onMouseLeave={(e) => e.target.style.color = sortColumn === 'value' ? '#0ea5e9' : '#64748b'}
-                      >
-                        Valoare (EUR)
-                        {sortColumn === 'value' && (
-                          <span style={{ marginLeft: '6px' }}>
-                            {sortDirection === 'asc' ? '↑' : '↓'}
-                          </span>
-                        )}
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {displayedProjects.map((project, index) => {
-                      const title = project.DENUMIRE_PROIECT || project.SCOP_PROIECT || project.title || 'N/A'
-                      const beneficiary = project.BENEFICIAR || project.DENUMIRE_BENEFICIAR || 'N/A'
-                      const county = project.countyName || project.JUDET_IMPLEMENTARE || 'N/A'
-                      const locality = project.LOCALIZARE_LOCALITATE || project.locality || 'N/A'
-                      const component = project.COD_COMPONENTA || project.component || '-'
-                      const status = project.STADIU || project.status || '-'
-                      const value = project.__share_value || project.valoare_fe || project.value || 0
-                      
-                      return (
-                        <tr 
-                          key={project._uniqueId || index} 
-                          style={{ 
-                            borderBottom: '1px solid #f1f5f9',
-                            background: selectedProjectId === project._uniqueId ? '#dbeafe' : '#fff',
-                            borderLeft: selectedProjectId === project._uniqueId ? '4px solid #0ea5e9' : 'none'
-                          }}
-                        >
-                          <td style={{ padding: '12px', maxWidth: '400px' }}>
-                            <div style={{ 
-                              whiteSpace: 'normal',
-                              wordWrap: 'break-word',
-                              color: '#0f172a',
-                              fontSize: '13px',
-                              fontWeight: '500',
-                              lineHeight: '1.4',
-                              textTransform: 'uppercase'
-                            }}>
-                              {title}
-                            </div>
-                          </td>
-                          <td style={{ padding: '12px', color: '#475569', fontSize: '13px', maxWidth: '200px' }}>
-                            <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                              {beneficiary}
-                            </div>
-                          </td>
-                          <td style={{ padding: '12px', color: '#0f172a', fontSize: '13px' }}>{county}</td>
-                          <td style={{ padding: '12px', color: '#0f172a', fontSize: '13px' }}>{locality}</td>
-                          <td style={{ padding: '12px', textAlign: 'center', fontSize: '13px', fontWeight: '500', color: '#0f172a' }}>{component}</td>
-                          <td style={{ padding: '12px', textAlign: 'center', fontSize: '13px', color: '#0f172a' }}>{status}</td>
-                          <td style={{ padding: '12px', textAlign: 'right', fontWeight: '600', color: '#0f172a', fontSize: '14px', whiteSpace: 'nowrap' }}>
-                            {value ? `${(value / 1000000).toFixed(2)} mil EUR` : '0.00 mil EUR'}
-                          </td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
-              </div>
-              
-              {/* Mobile: Carduri */}
-              <div className="mobile-only" style={{ flexDirection: 'column', gap: '16px' }}>
-                {displayedProjects.map((project, index) => {
-                const title = project.DENUMIRE_PROIECT || project.SCOP_PROIECT || project.title || 'N/A'
-                const beneficiary = project.BENEFICIAR || project.DENUMIRE_BENEFICIAR || 'N/A'
-                const locality = project.LOCALIZARE_LOCALITATE || project.locality || 'N/A'
-                const county = project.countyName || project.JUDET_IMPLEMENTARE || 'N/A'
-                const value = project.__share_value || project.valoare_fe || project.value || 0
-                const smis = project.COD_SMIS || project.contractNumber || ''
-                const component = project.COD_COMPONENTA || project.component || ''
-                const measure = project.COD_MASURA || project.measure || ''
-                const status = project.STADIU || project.status || ''
-                const fundingSource = project.SURSA_FINANTARE || project.fundingSource || 'Grant/loan'
-                
-                return (
-                  <div 
-                    key={index} 
-                    id={`project-${index}`}
-                    style={{
-                      background: '#fff',
-                      border: '1px solid #e5e7eb',
-                      borderRadius: '12px',
-                      padding: '16px',
-                      boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
-                    }}
-                  >
-                    {/* Titlu proiect */}
-                    <h3 style={{
-                      fontSize: '15px',
-                      fontWeight: '700',
-                      color: '#0f172a',
-                      marginBottom: '12px',
-                      lineHeight: '1.4',
-                      textTransform: 'uppercase'
-                    }}>
-                      {title}
-                    </h3>
-                    
-                    {/* Valoare */}
-                    <div style={{
-                      background: '#d1fae5',
-                      borderRadius: '8px',
-                      padding: '12px',
-                      marginBottom: '16px',
-                      textAlign: 'center'
-                    }}>
-                      <div style={{
-                        fontSize: '20px',
-                        fontWeight: '800',
-                        color: '#059669'
-                      }}>
-                        {fmtMoney(value, 'EUR')}
-                      </div>
-                    </div>
-                    
-                    {/* Beneficiar */}
-                    <div style={{
-                      borderLeft: '3px solid #3b82f6',
-                      paddingLeft: '12px',
-                      marginBottom: '16px'
-                    }}>
-                      <div style={{ fontSize: '11px', color: '#64748b', marginBottom: '4px' }}>
-                        BENEFICIAR
-                      </div>
-                      <div style={{ fontSize: '14px', fontWeight: '600', color: '#0f172a' }}>
-                        {beneficiary}
-                      </div>
-                    </div>
-                    
-                    {/* Grid 2 coloane */}
-                    <div style={{
-                      display: 'grid',
-                      gridTemplateColumns: '1fr 1fr',
-                      gap: '12px',
-                      fontSize: '13px'
-                    }}>
-                      <div>
-                        <div style={{ color: '#64748b', marginBottom: '4px' }}>JUDEȚ</div>
-                        <div style={{ fontWeight: '600', color: '#0f172a' }}>{county}</div>
-                      </div>
-                      <div>
-                        <div style={{ color: '#64748b', marginBottom: '4px' }}>SURSĂ FINANȚARE</div>
-                        <div style={{ fontWeight: '600', color: '#0f172a' }}>{fundingSource}</div>
-                      </div>
-                      <div>
-                        <div style={{ color: '#64748b', marginBottom: '4px' }}>STADIU</div>
-                        <div style={{ fontWeight: '600', color: status.includes('IMPLEMENTARE') ? '#10b981' : '#0f172a' }}>
-                          {status || 'N/A'}
-                        </div>
-                      </div>
-                      <div>
-                        <div style={{ color: '#64748b', marginBottom: '4px' }}>LOCALITATE</div>
-                        <div style={{ fontWeight: '600', color: '#0f172a' }}>{locality}</div>
-                      </div>
-                      {component && (
-                        <div>
-                          <div style={{ color: '#64748b', marginBottom: '4px' }}>COD COMPONENTĂ</div>
-                          <div style={{ fontWeight: '600', color: '#0f172a' }}>{component}</div>
-                        </div>
-                      )}
-                      {measure && (
-                        <div>
-                          <div style={{ color: '#64748b', marginBottom: '4px' }}>COD MĂSURĂ</div>
-                          <div style={{ fontWeight: '600', color: '#0f172a' }}>{measure}</div>
-                        </div>
-                      )}
-                    </div>
-                    
-                    {/* SMIS */}
-                    {smis && (
-                      <div style={{
-                        marginTop: '12px',
-                        paddingTop: '12px',
-                        borderTop: '1px solid #f1f5f9',
-                        fontSize: '11px',
-                        color: '#64748b'
-                      }}>
-                        SMIS: {smis}
-                      </div>
-                    )}
-                  </div>
-                )
-              })}
-              </div>
-              
-              {selectedProjectId === null && sortedProjects.length > 50 && (
-                <div style={{ marginTop: '16px', textAlign: 'center', color: '#64748b', fontSize: '13px' }}>
-                  Afișate primele 50 din {fmtNum(sortedProjects.length)} proiecte găsite
-                </div>
-              )}
-              
-              {selectedProjectId !== null && (
-                <div style={{ marginTop: '16px', textAlign: 'center', color: '#64748b', fontSize: '13px' }}>
-                  Afișat 1 proiect selectat din {fmtNum(sortedProjects.length)} proiecte găsite
-                </div>
-              )}
-            </>
+            <EnhancedTable
+              data={tableData}
+              fieldMappings={{
+                value: 'value',
+                cri: 'CRI',
+                measureCode: 'measureCode'
+              }}
+              getValueField={(item) => item.value || 0}
+              formatMoneyWithCurrency={(value) => fmtMoney(value, 'EUR')}
+              getCurrencySymbol={() => '€'}
+              currency="EUR"
+              filterStadiu=""
+              setFilterStadiu={() => {}}
+              filterLocality=""
+              setFilterLocality={() => {}}
+              filterFundingSource=""
+              setFilterFundingSource={() => {}}
+              filterCounty=""
+              setFilterCounty={() => {}}
+              filterComponent=""
+              setFilterComponent={() => {}}
+              filterMasura=""
+              setFilterMasura={() => {}}
+              filterCRI=""
+              setFilterCRI={() => {}}
+              columns={[
+                {
+                  key: 'title',
+                  label: 'Titlu Proiect',
+                  searchable: true,
+                  render: (value) => <div style={{ maxWidth: '350px', wordWrap: 'break-word', fontSize: '12px', lineHeight: '1.3', textTransform: 'uppercase' }}>{value}</div>
+                },
+                {
+                  key: 'beneficiary',
+                  label: 'Nume Beneficiar',
+                  searchable: true,
+                  render: (value) => <div style={{ maxWidth: '250px', wordWrap: 'break-word', fontSize: '12px', lineHeight: '1.3', textAlign: 'center' }}>{value}</div>
+                },
+                {
+                  key: 'cui',
+                  label: 'CUI',
+                  searchable: true,
+                  render: (value) => <div style={{ fontSize: '12px', minWidth: '100px', fontFamily: 'monospace', textAlign: 'center' }}>{value || '-'}</div>
+                },
+                {
+                  key: 'county',
+                  label: 'Județ',
+                  searchable: true,
+                  render: (value) => <div style={{ fontSize: '12px', minWidth: '70px', textAlign: 'center' }}>{value}</div>
+                },
+                {
+                  key: 'fundingSource',
+                  label: 'Sursă Finanțare',
+                  searchable: true,
+                  render: (value) => <div style={{ fontSize: '12px', minWidth: '120px', textAlign: 'center' }}>{value ? value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() : '-'}</div>
+                },
+                {
+                  key: 'value',
+                  label: 'Valoare (EUR)',
+                  numeric: true,
+                  searchable: false,
+                  render: (value) => <div style={{ fontSize: '12px', minWidth: '120px', textAlign: 'center' }}>{fmtMoney(value, 'EUR')}</div>
+                },
+                {
+                  key: 'progress',
+                  label: 'Progres Tehnic',
+                  numeric: true,
+                  searchable: false,
+                  sortable: true,
+                  sortValue: (item) => {
+                    const progresFizic = item.PROGRES_FIZIC
+                    if (progresFizic !== null && progresFizic !== undefined && progresFizic !== '') {
+                      let str = String(progresFizic).trim()
+                      if (str.startsWith(',')) str = '0' + str
+                      const parsed = parseFloat(str.replace(',', '.'))
+                      return !isNaN(parsed) ? parsed : 0
+                    }
+                    return 0
+                  },
+                  render: (value, item) => {
+                    const progresFizic = item.PROGRES_FIZIC
+                    let percentageValue = 0
+                    if (progresFizic !== null && progresFizic !== undefined && progresFizic !== '') {
+                      let progresFizicStr = String(progresFizic).trim()
+                      if (progresFizicStr.startsWith(',')) progresFizicStr = '0' + progresFizicStr
+                      const parsed = parseFloat(progresFizicStr.replace(',', '.'))
+                      percentageValue = !isNaN(parsed) ? parsed : 0
+                    }
+                    const percentageRaw = percentageValue * 100
+                    const percentage = percentageRaw === 100 ? '100' : percentageRaw.toFixed(2)
+                    return <div style={{ fontSize: '12px', minWidth: '100px', textAlign: 'center', fontWeight: '700', whiteSpace: 'nowrap', padding: '2px 4px', color: '#059669' }}>{percentage}%</div>
+                  }
+                },
+                {
+                  key: 'financialProgress',
+                  label: 'Progres Financiar',
+                  numeric: true,
+                  searchable: false,
+                  sortable: true,
+                  sortValue: (item) => item.PROGRES_FINANCIAR ?? 0,
+                  render: (value, item) => {
+                    const progresFinanciar = item.PROGRES_FINANCIAR
+                    const valueToDisplay = progresFinanciar !== null && progresFinanciar !== undefined ? progresFinanciar : 0
+                    const percentageRaw = valueToDisplay * 100
+                    const percentage = percentageRaw === 100 ? '100' : percentageRaw.toFixed(2)
+                    return <div style={{ fontSize: '12px', minWidth: '100px', textAlign: 'center', fontWeight: '500' }}>{percentage}%</div>
+                  }
+                },
+                {
+                  key: 'componentCode',
+                  label: 'Cod Componentă',
+                  searchable: true,
+                  render: (value) => <div style={{ fontSize: '12px', minWidth: '50px', textAlign: 'center' }}>{value}</div>
+                },
+                {
+                  key: 'measureCode',
+                  label: 'Cod Măsură',
+                  searchable: true,
+                  render: (value) => <div style={{ fontSize: '12px', minWidth: '50px', textAlign: 'center' }}>{value}</div>
+                },
+                {
+                  key: 'locality',
+                  label: 'Localitate',
+                  searchable: true,
+                  render: (value) => value ? <div style={{ maxWidth: '100px', wordWrap: 'break-word', fontSize: '12px', lineHeight: '1.3', textAlign: 'center' }}>{value}</div> : <div style={{ fontSize: '12px', textAlign: 'center' }}>-</div>
+                }
+              ]}
+              title={`Proiecte – „${query}"`}
+              subtitle={`${fmtNum(tableData.length)} proiecte găsite`}
+              itemsPerPage={50}
+              searchable={false}
+              defaultSortColumn="value"
+              defaultSortDirection="desc"
+              endpoint="projects"
+            />
           )}
-        </div>
+        </section>
         
       </div>
     </div>

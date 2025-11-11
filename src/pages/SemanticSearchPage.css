@@ -1,0 +1,21 @@
+/* Override DOAR pentru tabelul din SemanticSearchPage */
+
+/* Tabelul să aibă aceeași lățime ca filtrele (1200px max-width) */
+#semantic-search-table-section.projects-payments-section {
+  max-width: 1200px !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 auto 24px !important;
+}
+
+/* Tabelul să ocupe tot spațiul disponibil FĂRĂ scroll */
+#semantic-search-table-section table {
+  width: 100% !important;
+  min-width: 100% !important;
+  table-layout: fixed !important;
+}
+
+/* Ascunde overflow pentru a preveni scroll-ul orizontal */
+#semantic-search-table-section .desktop-only {
+  overflow-x: hidden !important;
+}

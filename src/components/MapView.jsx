@@ -40,7 +40,7 @@ import { useCRIData } from '../hooks/useCRIData'
 import * as XLSX from 'xlsx'
 
 // Enhanced Table Component (copied from CountyDetails.jsx)
-const EnhancedTable = ({ 
+export const EnhancedTable = ({ 
   data, 
   columns, 
   title, 
