@@ -31,16 +31,19 @@ export const useDataEndpoint = (dataDate?: string) => {
 
   // Load only the active endpoint on mount and when endpoint or dataDate changes (lazy loading for better performance)
   useEffect(() => {
+    // Don't load if dataDate is not yet available (avoid duplicate loads)
+    if (!dataDate) {
+      return
+    }
+    
     const loadInitialData = async () => {
       setIsInitialLoading(true)
       setInitialLoadError(null)
       
       try {
         const dataService = getPNRRDataService()
-        // Update data date if provided
-        if (dataDate) {
-          dataService.setDataDate(dataDate)
-        }
+        // Update data date
+        dataService.setDataDate(dataDate)
         // Only load the current endpoint instead of all data sources
         // Cache check is inside loadData, so this won't duplicate loads
         await dataService.loadData(endpoint)

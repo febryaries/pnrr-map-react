@@ -80,8 +80,12 @@ export const COUNTY_MAP = {
 
 // Available data dates - now populated dynamically from contains.json
 // See DataAvailabilityService and useAvailableDates hook
-// Keeping fallback for backward compatibility
-export const FALLBACK_DATA_DATE = '20251108';
+// Fallback uses today's date (YYYYMMDD format) - will be replaced by latestDate from contains.json
+const today = new Date();
+const year = today.getFullYear();
+const month = String(today.getMonth() + 1).padStart(2, '0');
+const day = String(today.getDate()).padStart(2, '0');
+export const FALLBACK_DATA_DATE = `${year}${month}${day}`;
 
 // Helper function to generate API URLs with dynamic date
 export const getAPIEndpoints = (dataDate: string = FALLBACK_DATA_DATE) => ({

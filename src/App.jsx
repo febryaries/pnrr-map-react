@@ -25,15 +25,15 @@ function App() {
   // Use available dates hook for dynamic date management
   const { availableDates, isLoading: isLoadingDates, latestDate } = useAvailableDates(true)
   
-  // Selected data date - use latest from contains.json or fallback
-  const [dataDate, setDataDate] = useState(FALLBACK_DATA_DATE)
+  // Selected data date - start with null, wait for latestDate to avoid duplicate loads
+  const [dataDate, setDataDate] = useState(null)
 
-  // Update dataDate when latestDate becomes available
+  // Update dataDate when latestDate becomes available (only once)
   useEffect(() => {
-    if (latestDate) {
+    if (latestDate && !dataDate) {
       setDataDate(latestDate)
     }
-  }, [latestDate])
+  }, [latestDate, dataDate])
 
   // Use the data endpoint hook with dataDate
   const { 

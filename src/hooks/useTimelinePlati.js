@@ -24,8 +24,8 @@ export function useTimelinePlati() {
         console.log('📥 Loading timeline plăți 2023-2025...');
         const startTime = Date.now();
         
-        // Add timestamp to prevent caching
-        const response = await fetch(`/timeline-plati-2025.json?t=${Date.now()}`);
+        // Add timestamp to prevent caching - use current timestamp
+        const response = await fetch(`/timeline-plati-2025.json?v=${Date.now()}`);
         
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);

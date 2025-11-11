@@ -57,22 +57,47 @@ function downloadAndDecompress(url) {
 }
 
 /**
- * Procesează date și extrage totaluri
+ * Procesează date și extrage totaluri DUPĂ data_raportarii
+ * Grupează plățile după data_raportarii (când au fost raportate în sistem)
  */
-function processData(rawData) {
+function processData(rawData, targetDate) {
   if (!rawData || !Array.isArray(rawData)) {
-    return { totalValue: 0, totalProjects: 0 };
+    return { totalValue: 0, totalProjects: 0, byReportDate: {} };
   }
 
-  let totalValue = 0;
-  let totalProjects = rawData.length;
-
+  // Grupează plățile după data_raportarii
+  const byReportDate = {};
+  
   rawData.forEach(item => {
+    // Folosește DOAR data_raportarii (când plata a fost raportată în sistem)
+    const reportDate = item.data_raportarii ? item.data_raportarii.split('T')[0] : null;
+    
+    if (!reportDate) return; // Skip dacă nu are data_raportarii
+    
     const value = parseFloat(item.valoare_plata_fe_euro || 0);
-    totalValue += value;
+    
+    if (!byReportDate[reportDate]) {
+      byReportDate[reportDate] = {
+        totalValue: 0,
+        count: 0
+      };
+    }
+    
+    byReportDate[reportDate].totalValue += value;
+    byReportDate[reportDate].count += 1;
   });
 
-  return { totalValue, totalProjects };
+  // Calculează totalul - TOATE plățile din fișier (indiferent de data_raportarii)
+  // Fișierul conține toate plățile raportate până la data fișierului
+  let totalValue = 0;
+  let totalProjects = 0;
+  
+  Object.keys(byReportDate).forEach(date => {
+    totalValue += byReportDate[date].totalValue;
+    totalProjects += byReportDate[date].count;
+  });
+
+  return { totalValue, totalProjects, byReportDate };
 }
 
 /**
@@ -144,15 +169,22 @@ async function generateTimelineData() {
     try {
       const url = `${BASE_URL}${date}-plati_pnrr.json.gz`;
       const rawData = await downloadAndDecompress(url);
-      const processed = processData(rawData);
       
-      timelineData[date] = processed;
+      // Convertește YYYYMMDD la YYYY-MM-DD pentru comparație
+      const targetDate = `${date.slice(0,4)}-${date.slice(4,6)}-${date.slice(6,8)}`;
+      const processed = processData(rawData, targetDate);
       
-      console.log(`✅ ${date}: ${(processed.totalValue / 1000000).toFixed(2)} mil EUR, ${processed.totalProjects} projects`);
+      timelineData[date] = {
+        totalValue: processed.totalValue,
+        totalProjects: processed.totalProjects,
+        date: targetDate
+      };
+      
+      console.log(`✅ ${date}: ${(processed.totalValue / 1000000).toFixed(2)} mil EUR, ${processed.totalProjects} plăți (până la data_raportarii ${targetDate})`);
       
     } catch (error) {
       console.error(`❌ Error processing ${date}:`, error.message);
-      timelineData[date] = { totalValue: 0, totalProjects: 0 };
+      timelineData[date] = { totalValue: 0, totalProjects: 0, date: null };
     }
   }
   
