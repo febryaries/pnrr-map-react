@@ -1167,19 +1167,12 @@ export default function SemanticSearchPage() {
         </div>
         
         {/* Filtre Dropdown - SINCRONIZATE CU MAPVIEW */}
-        <div style={{
-          background: '#fff',
-          borderRadius: '16px',
-          padding: '20px',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-          marginBottom: '24px'
-        }}>
-          <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', marginBottom: '16px' }}>🔍 Filtrează rezultatele</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
+        <div className="table-filters-sticky projects-layout">
+          <div className="table-filters-sticky-content">
             {/* VIZUALIZARE Filter - DOAR PENTRU PROIECTE */}
             {endpoint === 'projects' && (
-              <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#64748b', marginBottom: '6px' }}>📊 VIZUALIZARE</label>
+              <div className="filter-item">
+                <label>📊 Vizualizare</label>
                 <select
                   value={viewMode}
                   onChange={(e) => setViewMode(e.target.value)}
@@ -1467,20 +1460,27 @@ export default function SemanticSearchPage() {
               formatMoneyWithCurrency={(value) => fmtMoney(value, 'EUR')}
               getCurrencySymbol={() => '€'}
               currency="EUR"
-              filterStadiu=""
-              setFilterStadiu={() => {}}
-              filterLocality=""
-              setFilterLocality={() => {}}
-              filterFundingSource=""
-              setFilterFundingSource={() => {}}
-              filterCounty=""
-              setFilterCounty={() => {}}
-              filterComponent=""
-              setFilterComponent={() => {}}
-              filterMasura=""
-              setFilterMasura={() => {}}
-              filterCRI=""
-              setFilterCRI={() => {}}
+              filterStadiu={filterStadiu}
+              setFilterStadiu={setFilterStadiu}
+              filterLocality={filterLocality}
+              setFilterLocality={setFilterLocality}
+              filterFundingSource={filterFundingSource}
+              setFilterFundingSource={setFilterFundingSource}
+              filterCounty={filterCounty}
+              setFilterCounty={setFilterCounty}
+              filterComponent={filterComponent}
+              setFilterComponent={setFilterComponent}
+              filterMasura={filterMasura}
+              setFilterMasura={setFilterMasura}
+              filterCRI={filterCRI}
+              setFilterCRI={setFilterCRI}
+              viewMode={viewMode}
+              setViewMode={setViewMode}
+              setMetric={() => {}}
+              criData={[]}
+              criLoading={false}
+              criError={null}
+              searchable={true}
               columns={[
                 {
                   key: 'title',
@@ -1586,7 +1586,6 @@ export default function SemanticSearchPage() {
               title={`Proiecte – „${query}"`}
               subtitle={`${fmtNum(tableData.length)} proiecte găsite`}
               itemsPerPage={50}
-              searchable={false}
               defaultSortColumn="value"
               defaultSortDirection="desc"
               endpoint="projects"
