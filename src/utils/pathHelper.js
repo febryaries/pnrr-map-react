@@ -16,16 +16,20 @@ export function getBasePath() {
     return import.meta.env.BASE_URL;
   }
   
-  // În production build, detectăm din URL
-  const pathname = window.location.pathname;
-  
-  // Dacă URL-ul conține /pnrr-dashboard/, folosim acel base path
-  if (pathname.includes('/pnrr-dashboard')) {
-    return '/pnrr-dashboard/';
+  // În production build pe Vercel, fișierele din /public/ sunt ÎNTOTDEAUNA la root
+  // indiferent de base path-ul aplicației (chiar dacă app rulează la /pnrr-dashboard)
+  // Detectăm Vercel prin hostname
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname;
+    // Vercel deployment (*.vercel.app sau custom domain cu Vercel)
+    if (hostname.includes('vercel.app')) {
+      return '/';
+    }
   }
   
-  // Altfel, suntem în root (Vercel)
-  return '/';
+  // Pentru build local (dist/) servit cu base /pnrr-dashboard/
+  // Fișierele din /public/ trebuie accesate cu base path-ul
+  return import.meta.env.BASE_URL || '/pnrr-dashboard/';
 }
 
 /**
