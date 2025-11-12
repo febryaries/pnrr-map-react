@@ -130,7 +130,7 @@ function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick }) 
 
   // Load Romania map
   useEffect(() => {
-    fetch('/ro-all.topo.json')
+    fetch(`${import.meta.env.BASE_URL}ro-all.topo.json`)
       .then(res => res.json())
       .then(topology => setMapTopology(topology))
       .catch(err => console.error('Error loading map:', err));
