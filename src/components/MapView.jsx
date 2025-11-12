@@ -7,7 +7,9 @@ import HighchartsAccessibility from 'highcharts/modules/accessibility'
 import Highcharts3D from 'highcharts/highcharts-3d'
 import HighchartsMore from 'highcharts/highcharts-more'
 import HighchartsCylinder from 'highcharts/modules/cylinder'
-import ReactECharts from 'echarts-for-react';
+import ReactECharts from 'echarts-for-react'
+import { getPNRRDataService } from '../services/PNRRDataService'
+import { getAssetPath } from '../utils/pathHelper'
 
 // Initialize Highcharts modules
 HighchartsMap(Highcharts)
@@ -1808,7 +1810,7 @@ const MapView = ({
     useEffect(() => {
         const loadMapData = async () => {
             try {
-                const response = await fetch('./ro-all.topo.json')
+                const response = await fetch(getAssetPath('ro-all.topo.json'))
                 if (!response.ok) {
                     console.warn('Could not load Romania map data:', response.statusText)
                     return

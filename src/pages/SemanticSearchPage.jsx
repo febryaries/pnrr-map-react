@@ -6,6 +6,7 @@ import HighchartsMap from 'highcharts/modules/map'
 import { createSemanticMatcher } from '../utils/semanticSearch'
 import { fmtMoney, fmtNum } from '../data/data'
 import { getPNRRDataService } from '../services/PNRRDataService'
+import { getAssetPath } from '../utils/pathHelper'
 import { DATA_ENDPOINTS } from '../constants/PNRRConstants'
 import roLocalities from '../data/ro_localities_geoapify.json'
 import { EnhancedTable } from '../components/MapView'
@@ -226,7 +227,7 @@ export default function SemanticSearchPage() {
   useEffect(() => {
     const loadMap = async () => {
       try {
-        const response = await fetch('./ro-all.topo.json')
+        const response = await fetch(getAssetPath('ro-all.topo.json'))
         const topology = await response.json()
         setMapData(topology)
       } catch (error) {

@@ -5,6 +5,7 @@
 
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getAssetPath } from '../utils/pathHelper';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import HighchartsMap from 'highcharts/modules/map';
@@ -130,7 +131,7 @@ function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick }) 
 
   // Load Romania map
   useEffect(() => {
-    fetch('./ro-all.topo.json')
+    fetch(getAssetPath('ro-all.topo.json'))
       .then(res => res.json())
       .then(topology => setMapTopology(topology))
       .catch(err => console.error('Error loading map:', err));

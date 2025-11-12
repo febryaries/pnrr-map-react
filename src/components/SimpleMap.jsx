@@ -8,6 +8,7 @@ import { useMemo, useState, useEffect } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import HighchartsMap from 'highcharts/modules/map';
+import { getAssetPath } from '../utils/pathHelper';
 
 // Initialize Highcharts Map module
 HighchartsMap(Highcharts);
@@ -21,7 +22,7 @@ function SimpleMap({ data = [], isLoading = false, isPlaying = false }) {
   useEffect(() => {
     const loadMapData = async () => {
       try {
-        const response = await fetch('./ro-all.topo.json');
+        const response = await fetch(getAssetPath('ro-all.topo.json'));
         if (!response.ok) {
           console.warn('Could not load Romania map data:', response.statusText);
           return;

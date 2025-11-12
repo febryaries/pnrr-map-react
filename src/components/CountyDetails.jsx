@@ -1,7 +1,8 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import HighchartsMap from 'highcharts/modules/map'
+import { getAssetPath } from '../utils/pathHelper'
 import { PROGRAMS, PROGRAM_COLORS, COUNTY_MAP, fmtMoney, fmtNum, COMPONENT_MAPPING_PAYMENTS, COMPONENT_MAPPING_PROJECTS, ro_localities } from '../data/data'
 import * as XLSX from 'xlsx'
 import { useBucurestiProjects } from '../hooks/useBucurestiProjects'
@@ -820,7 +821,7 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
     const loadCountyMap = async () => {
       try {
         // Load full Romania topology and filter for the specific county
-        const response = await fetch('./ro-all.topo.json')
+        const response = await fetch(getAssetPath('ro-all.topo.json'))
         if (!response.ok) {
           console.warn('Could not load Romania map data')
           setCountyMapData(null)
