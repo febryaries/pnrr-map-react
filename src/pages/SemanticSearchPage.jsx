@@ -226,7 +226,7 @@ export default function SemanticSearchPage() {
   useEffect(() => {
     const loadMap = async () => {
       try {
-        const response = await fetch(`${import.meta.env.BASE_URL}ro-all.topo.json`)
+        const response = await fetch('./ro-all.topo.json')
         const topology = await response.json()
         setMapData(topology)
       } catch (error) {
