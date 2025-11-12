@@ -18,14 +18,14 @@ function TimelineStats({
   const [currency, setCurrency] = useState('EUR');
   const [animatedValue, setAnimatedValue] = useState(0);
   const [animatedProjects, setAnimatedProjects] = useState(0);
+  const [animatedBeneficiaries, setAnimatedBeneficiaries] = useState(0);
 
   const totalEUR = currentData?.totalEUR || 0;
   const totalRON = currentData?.totalRON || 0;
   const totalPayments = currentData?.totalPayments || 0;
   
-  // Use uniqueBeneficiaries from timeline data (plati_pnrr - only active CID 2025 measures)
-  // This is consistent with the timeline data source and represents beneficiaries with payments for active measures
-  const uniqueBeneficiaries = currentData?.uniqueBeneficiaries || 0;
+  // Use cumulativeBeneficiaries - total cumulativ de la început până la luna curentă
+  const uniqueBeneficiaries = currentData?.cumulativeBeneficiaries || 0;
 
   // Animate value changes - smooth transition între valori (arată evoluția reală)
   useEffect(() => {
@@ -38,6 +38,7 @@ function TimelineStats({
     const targetValue = currency === 'EUR' ? totalEUR : totalRON;
     const valueIncrement = (targetValue - animatedValue) / steps;
     const paymentsIncrement = (totalPayments - animatedProjects) / steps;
+    const beneficiariesIncrement = (uniqueBeneficiaries - animatedBeneficiaries) / steps;
 
     let currentStep = 0;
     const interval = setInterval(() => {
@@ -46,15 +47,17 @@ function TimelineStats({
       if (currentStep >= steps) {
         setAnimatedValue(targetValue);
         setAnimatedProjects(totalPayments);
+        setAnimatedBeneficiaries(uniqueBeneficiaries);
         clearInterval(interval);
       } else {
         setAnimatedValue(prev => prev + valueIncrement);
         setAnimatedProjects(prev => prev + paymentsIncrement);
+        setAnimatedBeneficiaries(prev => prev + beneficiariesIncrement);
       }
     }, stepDuration);
 
     return () => clearInterval(interval);
-  }, [totalEUR, totalRON, totalPayments, currency]);
+  }, [totalEUR, totalRON, totalPayments, uniqueBeneficiaries, currency]);
 
   const displayValue = animatedValue;
 
@@ -118,7 +121,7 @@ function TimelineStats({
               <div className="timeline-stat-content">
                 <div className="timeline-stat-label">Beneficiari cu plăți</div>
                 <div className="timeline-stat-number">
-                  {formatNumber(uniqueBeneficiaries)}
+                  {formatNumber(Math.round(animatedBeneficiaries))}
                 </div>
               </div>
             </div>

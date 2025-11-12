@@ -87,6 +87,11 @@
   border-left: 4px solid #0ea5e9;
 }
 
+.timeline-stat-beneficiaries {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  border-left: 4px solid #3b82f6;
+}
+
 .timeline-stat-date {
   background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
   border-left: 4px solid #64748b;

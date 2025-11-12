@@ -31,8 +31,12 @@ function TimelinePage({ onCountyClick }) {
   // Set to last month when data loads
   useEffect(() => {
     if (availableDates.length > 0 && currentIndex === 0) {
-      setCurrentIndex(availableDates.length - 1);
+      const lastIndex = availableDates.length - 1;
+      setCurrentIndex(lastIndex);
+      // Force recalculate cumulative for last month
+      getDataForIndex(lastIndex);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [availableDates.length]);
   
   // Dates are already formatted in the hook
@@ -128,7 +132,8 @@ function TimelinePage({ onCountyClick }) {
           totalEUR: currentData.totalEUR || 0,
           totalRON: currentData.totalRON || 0,
           totalPayments: currentData.totalPayments || 0,
-          uniqueBeneficiaries: currentData.uniqueBeneficiaries || 0
+          uniqueBeneficiaries: currentData.uniqueBeneficiaries || 0,
+          cumulativeBeneficiaries: currentData.cumulativeBeneficiaries || 0
         } : null}
         currentDate={formattedDates[currentIndex]}
         isLoading={isLoading}

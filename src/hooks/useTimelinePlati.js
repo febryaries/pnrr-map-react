@@ -57,9 +57,17 @@ export function useTimelinePlati() {
         }));
         setAvailableDates(dates);
         
-        // Set LAST frame as current (most recent data)
+        // Set LAST frame as current (most recent data) with cumulative beneficiaries
         if (filteredTimeline.length > 0) {
-          setCurrentData(filteredTimeline[filteredTimeline.length - 1]);
+          const lastIndex = filteredTimeline.length - 1;
+          let cumulativeBeneficiaries = 0;
+          for (let i = 0; i <= lastIndex; i++) {
+            cumulativeBeneficiaries += filteredTimeline[i]?.uniqueBeneficiaries || 0;
+          }
+          setCurrentData({
+            ...filteredTimeline[lastIndex],
+            cumulativeBeneficiaries
+          });
         }
         
         setIsLoading(false);
@@ -86,15 +94,28 @@ export function useTimelinePlati() {
       return null;
     }
     
+    // Calculate cumulative beneficiaries from start to current index
+    let cumulativeBeneficiaries = 0;
+    for (let i = 0; i <= index; i++) {
+      cumulativeBeneficiaries += timelineData.timeline[i]?.uniqueBeneficiaries || 0;
+    }
+    
+    // Add cumulative beneficiaries to frame data
+    const frameWithCumulative = {
+      ...frame,
+      cumulativeBeneficiaries
+    };
+    
     console.log(`📅 getDataForIndex(${index}):`, {
       date: frame.date,
       label: frame.label,
       countiesCount: frame.counties?.length,
-      counties: frame.counties?.map(c => c.name)
+      monthlyBeneficiaries: frame.uniqueBeneficiaries,
+      cumulativeBeneficiaries
     });
     
-    setCurrentData(frame);
-    return frame;
+    setCurrentData(frameWithCumulative);
+    return frameWithCumulative;
   }, [timelineData]);
 
   return {
