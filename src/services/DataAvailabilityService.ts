@@ -145,19 +145,14 @@ export class DataAvailabilityService {
       return this.cachedDates;
     }
 
-    // Add cache-busting parameter to avoid stale CDN/browser cache
-    const cacheBuster = `?t=${Math.floor(Date.now() / 60000)}`; // Changes every minute
-    const fetchUrl = CONTAINS_URL + cacheBuster;
-    
-    console.log('📅 Fetching available dates from:', fetchUrl);
+    console.log('📅 Fetching available dates from:', CONTAINS_URL);
 
     try {
-      const response = await fetch(fetchUrl, {
+      const response = await fetch(CONTAINS_URL, {
         headers: {
-          'Accept-Encoding': 'gzip, deflate',
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache'
-        }
+          'Accept-Encoding': 'gzip, deflate'
+        },
+        cache: 'no-store' // Force browser to bypass cache
       });
 
       if (!response.ok) {
