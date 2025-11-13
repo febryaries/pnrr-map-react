@@ -36,8 +36,8 @@ const isDevelopment = window.location.hostname === 'localhost' || window.locatio
 const CONTAINS_URL = isDevelopment
   ? '/api/mfe/generator/data/contains.json'
   : 'https://mfe.gov.ro/generator/data/contains.json';
-const CACHE_KEY = 'pnrr_available_dates_v3'; // v3: force cache invalidation for 6 nov 2025
-const CACHE_TIMESTAMP_KEY = 'pnrr_available_dates_timestamp_v3';
+const CACHE_KEY = 'pnrr_available_dates_v4'; // v4: force cache invalidation for 13 nov 2025
+const CACHE_TIMESTAMP_KEY = 'pnrr_available_dates_timestamp_v4';
 const CACHE_DURATION = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
 
 // Required endpoints for a complete dataset
@@ -145,12 +145,18 @@ export class DataAvailabilityService {
       return this.cachedDates;
     }
 
-    console.log('📅 Fetching available dates from:', CONTAINS_URL);
+    // Add cache-busting parameter to avoid stale CDN/browser cache
+    const cacheBuster = `?t=${Math.floor(Date.now() / 60000)}`; // Changes every minute
+    const fetchUrl = CONTAINS_URL + cacheBuster;
+    
+    console.log('📅 Fetching available dates from:', fetchUrl);
 
     try {
-      const response = await fetch(CONTAINS_URL, {
+      const response = await fetch(fetchUrl, {
         headers: {
-          'Accept-Encoding': 'gzip, deflate'
+          'Accept-Encoding': 'gzip, deflate',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache'
         }
       });
 
