@@ -2496,19 +2496,19 @@ const MapView = ({
 
         let title = ''
         if (viewMode === 'general') {
-            title = `Sursa datelor: ${sourceName} - Proiecte Județene ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}${filterSuffix}`
+            title = `${sourceName} - Proiecte Județene ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}${filterSuffix}`
         } else if (viewMode === 'all') {
-            title = `Sursa datelor: ${sourceName} - Toate proiectele ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}${filterSuffix}`
+            title = `${sourceName} - Toate proiectele ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}${filterSuffix}`
         } else if (viewMode === 'total') {
-            title = `Sursa datelor: ${sourceName} - Toate proiectele PNRR (${currencySymbol})`
+            title = `${sourceName} - Toate proiectele PNRR (${currencySymbol})`
         } else if (viewMode === 'national') {
-            title = `Sursa datelor: ${sourceName} - Proiecte Naționale (${currencySymbol})`
+            title = `${sourceName} - Proiecte Naționale (${currencySymbol})`
         } else if (viewMode === 'local') {
-            title = `Sursa datelor: ${sourceName} - Proiecte Locale ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}${filterSuffix}`
+            title = `${sourceName} - Proiecte Locale ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}${filterSuffix}`
         } else if (viewMode === 'program') {
-            title = `Sursa datelor: ${sourceName} - ${componentLabel || activeProgram} - ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}`
+            title = `${sourceName} - ${componentLabel || activeProgram} - ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}`
         } else {
-            title = `Sursa datelor: ${sourceName} - Național - ${metric === 'value' ? `Valoare (${currencySymbol}, împărțită egal între județe)` : 'Proiecte (plin în fiecare județ)'}${filterSuffix}`
+            title = `${sourceName} - Național - ${metric === 'value' ? `Valoare (${currencySymbol}, împărțită egal între județe)` : 'Proiecte (plin în fiecare județ)'}${filterSuffix}`
         }
 
         // If title is too long (more than 100 chars), add line break after "filtrat:"
@@ -2947,26 +2947,15 @@ const MapView = ({
                         <div className="data-timestamp">
                             <div className="timestamp-content">
                                 <span className="timestamp-label">Set de date:</span>
-                                <select 
-                                    className="data-date-selector"
-                                    value={dataDate}
-                                    onChange={(e) => setDataDate(e.target.value)}
-                                    title="Selectează setul de date PNRR"
-                                    disabled={isLoadingDates}
-                                >
+                                <span className="data-date-display">
                                     {isLoadingDates ? (
-                                        <option>Se încarcă date...</option>
+                                        'Se încarcă date...'
                                     ) : availableDates && availableDates.length > 0 ? (
-                                        availableDates.map(date => (
-                                            <option key={date.value} value={date.value}>
-                                                {date.label}
-                                                {!date.hasAllEndpoints && ' ⚠️'}
-                                            </option>
-                                        ))
+                                        availableDates.find(date => date.value === dataDate)?.label || dataDate
                                     ) : (
-                                        <option value={dataDate}>{dataDate}</option>
+                                        dataDate
                                     )}
-                                </select>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -3092,68 +3081,22 @@ const MapView = ({
 
             {/* Controls layout */}
             <div className="controls controls--map">
-                {/* Row 1: Data Source + Currency */}
-                <div style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    marginBottom: '15px', 
-                    width: '100%',
-                    flexWrap: 'wrap',
-                    gap: '15px'
-                }}>
-                    <div className="control-group">
-                        <p className="control-label" style={{ margin: 0 }}>Sursa datelor:</p>
-                        <div className="segment" style={{ margin: 0 }}>    
-                            <button
-                                className={endpoint === 'payments' ? 'active' : ''}
-                                onClick={() => switchEndpoint('payments')}
-                            >
-                                Plăți PNRR
-                            </button>
-                            <button
-                                className={endpoint === 'projects' ? 'active' : ''}
-                                onClick={() => switchEndpoint('projects')}
-                            >
-                                Proiecte PNRR în execuție
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div className="control-group" style={{ 
-                        marginLeft: 'auto', 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        gap: '10px'
-                    }}>
-                        <p className="control-label" style={{ margin: 0, whiteSpace: 'nowrap' }}>Moneda:</p>
-                        <div className="segment" style={{ margin: 0, display: 'flex', whiteSpace: 'nowrap' }}>
-                            <button
-                                className={currency === 'EUR' ? 'active' : ''}
-                                onClick={() => setCurrency('EUR')}
-                            >
-                                EUR
-                            </button>
-                            <button
-                                className={currency === 'RON' ? 'active' : ''}
-                                onClick={() => setCurrency('RON')}
-                            >
-                                RON
-                            </button>
-                        </div>
-                    </div>
+                {/* Row 1: Căutare Semantică (full width) */}
+                <div style={{ marginBottom: '15px', width: '100%' }}>
+                    <SemanticSearchCard endpoint={endpoint} />
                 </div>
                 
-                {/* Row 2: Vizualizare + Căutare Semantică - only show if not payments */}
+                {/* Row 2: Vizualizare (left) + Moneda (right) - only for projects */}
                 {endpoint !== 'payments' && (
                     <div style={{ 
                         display: 'flex', 
                         alignItems: 'flex-start', 
-                        width: '100%',
-                        flexWrap: 'wrap',
-                        gap: '15px'
+                        justifyContent: 'space-between',
+                        width: '100%'
                     }}>
+                        {/* Vizualizare - Left */}
                         <div className="control-group">
-                            <p className="control-label" style={{ margin: 0 }}>Vizualizare:</p>
+                            <p className="control-label" style={{ margin: '0 0 5px 0' }}>VIZUALIZARE:</p>
                             <div className="segment" style={{ margin: 0 }}>
                                 <button
                                     className={viewMode === 'total' ? 'active' : ''}
@@ -3188,8 +3131,28 @@ const MapView = ({
                             </div>
                         </div>
                         
-                        <div style={{ marginLeft: 'auto' }}>
-                            <SemanticSearchCard endpoint={endpoint} />
+                        {/* Moneda - Right */}
+                        <div className="control-group" style={{ 
+                            display: 'flex', 
+                            flexDirection: 'column',
+                            alignItems: 'flex-end',
+                            gap: '5px'
+                        }}>
+                            <p className="control-label" style={{ margin: 0, whiteSpace: 'nowrap' }}>MONEDA:</p>
+                            <div className="segment" style={{ margin: 0, display: 'flex', whiteSpace: 'nowrap' }}>
+                                <button
+                                    className={currency === 'EUR' ? 'active' : ''}
+                                    onClick={() => setCurrency('EUR')}
+                                >
+                                    EUR
+                                </button>
+                                <button
+                                    className={currency === 'RON' ? 'active' : ''}
+                                    onClick={() => setCurrency('RON')}
+                                >
+                                    RON
+                                </button>
+                            </div>
                         </div>
                     </div>
                 )}
@@ -4109,9 +4072,9 @@ function SemanticSearchCard({ endpoint }) {
     
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '15px', flexWrap: 'wrap' }}>
-                <p className="control-label" style={{ margin: 0 }}>Căutare Semantică:</p>
-                <div style={{ display: 'flex', gap: '10px', flex: 1, minWidth: '250px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '15px', flexWrap: 'nowrap' }}>
+                <p className="control-label" style={{ margin: 0, whiteSpace: 'nowrap' }}>CĂUTARE SEMANTICĂ:</p>
+                <div style={{ display: 'flex', gap: '10px', flex: 1 }}>
                     <input
                         type="text"
                         placeholder="Ex: apă uzată, spital, drum..."
@@ -4127,8 +4090,7 @@ function SemanticSearchCard({ endpoint }) {
                             fontSize: '14px',
                             flex: 1,
                             outline: 'none',
-                            transition: 'border-color 0.2s',
-                            minWidth: '150px'
+                            transition: 'border-color 0.2s'
                         }}
                         onFocus={(e) => e.target.style.borderColor = '#0ea5e9'}
                         onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
