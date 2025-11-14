@@ -10,8 +10,5 @@ dist
 dist-ssr
 *.local
 
-# Documentation and changelogs (local only)
+# Documentation - not used in platform
 *.md
-CHANGELOG*.md
-**/README.md
-!README.md
