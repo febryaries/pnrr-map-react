@@ -13,8 +13,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const BASE_URL = 'https://mfe.gov.ro/generator/data/';
-const CONTAINS_URL = 'https://mfe.gov.ro/generator/data/contains.json';
+const BASE_URL = 'https://mfe.gov.ro/pnrr-dashboard/generator/data/';
+const CONTAINS_URL = 'https://mfe.gov.ro/pnrr-dashboard/generator/data/contains.json';
 
 /**
  * Download și decompress fișier .gz

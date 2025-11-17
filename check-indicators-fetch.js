@@ -1,6 +1,6 @@
 import pako from 'pako';
 
-const url = 'https://mfe.gov.ro/generator/data/20251106-indicatori_total.json.gz';
+const url = 'https://mfe.gov.ro/pnrr-dashboard/generator/data/20251106-indicatori_total.json.gz';
 
 async function fetchIndicators() {
   try {

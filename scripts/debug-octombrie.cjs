@@ -5,7 +5,7 @@
 const https = require('https');
 const zlib = require('zlib');
 
-const url = 'https://mfe.gov.ro/generator/data/20251108-plati_pnrr.json.gz';
+const url = 'https://mfe.gov.ro/pnrr-dashboard/generator/data/20251108-plati_pnrr.json.gz';
 
 console.log('📥 Downloading plati_pnrr.json.gz...\n');
 

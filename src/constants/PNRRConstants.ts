@@ -89,10 +89,10 @@ export const FALLBACK_DATA_DATE = `${year}${month}${day}`;
 
 // Helper function to generate API URLs with dynamic date
 export const getAPIEndpoints = (dataDate: string = FALLBACK_DATA_DATE) => ({
-  PAYMENTS: `https://mfe.gov.ro/generator/data/${dataDate}-plati_pnrr.json.gz`,
-  PROJECTS: `https://mfe.gov.ro/generator/data/${dataDate}-progres_tehnic_proiecte.json.gz`,
-  TOP_BENEFICIARIES: `https://mfe.gov.ro/generator/data/${dataDate}-persons.json.gz`,
-  INDICATORS: `https://mfe.gov.ro/generator/data/${dataDate}-indicatori_total.json.gz`
+  PAYMENTS: `https://mfe.gov.ro/pnrr-dashboard/generator/data/${dataDate}-plati_pnrr.json.gz`,
+  PROJECTS: `https://mfe.gov.ro/pnrr-dashboard/generator/data/${dataDate}-progres_tehnic_proiecte.json.gz`,
+  TOP_BENEFICIARIES: `https://mfe.gov.ro/pnrr-dashboard/generator/data/${dataDate}-persons.json.gz`,
+  INDICATORS: `https://mfe.gov.ro/pnrr-dashboard/generator/data/${dataDate}-indicatori_total.json.gz`
 });
 
 // API Endpoints (default - for backward compatibility)

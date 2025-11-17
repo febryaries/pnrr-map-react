@@ -66,7 +66,7 @@ self.onmessage = async function(e) {
     try {
       console.log(`Worker: Loading REAL data for ${date}...`);
       
-      const url = `https://mfe.gov.ro/generator/data/${date}-plati_pnrr.json.gz`;
+      const url = `https://mfe.gov.ro/pnrr-dashboard/generator/data/${date}-plati_pnrr.json.gz`;
       const rawData = await fetchAndDecompress(url);
       const processedData = processData(rawData);
       

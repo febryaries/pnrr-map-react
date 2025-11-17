@@ -16,7 +16,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // MFE API configuration
-const MFE_BASE_URL = 'https://mfe.gov.ro/generator/data';
+const MFE_BASE_URL = 'https://mfe.gov.ro/pnrr-dashboard/generator/data';
 const DATA_DATE = '20251106'; // Latest available date
 const MAX_RETRIES = 3;
 const OUTPUT_DIR = 'src/data';

@@ -5,7 +5,7 @@
 const https = require('https');
 const zlib = require('zlib');
 
-const url = 'https://mfe.gov.ro/generator/data/20251108-progres_tehnic_proiecte.json.gz';
+const url = 'https://mfe.gov.ro/pnrr-dashboard/generator/data/20251108-progres_tehnic_proiecte.json.gz';
 
 console.log('📥 Downloading progres_tehnic_proiecte.json.gz...\n');
 

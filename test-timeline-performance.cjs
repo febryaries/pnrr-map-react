@@ -17,7 +17,7 @@ async function testPerformance() {
   const startDownload = Date.now();
   
   const data = await new Promise((resolve, reject) => {
-    https.get('https://mfe.gov.ro/generator/data/20251106-plati_pnrr.json.gz', (res) => {
+    https.get('https://mfe.gov.ro/pnrr-dashboard/generator/data/20251106-plati_pnrr.json.gz', (res) => {
       const chunks = [];
       const gunzip = zlib.createGunzip();
       

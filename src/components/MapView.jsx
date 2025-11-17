@@ -1849,7 +1849,7 @@ const MapView = ({
         const fetchTopBeneficiaries = async () => {
             setLoadingBeneficiaries(true)
             try {
-                const url = `https://mfe.gov.ro/generator/data/${dataDate}-persons.json.gz`
+                const url = `https://mfe.gov.ro/pnrr-dashboard/generator/data/${dataDate}-persons.json.gz`
                 console.log('🔥 FETCHING BENEFICIARIES FROM:', url)
                 const response = await fetch(url, {
                     headers: {

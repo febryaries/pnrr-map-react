@@ -140,7 +140,7 @@ export function useTimelineWorker() {
         
         console.log('📅 Fetching available dates from mfe.gov.ro...');
         
-        const response = await fetch('https://mfe.gov.ro/generator/data/contains.json');
+        const response = await fetch('https://mfe.gov.ro/pnrr-dashboard/generator/data/contains.json');
         const data = await response.json();
         
         // Extract dates for progres_tehnic_proiecte (valoare contractată)

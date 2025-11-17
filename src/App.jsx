@@ -28,12 +28,16 @@ function App() {
   // Selected data date - start with null, wait for latestDate to avoid duplicate loads
   const [dataDate, setDataDate] = useState(null)
 
-  // Update dataDate when latestDate becomes available (only once)
+  // Update dataDate when latestDate changes (ALWAYS update to latest)
   useEffect(() => {
-    if (latestDate && !dataDate) {
-      setDataDate(latestDate)
+    if (latestDate) {
+      // Check if date actually changed
+      if (dataDate !== latestDate) {
+        console.log(`📅 Auto-updating to latest date: ${latestDate}`)
+        setDataDate(latestDate)
+      }
     }
-  }, [latestDate, dataDate])
+  }, [latestDate]) // Remove dataDate from dependencies to always update
 
   // Use the data endpoint hook with dataDate
   const { 

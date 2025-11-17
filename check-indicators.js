@@ -1,7 +1,7 @@
 const https = require('https');
 const zlib = require('zlib');
 
-const url = 'https://mfe.gov.ro/generator/data/20251106-indicatori_total.json.gz';
+const url = 'https://mfe.gov.ro/pnrr-dashboard/generator/data/20251106-indicatori_total.json.gz';
 
 https.get(url, (response) => {
   const gunzip = zlib.createGunzip();

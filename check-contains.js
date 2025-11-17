@@ -1,4 +1,4 @@
-const url = 'https://mfe.gov.ro/generator/data/contains.json';
+const url = 'https://mfe.gov.ro/pnrr-dashboard/generator/data/contains.json';
 
 async function fetchContains() {
   try {

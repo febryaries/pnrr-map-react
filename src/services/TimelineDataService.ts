@@ -35,7 +35,7 @@ export class TimelineDataService {
    */
   async fetchAvailableDates(): Promise<TimelineDate[]> {
     try {
-      const response = await fetch('https://mfe.gov.ro/generator/data/contains.json');
+      const response = await fetch('https://mfe.gov.ro/pnrr-dashboard/generator/data/contains.json');
       const data = await response.json();
       
       // Extract unique dates for plati_pnrr endpoint
@@ -139,7 +139,7 @@ export class TimelineDataService {
    */
   private async loadPaymentsForDate(date: string): Promise<PaymentDataAggregation> {
     const aggregation = new PaymentDataAggregation();
-    const url = `https://mfe.gov.ro/generator/data/${date}-plati_pnrr.json.gz`;
+    const url = `https://mfe.gov.ro/pnrr-dashboard/generator/data/${date}-plati_pnrr.json.gz`;
     
     // Override the default URL
     (aggregation as any).dataUrl = url;
@@ -153,7 +153,7 @@ export class TimelineDataService {
    */
   private async loadProjectsForDate(date: string): Promise<ProjectDataAggregation> {
     const aggregation = new ProjectDataAggregation();
-    const url = `https://mfe.gov.ro/generator/data/${date}-progres_tehnic_proiecte.json.gz`;
+    const url = `https://mfe.gov.ro/pnrr-dashboard/generator/data/${date}-progres_tehnic_proiecte.json.gz`;
     
     // Override the default URL
     (aggregation as any).dataUrl = url;

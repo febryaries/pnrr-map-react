@@ -86,7 +86,7 @@ async function getLatestDataDate() {
   return new Promise((resolve, reject) => {
     console.log('📅 Fetching latest data date from contains.json...');
     
-    https.get('https://mfe.gov.ro/generator/data/contains.json', (res) => {
+    https.get('https://mfe.gov.ro/pnrr-dashboard/generator/data/contains.json', (res) => {
       if (res.statusCode !== 200) {
         reject(new Error(`HTTP ${res.statusCode}: ${res.statusMessage}`));
         return;
@@ -132,7 +132,7 @@ async function generateTimeline() {
     }
     
     // 2. Download data
-    const url = `https://mfe.gov.ro/generator/data/${latestDate}-plati_pnrr.json.gz`;
+    const url = `https://mfe.gov.ro/pnrr-dashboard/generator/data/${latestDate}-plati_pnrr.json.gz`;
     const allPayments = await downloadAndDecompress(url);
     console.log(`✅ Downloaded ${allPayments.length} total payments\n`);
     
