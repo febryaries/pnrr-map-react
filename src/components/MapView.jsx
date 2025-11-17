@@ -3058,7 +3058,7 @@ const MapView = ({
                         </div>
                         <div className="indicator-card">
                             <div className="indicator-value">{formatMoneyEUR(totalIndicators.platit_eur)}</div>
-                            <div className="indicator-label">Plătit către beneficiari</div>
+                            <div className="indicator-label">Suma plătită pentru proiectele PNRR <span style={{fontSize: '0.85em', fontWeight: 400}}>(active și retrase)</span></div>
                         </div>
                         <div className="indicator-card">
                             <div className="indicator-value">{formatMoneyEUR(totalIndicators.incasat_eur)}</div>

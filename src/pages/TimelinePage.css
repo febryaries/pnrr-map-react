@@ -21,10 +21,16 @@
 }
 
 .timeline-page-title h1 {
-  margin: 0 0 5px 0;
+  margin: 0;
   font-size: 2em;
   color: #2c3e50;
   font-weight: 700;
+}
+
+.timeline-page-title h1 .subtitle-text {
+  font-size: 0.6em;
+  font-weight: 400;
+  color: #7f8c8d;
 }
 
 .timeline-page-title p {

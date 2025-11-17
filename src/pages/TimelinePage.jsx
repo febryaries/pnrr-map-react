@@ -116,7 +116,7 @@ function TimelinePage({ onCountyClick }) {
       {/* Header */}
       <div className="timeline-page-header">
         <div className="timeline-page-title">
-          <h1>💰 Absorbție în Timp - Plăți PNRR</h1>
+          <h1>💰 Situația Plăților PNRR – Evoluție în Timp <span className="subtitle-text">(proiecte PNRR active)</span></h1>
           <p>Evoluția plăților PNRR 2023 - 2025</p>
         </div>
         
