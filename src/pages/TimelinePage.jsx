@@ -132,9 +132,12 @@ function TimelinePage({ onCountyClick }) {
           totalEUR: currentData.totalEUR || 0,
           totalRON: currentData.totalRON || 0,
           totalPayments: currentData.totalPayments || 0,
-          uniqueBeneficiaries: currentData.uniqueBeneficiaries || 0
+          uniqueBeneficiaries: currentData.uniqueBeneficiaries || 0,
+          cumulativeBeneficiaries: currentData.cumulativeBeneficiaries || 0
         } : null}
         currentDate={formattedDates[currentIndex]}
+        currentIndex={currentIndex}
+        totalMonths={availableDates.length - 1}
         isLoading={isLoading}
         isPlaying={isPlaying}
         totalIndicators={totalIndicators}

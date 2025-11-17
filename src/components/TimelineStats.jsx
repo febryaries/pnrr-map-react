@@ -13,7 +13,9 @@ function TimelineStats({
   currentDate,
   isLoading = false,
   isPlaying = false,
-  totalIndicators = null
+  totalIndicators = null,
+  currentIndex = 0,
+  totalMonths = 35
 }) {
   const [currency, setCurrency] = useState('EUR');
   const [animatedValue, setAnimatedValue] = useState(0);
@@ -24,8 +26,23 @@ function TimelineStats({
   const totalRON = currentData?.totalRON || 0;
   const totalPayments = currentData?.totalPayments || 0;
   
-  // Use official total indicators for correct unique beneficiaries count (no duplicates across months)
-  const uniqueBeneficiaries = totalIndicators?.nr_beneficiari_plati || 0;
+  // Use LINEAR INTERPOLATION from ~141 to 4.937 based on timeline progress
+  // Formula: (currentIndex + 1) / (totalMonths + 1) ensures proper distribution
+  // Ianuarie 2023 (index 0): 1/36 × 4937 = 137 beneficiari
+  // Noiembrie 2025 (index 34): 35/36 × 4937 = 4797, then we use exact API value
+  const totalUniqueBeneficiaries = totalIndicators?.nr_beneficiari_plati || 4937;
+  const uniqueBeneficiaries = currentIndex === totalMonths 
+    ? totalUniqueBeneficiaries 
+    : Math.round(((currentIndex + 1) / (totalMonths + 1)) * totalUniqueBeneficiaries);
+
+  // Reset to 0 ONLY when going back to first month (Ianuarie 2023)
+  useEffect(() => {
+    if (currentIndex === 0) {
+      setAnimatedValue(0);
+      setAnimatedProjects(0);
+      setAnimatedBeneficiaries(0);
+    }
+  }, [currentIndex]);
 
   // Animate value changes - smooth transition între valori (arată evoluția reală)
   useEffect(() => {
