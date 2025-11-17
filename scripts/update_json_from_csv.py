@@ -8,7 +8,7 @@ import json
 from collections import defaultdict
 
 # Citește CSV-ul
-csv_path = '/Users/teraki/Desktop/AlocariComponente.csv'
+csv_path = '/Users/teraki/Desktop/react-pnrr/src/data/AlocariComponente.csv'
 json_output_path = '/Users/teraki/Desktop/react-pnrr/src/data/alocariComponente.json'
 
 # Mapare nume componente
