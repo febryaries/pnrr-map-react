@@ -36,8 +36,8 @@ const isDevelopment = window.location.hostname === 'localhost' || window.locatio
 const CONTAINS_URL = isDevelopment
   ? '/api/mfe/pnrr-dashboard/generator/data/contains.json'
   : 'https://mfe.gov.ro/pnrr-dashboard/generator/data/contains.json';
-const CACHE_KEY = 'pnrr_available_dates_v4'; // v4: force cache invalidation for 13 nov 2025
-const CACHE_TIMESTAMP_KEY = 'pnrr_available_dates_timestamp_v4';
+const CACHE_KEY = 'pnrr_available_dates_v5'; // v5: force cache invalidation for 17 nov 2025
+const CACHE_TIMESTAMP_KEY = 'pnrr_available_dates_timestamp_v5';
 const CACHE_DURATION = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
 
 // Required endpoints for a complete dataset
