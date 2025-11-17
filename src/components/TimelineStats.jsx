@@ -24,8 +24,8 @@ function TimelineStats({
   const totalRON = currentData?.totalRON || 0;
   const totalPayments = currentData?.totalPayments || 0;
   
-  // Use cumulativeBeneficiaries - total cumulativ de la început până la luna curentă
-  const uniqueBeneficiaries = currentData?.cumulativeBeneficiaries || 0;
+  // Use official total indicators for correct unique beneficiaries count (no duplicates across months)
+  const uniqueBeneficiaries = totalIndicators?.nr_beneficiari_plati || 0;
 
   // Animate value changes - smooth transition între valori (arată evoluția reală)
   useEffect(() => {

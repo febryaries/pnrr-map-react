@@ -95,28 +95,18 @@ export function useTimelinePlati() {
       return null;
     }
     
-    // Calculate cumulative beneficiaries from start to current index
-    let cumulativeBeneficiaries = 0;
-    for (let i = 0; i <= index; i++) {
-      cumulativeBeneficiaries += timelineData.timeline[i]?.uniqueBeneficiaries || 0;
-    }
-    
-    // Add cumulative beneficiaries to frame data
-    const frameWithCumulative = {
-      ...frame,
-      cumulativeBeneficiaries
-    };
+    // Note: Beneficiaries count is now taken from totalIndicators (official API)
+    // to avoid counting duplicates across months
     
     console.log(`📅 getDataForIndex(${index}):`, {
       date: frame.date,
       label: frame.label,
       countiesCount: frame.counties?.length,
-      monthlyBeneficiaries: frame.uniqueBeneficiaries,
-      cumulativeBeneficiaries
+      monthlyBeneficiaries: frame.uniqueBeneficiaries
     });
     
-    setCurrentData(frameWithCumulative);
-    return frameWithCumulative;
+    setCurrentData(frame);
+    return frame;
   }, [timelineData]);
 
   return {
