@@ -1060,15 +1060,31 @@ export const EnhancedTable = ({
               <div className="mobile-table-card-detail">
                 <div className="mobile-table-card-detail-label">Progres Tehnic</div>
                 <div className="mobile-table-card-detail-value" style={{ color: '#059669', fontWeight: '500', fontSize: '10px' }}>
-                  {item.PROGRES_FIZIC && item.PROGRES_FIZIC !== '' 
-                    ? (() => {
-                        let str = String(item.PROGRES_FIZIC).trim()
-                        if (str.startsWith(',')) str = '0' + str
-                        const parsed = parseFloat(str.replace(',', '.'))
-                        return !isNaN(parsed) ? `${Math.floor(parsed * 100)}%` : (item.progress || '-')
-                      })()
-                    : (item.progress || '-')
-                  }
+                  {(() => {
+                    const progresFizic = item.PROGRES_FIZIC
+                    const progresFinanciar = item.PROGRES_FINANCIAR
+                    const codMasura = item[fieldMappings.measureCode] || ''
+                    const isReform = /^R[1-9]$/.test(codMasura)
+                    
+                    let percentageValue = null
+                    
+                    if (progresFizic !== null && progresFizic !== undefined && progresFizic !== '') {
+                      let progresFizicStr = String(progresFizic).trim()
+                      if (progresFizicStr.startsWith(',')) {
+                        progresFizicStr = '0' + progresFizicStr
+                      }
+                      const parsed = parseFloat(progresFizicStr.replace(',', '.'))
+                      percentageValue = !isNaN(parsed) ? parsed : 0
+                    } else if (isReform && progresFinanciar !== null && progresFinanciar !== undefined) {
+                      percentageValue = progresFinanciar
+                    } else {
+                      percentageValue = 0
+                    }
+                    
+                    const percentageRaw = percentageValue * 100
+                    const percentage = percentageRaw === 100 ? '100' : percentageRaw.toFixed(2)
+                    return `${percentage}%`
+                  })()}
                 </div>
               </div>
               <div className="mobile-table-card-detail">
