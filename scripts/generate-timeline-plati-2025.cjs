@@ -131,17 +131,19 @@ async function generateTimeline() {
       latestDate = '20251117';
     }
     
-    // 2. Download indicatori_total for official beneficiaries count
+    // 2. Download indicatori_total for official values
     let officialBeneficiaries = null;
+    let officialTotalEUR = null;
     try {
       const indicatorsUrl = `https://mfe.gov.ro/pnrr-dashboard/generator/data/${latestDate}-indicatori_total.json.gz`;
       const indicators = await downloadAndDecompress(indicatorsUrl);
-      // API structure: { items: [{ nr_beneficiari_plati: 4928, ... }] }
+      // API structure: { items: [{ nr_beneficiari_plati: 4937, platit_eur: 8910110000, ... }] }
       officialBeneficiaries = indicators.items?.[0]?.nr_beneficiari_plati;
-      console.log(`✅ Official beneficiaries from API: ${officialBeneficiaries}\n`);
+      officialTotalEUR = indicators.items?.[0]?.platit_eur;
+      console.log(`✅ Official from API: ${officialBeneficiaries} beneficiaries, ${(officialTotalEUR / 1000000).toFixed(2)} mil EUR\n`);
     } catch (error) {
       console.log(`⚠️  Could not fetch indicators: ${error.message}`);
-      console.log(`📊 Will calculate beneficiaries from payments\n`);
+      console.log(`📊 Will calculate from payments\n`);
     }
     
     // 3. Download payments data
@@ -215,9 +217,11 @@ async function generateTimeline() {
           };
         }
         
-        // Include ALL payments (positive and negative) for accurate cumulative totals
-        byCounty[county].totalEUR += p.valoare_plata_fe_euro || 0;
-        byCounty[county].totalRON += p.valoare_plata_fe || 0;
+        // Include ONLY positive payments (exclude negative corrections)
+        const eurValue = p.valoare_plata_fe_euro || 0;
+        const ronValue = p.valoare_plata_fe || 0;
+        if (eurValue > 0) byCounty[county].totalEUR += eurValue;
+        if (ronValue > 0) byCounty[county].totalRON += ronValue;
         byCounty[county].paymentsCount++;
         byCounty[county].beneficiaries.add(p.cui_beneficiar_final);
         beneficiaries.add(p.cui_beneficiar_final);
@@ -234,29 +238,32 @@ async function generateTimeline() {
         }))
         .sort((a, b) => b.totalEUR - a.totalEUR); // Sort by value DESC
       
-      // Calculate totals (include ALL payments - positive and negative)
-      const totalEUR = cumulativePayments.reduce((sum, p) => 
-        sum + (p.valoare_plata_fe_euro || 0), 0
-      );
-      const totalRON = cumulativePayments.reduce((sum, p) => 
-        sum + (p.valoare_plata_fe || 0), 0
-      );
+      // Calculate totals (ONLY positive payments - exclude negative corrections)
+      const totalEUR = cumulativePayments
+        .filter(p => (p.valoare_plata_fe_euro || 0) > 0)
+        .reduce((sum, p) => sum + (p.valoare_plata_fe_euro || 0), 0);
+      const totalRON = cumulativePayments
+        .filter(p => (p.valoare_plata_fe || 0) > 0)
+        .reduce((sum, p) => sum + (p.valoare_plata_fe || 0), 0);
       
       const [year, monthNum] = month.split('-');
       const monthName = ROMANIAN_MONTHS[monthNum];
       
-      // Use official beneficiaries count for last month if available
+      // Use official values for last month if available
       const isLastMonth = index === targetMonths.length - 1;
       const beneficiariesCount = (isLastMonth && officialBeneficiaries) 
         ? officialBeneficiaries 
         : beneficiaries.size;
+      const finalTotalEUR = (isLastMonth && officialTotalEUR)
+        ? officialTotalEUR
+        : totalEUR;
       
       timeline.push({
         date: month,
         dateYYYYMMDD: month.replace(/-/g, ''),
         label: `${monthName} ${year}`,
         totalPayments: cumulativePayments.length,
-        totalEUR: Math.round(totalEUR * 100) / 100,
+        totalEUR: Math.round(finalTotalEUR * 100) / 100,
         totalRON: Math.round(totalRON * 100) / 100,
         uniqueBeneficiaries: beneficiariesCount,
         counties

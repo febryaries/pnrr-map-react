@@ -8,6 +8,57 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getAssetPath } from '../utils/pathHelper';
 
+/**
+ * Smooth timeline data by interpolating June-September 2025 spike
+ * Spike range: June, July, August, September (October returns to normal)
+ */
+function smoothTimeline(timeline) {
+  if (!timeline || timeline.length === 0) return timeline;
+  
+  const smoothed = timeline.map(frame => ({ ...frame })); // Deep copy
+  
+  // Specific fix for June-September 2025 spike (Octombrie has negative payments)
+  const mayIndex = timeline.findIndex(f => f.date === '2025-05');
+  const juneIndex = timeline.findIndex(f => f.date === '2025-06');
+  const julyIndex = timeline.findIndex(f => f.date === '2025-07');
+  const augustIndex = timeline.findIndex(f => f.date === '2025-08');
+  const septemberIndex = timeline.findIndex(f => f.date === '2025-09');
+  const octoberIndex = timeline.findIndex(f => f.date === '2025-10');
+  const novemberIndex = timeline.findIndex(f => f.date === '2025-11');
+  
+  if (mayIndex !== -1 && novemberIndex !== -1) {
+    const mayValue = timeline[mayIndex].totalEUR;
+    const novemberValue = timeline[novemberIndex].totalEUR;
+    
+    console.log('🎨 Applying spike smoothing for June-October 2025...');
+    console.log(`  → Interpolating from Mai (${(mayValue / 1e6).toFixed(2)} mil EUR) to Noiembrie (${(novemberValue / 1e6).toFixed(2)} mil EUR)`);
+    
+    // Interpolate June, July, August, September, October
+    const spikeMonths = [
+      { idx: juneIndex, name: 'Iunie' },
+      { idx: julyIndex, name: 'Iulie' },
+      { idx: augustIndex, name: 'August' },
+      { idx: septemberIndex, name: 'Septembrie' },
+      { idx: octoberIndex, name: 'Octombrie' }
+    ].filter(m => m.idx !== -1);
+    
+    const totalSteps = novemberIndex - mayIndex;
+    
+    spikeMonths.forEach((month, i) => {
+      const step = month.idx - mayIndex;
+      const progress = step / totalSteps;
+      const interpolatedValue = mayValue + (novemberValue - mayValue) * progress;
+      
+      smoothed[month.idx].totalEUR = Math.round(interpolatedValue * 100) / 100;
+      smoothed[month.idx].totalRON = Math.round((interpolatedValue * 5) * 100) / 100;
+      
+      console.log(`    ${month.name} 2025: ${(timeline[month.idx].totalEUR / 1e6).toFixed(2)} → ${(smoothed[month.idx].totalEUR / 1e6).toFixed(2)} mil EUR`);
+    });
+  }
+  
+  return smoothed;
+}
+
 export function useTimelinePlati() {
   const [timelineData, setTimelineData] = useState(null);
   const [availableDates, setAvailableDates] = useState([]);
@@ -43,26 +94,30 @@ export function useTimelinePlati() {
         
         console.log(`🔍 Filtered timeline: ${filteredTimeline.length} months (from ${filteredTimeline[0]?.date} to ${filteredTimeline[filteredTimeline.length - 1]?.date})`);
         
+        // Apply smoothing to remove spikes
+        console.log('\n🎨 Applying spike smoothing...');
+        const smoothedTimeline = smoothTimeline(filteredTimeline);
+        
         const filteredData = {
           ...data,
-          timeline: filteredTimeline,
-          months: filteredTimeline.length
+          timeline: smoothedTimeline,
+          months: smoothedTimeline.length
         };
         
         setTimelineData(filteredData);
         
-        // Extract available dates (only from 2023+)
-        const dates = filteredTimeline.map(frame => ({
+        // Extract available dates (only from 2023+) - use SMOOTHED data
+        const dates = smoothedTimeline.map(frame => ({
           date: frame.date,
           label: frame.label
         }));
         setAvailableDates(dates);
         
-        // Set LAST frame as current (most recent data)
+        // Set LAST frame as current (most recent data) - use SMOOTHED data
         // uniqueBeneficiaries is already cumulative from the script
-        if (filteredTimeline.length > 0) {
-          const lastIndex = filteredTimeline.length - 1;
-          const lastFrame = filteredTimeline[lastIndex];
+        if (smoothedTimeline.length > 0) {
+          const lastIndex = smoothedTimeline.length - 1;
+          const lastFrame = smoothedTimeline[lastIndex];
           setCurrentData({
             ...lastFrame,
             cumulativeBeneficiaries: lastFrame.uniqueBeneficiaries || 0
