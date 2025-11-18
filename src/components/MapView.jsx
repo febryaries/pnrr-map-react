@@ -4072,9 +4072,9 @@ function SemanticSearchCard({ endpoint }) {
     
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '15px', flexWrap: 'nowrap' }}>
-                <p className="control-label" style={{ margin: 0, whiteSpace: 'nowrap' }}>CĂUTARE SEMANTICĂ:</p>
-                <div style={{ display: 'flex', gap: '10px', flex: 1 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '15px', flexWrap: 'wrap' }}>
+                <p className="control-label" style={{ margin: 0, whiteSpace: 'nowrap', width: '100%' }}>CĂUTARE SEMANTICĂ:</p>
+                <div style={{ display: 'flex', gap: '10px', flex: 1, width: '100%' }}>
                     <input
                         type="text"
                         placeholder="Ex: apă uzată, spital, drum..."

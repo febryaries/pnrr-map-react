@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import HighchartsMap from 'highcharts/modules/map'
@@ -33,6 +33,15 @@ const EnhancedTable = ({
   const [filterStadiu, setFilterStadiu] = useState('')
   const [filterLocality, setFilterLocality] = useState('')
   const [filterFundingSource, setFilterFundingSource] = useState('')
+  const [viewMode, setViewMode] = useState('total')
+  const [filterComponent, setFilterComponent] = useState('')
+  const [filterMasura, setFilterMasura] = useState('')
+  
+  // Mobile filters state
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false)
+  const [showMobileButton, setShowMobileButton] = useState(false)
+  const [renderMobileButton, setRenderMobileButton] = useState(false)
+  const tableContainerRef = useRef(null)
 
 
   // Get unique values for filters
@@ -59,6 +68,53 @@ const EnhancedTable = ({
     })
     return Array.from(values).sort()
   }, [data])
+
+  const uniqueComponents = useMemo(() => {
+    const values = new Set()
+    data.forEach(item => {
+      if (item.componentCode) values.add(item.componentCode)
+    })
+    return Array.from(values).sort()
+  }, [data])
+
+  const uniqueMasuri = useMemo(() => {
+    const values = new Set()
+    data.forEach(item => {
+      if (item.measureCode) values.add(item.measureCode)
+    })
+    return Array.from(values).sort()
+  }, [data])
+  
+  // Scroll detection for mobile button
+  useEffect(() => {
+    const handleScroll = () => {
+      if (tableContainerRef.current) {
+        const rect = tableContainerRef.current.getBoundingClientRect()
+        const isInTableArea = rect.top < window.innerHeight - 100 && rect.bottom > 100
+        
+        if (isInTableArea && !renderMobileButton) {
+          setRenderMobileButton(true)
+          setTimeout(() => setShowMobileButton(true), 10)
+        } else if (!isInTableArea && renderMobileButton) {
+          setShowMobileButton(false)
+          setTimeout(() => setRenderMobileButton(false), 400)
+        }
+      }
+    }
+    
+    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('resize', handleScroll)
+    handleScroll()
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
+    }
+  }, [renderMobileButton])
+  
+  const closeMobileSidebar = () => {
+    setIsMobileFiltersOpen(false)
+  }
 
   // Filter data based on search term and filters (keep zero values and duplicates)
   useEffect(() => {
@@ -98,9 +154,32 @@ const EnhancedTable = ({
       filtered = filtered.filter(item => item.fundingSource === filterFundingSource)
     }
     
+    // Apply Component filter
+    if (filterComponent) {
+      filtered = filtered.filter(item => item.componentCode === filterComponent)
+    }
+    
+    // Apply Măsură filter
+    if (filterMasura) {
+      filtered = filtered.filter(item => item.measureCode === filterMasura)
+    }
+    
+    // Apply View Mode filter
+    if (viewMode === 'national') {
+      filtered = filtered.filter(item => {
+        const locality = (item.locality || '').toUpperCase()
+        return locality === 'NAȚIONAL' || locality === 'NAŢIONAL' || locality === 'NATIONAL'
+      })
+    } else if (viewMode === 'local') {
+      filtered = filtered.filter(item => {
+        const locality = (item.locality || '').toUpperCase()
+        return locality !== 'NAȚIONAL' && locality !== 'NAŢIONAL' && locality !== 'NATIONAL'
+      })
+    }
+    
     setFilteredData(filtered)
     setCurrentPage(1) // Reset to first page when filtering
-  }, [data, searchTerm, filterStadiu, filterLocality, filterFundingSource, columns])
+  }, [data, searchTerm, filterStadiu, filterLocality, filterFundingSource, filterComponent, filterMasura, viewMode, columns])
 
   // Sort data
   const sortedData = useMemo(() => {
@@ -530,8 +609,50 @@ const EnhancedTable = ({
         )}
       </div>
       
+      {/* Mobile Hamburger Button */}
+      {searchable && renderMobileButton && !isMobileFiltersOpen && (
+        <button
+          className="mobile-filters-toggle"
+          onClick={() => setIsMobileFiltersOpen(!isMobileFiltersOpen)}
+          style={{
+            display: 'none',
+            position: 'fixed',
+            top: '2px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 999,
+            padding: '12px 20px',
+            background: '#0ea5e9',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '12px',
+            fontSize: '15px',
+            fontWeight: '600',
+            boxShadow: '0 4px 12px rgba(14, 165, 233, 0.3)',
+            cursor: 'pointer',
+            animation: showMobileButton ? 'buttonFadeIn 0.4s ease forwards' : 'buttonFadeOut 0.4s ease forwards',
+            pointerEvents: showMobileButton ? 'auto' : 'none'
+          }}
+        >
+          ☰ FILTRE
+          {(filterStadiu || filterLocality || filterFundingSource || filterComponent || filterMasura || viewMode !== 'total') && (
+            <span style={{
+              marginLeft: '8px',
+              background: '#fff',
+              color: '#0ea5e9',
+              padding: '2px 8px',
+              borderRadius: '10px',
+              fontSize: '14px',
+              fontWeight: '700'
+            }}>
+              {[filterStadiu, filterLocality, filterFundingSource, filterComponent, filterMasura, viewMode !== 'total' ? '1' : ''].filter(Boolean).length}
+            </span>
+          )}
+        </button>
+      )}
+      
       {searchable && (
-        <div style={{ marginBottom: '16px' }}>
+        <div style={{ marginBottom: '16px' }} ref={tableContainerRef}>
           {/* Search bar */}
           <input
             type="text"
@@ -548,16 +669,17 @@ const EnhancedTable = ({
             }}
           />
           
-          {/* Filters */}
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-            {/* Progres Tehnic Filter */}
-            <div style={{ flex: '1 1 200px', minWidth: '200px' }}>
+          {/* Filters - Hidden on mobile by default */}
+          <div className="table-filters-sticky" data-mobile-visible={isMobileFiltersOpen}>
+            <div className="table-filters-sticky-content" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            {/* Visualization Mode Filter */}
+            <div style={{ flex: '1 1 calc(33.333% - 8px)', minWidth: '200px' }}>
               <label style={{ display: 'block', fontSize: '12px', fontWeight: '500', marginBottom: '4px', color: '#64748b' }}>
-                Progres Tehnic
+                📊 VIZUALIZARE
               </label>
               <select
-                value={filterStadiu}
-                onChange={(e) => setFilterStadiu(e.target.value)}
+                value={viewMode}
+                onChange={(e) => { setViewMode(e.target.value); closeMobileSidebar(); }}
                 style={{
                   width: '100%',
                   padding: '8px 12px',
@@ -568,21 +690,20 @@ const EnhancedTable = ({
                   outline: 'none'
                 }}
               >
-                <option value="">Toate valorile</option>
-                {uniqueStadiu.map(value => (
-                  <option key={value} value={value}>{value}</option>
-                ))}
+                <option value="total">Toate Proiectele</option>
+                <option value="national">Proiecte Naționale</option>
+                <option value="local">Proiecte Locale</option>
               </select>
             </div>
             
             {/* Locality Filter */}
-            <div style={{ flex: '1 1 200px', minWidth: '200px' }}>
+            <div style={{ flex: '1 1 calc(33.333% - 8px)', minWidth: '200px' }}>
               <label style={{ display: 'block', fontSize: '12px', fontWeight: '500', marginBottom: '4px', color: '#64748b' }}>
-                Localitate
+                🏘️ ALEGE LOCALITATEA
               </label>
               <select
                 value={filterLocality}
-                onChange={(e) => setFilterLocality(e.target.value)}
+                onChange={(e) => { setFilterLocality(e.target.value); closeMobileSidebar(); }}
                 style={{
                   width: '100%',
                   padding: '8px 12px',
@@ -600,14 +721,89 @@ const EnhancedTable = ({
               </select>
             </div>
             
+            {/* Component Filter */}
+            <div style={{ flex: '1 1 calc(33.333% - 8px)', minWidth: '200px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: '500', marginBottom: '4px', color: '#64748b' }}>
+                🎯 ALEGE COMPONENTA
+              </label>
+              <select
+                value={filterComponent}
+                onChange={(e) => { setFilterComponent(e.target.value); closeMobileSidebar(); }}
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  border: '2px solid #e5e7eb',
+                  borderRadius: '8px',
+                  fontSize: '13px',
+                  fontWeight: '500',
+                  outline: 'none'
+                }}
+              >
+                <option value="">Toate componentele</option>
+                {uniqueComponents.map(value => (
+                  <option key={value} value={value}>{value}</option>
+                ))}
+              </select>
+            </div>
+            
+            {/* Măsură Filter */}
+            <div style={{ flex: '1 1 calc(33.333% - 8px)', minWidth: '200px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: '500', marginBottom: '4px', color: '#64748b' }}>
+                📋 COD MĂSURĂ
+              </label>
+              <select
+                value={filterMasura}
+                onChange={(e) => { setFilterMasura(e.target.value); closeMobileSidebar(); }}
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  border: '2px solid #e5e7eb',
+                  borderRadius: '8px',
+                  fontSize: '13px',
+                  fontWeight: '500',
+                  outline: 'none'
+                }}
+              >
+                <option value="">Toate măsurile</option>
+                {uniqueMasuri.map(value => (
+                  <option key={value} value={value}>{value}</option>
+                ))}
+              </select>
+            </div>
+            
+            {/* Progres Tehnic Filter */}
+            <div style={{ flex: '1 1 calc(33.333% - 8px)', minWidth: '200px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: '500', marginBottom: '4px', color: '#64748b' }}>
+                Progres Tehnic
+              </label>
+              <select
+                value={filterStadiu}
+                onChange={(e) => { setFilterStadiu(e.target.value); closeMobileSidebar(); }}
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  border: '2px solid #e5e7eb',
+                  borderRadius: '8px',
+                  fontSize: '13px',
+                  fontWeight: '500',
+                  outline: 'none'
+                }}
+              >
+                <option value="">Toate valorile</option>
+                {uniqueStadiu.map(value => (
+                  <option key={value} value={value}>{value}</option>
+                ))}
+              </select>
+            </div>
+            
             {/* Funding Source Filter */}
-            <div style={{ flex: '1 1 200px', minWidth: '200px' }}>
+            <div style={{ flex: '1 1 calc(33.333% - 8px)', minWidth: '200px' }}>
               <label style={{ display: 'block', fontSize: '12px', fontWeight: '500', marginBottom: '4px', color: '#64748b' }}>
                 Sursă Finanțare
               </label>
               <select
                 value={filterFundingSource}
-                onChange={(e) => setFilterFundingSource(e.target.value)}
+                onChange={(e) => { setFilterFundingSource(e.target.value); closeMobileSidebar(); }}
                 style={{
                   width: '100%',
                   padding: '8px 12px',
@@ -626,13 +822,16 @@ const EnhancedTable = ({
             </div>
             
             {/* Clear Filters Button */}
-            {(filterStadiu || filterLocality || filterFundingSource) && (
+            {(filterStadiu || filterLocality || filterFundingSource || filterComponent || filterMasura || viewMode !== 'total') && (
               <div style={{ flex: '0 0 auto', display: 'flex', alignItems: 'flex-end' }}>
                 <button
                   onClick={() => {
                     setFilterStadiu('')
                     setFilterLocality('')
                     setFilterFundingSource('')
+                    setFilterComponent('')
+                    setFilterMasura('')
+                    setViewMode('total')
                   }}
                   style={{
                     padding: '8px 16px',
@@ -650,6 +849,28 @@ const EnhancedTable = ({
                 </button>
               </div>
             )}
+            
+            {/* Close Filters Button - VISIBLE ONLY ON MOBILE */}
+            <button
+              onClick={() => setIsMobileFiltersOpen(false)}
+              className="close-filters-btn"
+              style={{
+                display: 'none',
+                width: '100%',
+                padding: '12px 20px',
+                background: '#64748b',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                marginTop: '12px'
+              }}
+            >
+              Închide
+            </button>
+            </div>
           </div>
         </div>
       )}
