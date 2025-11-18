@@ -502,7 +502,33 @@ const EnhancedTable = ({
             </div>
             <div className="mobile-table-card-detail">
               <div className="mobile-table-card-detail-label">Progres Tehnic</div>
-              <div className="mobile-table-card-detail-value">{item.stage || '-'}</div>
+              <div className="mobile-table-card-detail-value" style={{ color: '#059669', fontWeight: '700' }}>
+                {(() => {
+                  const progresFizic = item.PROGRES_FIZIC
+                  const progresFinanciar = item.PROGRES_FINANCIAR
+                  const codMasura = item.measureCode || ''
+                  const isReform = /^R[1-9]$/.test(codMasura)
+                  
+                  let percentageValue = null
+                  
+                  if (progresFizic !== null && progresFizic !== undefined && progresFizic !== '') {
+                    let progresFizicStr = String(progresFizic).trim()
+                    if (progresFizicStr.startsWith(',')) {
+                      progresFizicStr = '0' + progresFizicStr
+                    }
+                    const parsed = parseFloat(progresFizicStr.replace(',', '.'))
+                    percentageValue = !isNaN(parsed) ? parsed : 0
+                  } else if (isReform && progresFinanciar !== null && progresFinanciar !== undefined) {
+                    percentageValue = progresFinanciar
+                  } else {
+                    percentageValue = 0
+                  }
+                  
+                  const percentageRaw = percentageValue * 100
+                  const percentage = percentageRaw === 100 ? '100' : percentageRaw.toFixed(2)
+                  return `${percentage}%`
+                })()}
+              </div>
             </div>
           </div>
           
@@ -510,7 +536,18 @@ const EnhancedTable = ({
           <div className="mobile-table-card-row">
             <div className="mobile-table-card-detail">
               <div className="mobile-table-card-detail-label">Progres Financiar</div>
-              <div className="mobile-table-card-detail-value" style={{ color: '#94a3b8', fontStyle: 'italic' }}>-</div>
+              <div className="mobile-table-card-detail-value" style={{ fontWeight: '500' }}>
+                {(() => {
+                  const progresFinanciar = item.PROGRES_FINANCIAR
+                  const valueToDisplay = progresFinanciar !== null && progresFinanciar !== undefined 
+                    ? progresFinanciar 
+                    : 0
+                  
+                  const percentageRaw = valueToDisplay * 100
+                  const percentage = percentageRaw === 100 ? '100' : percentageRaw.toFixed(2)
+                  return `${percentage}%`
+                })()}
+              </div>
             </div>
           </div>
           
@@ -1994,16 +2031,87 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
               render: (value, item) => formatMoneyWithCurrency(value, item.value_ron)
             },
             {
-              key: 'stage',
+              key: 'progress',
               label: 'Progres Tehnic',
-              searchable: true,
-              render: (value) => value || '-'
+              numeric: true,
+              searchable: false,
+              sortable: true,
+              sortValue: (item) => {
+                const progresFizic = item.PROGRES_FIZIC
+                const progresFinanciar = item.PROGRES_FINANCIAR
+                const codMasura = item.measureCode || ''
+                const isReform = /^R[1-9]$/.test(codMasura)
+                
+                if (progresFizic !== null && progresFizic !== undefined && progresFizic !== '') {
+                  let str = String(progresFizic).trim()
+                  if (str.startsWith(',')) str = '0' + str
+                  const parsed = parseFloat(str.replace(',', '.'))
+                  return !isNaN(parsed) ? parsed : 0
+                } else if (isReform && progresFinanciar !== null && progresFinanciar !== undefined) {
+                  return progresFinanciar
+                }
+                return 0
+              },
+              render: (value, item) => {
+                const progresFizic = item.PROGRES_FIZIC
+                const progresFinanciar = item.PROGRES_FINANCIAR
+                const codMasura = item.measureCode || ''
+                const isReform = /^R[1-9]$/.test(codMasura)
+                
+                let percentageValue = null
+                
+                if (progresFizic !== null && progresFizic !== undefined && progresFizic !== '') {
+                  let progresFizicStr = String(progresFizic).trim()
+                  if (progresFizicStr.startsWith(',')) {
+                    progresFizicStr = '0' + progresFizicStr
+                  }
+                  const parsed = parseFloat(progresFizicStr.replace(',', '.'))
+                  percentageValue = !isNaN(parsed) ? parsed : 0
+                } else if (isReform && progresFinanciar !== null && progresFinanciar !== undefined) {
+                  percentageValue = progresFinanciar
+                } else {
+                  percentageValue = 0
+                }
+                
+                const percentageRaw = percentageValue * 100
+                const percentage = percentageRaw === 100 ? '100' : percentageRaw.toFixed(2)
+                
+                return <div style={{ 
+                  fontSize: '12px', 
+                  minWidth: '100px', 
+                  textAlign: 'center',
+                  fontWeight: '700',
+                  whiteSpace: 'nowrap',
+                  padding: '2px 4px',
+                  color: '#059669'
+                }}>{percentage}%</div>
+              }
             },
             {
               key: 'financialProgress',
               label: 'Progres Financiar',
+              numeric: true,
               searchable: false,
-              render: (value) => <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>-</span>
+              sortable: true,
+              sortValue: (item) => {
+                return item.PROGRES_FINANCIAR ?? 0
+              },
+              render: (value, item) => {
+                const progresFinanciar = item.PROGRES_FINANCIAR
+                const valueToDisplay = progresFinanciar !== null && progresFinanciar !== undefined 
+                  ? progresFinanciar 
+                  : 0
+                
+                const percentageRaw = valueToDisplay * 100
+                const percentage = percentageRaw === 100 ? '100' : percentageRaw.toFixed(2)
+                
+                return <div style={{ 
+                  fontSize: '12px', 
+                  minWidth: '100px', 
+                  textAlign: 'center',
+                  fontWeight: '500'
+                }}>{percentage}%</div>
+              }
             },
             {
               key: 'componentCode',

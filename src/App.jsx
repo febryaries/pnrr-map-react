@@ -4,6 +4,7 @@ import MapView from './components/MapView'
 import CountyDetails from './components/CountyDetails'
 import SemanticSearchPage from './pages/SemanticSearchPage'
 import TimelinePage from './pages/TimelinePage'
+import Footer from './components/Footer'
 import { mockData } from './data/data'
 import { useDataEndpoint } from './hooks/useDataEndpoint'
 import { FALLBACK_DATA_DATE } from './constants/PNRRConstants'
@@ -236,6 +237,7 @@ function App() {
         <Route path="/semantic-search" element={<SemanticSearchPage />} />
         <Route path="/absorbtie-in-timp" element={<TimelinePage onCountyClick={handleCountyClick} />} />
       </Routes>
+      <Footer />
     </div>
   )
 }
