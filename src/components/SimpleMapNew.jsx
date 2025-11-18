@@ -222,9 +222,10 @@ function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick }) 
       if (hcKey) {
         countyDataMap[hcKey] = {
           name: county.name,
-          value: county.value || 0,
-          totalEUR: county.value || 0,
-          paymentsCount: county.payments || 0
+          value: county.totalEUR || 0,
+          totalEUR: county.totalEUR || 0,
+          paymentsCount: county.paymentsCount || 0,
+          beneficiariesCount: county.beneficiariesCount || 0
         };
       } else {
         console.warn('⚠️ No hc-key found for county:', county.name, 'normalized:', normalizedName);
@@ -244,7 +245,8 @@ function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick }) 
         name: data?.name || code,
         value: data?.value || 0,
         totalEUR: data?.totalEUR || 0,
-        paymentsCount: data?.paymentsCount || 0
+        paymentsCount: data?.paymentsCount || 0,
+        beneficiariesCount: data?.beneficiariesCount || 0
       };
     });
     
@@ -311,6 +313,7 @@ function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick }) 
           const point = this.point;
           const millions = (point.totalEUR / 1000000).toFixed(2);
           const payments = point.paymentsCount || 0;
+          const beneficiaries = point.beneficiariesCount || 0;
           
           // Format numbers with Romanian locale
           const fmtNum = (num) => num.toLocaleString('ro-RO');
@@ -319,6 +322,7 @@ function SimpleMapNew({ currentData = null, isPlaying = false, onCountyClick }) 
             <strong>${point.name}</strong><br/>
             Valoare: <strong>${millions} mil EUR</strong><br/>
             Plăți: ${fmtNum(payments)}<br/>
+            Beneficiari: ${fmtNum(beneficiaries)}<br/>
             <div style="margin-top: 8px;">
               <button onclick="window.handleCountyClick('${point.code}', '${point.name}')" 
                       style="padding: 6px 10px; background: #0ea5e9; color: #fff; border: 0; border-radius: 8px; font-weight: 600; cursor: pointer;">

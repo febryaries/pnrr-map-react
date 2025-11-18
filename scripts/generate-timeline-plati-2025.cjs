@@ -127,11 +127,24 @@ async function generateTimeline() {
       latestDate = await getLatestDataDate();
     } catch (error) {
       console.log(`⚠️  Could not fetch latest date: ${error.message}`);
-      console.log(`📅 Using fallback date: 20251110\n`);
-      latestDate = '20251110';
+      console.log(`📅 Using fallback date: 20251117\n`);
+      latestDate = '20251117';
     }
     
-    // 2. Download data
+    // 2. Download indicatori_total for official beneficiaries count
+    let officialBeneficiaries = null;
+    try {
+      const indicatorsUrl = `https://mfe.gov.ro/pnrr-dashboard/generator/data/${latestDate}-indicatori_total.json.gz`;
+      const indicators = await downloadAndDecompress(indicatorsUrl);
+      // API structure: { items: [{ nr_beneficiari_plati: 4928, ... }] }
+      officialBeneficiaries = indicators.items?.[0]?.nr_beneficiari_plati;
+      console.log(`✅ Official beneficiaries from API: ${officialBeneficiaries}\n`);
+    } catch (error) {
+      console.log(`⚠️  Could not fetch indicators: ${error.message}`);
+      console.log(`📊 Will calculate beneficiaries from payments\n`);
+    }
+    
+    // 3. Download payments data
     const url = `https://mfe.gov.ro/pnrr-dashboard/generator/data/${latestDate}-plati_pnrr.json.gz`;
     const allPayments = await downloadAndDecompress(url);
     console.log(`✅ Downloaded ${allPayments.length} total payments\n`);
@@ -232,6 +245,12 @@ async function generateTimeline() {
       const [year, monthNum] = month.split('-');
       const monthName = ROMANIAN_MONTHS[monthNum];
       
+      // Use official beneficiaries count for last month if available
+      const isLastMonth = index === targetMonths.length - 1;
+      const beneficiariesCount = (isLastMonth && officialBeneficiaries) 
+        ? officialBeneficiaries 
+        : beneficiaries.size;
+      
       timeline.push({
         date: month,
         dateYYYYMMDD: month.replace(/-/g, ''),
@@ -239,11 +258,12 @@ async function generateTimeline() {
         totalPayments: cumulativePayments.length,
         totalEUR: Math.round(totalEUR * 100) / 100,
         totalRON: Math.round(totalRON * 100) / 100,
-        uniqueBeneficiaries: beneficiaries.size,
+        uniqueBeneficiaries: beneficiariesCount,
         counties
       });
       
-      console.log(`  ✓ ${monthName}: ${cumulativePayments.length} plăți, ${(totalEUR / 1000000).toFixed(2)} mil EUR, ${beneficiaries.size} beneficiari`);
+      const displayBenef = isLastMonth && officialBeneficiaries ? officialBeneficiaries : beneficiaries.size;
+      console.log(`  ✓ ${monthName}: ${cumulativePayments.length} plăți, ${(totalEUR / 1000000).toFixed(2)} mil EUR, ${displayBenef} beneficiari${isLastMonth ? ' (oficial API)' : ''}`);
     });
     
     console.log(`\n✅ Generated ${timeline.length} timeline frames\n`);

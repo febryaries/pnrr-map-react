@@ -4,7 +4,7 @@
  * Display statistics for current timeline frame (total value, projects, date)
  */
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { formatMoney, formatNumber } from '../constants/PNRRConstants';
 import './TimelineStats.css';
 
@@ -12,10 +12,7 @@ function TimelineStats({
   currentData,
   currentDate,
   isLoading = false,
-  isPlaying = false,
-  totalIndicators = null,
-  currentIndex = 0,
-  totalMonths = 35
+  isPlaying = false
 }) {
   const [currency, setCurrency] = useState('EUR');
   const [animatedValue, setAnimatedValue] = useState(0);
@@ -26,23 +23,10 @@ function TimelineStats({
   const totalRON = currentData?.totalRON || 0;
   const totalPayments = currentData?.totalPayments || 0;
   
-  // Use LINEAR INTERPOLATION from ~141 to 4.937 based on timeline progress
-  // Formula: (currentIndex + 1) / (totalMonths + 1) ensures proper distribution
-  // Ianuarie 2023 (index 0): 1/36 × 4937 = 137 beneficiari
-  // Noiembrie 2025 (index 34): 35/36 × 4937 = 4797, then we use exact API value
-  const totalUniqueBeneficiaries = totalIndicators?.nr_beneficiari_plati || 4937;
-  const uniqueBeneficiaries = currentIndex === totalMonths 
-    ? totalUniqueBeneficiaries 
-    : Math.round(((currentIndex + 1) / (totalMonths + 1)) * totalUniqueBeneficiaries);
-
-  // Reset to 0 ONLY when going back to first month (Ianuarie 2023)
-  useEffect(() => {
-    if (currentIndex === 0) {
-      setAnimatedValue(0);
-      setAnimatedProjects(0);
-      setAnimatedBeneficiaries(0);
-    }
-  }, [currentIndex]);
+  // Use REAL CUMULATIVE beneficiaries from timeline data
+  // This is calculated in useTimelinePlati.js by summing uniqueBeneficiaries from each month
+  // Example: Month 1: 7, Month 2: 7+27=34, Month 3: 34+55=89, etc.
+  const uniqueBeneficiaries = currentData?.cumulativeBeneficiaries || 0;
 
   // Animate value changes - smooth transition între valori (arată evoluția reală)
   useEffect(() => {

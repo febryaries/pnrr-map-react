@@ -58,16 +58,14 @@ export function useTimelinePlati() {
         }));
         setAvailableDates(dates);
         
-        // Set LAST frame as current (most recent data) with cumulative beneficiaries
+        // Set LAST frame as current (most recent data)
+        // uniqueBeneficiaries is already cumulative from the script
         if (filteredTimeline.length > 0) {
           const lastIndex = filteredTimeline.length - 1;
-          let cumulativeBeneficiaries = 0;
-          for (let i = 0; i <= lastIndex; i++) {
-            cumulativeBeneficiaries += filteredTimeline[i]?.uniqueBeneficiaries || 0;
-          }
+          const lastFrame = filteredTimeline[lastIndex];
           setCurrentData({
-            ...filteredTimeline[lastIndex],
-            cumulativeBeneficiaries
+            ...lastFrame,
+            cumulativeBeneficiaries: lastFrame.uniqueBeneficiaries || 0
           });
         }
         
@@ -95,12 +93,10 @@ export function useTimelinePlati() {
       return null;
     }
     
-    // Calculate CUMULATIVE beneficiaries up to current index
-    // This ensures beneficiaries count grows progressively: 7 → 34 → 89 → ... → 4937
-    let cumulativeBeneficiaries = 0;
-    for (let i = 0; i <= index; i++) {
-      cumulativeBeneficiaries += timelineData.timeline[i]?.uniqueBeneficiaries || 0;
-    }
+    // uniqueBeneficiaries from JSON is ALREADY CUMULATIVE
+    // It's calculated by the script using Set() for all payments up to that month
+    // So we use it directly, no need to sum!
+    const cumulativeBeneficiaries = frame.uniqueBeneficiaries || 0;
     
     console.log(`📅 getDataForIndex(${index}):`, {
       date: frame.date,

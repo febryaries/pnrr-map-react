@@ -4,13 +4,12 @@
  * Main page for "Absorbție în Timp" - animated timeline visualization
  */
 
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import TimelineControls from '../components/TimelineControls';
 import TimelineStats from '../components/TimelineStats';
 import SimpleMapNew from '../components/SimpleMapNew';
 import { useTimelinePlati } from '../hooks/useTimelinePlati';
-import { useTotalIndicators } from '../hooks/useTotalIndicators';
 import './TimelinePage.css';
 
 function TimelinePage({ onCountyClick }) {
@@ -21,9 +20,6 @@ function TimelinePage({ onCountyClick }) {
   
   // Load pre-generated timeline data (Plăți 2023-2025)
   const { availableDates, currentData, isLoading, getDataForIndex } = useTimelinePlati();
-  
-  // Load total indicators from official API for correct beneficiaries count
-  const { totalIndicators } = useTotalIndicators();
   
   // Start from last month (Noiembrie 2025) - will be set when data loads
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -136,11 +132,8 @@ function TimelinePage({ onCountyClick }) {
           cumulativeBeneficiaries: currentData.cumulativeBeneficiaries || 0
         } : null}
         currentDate={formattedDates[currentIndex]}
-        currentIndex={currentIndex}
-        totalMonths={availableDates.length - 1}
         isLoading={isLoading}
         isPlaying={isPlaying}
-        totalIndicators={totalIndicators}
       />
 
       {/* Controls */}
