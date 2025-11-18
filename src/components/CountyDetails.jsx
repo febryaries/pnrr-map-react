@@ -1621,11 +1621,8 @@ const CountyDetails = ({ county, data, onBackToMap, onLoadingComplete, isParentL
           : `Nu au fost identificate localități cu investiții în proiectele din acest județ${activeProgram ? ` (${COMPONENT_MAPPING[activeProgram]?.label})` : ''}`
       },
       mapNavigation: {
-        enabled: true,
-        enableDoubleClickZoomTo: true,
-        buttonOptions: {
-          verticalAlign: 'bottom'
-        }
+        enabled: false,
+        enableDoubleClickZoomTo: false
       },
       tooltip: {
         enabled: true
