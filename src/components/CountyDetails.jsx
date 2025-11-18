@@ -185,9 +185,13 @@ const EnhancedTable = ({
   const sortedData = useMemo(() => {
     if (!sortColumn) return filteredData
 
+    // Find column definition to check for custom sortValue
+    const columnDef = columns.find(col => col.key === sortColumn)
+
     return [...filteredData].sort((a, b) => {
-      const aVal = a[sortColumn]
-      const bVal = b[sortColumn]
+      // Use sortValue function if defined, otherwise use direct value
+      const aVal = columnDef?.sortValue ? columnDef.sortValue(a) : a[sortColumn]
+      const bVal = columnDef?.sortValue ? columnDef.sortValue(b) : b[sortColumn]
       
       // Handle numeric values
       if (typeof aVal === 'number' && typeof bVal === 'number') {
@@ -204,7 +208,7 @@ const EnhancedTable = ({
         return bStr.localeCompare(aStr)
       }
     })
-  }, [filteredData, sortColumn, sortDirection])
+  }, [filteredData, sortColumn, sortDirection, columns])
 
   // Paginate data
   const totalPages = Math.ceil(sortedData.length / itemsPerPage)
