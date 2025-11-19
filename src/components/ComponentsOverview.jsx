@@ -501,8 +501,8 @@ const ComponentsOverview = ({
                                             <div 
                                               key={subIndex} 
                                               className="submeasure-item"
-                                              onClick={() => handleMeasureClick(component.code, sub.code)}
-                                              title="Click pentru a filtra tabelul după această sub-măsură"
+                                              onClick={() => handleMeasureClick(component.code, measureCode)}
+                                              title="Click pentru a filtra tabelul după această măsură"
                                             >
                                               <span className="submeasure-code">{sub.code}</span>
                                               <span className="submeasure-desc">{sub.description}</span>
