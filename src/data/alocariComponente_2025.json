@@ -128,7 +128,7 @@
         {
           "masura": "I1",
           "finantare": "loan",
-          "titlul_masurii": "I1. Instituirea sistemelor de management integrat al deșeurilor municipale la nivel de județ sau la nivel de oraș/localitate:\n• I1.b Livrarea de insule ecologice digitalizate pentru colectarea separată a deșeurilor la nivel local - 72,75 mil\n• I1.c. Construirea de centre integrate de colectare separată pentru aglomerări urbane - 16,74 mil\n• I1.d. Construirea sau livrarea de instalații de reciclare a deșeurilor în vederea atingerii țintelor de reciclare din pachetul economiei circulare - 76,15 mil",
+          "titlul_masurii": "I1. Instituirea sistemelor de management integrat al deșeurilor municipale la nivel de județ sau la nivel de oraș/localitate: I1.b Livrarea de insule ecologice digitalizate pentru colectarea separată a deșeurilor la nivel local - 72,75 mil; I1.c. Construirea de centre integrate de colectare separată pentru aglomerări urbane - 16,74 mil; I1.d. Construirea sau livrarea de instalații de reciclare a deșeurilor în vederea atingerii țintelor de reciclare din pachetul economiei circulare - 76,15 mil",
           "alocare_financiara_euro": 165643845,
           "executat_euro": 33277834,
           "executat_procent": 20.09
@@ -734,7 +734,7 @@
         {
           "masura": "I2",
           "finantare": "loan",
-          "titlul_masurii": "I2. Instrumente financiare pentru sectorul privat:\n• 2.1 Garanția de portofoliu pentru reziliență - 500 mil\n• 2.2 Garanția de portofoliu pentru acțiune climatică - 0 mil\n• 2.3 Fondul de fonduri de capital de risc pentru redresare - 400 mil\n• 2.4. Fond de fonduri pentru digitalizare, acțiune climatică și alte domenii de interes - 100 mil\n• 2.5: Investiții în eficiență energetică în sectorul rezidențial și al clădirilor - 50 mil",
+          "titlul_masurii": "I2. Instrumente financiare pentru sectorul privat - 2.1 Garanția de portofoliu pentru reziliență - 500 mil; 2.2 Garanția de portofoliu pentru acțiune climatică - 0 mil; 2.3 Fondul de fonduri de capital de risc pentru redresare - 400 mil; 2.4. Fond de fonduri pentru digitalizare, acțiune climatică și alte domenii de interes - 100 mil; 2.5: Investiții în eficiență energetică în sectorul rezidențial și al clădirilor - 50 mil",
           "alocare_financiara_euro": 1050000000,
           "executat_euro": 138547169,
           "executat_procent": 13.19
@@ -750,7 +750,7 @@
         {
           "masura": "I3",
           "finantare": "loan",
-          "titlul_masurii": "I3. Scheme de ajutor pentru sectorul privat:\n• 3.1 Schemă de ajutor pentru digitalizarea IMM-urilor - 0 mil\n• 3.2 Schema de minimis pentru ajutarea firmelor din România în procesul de listare la bursă - 0,6 mil",
+          "titlul_masurii": "I3. Scheme de ajutor pentru sectorul privat - 3.1 Schemă de ajutor pentru digitalizarea IMM-urilor - 0 mil; 3.2 schema de minimis pentru ajutarea firmelor din România în procesul de listare la bursă - 0,6 mil",
           "alocare_financiara_euro": 600000,
           "executat_euro": 13,
           "executat_procent": 0.0

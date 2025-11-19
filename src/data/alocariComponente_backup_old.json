@@ -2,27 +2,28 @@
   "components": [
     {
       "componenta": "C1",
+      "numeComponenta": "Managementul apei",
       "masuri": [
         {
           "masura": "I1",
           "finantare": "loan",
-          "titlul_masurii": "I1. Construirea de rețele de apă și sisteme de canalizare în aglomerări mai mari de 2 000 de locuitori echivalenți",
+          "titlul_masurii": "I1. Extinderea sistemelor de apă și canalizare în aglomerări mai mari de 2000 de locuitori echivalenți",
           "alocare_financiara_euro": 244838539,
-          "executat_euro": 51194398,
-          "executat_procent": 20.91
+          "executat_euro": 50017454,
+          "executat_procent": 20.43
         },
         {
           "masura": "I2",
           "finantare": "loan",
-          "titlul_masurii": "I2. Colectarea apelor uzate în aglomerări mai mici de 2000 de locuitori echivalenți",
+          "titlul_masurii": "I2. Colectarea apelor uzate în aglomerări mai mici de 2.000 de locuitori echivalenți",
           "alocare_financiara_euro": 57974587,
-          "executat_euro": 26493459,
-          "executat_procent": 45.7
+          "executat_euro": 25049710,
+          "executat_procent": 43.21
         },
         {
           "masura": "I4",
           "finantare": "loan",
-          "titlul_masurii": "I4. Reabilitarea acumulărilor existente care necesită intervenții de urgență pentru exploatarea în condiții de siguranță",
+          "titlul_masurii": "I4. Reabilitarea acumularilor existente care necesita interventii de urgenta pentru siguranta utilizarii",
           "alocare_financiara_euro": 33003856,
           "executat_euro": 1185419,
           "executat_procent": 3.59
@@ -32,20 +33,20 @@
           "finantare": "loan",
           "titlul_masurii": "I5. Dotarea adecvată a administrațiilor bazinale pentru monitorizarea infrastructurii, prevenirea și gestionarea situațiilor de urgență",
           "alocare_financiara_euro": 35000000,
-          "executat_euro": 15761771,
-          "executat_procent": 45.03
+          "executat_euro": 12484331,
+          "executat_procent": 35.67
         },
         {
           "masura": "I6",
           "finantare": "grant",
-          "titlul_masurii": "I6. Livrarea cadastrului apelor",
+          "titlul_masurii": "I6. Realizarea cadastrului apelor",
           "alocare_financiara_euro": 30000000,
           "executat_euro": 499002,
           "executat_procent": 1.66
         },
         {
           "masura": "R1",
-          "finantare": "loan",
+          "finantare": "grant",
           "titlul_masurii": "R1. Consolidarea cadrului de reglementare pentru managementul sustenabil al sectorului de apă și apă uzată și pentru accelerarea accesului populației la servicii de calitate conform directivelor europene",
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
@@ -54,7 +55,7 @@
         {
           "masura": "R2",
           "finantare": "loan",
-          "titlul_masurii": "R2. Reconfigurarea actualului mecanism economic al Administrației Naționale Apele Române (ANAR) în vederea asigurării modernizării și întreținerii sistemului național de gospodărire a apelor",
+          "titlul_masurii": "R2. Reconfigurarea actualului mecanism economic al ANAR în vederea asigurării modernizării și întreținerii sistemului național de gospodărire a apelor, precum și a implementării corespunzătoare a Directivei-cadru privind apa și a Directivei privind inundațiile",
           "alocare_financiara_euro": 2500000,
           "executat_euro": 2478414,
           "executat_procent": 99.14
@@ -63,27 +64,28 @@
     },
     {
       "componenta": "C2",
+      "numeComponenta": "Protejarea pădurilor și a biodiversității",
       "masuri": [
         {
           "masura": "I1",
           "finantare": "grant",
           "titlul_masurii": "I1. Campania națională de împădurire și reîmpădurire, inclusiv păduri urbane",
           "alocare_financiara_euro": 307547498,
-          "executat_euro": 109887759,
-          "executat_procent": 35.73
+          "executat_euro": 73088923,
+          "executat_procent": 23.77
         },
         {
           "masura": "I2",
           "finantare": "grant",
-          "titlul_masurii": "I2. Capacități moderne de producere a materialului forestier de reproducere",
+          "titlul_masurii": "I2. Dezvoltarea de capacități moderne de producere a materialului forestier de reproducere",
           "alocare_financiara_euro": 50000000,
-          "executat_euro": 20127093,
-          "executat_procent": 40.25
+          "executat_euro": 17622067,
+          "executat_procent": 35.24
         },
         {
           "masura": "I3",
           "finantare": "grant",
-          "titlul_masurii": "I3. Identificarea zonelor potențiale de protecție strictă în habitate naturale terestre și marine în conformitate cu Strategia UE privind biodiversitatea pentru 2030",
+          "titlul_masurii": "I3. Identificarea zonelor potențiale de protecție strictă în habitate naturale terestre și marine în vederea punerii în aplicare a Strategiei UE privind biodiversitatea pentru 2030",
           "alocare_financiara_euro": 5000000,
           "executat_euro": 0,
           "executat_procent": 0.0
@@ -91,7 +93,7 @@
         {
           "masura": "I4",
           "finantare": "grant",
-          "titlul_masurii": "I4. Sistem de monitorizare a sturionilor sălbatici de-a lungul Dunării de Jos",
+          "titlul_masurii": "I4. Sistem de monitorizare pentru sturioni salbatici in Dunarea de Jos",
           "alocare_financiara_euro": 10001000,
           "executat_euro": 0,
           "executat_procent": 0.0
@@ -99,7 +101,7 @@
         {
           "masura": "I5",
           "finantare": "grant",
-          "titlul_masurii": "I5. Sisteme integrate de reducere a riscurilor generate de viituri torențiale în bazinete forestiere expuse unor astfel de fenomene",
+          "titlul_masurii": "I5. Sisteme integrate de reducere a riscurilor generate de viituri torențiale în bazinete forestiere",
           "alocare_financiara_euro": 22000000,
           "executat_euro": 12817720,
           "executat_procent": 58.26
@@ -107,7 +109,7 @@
         {
           "masura": "R1",
           "finantare": "grant",
-          "titlul_masurii": "R1. Reforma sistemului de management și a ce lui privind guvernanța în domeniul forestier printr o nouă Strategie forestieră națională și actele juridice subsecvente",
+          "titlul_masurii": "R1. Reforma sistemului de management și a celui privind guvernanța în domeniul forestier prin dezvoltarea unei noi Strategii forestiere naționale și a legislației subsecvente",
           "alocare_financiara_euro": 1000000,
           "executat_euro": 661400,
           "executat_procent": 66.14
@@ -115,7 +117,7 @@
         {
           "masura": "R2",
           "finantare": "grant",
-          "titlul_masurii": "R2. Reforma sistemului de management al ariilor naturale protejate pentru Strategia Europeană privind biodiversitatea",
+          "titlul_masurii": "R2. Reforma sistemului de management al ariilor naturale protejate în vederea implementării coerente și eficace a Strategiei Europene privind biodiversitate",
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
           "executat_procent": 0
@@ -124,27 +126,28 @@
     },
     {
       "componenta": "C3",
+      "numeComponenta": "Managementul deșeurilor",
       "masuri": [
         {
           "masura": "I1",
           "finantare": "loan",
-          "titlul_masurii": "I1. Instituirea sistemelor de management integrat al deșeurilor municipale la nivel de județ sau la nivel de oraș/localitate:\n• I1.b Livrarea de insule ecologice digitalizate pentru colectarea separată a deșeurilor la nivel local - 72,75 mil\n• I1.c. Construirea de centre integrate de colectare separată pentru aglomerări urbane - 16,74 mil\n• I1.d. Construirea sau livrarea de instalații de reciclare a deșeurilor în vederea atingerii țintelor de reciclare din pachetul economiei circulare - 76,15 mil",
+          "titlul_masurii": "I1. Dezvoltarea sistemelor de management integrat al deșeurilor municipale la nivel de județ sau la nivel de orașe/comune",
           "alocare_financiara_euro": 165643845,
-          "executat_euro": 33277834,
-          "executat_procent": 20.09
+          "executat_euro": 22057661,
+          "executat_procent": 9.19
         },
         {
           "masura": "I1",
           "finantare": "grant",
-          "titlul_masurii": "I1.a Construcția de centre de colectare a deșeurilor cu aport voluntar la nivel județean sau la nivel de oraș/localitate",
+          "titlul_masurii": "I1a. Constructie de centre voluntare de colectare a deseurilor la nivel de judet sau la nivel de orase/comune",
           "alocare_financiara_euro": 240106200,
-          "executat_euro": 125742962,
-          "executat_procent": 52.37
+          "executat_euro": 20313708,
+          "executat_procent": 12.26
         },
         {
           "masura": "I2",
           "finantare": "loan",
-          "titlul_masurii": "I2. Construirea infrastructurii pentru managementul gunoiului de grajd și al altor deșeuri agricole compostabile",
+          "titlul_masurii": "I2. Dezvoltarea infrastructurii pentru managementul gunoiului de grajd și al altor deșeuri agricole compostabile",
           "alocare_financiara_euro": 50196850,
           "executat_euro": 236147,
           "executat_procent": 0.47
@@ -152,7 +155,7 @@
         {
           "masura": "I3",
           "finantare": "grant",
-          "titlul_masurii": "I3. Capacități instituționale de monitorizare publică și control pentru gestionarea deșeurilor",
+          "titlul_masurii": "I3. Dezvoltarea capacităților instituționale de monitorizare publică și control pentru gestionarea deșeurilor",
           "alocare_financiara_euro": 13000000,
           "executat_euro": 6794785,
           "executat_procent": 52.27
@@ -160,7 +163,7 @@
         {
           "masura": "R1",
           "finantare": "grant",
-          "titlul_masurii": "R1. Sprijinirea guvernanței în domeniul gestionării deșeurilor în vederea accelerării tranziției către economia circulară",
+          "titlul_masurii": "R1. Îmbunătățirea guvernanței în domeniul gestionării deșeurilor în vederea accelerării tranziției către economia circulară.",
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
           "executat_procent": 0
@@ -169,43 +172,44 @@
     },
     {
       "componenta": "C4",
+      "numeComponenta": "Transport sustenabil",
       "masuri": [
         {
           "masura": "I1",
           "finantare": "loan",
-          "titlul_masurii": "I1. Modernizarea infrastructurii feroviare",
+          "titlul_masurii": "I1. Modernizarea și reînnoirea infrastructurii feroviare",
           "alocare_financiara_euro": 1874376400,
-          "executat_euro": 1097219407,
-          "executat_procent": 58.54
+          "executat_euro": 1029044282,
+          "executat_procent": 54.9
         },
         {
           "masura": "I2",
           "finantare": "loan",
-          "titlul_masurii": "I2. Material rulant feroviar",
+          "titlul_masurii": "I2-  Material rulant feroviar",
           "alocare_financiara_euro": 280829800,
-          "executat_euro": 176003682,
-          "executat_procent": 62.67
+          "executat_euro": 146803831,
+          "executat_procent": 52.28
         },
         {
           "masura": "I3",
           "finantare": "loan",
-          "titlul_masurii": "I3. Creșterea durabilității infrastructurii rutiere aferente rețelei TEN-T, taxarea drumurilor, managementul traficului și siguranța rutieră.",
-          "alocare_financiara_euro": 1098821135,
-          "executat_euro": 0,
-          "executat_procent": 0.0
+          "titlul_masurii": "I3.  Dezvoltarea infrastructurii rutiere durabile aferente rețelei TEN-T, taxarea drumurilor, managementul traficului și siguranța rutieră",
+          "alocare_financiara_euro": 1098821134,
+          "executat_euro": 1658641562,
+          "executat_procent": 150.95
         },
         {
           "masura": "I3",
           "finantare": "grant",
-          "titlul_masurii": "I3.a Creșterea durabilității infrastructurii rutiere aferente rețelei TEN-T, taxarea drumurilor, managementul traficului și siguranța rutieră.",
-          "alocare_financiara_euro": 2169200265,
-          "executat_euro": 1716102983,
-          "executat_procent": 79.11
+          "titlul_masurii": "I3a.  Dezvoltarea infrastructurii rutiere durabile aferente rețelei TEN-T, taxarea drumurilor, managementul traficului și siguranța rutieră",
+          "alocare_financiara_euro": 2169200266,
+          "executat_euro": 0,
+          "executat_procent": 0.0
         },
         {
           "masura": "R1",
           "finantare": "grant",
-          "titlul_masurii": "R1.Transport sustenabil, decarbonizare și siguranță rutieră",
+          "titlul_masurii": "R1. Transport sustenabil, decarbonizare și siguranță rutieră /Decarbonizarea rutieră în conformitate cu principiul „poluatorul plătește”",
           "alocare_financiara_euro": 10000000,
           "executat_euro": 0,
           "executat_procent": 0.0
@@ -215,34 +219,35 @@
           "finantare": "loan",
           "titlul_masurii": "R2. Management performant pentru transport de calitate - Îmbunătățirea capacității instituționale de management și guvernanță corporativă",
           "alocare_financiara_euro": 19000000,
-          "executat_euro": 2754102,
-          "executat_procent": 14.5
+          "executat_euro": 1378427,
+          "executat_procent": 7.25
         }
       ]
     },
     {
       "componenta": "C5",
+      "numeComponenta": "Valul Renovării",
       "masuri": [
         {
           "masura": "I1",
           "finantare": "loan",
-          "titlul_masurii": "I1. Instituirea unui fond pentru Valul renovării care să finanțeze lucrări de creștere a eficienței energetice a fondului construit existent",
-          "alocare_financiara_euro": 526229817,
-          "executat_euro": 0,
-          "executat_procent": 0.0
+          "titlul_masurii": "I1. Instituirea unui fond pentru Valul Renovării care să finanțeze lucrări de îmbunătățire a eficienței energetice a fondului construit",
+          "alocare_financiara_euro": 526228817,
+          "executat_euro": 1030189366,
+          "executat_procent": 195.77
         },
         {
           "masura": "I1",
           "finantare": "grant",
-          "titlul_masurii": "I1.a. Instituirea unui fond pentru Valul renovării care să finanțeze lucrări de creștere a eficienței energetice a fondului construit existent",
+          "titlul_masurii": "I1a. Instituirea unui fond pentru Valul Renovării care să finanțeze lucrări de îmbunătățire a eficienței energetice a fondului construit",
           "alocare_financiara_euro": 1387172898,
-          "executat_euro": 1162506111,
-          "executat_procent": 83.8
+          "executat_euro": 0,
+          "executat_procent": 0.0
         },
         {
           "masura": "I2",
           "finantare": "loan",
-          "titlul_masurii": "I2. Publicarea Registrului național digital al clădirilor",
+          "titlul_masurii": "I2. Implementarea Registrului național al clădirilor",
           "alocare_financiara_euro": 5000000,
           "executat_euro": 0,
           "executat_procent": 0.0
@@ -252,13 +257,13 @@
           "finantare": "loan",
           "titlul_masurii": "I4. Economie circulară și creșterea eficienței energetice a clădirilor istorice",
           "alocare_financiara_euro": 14850000,
-          "executat_euro": 1946312,
-          "executat_procent": 13.11
+          "executat_euro": 1313610,
+          "executat_procent": 8.85
         },
         {
           "masura": "R1",
           "finantare": "loan",
-          "titlul_masurii": "R1. Un cadru juridic și de reglementare simplificat și actualizat pentru a sprijini renovarea clădirilor ce vizează eficiența energetică",
+          "titlul_masurii": "R1. Realizarea unui cadru normativ simplificat și actualizat care să sprijine implementarea investițiilor în tranziția spre clădiri verzi și reziliente",
           "alocare_financiara_euro": 150000,
           "executat_euro": 22000,
           "executat_procent": 14.67
@@ -275,51 +280,52 @@
     },
     {
       "componenta": "C6",
+      "numeComponenta": "Energie",
       "masuri": [
         {
           "masura": "I2",
           "finantare": "loan",
           "titlul_masurii": "I2. Capacitățile de producție a hidrogenului verde care să fie utilizat pentru stocarea energiei electrice și/sau pentru decarbonizarea industriei",
           "alocare_financiara_euro": 86500000,
-          "executat_euro": 2860866,
-          "executat_procent": 3.31
+          "executat_euro": 6516,
+          "executat_procent": 0.01
         },
         {
           "masura": "I3",
           "finantare": "loan",
-          "titlul_masurii": "I3. Construirea unei producții combinate de energie termică și energie electrică (CHP) pe gaz flexibilă și de înaltă eficiență în sectorul încălzirii centralizate",
+          "titlul_masurii": "I3. Dezvoltarea unei producții combinate de energie termică și energie electrică (CHP) pe gaz flexibile și de înaltă eficiență în sectorul încălzirii centralizate",
           "alocare_financiara_euro": 86377743,
-          "executat_euro": 38040034,
-          "executat_procent": 44.04
-        },
-        {
-          "masura": "I4",
-          "finantare": "loan",
-          "titlul_masurii": "I4. Punerea în funcțiune a instalațiilor de producție fotovoltaică",
-          "alocare_financiara_euro": 50000000,
           "executat_euro": 0,
           "executat_procent": 0.0
         },
         {
           "masura": "I4",
-          "finantare": "grant",
-          "titlul_masurii": "I4.a Noi capacități de stocare a energiei electrice",
-          "alocare_financiara_euro": 80000000,
-          "executat_euro": 6516,
-          "executat_procent": 0.01
+          "finantare": "loan",
+          "titlul_masurii": "I4. Lant industrial de productie a panourilor fotovoltaice",
+          "alocare_financiara_euro": 50000000,
+          "executat_euro": 8473404,
+          "executat_procent": 13.24
         },
         {
-          "masura": "I5",
+          "masura": "I4",
           "finantare": "grant",
-          "titlul_masurii": "I5.a Asigurarea eficienţei energetice în sectorul industrial",
+          "titlul_masurii": "I4a. Noi capacități de stocare a energiei electrice",
+          "alocare_financiara_euro": 80000000,
+          "executat_euro": 2860866,
+          "executat_procent": 3.31
+        },
+        {
+          "masura": "I5a",
+          "finantare": "grant",
+          "titlul_masurii": "I5a. Asigurarea eficienței energetice în sectorul industrial",
           "alocare_financiara_euro": 64000000,
-          "executat_euro": 9208986,
-          "executat_procent": 14.39
+          "executat_euro": 28787172,
+          "executat_procent": 33.33
         },
         {
           "masura": "I5",
           "finantare": "loan",
-          "titlul_masurii": "I5. Asigurarea eficienţei energetice în sectorul industrial",
+          "titlul_masurii": "I5. Asigurarea eficienței energetice în sectorul industrial",
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
           "executat_procent": 0.0
@@ -335,15 +341,7 @@
         {
           "masura": "R2",
           "finantare": "grant",
-          "titlul_masurii": "R2. Reformarea guvernanței corporative a întreprinderilor de stat din sectorul energetic",
-          "alocare_financiara_euro": 0,
-          "executat_euro": 0,
-          "executat_procent": 0
-        },
-        {
-          "masura": "R3",
-          "finantare": "grant",
-          "titlul_masurii": "R3. Bugetarea verde",
+          "titlul_masurii": "R2. Îmbunătățirea guvernanței corporative a întreprinderilor de stat din sectorul energetic",
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
           "executat_procent": 0
@@ -351,7 +349,7 @@
         {
           "masura": "R4",
           "finantare": "loan",
-          "titlul_masurii": "R4. Instituirea unui cadru legislativ și de reglementare favorabil pentru hidrogenul din surse regenerabile",
+          "titlul_masurii": "R4. Dezvoltarea unui cadru legislativ și de reglementare favorabil tehnologiilor viitorului, în special hidrogen și soluții de stocare",
           "alocare_financiara_euro": 1000000,
           "executat_euro": 1000000,
           "executat_procent": 100.0
@@ -359,7 +357,7 @@
         {
           "masura": "R5",
           "finantare": "grant",
-          "titlul_masurii": "R5. Reducerea intensității energetice a economiei prin instituirea unui mecanism sustenabil de stimulare a eficienței energetice în industrie",
+          "titlul_masurii": "R5. Reducerea intensității energetice a economiei prin dezvoltarea unui mecanism sustenabil de stimulare a eficienței energetice în industrie şi de creștere a rezilienței",
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
           "executat_procent": 0
@@ -367,7 +365,15 @@
         {
           "masura": "R6",
           "finantare": "grant",
-          "titlul_masurii": "R6. Decarbonizarea sectorului încălzirii și răcirii",
+          "titlul_masurii": "R6. Creșterea competitivității și decarbonizarea sectorului de încălzire – răcire",
+          "alocare_financiara_euro": 0,
+          "executat_euro": 0,
+          "executat_procent": 0
+        },
+        {
+          "masura": "R3",
+          "finantare": "grant",
+          "titlul_masurii": "R3. Bugetare verde",
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
           "executat_procent": 0
@@ -376,6 +382,7 @@
     },
     {
       "componenta": "C7",
+      "numeComponenta": "Transformare digitală",
       "masuri": [
         {
           "masura": "I1",
@@ -386,140 +393,76 @@
           "executat_procent": 47.1
         },
         {
-          "masura": "I2",
-          "finantare": "grant",
-          "titlul_masurii": "I2. Dezvoltarea cloudului și migrarea în cloud",
-          "alocare_financiara_euro": 187050420,
-          "executat_euro": 4728865,
-          "executat_procent": 2.53
-        },
-        {
-          "masura": "I3",
-          "finantare": "grant",
-          "titlul_masurii": "I3. Instituirea sistemului de eHealth și telemedicină",
-          "alocare_financiara_euro": 300000000,
-          "executat_euro": 26091977,
-          "executat_procent": 8.7
-        },
-        {
-          "masura": "I4",
-          "finantare": "grant",
-          "titlul_masurii": "I4. Digitalizarea sistemului judiciar",
-          "alocare_financiara_euro": 242310000,
-          "executat_euro": 50970489,
-          "executat_procent": 21.04
-        },
-        {
-          "masura": "I5",
-          "finantare": "grant",
-          "titlul_masurii": "I5. Digitalizare in domeniul mediulu",
-          "alocare_financiara_euro": 47951280,
-          "executat_euro": 8237545,
-          "executat_procent": 17.18
-        },
-        {
-          "masura": "I6",
-          "finantare": "grant",
-          "titlul_masurii": "I6. Digitalizare în domeniul muncii și protecției sociale",
-          "alocare_financiara_euro": 85000000,
-          "executat_euro": 43076266,
-          "executat_procent": 50.68
-        },
-        {
-          "masura": "I7",
-          "finantare": "grant",
-          "titlul_masurii": "I7. Introducerea formularelor electronice (eForms) în domeniul achizițiilor publice",
-          "alocare_financiara_euro": 851600,
-          "executat_euro": 654792,
-          "executat_procent": 76.89
-        },
-        {
-          "masura": "I8",
-          "finantare": "grant",
-          "titlul_masurii": "I8. Carte de identitate electronică și semnătură digitală",
-          "alocare_financiara_euro": 129000000,
-          "executat_euro": 230861,
-          "executat_procent": 0.18
-        },
-        {
-          "masura": "I9",
-          "finantare": "grant",
-          "titlul_masurii": "I9. Digitalizarea sectorului organizațiilor neguvernamentale",
-          "alocare_financiara_euro": 12000000,
-          "executat_euro": 465977,
-          "executat_procent": 3.88
-        },
-        {
           "masura": "I10",
           "finantare": "grant",
           "titlul_masurii": "I10. Transformarea digitală în managementul funcției publice",
           "alocare_financiara_euro": 10000000,
-          "executat_euro": 1129813,
-          "executat_procent": 11.3
+          "executat_euro": 230861,
+          "executat_procent": 0.18
         },
         {
           "masura": "I11",
           "finantare": "grant",
-          "titlul_masurii": "I11. Introducere unei scheme de sprijinire a utilizării serviciilor de comunicații în zonele albe",
+          "titlul_masurii": "I11. Implementarea unei scheme de sprijinire a utilizării serviciilor de comunicații prin diferite tipuri de instrumente pentru beneficiari, cu accent pe zonele albe",
           "alocare_financiara_euro": 94000000,
-          "executat_euro": 18202922,
-          "executat_procent": 19.36
+          "executat_euro": 39196,
+          "executat_procent": 0.33
         },
         {
           "masura": "I12",
           "finantare": "grant",
-          "titlul_masurii": "I12. Asigurarea protecției securității cibernetice atât pentru infrastructurile TIC publice, cât și pentru cele private, importante pentru securitatea națională",
+          "titlul_masurii": "I12. Asigurarea protecției cibernetice atât pentru infrastructurile TIC publice, cât și pentru cele private cu valențe critic e pentru securitatea națională, prin utilizarea tehnologiilor inteligente",
           "alocare_financiara_euro": 100000000,
-          "executat_euro": 196840,
-          "executat_procent": 0.2
+          "executat_euro": 1129813,
+          "executat_procent": 11.3
         },
         {
           "masura": "I13",
           "finantare": "grant",
           "titlul_masurii": "I13. Dezvoltarea sistemelor de securitate pentru protecția spectrului guvernamental",
           "alocare_financiara_euro": 38530000,
-          "executat_euro": 10060486,
-          "executat_procent": 26.11
+          "executat_euro": 18202922,
+          "executat_procent": 19.36
         },
         {
           "masura": "I14",
           "finantare": "grant",
-          "titlul_masurii": "I14. Sporirea rezilienței și a securității cibernetice a serviciilor de infrastructură ale furnizorilor de servicii de internet pentru autoritățile publice din România",
+          "titlul_masurii": "I14. Sporirea rezilienței și a securității cibernetice a serviciilor de infrastructură ale furnizorilor de servicii de internet",
           "alocare_financiara_euro": 18393501,
-          "executat_euro": 17589781,
-          "executat_procent": 95.63
+          "executat_euro": 196840,
+          "executat_procent": 0.2
         },
         {
           "masura": "I15",
           "finantare": "grant",
-          "titlul_masurii": "I15. Crearea de noi competențe de securitate cibernetică pentru actorii-cheie",
+          "titlul_masurii": "I15. Crearea de noi competențe de securitate cibernetică pentru actori cheie",
           "alocare_financiara_euro": 11310000,
-          "executat_euro": 0,
-          "executat_procent": 0.0
+          "executat_euro": 10060486,
+          "executat_procent": 26.11
         },
         {
           "masura": "I16",
           "finantare": "grant",
-          "titlul_masurii": "I16. Program de formare pentru funcționarii publici în domeniul competențelor digitale",
+          "titlul_masurii": "I16. Program de formare de competențe digitale avansate pentru funcționarii publici",
           "alocare_financiara_euro": 20000000,
-          "executat_euro": 5658100,
-          "executat_procent": 28.29
+          "executat_euro": 17589781,
+          "executat_procent": 95.63
         },
         {
           "masura": "I17",
           "finantare": "grant",
           "titlul_masurii": "I17. Scheme de finanțare pentru biblioteci pentru a deveni hub-uri de dezvoltare a competențelor digitale",
           "alocare_financiara_euro": 22624468,
-          "executat_euro": 6773805,
-          "executat_procent": 29.94
+          "executat_euro": 0,
+          "executat_procent": 0.0
         },
         {
           "masura": "I18",
           "finantare": "loan",
-          "titlul_masurii": "I18.Transformarea digitală și adoptarea tehnologiei de automatizare a proceselor de lucru în administrația publică",
+          "titlul_masurii": "I18. Transformarea digitală și adoptarea tehnologiei de automatizare a proceselor de lucru robotice în administrația publică.",
           "alocare_financiara_euro": 14800000,
-          "executat_euro": 50838,
-          "executat_procent": 0.34
+          "executat_euro": 6773811,
+          "executat_procent": 29.94
         },
         {
           "masura": "I19",
@@ -532,23 +475,87 @@
         {
           "masura": "I19",
           "finantare": "grant",
-          "titlul_masurii": "I19.a. Scheme dedicate perfecționării/recalificării angajaților din firme",
+          "titlul_masurii": "I19a. Scheme dedicate perfecționării/recalificării angajaților din firme",
           "alocare_financiara_euro": 19000000,
-          "executat_euro": 925298,
-          "executat_procent": 4.87
+          "executat_euro": 5658100,
+          "executat_procent": 28.29
+        },
+        {
+          "masura": "I2",
+          "finantare": "grant",
+          "titlul_masurii": "I2. Dezvoltarea cloudului și migrarea în cloud.",
+          "alocare_financiara_euro": 187050420,
+          "executat_euro": 4728865,
+          "executat_procent": 2.53
+        },
+        {
+          "masura": "I3",
+          "finantare": "grant",
+          "titlul_masurii": "I3. Realizarea sistemului de eHealth și telemedicină",
+          "alocare_financiara_euro": 300000000,
+          "executat_euro": 22316977,
+          "executat_procent": 22.32
+        },
+        {
+          "masura": "I4",
+          "finantare": "grant",
+          "titlul_masurii": "I4. Digitalizarea sistemului judiciar",
+          "alocare_financiara_euro": 242310000,
+          "executat_euro": 0,
+          "executat_procent": 0.0
+        },
+        {
+          "masura": "I5",
+          "finantare": "grant",
+          "titlul_masurii": "I5. Digitalizare în domeniul mediului",
+          "alocare_financiara_euro": 47951280,
+          "executat_euro": 0,
+          "executat_procent": 0.0
+        },
+        {
+          "masura": "I6",
+          "finantare": "grant",
+          "titlul_masurii": "I6. Digitalizarea în domeniul muncii și protecției sociale",
+          "alocare_financiara_euro": 85000000,
+          "executat_euro": 46468278,
+          "executat_procent": 19.18
+        },
+        {
+          "masura": "I7",
+          "finantare": "grant",
+          "titlul_masurii": "I7. Implementarea formularelor electronice eForms în domeniul achizițiilor publice",
+          "alocare_financiara_euro": 851600,
+          "executat_euro": 8237545,
+          "executat_procent": 17.18
+        },
+        {
+          "masura": "I8",
+          "finantare": "grant",
+          "titlul_masurii": "I8. Cartea de identitate electronică și semnătura digitală",
+          "alocare_financiara_euro": 129000000,
+          "executat_euro": 43076266,
+          "executat_procent": 50.68
+        },
+        {
+          "masura": "I9",
+          "finantare": "grant",
+          "titlul_masurii": "I9. Digitalizarea sectorului organizațiilor neguvernamentale",
+          "alocare_financiara_euro": 12000000,
+          "executat_euro": 654792,
+          "executat_procent": 76.89
         },
         {
           "masura": "R1",
           "finantare": "grant",
           "titlul_masurii": "R1. Dezvoltarea unui cadru unitar pentru definirea arhitecturii unui sistem de tip cloud guvernamental",
           "alocare_financiara_euro": 11889498,
-          "executat_euro": 2255536,
+          "executat_euro": 2255539,
           "executat_procent": 18.97
         },
         {
           "masura": "R2",
           "finantare": "grant",
-          "titlul_masurii": "R2.Tranziția către atingerea obiectivelor de conectivitate UE 2025 și stimularea investițiilor private pentru dezvoltarea rețelelor de foarte mare capacitate",
+          "titlul_masurii": "R2. Tranziția către atingerea obiectivelor de conectivitate UE 2025 și stimularea investițiilor private pentru dezvoltarea rețelelor de foarte mare capacitate",
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
           "executat_procent": 0
@@ -556,7 +563,7 @@
         {
           "masura": "R3",
           "finantare": "grant",
-          "titlul_masurii": "R3. Asigurarea securității cibernetice a entităților publice și private care dețin infrastructuri cu valențe critice",
+          "titlul_masurii": "R3 Asigurarea securitatii cibernetice pentru entitatile publice sau private care au infrastructura critica",
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
           "executat_procent": 0
@@ -564,7 +571,7 @@
         {
           "masura": "R4",
           "finantare": "grant",
-          "titlul_masurii": "R4. Creșterea competențelor digitale pentru exercitarea funcției publice și educație digitală pe parcursul vieții pentru cetățeni",
+          "titlul_masurii": "R4. Dezvoltarea competentelor digitale pentru serviciul public si educatie digitala pe tot parcursul vietii pentru cetateni",
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
           "executat_procent": 0
@@ -573,14 +580,31 @@
     },
     {
       "componenta": "C8",
+      "numeComponenta": "Reforme fiscale și pensiilor",
       "masuri": [
         {
           "masura": "I1",
           "finantare": "grant",
-          "titlul_masurii": "I1. Facilitarea respectării normelor de către contribuabili prin accesul la servicii digitale",
+          "titlul_masurii": "I1. Creșterea conformării voluntare a contribuabililor prin dezvoltarea serviciilor digitale",
           "alocare_financiara_euro": 7000000,
           "executat_euro": 1060414,
           "executat_procent": 15.15
+        },
+        {
+          "masura": "I10",
+          "finantare": "grant",
+          "titlul_masurii": "I10. Servicii electronice avansate prin digitalizarea sistemului de pensii",
+          "alocare_financiara_euro": 61881919,
+          "executat_euro": 20800158,
+          "executat_procent": 33.61
+        },
+        {
+          "masura": "I11",
+          "finantare": "loan",
+          "titlul_masurii": "I11. Capitalizare BID",
+          "alocare_financiara_euro": 100000000,
+          "executat_euro": 0,
+          "executat_procent": 0.0
         },
         {
           "masura": "I2",
@@ -593,7 +617,7 @@
         {
           "masura": "I3",
           "finantare": "grant",
-          "titlul_masurii": "I3. Asigurarea capacității de răspuns la provocările informaționale actuale și viitoare, inclusiv în contextul pandemiei, prin transformarea digitală a Ministerului de Finanțe / Agenției Naționale de Administrare Fiscală",
+          "titlul_masurii": "I3. Asigurarea capacității de răspuns la provocările informaționale actuale și viitoare, inclusiv în contextul pandemiei, prin transformarea digitală a Ministerului de Finanțe/Agenției Naționale de Administrare Fiscală",
           "alocare_financiara_euro": 88000000,
           "executat_euro": 48223990,
           "executat_procent": 54.8
@@ -601,8 +625,8 @@
         {
           "masura": "I4",
           "finantare": "grant",
-          "titlul_masurii": "I4. Instituirea vămii electronice",
-          "alocare_financiara_euro": 62000000,
+          "titlul_masurii": "I4. Implementarea vămii electronice",
+          "alocare_financiara_euro": 61999999,
           "executat_euro": 40674441,
           "executat_procent": 65.6
         },
@@ -617,7 +641,7 @@
         {
           "masura": "I6",
           "finantare": "grant",
-          "titlul_masurii": "I6. Instrument de modelare economică (set de instrumente de simulare privind opțiunile de reformă a pensiilor) pentru extinderea capacității instituționale de a prognoza cheltuielile cu pensiile",
+          "titlul_masurii": "I6. Instrument de modelare economică (set de instrumente de simulare privind opțiunile de reformă a pensiilor) pentru îmbunătățirea capacității instituționale de a prognoza cheltuielile cu pensiile",
           "alocare_financiara_euro": 400000,
           "executat_euro": 347708,
           "executat_procent": 86.93
@@ -633,7 +657,7 @@
         {
           "masura": "I8",
           "finantare": "grant",
-          "titlul_masurii": "I8. Înființarea Băncii Naționale de Dezvoltare",
+          "titlul_masurii": "I8. Operaționalizarea Băncii Naționale de Dezvoltare",
           "alocare_financiara_euro": 10000000,
           "executat_euro": 9954200,
           "executat_procent": 99.54
@@ -642,25 +666,9 @@
           "masura": "I9",
           "finantare": "grant",
           "titlul_masurii": "I9. Susținerea procesului de evaluare a dosarelor de pensii aflate în plată",
-          "alocare_financiara_euro": 20741597,
+          "alocare_financiara_euro": 19250597,
           "executat_euro": 20777581,
-          "executat_procent": 100.17
-        },
-        {
-          "masura": "I10",
-          "finantare": "grant",
-          "titlul_masurii": "I10. Servicii electronice avansate pentru sistemul național de pensii prin digitalizare",
-          "alocare_financiara_euro": 60390919,
-          "executat_euro": 20800158,
-          "executat_procent": 34.44
-        },
-        {
-          "masura": "I11",
-          "finantare": "loan",
-          "titlul_masurii": "I11. Injecție de capital în Banca Națională de Dezvoltare",
-          "alocare_financiara_euro": 100000000,
-          "executat_euro": 0,
-          "executat_procent": 0.0
+          "executat_procent": 107.93
         },
         {
           "masura": "R1",
@@ -673,7 +681,7 @@
         {
           "masura": "R2",
           "finantare": "grant",
-          "titlul_masurii": "R2. Modernizarea sistemului vamal și instituirea vămii electronice",
+          "titlul_masurii": "R2. Modernizarea sistemului vamal și implementarea vămii electronice",
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
           "executat_procent": 0
@@ -697,7 +705,7 @@
         {
           "masura": "R5",
           "finantare": "grant",
-          "titlul_masurii": "R5. Înființarea Băncii Naționale de Dezvoltare",
+          "titlul_masurii": "R5. Crearea și operaționalizarea Băncii Naționale de Dezvoltare",
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
           "executat_procent": 0
@@ -705,7 +713,7 @@
         {
           "masura": "R6",
           "finantare": "grant",
-          "titlul_masurii": "R6.Reforma sistemului public de pensii",
+          "titlul_masurii": "R6. Reforma sistemului public de pensii",
           "alocare_financiara_euro": 4000000,
           "executat_euro": 1345288,
           "executat_procent": 33.63
@@ -714,46 +722,79 @@
     },
     {
       "componenta": "C9",
+      "numeComponenta": "Sprijin pentru mediul de afaceri și cercetare",
       "masuri": [
+        {
+          "masura": "I2",
+          "finantare": "grant",
+          "titlul_masurii": "I2a. Instrumente financiare pentru sectorul privat  - Sub inv 2a Portofoliul de Garantii pentru Actiune Climatica",
+          "alocare_financiara_euro": 200000000,
+          "executat_euro": 3465664,
+          "executat_procent": 65.42
+        },
+        {
+          "masura": "I3",
+          "finantare": "grant",
+          "titlul_masurii": "I3a. Scheme de ajutor pentru sectorul privat - Sub inv 3a Scheme de ajutor pentru digitalizarea IMM",
+          "alocare_financiara_euro": 256500000,
+          "executat_euro": 138547169,
+          "executat_procent": 13.19
+        },
+        {
+          "masura": "I5",
+          "finantare": "grant",
+          "titlul_masurii": "I5a. Înființarea centrelor de competență",
+          "alocare_financiara_euro": 25000000,
+          "executat_euro": 91721479,
+          "executat_procent": 45.86
+        },
+        {
+          "masura": "I8",
+          "finantare": "grant",
+          "titlul_masurii": "I8. Dezvoltarea unui program pentru atragerea resurselor umane înalt specializate din străinătate pentru activități de cercetare, dezvoltare, inovare",
+          "alocare_financiara_euro": 183000000,
+          "executat_euro": 1375626,
+          "executat_procent": 0.54
+        },
+        {
+          "masura": "I9",
+          "finantare": "grant",
+          "titlul_masurii": "I9. Program de sprijin pentru posesorii de certificate de excelență primite la competiția pentru burse individuale Marie Sklodowska Curie",
+          "alocare_financiara_euro": 1600000,
+          "executat_euro": 13,
+          "executat_procent": 0.0
+        },
+        {
+          "masura": "I10",
+          "finantare": "grant",
+          "titlul_masurii": "I10. Înființarea și susținerea financiară a unei rețele naționale de (8) opt centre regionale de orientare în carieră",
+          "alocare_financiara_euro": 4000000,
+          "executat_euro": 1798801,
+          "executat_procent": 44.97
+        },
         {
           "masura": "I1",
           "finantare": "loan",
           "titlul_masurii": "I1. Platforme digitale privind transparentizarea legislativă, debirocratizarea și simplificarea procedurală destinate mediului de afaceri",
           "alocare_financiara_euro": 5297170,
-          "executat_euro": 3465664,
-          "executat_procent": 65.42
-        },
-        {
-          "masura": "I2",
-          "finantare": "grant",
-          "titlul_masurii": "I2.a. Instrumente financiare pentru sectorul privat",
-          "alocare_financiara_euro": 200000000,
-          "executat_euro": 91721479,
-          "executat_procent": 45.86
+          "executat_euro": 8859103,
+          "executat_procent": 35.44
         },
         {
           "masura": "I2",
           "finantare": "loan",
-          "titlul_masurii": "I2. Instrumente financiare pentru sectorul privat:\n• 2.1 Garanția de portofoliu pentru reziliență - 500 mil\n• 2.2 Garanția de portofoliu pentru acțiune climatică - 0 mil\n• 2.3 Fondul de fonduri de capital de risc pentru redresare - 400 mil\n• 2.4. Fond de fonduri pentru digitalizare, acțiune climatică și alte domenii de interes - 100 mil\n• 2.5: Investiții în eficiență energetică în sectorul rezidențial și al clădirilor - 50 mil",
+          "titlul_masurii": "I2. Instrumente financiare pentru sectorul privat  - Sub inv 2.1 Portofoliu de Garantii pentru Rezilienta; Sub inv 2.2 Portofoliu de Garantii pentru Actiune Climatica; Sub Inv 2.3 pentru IMM si comp cu capitalizare medie: Fond de capital de risc de recuperare; Sub masura 2.4. Fondul fondurilor pt digitalizare, actiune climatica si alte domenii; sub inv 2.5: Investitii in eficienta energetica in sectorul rezidential si de business",
           "alocare_financiara_euro": 1050000000,
-          "executat_euro": 138547169,
-          "executat_procent": 13.19
-        },
-        {
-          "masura": "I3",
-          "finantare": "grant",
-          "titlul_masurii": "I3.a. Scheme de ajutor pentru sectorul privat",
-          "alocare_financiara_euro": 256500000,
-          "executat_euro": 2760772,
-          "executat_procent": 1.08
+          "executat_euro": 49876430,
+          "executat_procent": 27.25
         },
         {
           "masura": "I3",
           "finantare": "loan",
-          "titlul_masurii": "I3. Scheme de ajutor pentru sectorul privat:\n• 3.1 Schemă de ajutor pentru digitalizarea IMM-urilor - 0 mil\n• 3.2 Schema de minimis pentru ajutarea firmelor din România în procesul de listare la bursă - 0,6 mil",
+          "titlul_masurii": "I3. Scheme de ajutor pentru sectorul privat - Sub in 3.1 Scheme de ajutor pt digitalizarea IMM; Sub in 3.2 Scheme de minimis pt listare la bursa a firmelor romanesti",
           "alocare_financiara_euro": 600000,
-          "executat_euro": 13,
-          "executat_procent": 0.0
+          "executat_euro": 1057774,
+          "executat_procent": 66.11
         },
         {
           "masura": "I4",
@@ -765,48 +806,16 @@
         },
         {
           "masura": "I5",
-          "finantare": "grant",
-          "titlul_masurii": "I5.a. Instituirea de centre de competență",
-          "alocare_financiara_euro": 25000000,
-          "executat_euro": 9235302,
-          "executat_procent": 36.94
-        },
-        {
-          "masura": "I5",
           "finantare": "loan",
-          "titlul_masurii": "I5. Instituirea de centre de competență",
+          "titlul_masurii": "I5. Înființarea și operaționalizarea centrelor de competență",
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
           "executat_procent": 0.0
         },
         {
-          "masura": "I8",
-          "finantare": "grant",
-          "titlul_masurii": "I8. Dezvoltarea unui program pentru atragerea resurselor umane înalt specializate din străinătate în activități de cercetare, dezvoltare și inovare",
-          "alocare_financiara_euro": 183000000,
-          "executat_euro": 52423785,
-          "executat_procent": 28.65
-        },
-        {
-          "masura": "I9",
-          "finantare": "grant",
-          "titlul_masurii": "I9. Program de sprijin pentru posesorii de certificate de excelență primite în cadrul concursului pentru burse individuale Marie Sklodowska Curie",
-          "alocare_financiara_euro": 1600000,
-          "executat_euro": 1061843,
-          "executat_procent": 66.37
-        },
-        {
-          "masura": "I10",
-          "finantare": "grant",
-          "titlul_masurii": "I10. Înființarea și susținerea financiară a unei rețele naționale de opt centre regionale de orientare în carieră",
-          "alocare_financiara_euro": 4000000,
-          "executat_euro": 1798801,
-          "executat_procent": 44.97
-        },
-        {
           "masura": "R1",
           "finantare": "loan",
-          "titlul_masurii": "R1. Transparență legislativă, debirocratizare și simplificare procedurală destinate mediului de afaceri",
+          "titlul_masurii": "R1. Transparentizare legislativă, debirocratizare și simplificare procedurală destinate mediului de afaceri",
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
           "executat_procent": 0
@@ -814,18 +823,10 @@
         {
           "masura": "R2",
           "finantare": "grant",
-          "titlul_masurii": "R2.a. Raționalizarea guvernanței în domeniul cercetării, dezvoltării și inovării",
+          "titlul_masurii": "R2a. Raționalizarea guvernanței în domeniul cercetării, dezvoltării și inovării",
           "alocare_financiara_euro": 3430000,
-          "executat_euro": 5127272,
-          "executat_procent": 149.48
-        },
-        {
-          "masura": "R2",
-          "finantare": "loan",
-          "titlul_masurii": "R2. Raționalizarea guvernanței în domeniul cercetării, dezvoltării și inovării",
-          "alocare_financiara_euro": 0,
-          "executat_euro": 0,
-          "executat_procent": 0
+          "executat_euro": 4403396,
+          "executat_procent": 128.38
         },
         {
           "masura": "R3",
@@ -850,51 +851,60 @@
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
           "executat_procent": 0
+        },
+        {
+          "masura": "R2",
+          "finantare": "loan",
+          "titlul_masurii": "R2. Raționalizarea guvernanței în domeniul cercetării, dezvoltării și inovării",
+          "alocare_financiara_euro": 0,
+          "executat_euro": 0,
+          "executat_procent": 0
         }
       ]
     },
     {
       "componenta": "C10",
+      "numeComponenta": "Fondul local",
       "masuri": [
         {
           "masura": "I1",
           "finantare": "grant",
-          "titlul_masurii": "I1. Mobilitatea urbană durabilă",
+          "titlul_masurii": "I1. Mobilitate urbană durabilă",
           "alocare_financiara_euro": 904000000,
-          "executat_euro": 451943420,
-          "executat_procent": 49.99
+          "executat_euro": 421563069,
+          "executat_procent": 46.63
         },
         {
           "masura": "I2",
           "finantare": "loan",
-          "titlul_masurii": "I2. Construirea de locuințe pentru tineri și pentru specialiști din sănătate și învățământ",
+          "titlul_masurii": "I2. Construcția de locuințe pentru tineri / locuințe pentru specialiști în sănătate și educație",
           "alocare_financiara_euro": 145341508,
-          "executat_euro": 66272451,
-          "executat_procent": 45.6
+          "executat_euro": 278369270,
+          "executat_procent": 96.82
         },
         {
           "masura": "I3",
           "finantare": "loan",
-          "titlul_masurii": "I3. Renovarea clădirilor publice pentru a sprijini furnizarea de servicii publice mai bune de către unitățile administrativ teritoriale",
+          "titlul_masurii": "I3. Reabilitarea clădirilor publice pentru a îmbunătăți furnizarea de servicii publice de către unitățile administrativ-teritoriale",
           "alocare_financiara_euro": 287500000,
-          "executat_euro": 155706709,
-          "executat_procent": 54.16
+          "executat_euro": 57500000,
+          "executat_procent": 20.0
         },
         {
-          "masura": "I3",
+          "masura": "I3a",
           "finantare": "grant",
-          "titlul_masurii": "I3a. Renovarea clădirilor publice pentru a sprijini furnizarea de servicii publice mai bune de către unitățile administrativ teritoriale publice de către unitățile administrativ teritoriale",
+          "titlul_masurii": "I3a. Reabilitarea clădirilor publice pentru a îmbunătăți furnizarea de servicii publice de către unitățile administrativ-teritoriale",
           "alocare_financiara_euro": 287500000,
-          "executat_euro": 155706709,
-          "executat_procent": 54.16
+          "executat_euro": 50186292,
+          "executat_procent": 34.53
         },
         {
           "masura": "I4",
           "finantare": "loan",
           "titlul_masurii": "I4. Elaborarea / actualizarea în format GIS a documentelor de amenajare a teritoriului și de urbanism",
           "alocare_financiara_euro": 25197281,
-          "executat_euro": 17100344,
-          "executat_procent": 67.87
+          "executat_euro": 14879294,
+          "executat_procent": 59.05
         },
         {
           "masura": "R1",
@@ -907,7 +917,7 @@
         {
           "masura": "R2",
           "finantare": "grant",
-          "titlul_masurii": "R2. Crearea cadrului de politică pentru o transformare urbană durabilă",
+          "titlul_masurii": "R2. Crearea cadrului de politică pentru o transformare urbană durabilă – Politica urbană a României",
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
           "executat_procent": 0
@@ -923,7 +933,7 @@
         {
           "masura": "R4",
           "finantare": "grant",
-          "titlul_masurii": "R4. Creșterea calității locuințelor",
+          "titlul_masurii": "R4. Îmbunătățirea calității locuirii",
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
           "executat_procent": 0
@@ -931,7 +941,7 @@
         {
           "masura": "R5",
           "finantare": "grant",
-          "titlul_masurii": "R5. Dezvoltarea sistemului de planificare - Codul amenajării teritoriului, urbanismului și construcțiilor",
+          "titlul_masurii": "R5. Dezvoltarea sistemului de planificare – Codul amenajării teritoriului, urbanismului și construcțiilor",
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
           "executat_procent": 0
@@ -940,75 +950,76 @@
     },
     {
       "componenta": "C11",
+      "numeComponenta": "Turism și cultura",
       "masuri": [
         {
           "masura": "I1",
           "finantare": "loan",
           "titlul_masurii": "I1. Promovarea celor 12 rute turistice/culturale",
           "alocare_financiara_euro": 102085000,
-          "executat_euro": 47541624,
-          "executat_procent": 46.57
+          "executat_euro": 8943931,
+          "executat_procent": 36.8
         },
         {
           "masura": "I2",
           "finantare": "loan",
           "titlul_masurii": "I2. Modernizarea/crearea de muzee și memoriale",
           "alocare_financiara_euro": 34728928,
-          "executat_euro": 7507829,
-          "executat_procent": 21.62
+          "executat_euro": 3609702,
+          "executat_procent": 46.34
         },
         {
           "masura": "I3",
           "finantare": "loan",
-          "titlul_masurii": "I3. Înstituirea și operaționalizarea Centrului Național de Coordonare Velo",
+          "titlul_masurii": "I3. Înființarea și operaționalizarea Centrului Național de Coordonare Velo",
           "alocare_financiara_euro": 1500000,
-          "executat_euro": 47040,
-          "executat_procent": 3.14
+          "executat_euro": 1979771,
+          "executat_procent": 52.79
         },
         {
           "masura": "I4",
           "finantare": "loan",
-          "titlul_masurii": "I4. Construirea a 236,05 km de piste pentru biciclete",
+          "titlul_masurii": "I4. Implementarea a 236,05 km de piste pentru biciclete",
           "alocare_financiara_euro": 24302153,
-          "executat_euro": 12648074,
-          "executat_procent": 52.05
+          "executat_euro": 5129592,
+          "executat_procent": 93.95
         },
         {
           "masura": "I5",
           "finantare": "grant",
           "titlul_masurii": "I5. Sporirea accesului la cultură în zonele defavorizate din punct de vedere cultural",
           "alocare_financiara_euro": 7790000,
-          "executat_euro": 3611626,
-          "executat_procent": 46.36
+          "executat_euro": 46174569,
+          "executat_procent": 45.23
         },
         {
           "masura": "I6",
           "finantare": "grant",
           "titlul_masurii": "I6. Dezvoltarea unui sistem digital pentru procesele de finanțare a culturii",
           "alocare_financiara_euro": 3750000,
-          "executat_euro": 1970933,
-          "executat_procent": 52.56
+          "executat_euro": 5637432,
+          "executat_procent": 16.23
         },
         {
           "masura": "I7",
           "finantare": "grant",
           "titlul_masurii": "I7. Accelerarea digitalizării producției și distribuției de filme",
           "alocare_financiara_euro": 5460000,
-          "executat_euro": 5161672,
-          "executat_procent": 94.54
+          "executat_euro": 47040,
+          "executat_procent": 3.14
         },
         {
           "masura": "R1",
           "finantare": "loan",
-          "titlul_masurii": "R1.Operaționalizarea organizațiilor de management al destinației (OMD-uri)",
+          "titlul_masurii": "R1. Operaționalizarea organizațiilor de management al destinației (OMD-uri)",
           "alocare_financiara_euro": 10000000,
-          "executat_euro": 0,
-          "executat_procent": 0.0
+          "executat_euro": 2500000,
+          "executat_procent": 25.0
         },
         {
           "masura": "R2",
-          "finantare": "loan",
-          "titlul_masurii": "R2. Cadrul pentru operaționalizarea traseelor cicloturistice la nivel național",
+          "finantare": "grant",
+          "titlul_masurii": "R2. Crearea cadrului pentru operaționalizarea traseelor cicloturistice la nivel național",
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
           "executat_procent": 0
@@ -1016,10 +1027,10 @@
         {
           "masura": "R3",
           "finantare": "grant",
-          "titlul_masurii": "R3.a. Reformarea sistemului de finanțare a sectorului cultural",
+          "titlul_masurii": "R3a. Reformarea sistemului de finanțare a sectorului cultural",
           "alocare_financiara_euro": 1000000,
-          "executat_euro": 287822,
-          "executat_procent": 28.78
+          "executat_euro": 276022,
+          "executat_procent": 27.6
         },
         {
           "masura": "R3",
@@ -1033,22 +1044,23 @@
     },
     {
       "componenta": "C12",
+      "numeComponenta": "Sănătate",
       "masuri": [
         {
           "masura": "I1",
           "finantare": "grant",
-          "titlul_masurii": "I1. Infrastructura medicală prespitalicească",
+          "titlul_masurii": "I1. Dezvoltarea infrastructurii medicale prespitalicești",
           "alocare_financiara_euro": 213370807,
-          "executat_euro": 189715588,
-          "executat_procent": 88.91
+          "executat_euro": 183565552,
+          "executat_procent": 152.65
         },
         {
           "masura": "I2",
           "finantare": "grant",
-          "titlul_masurii": "I2. Infrastructura spitalelor publice",
-          "alocare_financiara_euro": 501455474,
-          "executat_euro": 447058414,
-          "executat_procent": 89.15
+          "titlul_masurii": "I2. Dezvoltarea infrastructurii spitalicești publice",
+          "alocare_financiara_euro": 499955474,
+          "executat_euro": 0,
+          "executat_procent": 0.0
         },
         {
           "masura": "I3",
@@ -1061,7 +1073,7 @@
         {
           "masura": "I4",
           "finantare": "loan",
-          "titlul_masurii": "I4. Modernizarea asistenței medicale de urgență",
+          "titlul_masurii": "I4. Modernizarea serviciilor medicale de urgență",
           "alocare_financiara_euro": 183590800,
           "executat_euro": 0,
           "executat_procent": 0.0
@@ -1094,6 +1106,7 @@
     },
     {
       "componenta": "C13",
+      "numeComponenta": "Reforme sociale",
       "masuri": [
         {
           "masura": "I1",
@@ -1106,31 +1119,31 @@
         {
           "masura": "I2",
           "finantare": "grant",
-          "titlul_masurii": "I2. Reabilitarea, renovarea și extinderea infrastructurii sociale pentru persoanele cu dizabilități",
+          "titlul_masurii": "I2. Reabilitarea, renovarea și dezvoltarea infrastructurii sociale pentru persoanele cu dizabilități",
           "alocare_financiara_euro": 34032327,
-          "executat_euro": 6816200,
-          "executat_procent": 20.03
+          "executat_euro": 5631914,
+          "executat_procent": 16.55
         },
         {
           "masura": "I3",
           "finantare": "grant",
-          "titlul_masurii": "I3. Instituirea sistemului de tichete de muncă pentru prestatorii casnici și beneficiarii serviciilor",
+          "titlul_masurii": "I3. Operaționalizarea introducerii tichetelor de muncă pentru activitățile casnice",
           "alocare_financiara_euro": 4540000,
-          "executat_euro": 2923194,
-          "executat_procent": 64.39
+          "executat_euro": 2923075,
+          "executat_procent": 64.38
         },
         {
           "masura": "I4",
           "finantare": "grant",
           "titlul_masurii": "I4. Crearea unei rețele de centre de îngrijire de zi și de reabilitare pentru persoanele în vârstă",
           "alocare_financiara_euro": 77694085,
-          "executat_euro": 10239546,
-          "executat_procent": 13.18
+          "executat_euro": 7638863,
+          "executat_procent": 9.83
         },
         {
           "masura": "R1",
           "finantare": "grant",
-          "titlul_masurii": "R1. Crearea unui nou cadru juridic pentru a preveni separarea copiilor de familie",
+          "titlul_masurii": "R1. Crearea unui nou cadru legal pentru a preveni separarea copiilor de familie",
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
           "executat_procent": 0
@@ -1146,26 +1159,10 @@
         {
           "masura": "R3",
           "finantare": "grant",
-          "titlul_masurii": "R3. Furnizarea venitului minim de incluziune (VMI)",
-          "alocare_financiara_euro": 2995600,
+          "titlul_masurii": "R3. Implementarea venitului minim de incluziune (VMI)",
+          "alocare_financiara_euro": 2000000,
           "executat_euro": 2106911,
-          "executat_procent": 70.33
-        },
-        {
-          "masura": "R4",
-          "finantare": "grant",
-          "titlul_masurii": "R4. Introducerea tichetelor de muncă și formalizarea muncii în domeniul lucrătorilor casnici",
-          "alocare_financiara_euro": 0,
-          "executat_euro": 0,
-          "executat_procent": 0
-        },
-        {
-          "masura": "R5",
-          "finantare": "grant",
-          "titlul_masurii": "R5. Asigurarea stabilirii unui salariu minim",
-          "alocare_financiara_euro": 0,
-          "executat_euro": 0,
-          "executat_procent": 0
+          "executat_procent": 105.35
         },
         {
           "masura": "R6",
@@ -1182,48 +1179,65 @@
           "alocare_financiara_euro": 1190000,
           "executat_euro": 1185667,
           "executat_procent": 99.64
+        },
+        {
+          "masura": "R4",
+          "finantare": "grant",
+          "titlul_masurii": "R4. Introducerea cadrurilor de munca si formalizarea muncii lucratorilor casnici",
+          "alocare_financiara_euro": 0,
+          "executat_euro": 0,
+          "executat_procent": 0
+        },
+        {
+          "masura": "R5",
+          "finantare": "grant",
+          "titlul_masurii": "R5. Mecanism de stabilire a salariului minim",
+          "alocare_financiara_euro": 0,
+          "executat_euro": 0,
+          "executat_procent": 0
         }
       ]
     },
     {
       "componenta": "C14",
+      "numeComponenta": "Buna guvernanță",
       "masuri": [
         {
           "masura": "I4",
           "finantare": "grant",
-          "titlul_masurii": "I4. Creșterea capacității organizațiilor societății civile de stimulare a cetățeniei active, de implicare profesionistă în planificarea și implementarea politicilor publice privind drepturile sociale vizate de planul național de redresare și reziliență și monitorizarea reformelor asociate",
+          "titlul_masurii": "I4. Intarirea capacitatii organizatiilor societatii civile pentru participare activa in planificarea si implementarea politicilor publice in domeniul drepturilor sociale devoltate in cadrul PNRR si pentru monitorizarea reformelor respective",
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
-          "executat_procent": 0.0
+          "executat_procent": 0
         },
         {
           "masura": "I5",
           "finantare": "grant",
-          "titlul_masurii": "I5. Monitorizarea și implementarea planului",
-          "alocare_financiara_euro": 12840999,
+          "titlul_masurii": "I5.  Monitorizarea și implementarea planului",
+          "alocare_financiara_euro": 12841000,
           "executat_euro": 11471751,
           "executat_procent": 89.34
         },
         {
           "masura": "R1",
           "finantare": "grant",
-          "titlul_masurii": "R1. Îmbunătățirea calității procesului decizional al administrației publice",
+          "titlul_masurii": "R1. Îmbunătățirea predictibilității și a eficienței proceselor decizionale prin întărirea capacității de coordonare a politicilor și analiză de impact la nivelul guvernului și a ministerelor coordonatoare, precum și prin consolidarea instrumentelor în vederea creșterea calității consultărilor publice la toate palierele administrație",
           "alocare_financiara_euro": 11930000,
-          "executat_euro": 7999976,
-          "executat_procent": 67.06
+          "executat_euro": 6924010,
+          "executat_procent": 58.04
         },
         {
           "masura": "R2",
           "finantare": "grant",
-          "titlul_masurii": "R2. Îmbunătățirea guvernanței strategice pentru politicile în domeniul climei, al dezvoltării durabile și al mediului",
+          "titlul_masurii": "R2. Întărirea coordonării la Centrul Guvernului printr-o abordare integrată și coerentă a inițiativelor în domeniul schimbărilor climatice și a dezvoltării durabile",
           "alocare_financiara_euro": 14180000,
-          "executat_euro": 5866984,
-          "executat_procent": 41.38
+          "executat_euro": 3827288,
+          "executat_procent": 26.99
         },
         {
           "masura": "R3",
           "finantare": "grant",
-          "titlul_masurii": "R3. Modernizarea managementului resurselor umane în sectorul public",
+          "titlul_masurii": "R3. Management performant al resurselor umane în sectorul public",
           "alocare_financiara_euro": 14000000,
           "executat_euro": 6977026,
           "executat_procent": 49.84
@@ -1232,9 +1246,9 @@
           "masura": "R4",
           "finantare": "grant",
           "titlul_masurii": "R4. Dezvoltarea unui sistem de salarizare echitabil și unitar în sectorul public",
-          "alocare_financiara_euro": 1004400,
+          "alocare_financiara_euro": 2000000,
           "executat_euro": 998560,
-          "executat_procent": 99.42
+          "executat_procent": 49.93
         },
         {
           "masura": "R5",
@@ -1255,7 +1269,7 @@
         {
           "masura": "R7",
           "finantare": "grant",
-          "titlul_masurii": "R7. Actualizarea cadrului juridic de integritate pentru funcția publică",
+          "titlul_masurii": "R7. Evaluarea și actualizarea legislației privind cadrul de integritate",
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
           "executat_procent": 0
@@ -1263,7 +1277,7 @@
         {
           "masura": "R8",
           "finantare": "grant",
-          "titlul_masurii": "R8. Modernizarea și raționalizarea sistemului național de achiziții publice",
+          "titlul_masurii": "R8. Reformarea sistemului național de achiziții publice",
           "alocare_financiara_euro": 4600000,
           "executat_euro": 2680824,
           "executat_procent": 58.28
@@ -1280,91 +1294,28 @@
     },
     {
       "componenta": "C15",
+      "numeComponenta": "Educație",
       "masuri": [
         {
-          "masura": "I1",
-          "finantare": "loan",
-          "titlul_masurii": "I1.a. Construirea și dotarea creșelor",
-          "alocare_financiara_euro": 62727000,
-          "executat_euro": 0,
-          "executat_procent": 0.0
-        },
-        {
-          "masura": "I1",
+          "masura": "I16",
           "finantare": "grant",
-          "titlul_masurii": "I1. Construirea și dotarea creșelor",
-          "alocare_financiara_euro": 177303000,
-          "executat_euro": 129387694,
-          "executat_procent": 72.98
-        },
-        {
-          "masura": "I2",
-          "finantare": "grant",
-          "titlul_masurii": "I2. Înființarea, echiparea și aprobarea serviciilor complementare pentru grupurile defavorizate",
-          "alocare_financiara_euro": 6236458,
-          "executat_euro": 3021046,
-          "executat_procent": 48.44
-        },
-        {
-          "masura": "I3",
-          "finantare": "grant",
-          "titlul_masurii": "I3. Program-cadru pentru formarea continuă a profesioniștilor care lucrează în servicii de educație timpurie",
-          "alocare_financiara_euro": 3832000,
-          "executat_euro": 708458,
-          "executat_procent": 18.49
-        },
-        {
-          "masura": "I4",
-          "finantare": "grant",
-          "titlul_masurii": "I4. Sprijinirea unităților de învățământ cu risc mediu și ridicat de abandon școlar",
-          "alocare_financiara_euro": 460000000,
-          "executat_euro": 14447218,
-          "executat_procent": 3.14
-        },
-        {
-          "masura": "I5",
-          "finantare": "loan",
-          "titlul_masurii": "I5. Cursuri de formare a utilizatorilor Sistemului Informatic Integrat al Învățământului din România (SIIIR) ș i ai instrumentului informatic al mecanismului de avertizare timpurie (MATE) pentru reducerea părăsirii timpurii a școlii",
-          "alocare_financiara_euro": 32970000,
-          "executat_euro": 0,
-          "executat_procent": 0.0
-        },
-        {
-          "masura": "I6",
-          "finantare": "loan",
-          "titlul_masurii": "I6. Construirea și dotarea campusurilor profesionale în cadrul consorțiilor regionale",
-          "alocare_financiara_euro": 169000000,
-          "executat_euro": 21042120,
-          "executat_procent": 12.45
-        },
-        {
-          "masura": "I8",
-          "finantare": "loan",
-          "titlul_masurii": "I8. Program de formare în domeniul pedagogiei digitale pentru personalul didactic",
-          "alocare_financiara_euro": 80000000,
-          "executat_euro": 20923325,
-          "executat_procent": 26.15
-        },
-        {
-          "masura": "I9",
-          "finantare": "loan",
-          "titlul_masurii": "I9. Echipamente digitale și resurse tehnologice pentru școli și instituțiile de învățământ extrașcolare",
-          "alocare_financiara_euro": 478500000,
-          "executat_euro": 250736144,
-          "executat_procent": 52.4
+          "titlul_masurii": "I16a. Digitalizarea universităților și pregătirea acestora pentru profesiile digitale ale viitorului",
+          "alocare_financiara_euro": 234000000,
+          "executat_euro": 131043470,
+          "executat_procent": 62.66
         },
         {
           "masura": "I10",
           "finantare": "grant",
-          "titlul_masurii": "I10. Dezvoltarea rețelei de școli verzi și achiziționarea de microbuze verzi",
+          "titlul_masurii": "I10a. Dezvoltarea rețelei de școli verzi și achiziționarea de microbuze verzi",
           "alocare_financiara_euro": 209144630,
-          "executat_euro": 146475021,
-          "executat_procent": 70.04
+          "executat_euro": 0,
+          "executat_procent": 0.0
         },
         {
           "masura": "I10",
           "finantare": "loan",
-          "titlul_masurii": "I10a. Construirea rețelei de școli verzi",
+          "titlul_masurii": "I10. Dezvoltarea rețelei de școli verzi și achiziționarea de microbuze verzi",
           "alocare_financiara_euro": 52960909,
           "executat_euro": 0,
           "executat_procent": 0.0
@@ -1372,55 +1323,127 @@
         {
           "masura": "I11",
           "finantare": "grant",
-          "titlul_masurii": "I11. Asigurarea dotărilor pentru sălile de clasă preuniversitare și laboratoarele de știință/cabinetele școlare",
+          "titlul_masurii": "I11. Asigurarea dotărilor sălilor de clasa și a laboratoarelor/cabinetelor școlare din sistemul preuniversitar",
           "alocare_financiara_euro": 600000000,
           "executat_euro": 252657953,
           "executat_procent": 42.11
         },
         {
-          "masura": "I13",
+          "masura": "I1",
           "finantare": "loan",
-          "titlul_masurii": "I13. Echiparea laboratoarelor informatice din școlile de educație și formare profesională (EFP)",
-          "alocare_financiara_euro": 9000000,
-          "executat_euro": 5439169,
-          "executat_procent": 60.44
+          "titlul_masurii": "I1. Construirea si echiparea creșelor",
+          "alocare_financiara_euro": 62727000,
+          "executat_euro": 0,
+          "executat_procent": 0.0
         },
         {
-          "masura": "I14",
+          "masura": "I2",
           "finantare": "grant",
-          "titlul_masurii": "I14. Echiparea atelierelor de practică din unitățile de învățământ profesional și tehnic",
-          "alocare_financiara_euro": 50000000,
-          "executat_euro": 22721280,
-          "executat_procent": 45.44
+          "titlul_masurii": "I2. Înființarea, echiparea și operaționalizarea de servicii pentru gupuri dezavantajate",
+          "alocare_financiara_euro": 6236458,
+          "executat_euro": 0,
+          "executat_procent": 0.0
+        },
+        {
+          "masura": "I18",
+          "finantare": "grant",
+          "titlul_masurii": "I18. Program de instruire și mentorat pentru manageri și inspectori școlari",
+          "alocare_financiara_euro": 30720000,
+          "executat_euro": 4861050,
+          "executat_procent": 54.01
+        },
+        {
+          "masura": "I1",
+          "finantare": "grant",
+          "titlul_masurii": "I1a. Construirea si echiparea creșelor",
+          "alocare_financiara_euro": 167273000,
+          "executat_euro": 20515164,
+          "executat_procent": 41.03
+        },
+        {
+          "masura": "I13",
+          "finantare": "loan",
+          "titlul_masurii": "I13. Echiparea laboratoarelor de informatică din unitățile de învățământ profesional și tehnic",
+          "alocare_financiara_euro": 9000000,
+          "executat_euro": 111046712,
+          "executat_procent": 47.46
         },
         {
           "masura": "I16",
-          "finantare": "grant",
-          "titlul_masurii": "I16a. Digitalizarea universităților și pregătirea acestora pentru profesiile digitale ale viitorului",
-          "alocare_financiara_euro": 234000000,
-          "executat_euro": 115091795,
-          "executat_procent": 49.18
+          "finantare": "loan",
+          "titlul_masurii": "I16. Digitalizarea universităților și pregătirea acestora pentru profesiile digitale ale viitorului",
+          "alocare_financiara_euro": 0,
+          "executat_euro": 0,
+          "executat_procent": 0.0
         },
         {
           "masura": "I17",
           "finantare": "loan",
-          "titlul_masurii": "I17. Asigurarea infrastructurii universitare (cazare, cantine, spații de recreere)",
+          "titlul_masurii": "I17. Asigurarea infrastructurii universitare (cămine, cantine, spații de recreere)",
           "alocare_financiara_euro": 135791094,
-          "executat_euro": 13860167,
-          "executat_procent": 10.21
+          "executat_euro": 9418821,
+          "executat_procent": 6.94
         },
         {
-          "masura": "I18",
+          "masura": "I3",
+          "finantare": "grant",
+          "titlul_masurii": "I3. Dezvoltarea programului cadru pentru formarea continuă a profesioniștilor care lucrează în servicii de educație timpurii",
+          "alocare_financiara_euro": 3832000,
+          "executat_euro": 3021046,
+          "executat_procent": 48.44
+        },
+        {
+          "masura": "I4",
           "finantare": "loan",
-          "titlul_masurii": "I18. Program de formare și îndrumare pentru personalul de conducere din domeniul educației",
-          "alocare_financiara_euro": 30720000,
-          "executat_euro": 144243,
-          "executat_procent": 0.47
+          "titlul_masurii": "I4. Sprijinirea unităților de învățământ cu risc crescut de abandon școlar",
+          "alocare_financiara_euro": 460000000,
+          "executat_euro": 708458,
+          "executat_procent": 18.49
+        },
+        {
+          "masura": "I5",
+          "finantare": "loan",
+          "titlul_masurii": "I5. Instruiri pentru utilizatorii (SIIIR) și (MATE) și intervenții sistemice pentru reducerea abandonului școlar",
+          "alocare_financiara_euro": 43000000,
+          "executat_euro": 14447218,
+          "executat_procent": 3.14
+        },
+        {
+          "masura": "I6",
+          "finantare": "loan",
+          "titlul_masurii": "I6. Dezvoltarea si dotarea campusurilor profesionale in cadrul consortiilor regionale",
+          "alocare_financiara_euro": 169000000,
+          "executat_euro": 0,
+          "executat_procent": 0.0
+        },
+        {
+          "masura": "I14",
+          "finantare": "loan",
+          "titlul_masurii": "I14. Echiparea atelierelor de practică din unitățile de învățământ profesional și tehnic",
+          "alocare_financiara_euro": 50000000,
+          "executat_euro": 21042120,
+          "executat_procent": 12.45
+        },
+        {
+          "masura": "I8",
+          "finantare": "loan",
+          "titlul_masurii": "I8. Program de formare continuă a personalului didactic",
+          "alocare_financiara_euro": 80000000,
+          "executat_euro": 20923326,
+          "executat_procent": 26.15
+        },
+        {
+          "masura": "I9",
+          "finantare": "loan",
+          "titlul_masurii": "I9. Asigurarea echipamentelor și resurselor tehnologice digitale pentru școli",
+          "alocare_financiara_euro": 478500000,
+          "executat_euro": 250736143,
+          "executat_procent": 52.4
         },
         {
           "masura": "R1",
-          "finantare": "loan",
-          "titlul_masurii": "R1. Elaborarea și adoptarea pachetului de acte juridice pentru aplicarea proiectului „România Educată”",
+          "finantare": "grant",
+          "titlul_masurii": "R1. Elaborarea și adoptarea pachetului legislativ pentru implementarea proiectului „România Educată”",
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
           "executat_procent": 0
@@ -1452,7 +1475,7 @@
         {
           "masura": "R5",
           "finantare": "grant",
-          "titlul_masurii": "R5. Adoptarea cadrului juridic pentru digitalizarea educației",
+          "titlul_masurii": "R5. Adoptarea cadrului legislativ pentru digitalizarea educației",
           "alocare_financiara_euro": 0,
           "executat_euro": 0,
           "executat_procent": 0
@@ -1477,11 +1500,12 @@
     },
     {
       "componenta": "C16",
+      "numeComponenta": "RePOWER EU",
       "masuri": [
         {
           "masura": "I2",
           "finantare": "grant",
-          "titlul_masurii": "I2. Noi capacități de producție de energie electrică din surse regenerabile",
+          "titlul_masurii": "I2. Capacități de producție de energie electrică din surse regenerabile",
           "alocare_financiara_euro": 460000000,
           "executat_euro": 72507432,
           "executat_procent": 15.76
@@ -1489,7 +1513,7 @@
         {
           "masura": "I4",
           "finantare": "loan",
-          "titlul_masurii": "I4. Schema de granturi sub formă de bonuri valorice pentru introducerea utilizării energiei din surse regenerabile de către gospodării",
+          "titlul_masurii": "I4. Schemă de acordare a voucherelor pentru accelerarea instalării de capacități de energie regenerabilă",
           "alocare_financiara_euro": 305381134,
           "executat_euro": 0,
           "executat_procent": 0.0
@@ -1497,31 +1521,31 @@
         {
           "masura": "I4",
           "finantare": "grant",
-          "titlul_masurii": "I4a. Schema de granturi sub formă de bonuri valorice pentru implementarea introducerii energiei din surse regenerabile de către gospodării",
+          "titlul_masurii": "I4a.  Schemă de acordare a voucherelor pentru accelerarea instalării de capacități de energie regenerabilă",
           "alocare_financiara_euro": 305381134,
-          "executat_euro": 3715067,
-          "executat_procent": 1.22
+          "executat_euro": 49667,
+          "executat_procent": 0.02
         },
         {
           "masura": "I5",
           "finantare": "grant",
-          "titlul_masurii": "I5. Digitalizarea și modernizarea rețelei naționale de transport al energiei electrice",
+          "titlul_masurii": "I5. Eficientizarea, modernizarea și digitalizarea rețelei naționale de transport a energiei electrice",
           "alocare_financiara_euro": 51788527,
-          "executat_euro": 12085742,
-          "executat_procent": 23.34
+          "executat_euro": 0,
+          "executat_procent": 0.0
         },
         {
           "masura": "I7",
           "finantare": "loan",
-          "titlul_masurii": "I7. Schema de granturi sub formă de bonuri valorice pentru sprijinirea îmbunătățirilor în materie de eficiență energetică ale gospodăriilor",
+          "titlul_masurii": "I7. Schemă de acordare de vouchere pentru îmbunătățirea eficienței energetice în cadrul gospodăriilor individuale",
           "alocare_financiara_euro": 269690200,
-          "executat_euro": 14779566,
-          "executat_procent": 5.48
+          "executat_euro": 11717014,
+          "executat_procent": 39.64
         },
         {
           "masura": "I8",
           "finantare": "grant",
-          "titlul_masurii": "I8. Alocarea contractelor pentru diferență",
+          "titlul_masurii": "I8. Contribuția la schema de ajutor de stat sub formă de contracte pentru diferență",
           "alocare_financiara_euro": 350088169,
           "executat_euro": 0,
           "executat_procent": 0.0
@@ -1530,17 +1554,17 @@
           "masura": "R1",
           "finantare": "grant",
           "titlul_masurii": "R1. Crearea unui cadru juridic pentru utilizarea terenurilor aflate în proprietatea statului ca zone de accelerare pentru investițiile în sursele regenerabile de energie",
-          "alocare_financiara_euro": 3011752,
+          "alocare_financiara_euro": 3020000,
           "executat_euro": 0,
-          "executat_procent": 0.0
+          "executat_procent": 0
         },
         {
           "masura": "R2",
           "finantare": "grant",
-          "titlul_masurii": "R2. Înființarea de ghișee unice pentru furnizarea de servicii de consiliere în domeniul energiei",
-          "alocare_financiara_euro": 431438,
+          "titlul_masurii": "R2. Înființarea de ghișee unice pentru furnizarea către prosumatori de servicii de consiliere î",
+          "alocare_financiara_euro": 440000,
           "executat_euro": 0,
-          "executat_procent": 0.0
+          "executat_procent": 0
         }
       ]
     }
