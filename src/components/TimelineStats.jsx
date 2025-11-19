@@ -12,7 +12,10 @@ function TimelineStats({
   currentData,
   currentDate,
   isLoading = false,
-  isPlaying = false
+  isPlaying = false,
+  officialBeneficiaries = null,
+  currentIndex = 0,
+  totalMonths = 0
 }) {
   const [currency, setCurrency] = useState('EUR');
   const [animatedValue, setAnimatedValue] = useState(0);
@@ -23,10 +26,13 @@ function TimelineStats({
   const totalRON = currentData?.totalRON || 0;
   const totalPayments = currentData?.totalPayments || 0;
   
-  // Use REAL CUMULATIVE beneficiaries from timeline data
-  // This is calculated in useTimelinePlati.js by summing uniqueBeneficiaries from each month
-  // Example: Month 1: 7, Month 2: 7+27=34, Month 3: 34+55=89, etc.
-  const uniqueBeneficiaries = currentData?.cumulativeBeneficiaries || 0;
+  // Use official beneficiaries from API for last month, otherwise use calculated value
+  // For last month: use officialBeneficiaries from API (e.g., 4946)
+  // For other months: use cumulativeBeneficiaries from JSON (calculated)
+  const isLastMonth = totalMonths > 0 && currentIndex === totalMonths - 1;
+  const uniqueBeneficiaries = (isLastMonth && officialBeneficiaries) 
+    ? officialBeneficiaries 
+    : (currentData?.cumulativeBeneficiaries || 0);
 
   // Animate value changes - smooth transition între valori (arată evoluția reală)
   useEffect(() => {

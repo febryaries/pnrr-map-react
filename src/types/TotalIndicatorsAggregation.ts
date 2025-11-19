@@ -371,6 +371,11 @@ export class TotalIndicatorsAggregation extends BaseDataAggregation {
    * Process raw total indicators data into our format
    */
   private processTotalIndicators(rawData: RawTotalIndicatorsData): TotalIndicatorsData {
+    console.log('🔍 RAW INDICATORS DATA:', {
+      nr_beneficiari_plati: rawData.nr_beneficiari_plati,
+      platit_eur: rawData.platit_eur,
+      data_actualizare: rawData.data_actualizare
+    });
     return {
       alocat_eur: rawData.alocat_eur || 0,
       platit_eur: rawData.platit_eur || 0,

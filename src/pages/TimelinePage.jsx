@@ -19,7 +19,7 @@ function TimelinePage({ onCountyClick }) {
   const animationRef = useRef(null);
   
   // Load pre-generated timeline data (Plăți 2023-2025)
-  const { availableDates, currentData, isLoading, getDataForIndex } = useTimelinePlati();
+  const { availableDates, currentData, isLoading, getDataForIndex, officialBeneficiaries } = useTimelinePlati();
   
   // Start from last month (Noiembrie 2025) - will be set when data loads
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -116,7 +116,7 @@ function TimelinePage({ onCountyClick }) {
           <p>Evoluția plăților PNRR 2023 - 2025</p>
         </div>
         
-        <Link to="/pnrr-dashboard/" className="timeline-back-link">
+        <Link to="/" className="timeline-back-link">
           ← Înapoi la hartă
         </Link>
       </div>
@@ -134,6 +134,9 @@ function TimelinePage({ onCountyClick }) {
         currentDate={formattedDates[currentIndex]}
         isLoading={isLoading}
         isPlaying={isPlaying}
+        officialBeneficiaries={officialBeneficiaries}
+        currentIndex={currentIndex}
+        totalMonths={availableDates.length}
       />
 
       {/* Controls */}

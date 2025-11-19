@@ -7,6 +7,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { getAssetPath } from '../utils/pathHelper';
+import { getAPIEndpoints } from '../constants/PNRRConstants';
 
 /**
  * Smooth timeline data by interpolating June-September 2025 spike
@@ -65,6 +66,7 @@ export function useTimelinePlati() {
   const [currentData, setCurrentData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [officialBeneficiaries, setOfficialBeneficiaries] = useState(null);
 
   // Load pre-generated timeline data
   useEffect(() => {
@@ -113,8 +115,39 @@ export function useTimelinePlati() {
         }));
         setAvailableDates(dates);
         
+        // Fetch official beneficiaries count from API (like MapView does)
+        try {
+          const lastFrame = smoothedTimeline[smoothedTimeline.length - 1];
+          // Get today's date in YYYYMMDD format (API uses current date)
+          const today = new Date();
+          const dataDate = `${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, '0')}${String(today.getDate()).padStart(2, '0')}`;
+          
+          // Use proxy for localhost, direct URL for production
+          const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+          const baseUrl = isLocalhost 
+            ? '/api/mfe/pnrr-dashboard/generator/data' 
+            : 'https://mfe.gov.ro/pnrr-dashboard/generator/data';
+          const indicatorsUrl = `${baseUrl}/${dataDate}-indicatori_total.json.gz`;
+          
+          console.log(`📊 Fetching official beneficiaries from API for date: ${dataDate}`);
+          console.log(`🔗 URL: ${indicatorsUrl}`);
+          const indicatorsResponse = await fetch(indicatorsUrl);
+          
+          if (indicatorsResponse.ok) {
+            const text = await indicatorsResponse.text();
+            const indicatorsData = JSON.parse(text);
+            const beneficiariesCount = indicatorsData.items?.[0]?.nr_beneficiari_plati || indicatorsData.nr_beneficiari_plati;
+            
+            if (beneficiariesCount) {
+              setOfficialBeneficiaries(beneficiariesCount);
+              console.log(`✅ Official beneficiaries from API: ${beneficiariesCount}`);
+            }
+          }
+        } catch (apiError) {
+          console.warn('⚠️  Could not fetch official beneficiaries, using calculated value:', apiError.message);
+        }
+        
         // Set LAST frame as current (most recent data) - use SMOOTHED data
-        // uniqueBeneficiaries is already cumulative from the script
         if (smoothedTimeline.length > 0) {
           const lastIndex = smoothedTimeline.length - 1;
           const lastFrame = smoothedTimeline[lastIndex];
@@ -148,10 +181,12 @@ export function useTimelinePlati() {
       return null;
     }
     
-    // uniqueBeneficiaries from JSON is ALREADY CUMULATIVE
-    // It's calculated by the script using Set() for all payments up to that month
-    // So we use it directly, no need to sum!
-    const cumulativeBeneficiaries = frame.uniqueBeneficiaries || 0;
+    // Use official beneficiaries from API if available (for last frame)
+    // Otherwise use calculated value from JSON
+    const isLastFrame = index === timelineData.timeline.length - 1;
+    const cumulativeBeneficiaries = (isLastFrame && officialBeneficiaries) 
+      ? officialBeneficiaries 
+      : (frame.uniqueBeneficiaries || 0);
     
     console.log(`📅 getDataForIndex(${index}):`, {
       date: frame.date,
@@ -177,6 +212,7 @@ export function useTimelinePlati() {
     currentData,
     isLoading,
     error,
-    getDataForIndex
+    getDataForIndex,
+    officialBeneficiaries
   };
 }
