@@ -2512,15 +2512,15 @@ const MapView = ({
 
         let title = ''
         if (viewMode === 'general') {
-            title = `${sourceName} - Proiecte Județene ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}${filterSuffix}`
+            title = `Proiecte Județene ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}${filterSuffix}`
         } else if (viewMode === 'all') {
-            title = `${sourceName} - Toate proiectele ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}${filterSuffix}`
+            title = `Toate proiectele ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}${filterSuffix}`
         } else if (viewMode === 'total') {
-            title = `${sourceName} - Toate proiectele PNRR (${currencySymbol})`
+            title = `Toate proiectele PNRR (${currencySymbol})`
         } else if (viewMode === 'national') {
-            title = `${sourceName} - Proiecte Naționale (${currencySymbol})`
+            title = `Proiecte Naționale (${currencySymbol})`
         } else if (viewMode === 'local') {
-            title = `${sourceName} - Proiecte Locale ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}${filterSuffix}`
+            title = `Proiecte Locale (${currencySymbol})`
         } else if (viewMode === 'program') {
             title = `${sourceName} - ${componentLabel || activeProgram} - ${metric === 'value' ? `Valoare (${currencySymbol})` : 'Proiecte'}`
         } else {
@@ -3851,8 +3851,8 @@ const MapView = ({
                     })}
                     title={endpoint === 'payments' ? 'Plăți PNRR' : 
                            viewMode === 'total' ? 'Toate proiectele PNRR' : 
-                           viewMode === 'national' ? 'Proiecte Naționale PNRR' :
-                           viewMode === 'local' ? 'Proiecte Locale PNRR' : 'Proiecte PNRR'}
+                           viewMode === 'national' ? 'Proiecte Naționale' :
+                           viewMode === 'local' ? 'Proiecte Locale' : 'Proiecte PNRR'}
                     subtitle={
                         (() => {
                             // Use filtered totals from the table if available, otherwise fallback to calculated values
