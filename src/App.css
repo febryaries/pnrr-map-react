@@ -3451,8 +3451,20 @@ table tbody tr:nth-child(even) {
 
 .projects-payments-section table th:nth-child(9),
 .projects-payments-section table td:nth-child(9) {
-  width: 6%; /* Locality column */
-  min-width: 100px;
+  width: 6%; /* Component code column */
+  min-width: 60px;
+}
+
+.projects-payments-section table th:nth-child(10),
+.projects-payments-section table td:nth-child(10) {
+  width: 6%; /* Measure code column */
+  min-width: 60px;
+}
+
+.projects-payments-section table th:nth-child(11),
+.projects-payments-section table td:nth-child(11) {
+  width: 10%; /* Locality column */
+  min-width: 200px;
 }
 
 /* Specific header styling for projects/payments table */
@@ -3496,7 +3508,15 @@ table tbody tr:nth-child(even) {
 }
 
 .projects-payments-section table th:nth-child(9) {
-  min-width: 70px; /* Locality */
+  min-width: 60px; /* Component code */
+}
+
+.projects-payments-section table th:nth-child(10) {
+  min-width: 60px; /* Measure code */
+}
+
+.projects-payments-section table th:nth-child(11) {
+  min-width: 150px; /* Locality */
 }
 
 /* Mobile table cards styling */
