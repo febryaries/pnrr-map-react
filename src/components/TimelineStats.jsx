@@ -98,7 +98,7 @@ function TimelineStats({
             <div className="timeline-stat-card timeline-stat-value">
               <div className="timeline-stat-icon">💰</div>
               <div className="timeline-stat-content">
-                <div className="timeline-stat-label">Valoare plăți</div>
+                <div className="timeline-stat-label">Valoare plăți <span className="timeline-stat-subtitle">(Proiecte active)</span></div>
                 <div className="timeline-stat-number">
                   {formatMoney(displayValue, currency)}
                 </div>

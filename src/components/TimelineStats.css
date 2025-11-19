@@ -117,6 +117,13 @@
   letter-spacing: 0.5px;
 }
 
+.timeline-stat-subtitle {
+  font-size: 0.75em;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
 .timeline-stat-number {
   font-size: 1.5em;
   color: #2c3e50;

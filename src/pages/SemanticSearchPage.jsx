@@ -1313,7 +1313,7 @@ export default function SemanticSearchPage() {
                   key: 'locality',
                   label: 'Localitate',
                   searchable: true,
-                  render: (value) => value ? <div style={{ maxWidth: '100px', wordWrap: 'break-word', fontSize: '12px', lineHeight: '1.3', textAlign: 'center' }}>{value}</div> : <div style={{ fontSize: '12px', textAlign: 'center' }}>-</div>
+                  render: (value) => value ? <div style={{ maxWidth: '150px', whiteSpace: 'normal', wordBreak: 'keep-all', overflowWrap: 'break-word', fontSize: '12px', lineHeight: '1.3', textAlign: 'center' }}>{value}</div> : <div style={{ fontSize: '12px', textAlign: 'center' }}>-</div>
                 }
               ]}
               title={`Proiecte – „${query}"`}

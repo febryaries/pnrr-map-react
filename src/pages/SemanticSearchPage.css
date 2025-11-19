@@ -19,3 +19,16 @@
 #semantic-search-table-section .desktop-only {
   overflow-x: hidden !important;
 }
+
+/* Fix pentru coloana Localitate - permite lățime mai mare și word-break corect */
+#semantic-search-table-section table td:last-child {
+  min-width: 200px !important;
+  max-width: 250px !important;
+}
+
+#semantic-search-table-section table td:last-child div {
+  white-space: normal !important;
+  word-break: keep-all !important;
+  overflow-wrap: break-word !important;
+  font-size: 9px !important;
+}
