@@ -3267,7 +3267,7 @@ const MapView = ({
                         )}
                     </div>
                     <div className="mobile-total-card">
-                        <div className="mobile-total-value">{fmtNum(calculatedTotals.totalProjects)}</div>
+                        <div className="mobile-total-value">{fmtNum(totalIndicators?.nr_proiecte || calculatedTotals.totalProjects)}</div>
                         <div className="mobile-total-label">{endpoint === 'payments' ? 'NUMĂR TRANZACȚII' : 'NUMĂR PROIECTE'}</div>
                         {activeProgram && (
                             <div className="mobile-total-sublabel">{COMPONENT_MAPPING[activeProgram]?.label}</div>
@@ -3308,7 +3308,7 @@ const MapView = ({
                         )}
                     </div>
                     <div className="map-total-card">
-                        <div className="map-total-value">{fmtNum(calculatedTotals.totalProjects)}</div>
+                        <div className="map-total-value">{fmtNum(totalIndicators?.nr_proiecte || calculatedTotals.totalProjects)}</div>
                         <div className="map-total-label">{endpoint === 'payments' ? 'NUMĂR PLĂȚI' : 'NUMĂR PROIECTE'}</div>
                         {activeProgram && (
                             <div className="map-total-sublabel">{COMPONENT_MAPPING[activeProgram]?.label}</div>
