@@ -268,7 +268,7 @@ const ComponentsOverview = ({
   }
 
   // Funcție pentru a detecta și parsa sub-măsuri din titlu
-  const parseSubMeasures = (title) => {
+  const parseSubMeasures = (title, mainMeasureCode) => {
     if (!title.includes('•')) return null
     
     const lines = title.split('\n')
@@ -279,11 +279,21 @@ const ComponentsOverview = ({
       .map(line => {
         const match = line.match(/•\s*([^\s]+)\s+(.+?)\s+-\s+([\d,]+)\s+mil/)
         if (match) {
-          return {
-            code: match[1],
-            description: match[2].trim(),
-            value: parseFloat(match[3].replace(',', '.'))
+          let code = match[1].replace(/[.:]/g, '') // Remove dots and colons
+          const description = match[2].trim()
+          const value = parseFloat(match[3].replace(',', '.'))
+          
+          // Skip sub-measures with 0 value
+          if (value === 0) return null
+          
+          // Normalize code: if it starts with a number (like "21", "22"), prepend main measure code
+          // Extract the sub-number after the main number (e.g., "21" → "1", "22" → "2")
+          const subMatch = code.match(/^(\d+)(\d)$/)
+          if (subMatch) {
+            code = `${mainMeasureCode}.${subMatch[2]}`
           }
+          
+          return { code, description, value }
         }
         return null
       })
@@ -438,7 +448,7 @@ const ComponentsOverview = ({
                               const measureCode = investment.masura
                               const isZeroCost = investment.isZeroCost || !investment.alocare_financiara_euro || investment.alocare_financiara_euro === 0
                               const isZeroExecuted = !investment.executat_euro || investment.executat_euro === 0
-                              const parsedSubMeasures = parseSubMeasures(investment.titlul_masurii)
+                              const parsedSubMeasures = parseSubMeasures(investment.titlul_masurii, measureCode)
                               const hasSubMeasures = parsedSubMeasures && parsedSubMeasures.subMeasures
                               const measureKey = `${component.code}-${measureCode}-${index}`
                               const isSubExpanded = expandedSubMeasures.has(measureKey)
@@ -488,7 +498,12 @@ const ComponentsOverview = ({
                                       {isSubExpanded && (
                                         <div className="submeasures-list">
                                           {parsedSubMeasures.subMeasures.map((sub, subIndex) => (
-                                            <div key={subIndex} className="submeasure-item">
+                                            <div 
+                                              key={subIndex} 
+                                              className="submeasure-item"
+                                              onClick={() => handleMeasureClick(component.code, sub.code)}
+                                              title="Click pentru a filtra tabelul după această sub-măsură"
+                                            >
                                               <span className="submeasure-code">{sub.code}</span>
                                               <span className="submeasure-desc">{sub.description}</span>
                                               <span className="submeasure-value">{sub.value.toFixed(2)} mil EUR</span>
@@ -562,7 +577,7 @@ const ComponentsOverview = ({
                                       <div className="zero-cost-label" style={{ textAlign: 'center', fontSize: '0.875rem', fontWeight: '500', color: '#64748b', fontStyle: 'italic' }}>Fără cheltuieli asociate</div>
                                     ) : (
                                       <>
-                                        <div className="value-main">{isZeroExecuted ? '0,00 mil EUR' : formatMoney(reform.alocare_financiara_euro)}</div>
+                                        <div className="value-main">{formatMoney(reform.alocare_financiara_euro)}</div>
                                         <div className="financing-type">
                                           {reform.finantare === 'loan' ? 'Loan' : 'Grant'}
                                         </div>

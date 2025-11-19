@@ -4800,8 +4800,13 @@ td.num {
 
 .investment-description.with-submeasures {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+.investment-description.with-submeasures .investment-description-text {
+  flex: 0 1 auto;
+  text-align: left;
 }
 
 .submeasure-filter-link {
@@ -4858,6 +4863,7 @@ td.num {
   border-radius: 8px;
   border-left: 3px solid #3b82f6;
   transition: all 0.2s ease;
+  cursor: pointer;
 }
 
 .submeasure-item:hover {
