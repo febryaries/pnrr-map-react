@@ -116,7 +116,7 @@ function TimelinePage({ onCountyClick }) {
           <p>Evoluția plăților PNRR 2023 - 2025</p>
         </div>
         
-        <Link to="/" className="timeline-back-link">
+        <Link to="/pnrr-dashboard/" className="timeline-back-link">
           ← Înapoi la hartă
         </Link>
       </div>
