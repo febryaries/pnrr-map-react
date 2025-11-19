@@ -3041,6 +3041,15 @@ h1 {
   padding: 4px 0;
 }
 
+/* Remove pointer cursor from beneficiaries section */
+.beneficiaries-section .rank-item {
+  cursor: default;
+}
+
+.beneficiaries-section .rank-item:hover {
+  background-color: transparent;
+}
+
 .beneficiary-number {
   color: #0ea5e9;
   font-weight: 600;

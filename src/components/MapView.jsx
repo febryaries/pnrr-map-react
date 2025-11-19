@@ -2894,7 +2894,7 @@ const MapView = ({
                 {/* Transparency Banner */}
                 <div className="transparency-banner">
                     <div className="transparency-banner-content">
-                        <p>Acest tablou de bord reprezintă angajamentul României față de transparența publică în ceea ce privește fondurile NextGenerationEU și reflectă cifrele prezentate în PNRR, în urma aprobării de către Comisia Europeană, la 22 octombrie 2025, a propunerii de decizie de punere în aplicare a Consiliului de modificare a CID a planului României, în conformitate cu procedura prevăzută la articolul 21 din Regulamentul (UE) 2021/241 de instituire a Mecanismului de redresare și reziliență.</p>
+                        <p>Acest tablou de bord reprezintă angajamentul României față de transparența publică în ceea ce privește fondurile NextGenerationEU și reflectă cifrele prezentate în PNRR, în urma Deciziei de punere în aplicare a Consiliului din 17 noiembrie 2025 de modificare a Deciziei de punere în aplicare a Consiliului din 3 noiembrie 2021 de aprobare a evaluării planului de redresare și reziliență al României.</p>
                     </div>
                 </div>
                 
@@ -2939,7 +2939,7 @@ const MapView = ({
             {/* Transparency Banner */}
             <div className="transparency-banner">
                 <div className="transparency-banner-content">
-                    <p>Acest tablou de bord reprezintă angajamentul României față de transparența publică în ceea ce privește fondurile NextGenerationEU și reflectă cifrele prezentate în PNRR, în urma aprobării de către Comisia Europeană, la 22 octombrie 2025, a propunerii de decizie de punere în aplicare a Consiliului de modificare a CID a planului României, în conformitate cu procedura prevăzută la articolul 21 din Regulamentul (UE) 2021/241 de instituire a Mecanismului de redresare și reziliență.</p>
+                    <p>Acest tablou de bord reprezintă angajamentul României față de transparența publică în ceea ce privește fondurile NextGenerationEU și reflectă cifrele prezentate în PNRR, în urma Deciziei de punere în aplicare a Consiliului din 17 noiembrie 2025 de modificare a Deciziei de punere în aplicare a Consiliului din 3 noiembrie 2021 de aprobare a evaluării planului de redresare și reziliență al României.</p>
                 </div>
             </div>
             
@@ -3379,30 +3379,7 @@ const MapView = ({
                                                     return (
                                                         <li 
                                                             key={globalIndex} 
-                                                            className="rank-item beneficiary-item"
-                                                            onClick={() => {
-                                                                const taxId = beneficiary['cui'] ? String(beneficiary['cui']) : '';
-                                                                console.log('Beneficiary clicked:', beneficiary);
-                                                                console.log('Tax ID:', taxId);
-                                                                
-                                                                if (switchEndpoint) {
-                                                                    switchEndpoint('payments');
-                                                                    console.log('Switched to payments endpoint');
-                                                                }
-                                                                
-                                                                if (taxId) {
-                                                                    setSearchTerm(taxId);
-                                                                    console.log('Set search term to:', taxId);
-                                                                }
-                                                                
-                                                                setTimeout(() => {
-                                                                    const element = document.getElementById('projects-table');
-                                                                    if (element) {
-                                                                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                                                        console.log('Scrolled to table');
-                                                                    }
-                                                                }, 500);
-                                                            }}
+                                                            className="rank-item"
                                                         >
                                                             <span className="beneficiary-number">
                                                                 {globalIndex + 1}
@@ -3477,9 +3454,6 @@ const MapView = ({
                                                 </button>
                                             </div>
                                             
-                                            <div className="rank-note" style={{ textAlign: 'center', marginTop: '12px' }}>
-                                                Click pe un beneficiar pentru a vedea plățile lui. (Ctrl+#-clic pentru un nou tab.)
-                                            </div>
                                         </>
                                     );
                                 })()}
