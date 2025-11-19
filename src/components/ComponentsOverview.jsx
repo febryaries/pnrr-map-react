@@ -59,6 +59,7 @@ const ComponentsOverview = ({
   totalExecutedFromAPI = null  // Valoare executată din API (totalIndicators.platit_eur)
 }) => {
   const [expandedComponents, setExpandedComponents] = useState(new Set())
+  const [expandedSubMeasures, setExpandedSubMeasures] = useState(new Set())
   const [isSticky, setIsSticky] = useState(false)
   const sectionRef = useRef(null)
   const headerRef = useRef(null)
@@ -256,6 +257,44 @@ const ComponentsOverview = ({
     setExpandedComponents(newExpanded)
   }
 
+  const toggleSubMeasure = (measureKey) => {
+    const newExpanded = new Set(expandedSubMeasures)
+    if (newExpanded.has(measureKey)) {
+      newExpanded.delete(measureKey)
+    } else {
+      newExpanded.add(measureKey)
+    }
+    setExpandedSubMeasures(newExpanded)
+  }
+
+  // Funcție pentru a detecta și parsa sub-măsuri din titlu
+  const parseSubMeasures = (title) => {
+    if (!title.includes('•')) return null
+    
+    const lines = title.split('\n')
+    const mainTitle = lines[0].trim()
+    
+    const subMeasures = lines.slice(1)
+      .filter(line => line.includes('•'))
+      .map(line => {
+        const match = line.match(/•\s*([^\s]+)\s+(.+?)\s+-\s+([\d,]+)\s+mil/)
+        if (match) {
+          return {
+            code: match[1],
+            description: match[2].trim(),
+            value: parseFloat(match[3].replace(',', '.'))
+          }
+        }
+        return null
+      })
+      .filter(Boolean)
+    
+    return {
+      mainTitle,
+      subMeasures: subMeasures.length > 0 ? subMeasures : null
+    }
+  }
+
   // Funcție pentru scroll smooth cu ancora către componentă
   const scrollToComponent = (componentCode) => {
     const element = document.querySelector(`[data-component="${componentCode}"]`)
@@ -399,34 +438,94 @@ const ComponentsOverview = ({
                               const measureCode = investment.masura
                               const isZeroCost = investment.isZeroCost || !investment.alocare_financiara_euro || investment.alocare_financiara_euro === 0
                               const isZeroExecuted = !investment.executat_euro || investment.executat_euro === 0
+                              const parsedSubMeasures = parseSubMeasures(investment.titlul_masurii)
+                              const hasSubMeasures = parsedSubMeasures && parsedSubMeasures.subMeasures
+                              const measureKey = `${component.code}-${measureCode}-${index}`
+                              const isSubExpanded = expandedSubMeasures.has(measureKey)
                               
                               return (
                                 <div key={index} className="investment-item">
-                                  <div 
-                                    className="investment-description clickable"
-                                    onClick={() => handleMeasureClick(component.code, measureCode)}
-                                    title="Click pentru a filtra tabelul după această măsură"
-                                  >
-                                    <div className="investment-description-text">
-                                      {investment.titlul_masurii}
-                                    </div>
-                                    <div className="link-indicator">
-                                      <span className="link-icon">🔗</span>
-                                      <span className="link-text">Filtrează</span>
-                                    </div>
-                                  </div>
-                                  <div className="investment-value">
-                                    <>
-                                      <div className="value-main">{isZeroCost ? '0,00 mil EUR' : formatMoney(investment.alocare_financiara_euro)}</div>
-                                      <div className="financing-type">
-                                        {investment.finantare === 'loan' ? 'Loan' : 'Grant'}
+                                  {hasSubMeasures ? (
+                                    <div className="measure-with-submeasures">
+                                      <div className="measure-main-row">
+                                        <div className="investment-description-wrapper">
+                                          <div 
+                                            className="investment-description clickable with-submeasures"
+                                            onClick={() => toggleSubMeasure(measureKey)}
+                                            title="Click pentru a vedea sub-măsurile"
+                                          >
+                                            <div className="investment-description-text">
+                                              {parsedSubMeasures.mainTitle}
+                                            </div>
+                                            <div className="submeasure-expand-icon">
+                                              {isSubExpanded ? '−' : '+'}
+                                            </div>
+                                          </div>
+                                          <div 
+                                            className="link-indicator submeasure-filter-link"
+                                            onClick={(e) => {
+                                              e.stopPropagation()
+                                              handleMeasureClick(component.code, measureCode)
+                                            }}
+                                            title="Click pentru a filtra tabelul după această măsură"
+                                          >
+                                            <span className="link-icon">🔗</span>
+                                            <span className="link-text">Filtrează</span>
+                                          </div>
+                                        </div>
+                                        <div className="investment-value">
+                                          <div className="value-main">{isZeroCost ? '0,00 mil EUR' : formatMoney(investment.alocare_financiara_euro)}</div>
+                                          <div className="financing-type">
+                                            {investment.finantare === 'loan' ? 'Loan' : 'Grant'}
+                                          </div>
+                                          <div className="value-executed">
+                                            <span className="executed-label">Executat:</span> {isZeroCost || isZeroExecuted ? '0,00 mil EUR' : formatMoney(investment.executat_euro)}
+                                            <span className="execution-percent"> • {isZeroCost || isZeroExecuted ? '0%' : `${investment.executat_procent.toFixed(1)}%`}</span>
+                                          </div>
+                                        </div>
                                       </div>
-                                      <div className="value-executed">
-                                        <span className="executed-label">Executat:</span> {isZeroCost || isZeroExecuted ? '0,00 mil EUR' : formatMoney(investment.executat_euro)}
-                                        <span className="execution-percent"> • {isZeroCost || isZeroExecuted ? '0%' : `${investment.executat_procent.toFixed(1)}%`}</span>
+                                      
+                                      {isSubExpanded && (
+                                        <div className="submeasures-list">
+                                          {parsedSubMeasures.subMeasures.map((sub, subIndex) => (
+                                            <div key={subIndex} className="submeasure-item">
+                                              <span className="submeasure-code">{sub.code}</span>
+                                              <span className="submeasure-desc">{sub.description}</span>
+                                              <span className="submeasure-value">{sub.value.toFixed(2)} mil EUR</span>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      )}
+                                    </div>
+                                  ) : (
+                                    <>
+                                      <div 
+                                        className="investment-description clickable"
+                                        onClick={() => handleMeasureClick(component.code, measureCode)}
+                                        title="Click pentru a filtra tabelul după această măsură"
+                                      >
+                                        <div className="investment-description-text">
+                                          {investment.titlul_masurii}
+                                        </div>
+                                        <div className="link-indicator">
+                                          <span className="link-icon">🔗</span>
+                                          <span className="link-text">Filtrează</span>
+                                        </div>
+                                      </div>
+                                      <div className="investment-value">
+                                        <>
+                                          <div className="value-main">{isZeroCost ? '0,00 mil EUR' : formatMoney(investment.alocare_financiara_euro)}</div>
+                                          <div className="financing-type">
+                                            {investment.finantare === 'loan' ? 'Loan' : 'Grant'}
+                                          </div>
+                                          <div className="value-executed">
+                                            <span className="executed-label">Executat:</span> {isZeroCost || isZeroExecuted ? '0,00 mil EUR' : formatMoney(investment.executat_euro)}
+                                            <span className="execution-percent"> • {isZeroCost || isZeroExecuted ? '0%' : `${investment.executat_procent.toFixed(1)}%`}</span>
+                                          </div>
+                                        </>
                                       </div>
                                     </>
-                                  </div>
+                                  )}
                                 </div>
                               )
                             })}
