@@ -3408,7 +3408,18 @@ const MapView = ({
                                             {/* Buton Afișează tot / Restrânge - Desktop */}
                                             <div className="beneficiaries-show-all-desktop" style={{ textAlign: 'center', marginTop: '16px' }}>
                                                 <button 
-                                                    onClick={() => setShowAllBeneficiaries(!showAllBeneficiaries)}
+                                                    onClick={() => {
+                                                        setShowAllBeneficiaries(!showAllBeneficiaries);
+                                                        // Scroll to top when collapsing
+                                                        if (showAllBeneficiaries) {
+                                                            setTimeout(() => {
+                                                                const element = document.querySelector('.beneficiaries-section');
+                                                                if (element) {
+                                                                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                                                }
+                                                            }, 100);
+                                                        }
+                                                    }}
                                                     style={{
                                                         padding: '10px 24px',
                                                         background: '#f1f5f9',
