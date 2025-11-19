@@ -3267,7 +3267,13 @@ const MapView = ({
                         )}
                     </div>
                     <div className="mobile-total-card">
-                        <div className="mobile-total-value">{fmtNum(totalIndicators?.nr_proiecte || calculatedTotals.totalProjects)}</div>
+                        <div className="mobile-total-value">{fmtNum(
+                            viewMode === 'national' 
+                                ? totalIndicators?.nr_proiecte_impact_national 
+                                : viewMode === 'local'
+                                    ? (totalIndicators?.nr_proiecte - totalIndicators?.nr_proiecte_impact_national)
+                                    : totalIndicators?.nr_proiecte || calculatedTotals.totalProjects
+                        )}</div>
                         <div className="mobile-total-label">{endpoint === 'payments' ? 'NUMĂR TRANZACȚII' : 'NUMĂR PROIECTE'}</div>
                         {activeProgram && (
                             <div className="mobile-total-sublabel">{COMPONENT_MAPPING[activeProgram]?.label}</div>
@@ -3308,7 +3314,13 @@ const MapView = ({
                         )}
                     </div>
                     <div className="map-total-card">
-                        <div className="map-total-value">{fmtNum(totalIndicators?.nr_proiecte || calculatedTotals.totalProjects)}</div>
+                        <div className="map-total-value">{fmtNum(
+                            viewMode === 'national' 
+                                ? totalIndicators?.nr_proiecte_impact_national 
+                                : viewMode === 'local'
+                                    ? (totalIndicators?.nr_proiecte - totalIndicators?.nr_proiecte_impact_national)
+                                    : totalIndicators?.nr_proiecte || calculatedTotals.totalProjects
+                        )}</div>
                         <div className="map-total-label">{endpoint === 'payments' ? 'NUMĂR PLĂȚI' : 'NUMĂR PROIECTE'}</div>
                         {activeProgram && (
                             <div className="map-total-sublabel">{COMPONENT_MAPPING[activeProgram]?.label}</div>

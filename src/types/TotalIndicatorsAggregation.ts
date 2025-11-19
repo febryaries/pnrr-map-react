@@ -24,6 +24,7 @@ export interface TotalIndicatorsData {
   nr_beneficiari_contracte: number; // Number of beneficiaries with contracts
   nr_beneficiari_plati: number; // Number of beneficiaries with payments
   nr_proiecte: number;          // Total number of projects
+  nr_proiecte_impact_national?: number; // Number of national impact projects
   data_actualizare?: string;    // Last update date
 }
 
@@ -37,6 +38,7 @@ export interface RawTotalIndicatorsData {
   nr_beneficiari_contracte?: number;
   nr_beneficiari_plati?: number;
   nr_proiecte?: number;
+  nr_proiecte_impact_national?: number;
   data_actualizare?: string;
 }
 
@@ -374,6 +376,8 @@ export class TotalIndicatorsAggregation extends BaseDataAggregation {
     console.log('🔍 RAW INDICATORS DATA:', {
       nr_beneficiari_plati: rawData.nr_beneficiari_plati,
       platit_eur: rawData.platit_eur,
+      nr_proiecte: rawData.nr_proiecte,
+      nr_proiecte_impact_national: rawData.nr_proiecte_impact_national,
       data_actualizare: rawData.data_actualizare
     });
     return {
@@ -383,6 +387,7 @@ export class TotalIndicatorsAggregation extends BaseDataAggregation {
       nr_beneficiari_contracte: rawData.nr_beneficiari_contracte || 0,
       nr_beneficiari_plati: rawData.nr_beneficiari_plati || 0,
       nr_proiecte: rawData.nr_proiecte || 0,
+      nr_proiecte_impact_national: rawData.nr_proiecte_impact_national,
       data_actualizare: rawData.data_actualizare
     };
   }
