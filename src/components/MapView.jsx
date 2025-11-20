@@ -3268,11 +3268,13 @@ const MapView = ({
                     </div>
                     <div className="mobile-total-card">
                         <div className="mobile-total-value">{fmtNum(
-                            viewMode === 'national' 
-                                ? totalIndicators?.nr_proiecte_impact_national 
-                                : viewMode === 'local'
-                                    ? (totalIndicators?.nr_proiecte - totalIndicators?.nr_proiecte_impact_national)
-                                    : totalIndicators?.nr_proiecte || calculatedTotals.totalProjects
+                            activeProgram
+                                ? calculatedTotals.totalProjects
+                                : viewMode === 'national' 
+                                    ? totalIndicators?.nr_proiecte_impact_national 
+                                    : viewMode === 'local'
+                                        ? (totalIndicators?.nr_proiecte - totalIndicators?.nr_proiecte_impact_national)
+                                        : totalIndicators?.nr_proiecte || calculatedTotals.totalProjects
                         )}</div>
                         <div className="mobile-total-label">{endpoint === 'payments' ? 'NUMĂR TRANZACȚII' : 'NUMĂR PROIECTE'}</div>
                         {activeProgram && (
@@ -3315,11 +3317,13 @@ const MapView = ({
                     </div>
                     <div className="map-total-card">
                         <div className="map-total-value">{fmtNum(
-                            viewMode === 'national' 
-                                ? totalIndicators?.nr_proiecte_impact_national 
-                                : viewMode === 'local'
-                                    ? (totalIndicators?.nr_proiecte - totalIndicators?.nr_proiecte_impact_national)
-                                    : totalIndicators?.nr_proiecte || calculatedTotals.totalProjects
+                            activeProgram
+                                ? calculatedTotals.totalProjects
+                                : viewMode === 'national' 
+                                    ? totalIndicators?.nr_proiecte_impact_national 
+                                    : viewMode === 'local'
+                                        ? (totalIndicators?.nr_proiecte - totalIndicators?.nr_proiecte_impact_national)
+                                        : totalIndicators?.nr_proiecte || calculatedTotals.totalProjects
                         )}</div>
                         <div className="map-total-label">{endpoint === 'payments' ? 'NUMĂR PLĂȚI' : 'NUMĂR PROIECTE'}</div>
                         {activeProgram && (
