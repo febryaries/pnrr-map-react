@@ -3845,7 +3845,7 @@ const MapView = ({
                     subtitle={
                         (() => {
                             // Use filtered totals from the table if available, otherwise fallback to calculated values
-                            if (filteredTotals.count > 0) {
+                            if (filteredTotals.count !== undefined && filteredTotals.count !== null) {
                                 // For Total Proiecte view, show combined National + Local totals
                                 if (endpoint === 'projects' && viewMode === 'total') {
                                     // Calculate National and Local totals separately, filtered by activeProgram if selected
