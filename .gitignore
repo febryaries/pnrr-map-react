@@ -12,3 +12,6 @@ dist-ssr
 
 # Documentation - not used in platform
 *.md
+ANALIZA_*.html
+DATA_*.html
+VIZUALIZARE_*.html
